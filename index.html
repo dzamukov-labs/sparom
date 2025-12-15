@@ -8,7 +8,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -18,69 +18,97 @@
         <div class="preloader__logo">С лёгким паром</div>
     </div>
 
-    <!-- Hero Section - Full Screen Immersive -->
+    <!-- Hero Section - Two Column Layout -->
     <section class="hero" id="hero">
-        <div class="hero__bg">
-            <div class="hero__bg-overlay"></div>
-            <img src="https://images.unsplash.com/photo-1562778612-e1e0cda9915c?w=1920&q=80"
-                 alt="Баня в зимнем лесу"
-                 class="hero__bg-image"
-                 id="heroImage">
-        </div>
+        <div class="container hero__container">
+            <!-- Left Column - Content -->
+            <div class="hero__content">
+                <header class="header">
+                    <a href="/" class="logo">
+                        <span class="logo__main">С лёгким паром</span>
+                        <span class="logo__sub">готовые бани под ключ</span>
+                    </a>
+                </header>
 
-        <header class="header">
-            <a href="/" class="logo">
-                <span class="logo__main">С лёгким паром</span>
-            </a>
-        </header>
-
-        <div class="hero__content">
-            <div class="hero__badge">
-                <span class="hero__badge-dot"></span>
-                Производство в Новгородской области
-            </div>
-
-            <h1 class="hero__title">
-                <span class="hero__title-line">Ваша баня</span>
-                <span class="hero__title-line hero__title-line--accent">уже через 14 дней</span>
-            </h1>
-
-            <p class="hero__subtitle">
-                Готовая баня из бруса от 450 000 ₽<br>
-                Привезём, установим за час — и можно париться
-            </p>
-
-            <div class="hero__cta-group">
-                <button class="btn btn--primary btn--glow" id="mainCta">
-                    <span class="btn__content">
-                        <span class="btn__text">Подобрать свою баню</span>
-                        <span class="btn__icon">→</span>
-                    </span>
-                </button>
-
-                <div class="hero__trust">
-                    <div class="hero__trust-avatars">
-                        <div class="avatar">3000+</div>
+                <div class="hero__text">
+                    <div class="hero__badge">
+                        <span class="hero__badge-dot"></span>
+                        Производство в Новгородской области
                     </div>
-                    <span class="hero__trust-text">семей уже с нами</span>
+
+                    <h1 class="hero__title" data-ab="headline">
+                        <span class="hero__title-line">Ваша баня</span>
+                        <span class="hero__title-line hero__title-accent">уже через 14 дней</span>
+                    </h1>
+
+                    <p class="hero__subtitle">
+                        Готовая баня из бруса от 450 000 ₽<br>
+                        Привезём, установим за час — и можно париться
+                    </p>
+
+                    <div class="hero__cta-group">
+                        <button class="btn btn--primary" id="mainCta">
+                            <span>Подобрать свою баню</span>
+                            <span class="btn__arrow">→</span>
+                        </button>
+
+                        <div class="hero__trust">
+                            <div class="hero__trust-badge">3000+</div>
+                            <span>семей уже с нами</span>
+                        </div>
+                    </div>
+
+                    <!-- Timer -->
+                    <div class="hero__offer">
+                        <div class="offer-card">
+                            <div class="offer-card__icon">🎁</div>
+                            <div class="offer-card__content">
+                                <div class="offer-card__title">Подарок при заказе</div>
+                                <div class="offer-card__desc">Комплект банных принадлежностей</div>
+                            </div>
+                            <div class="offer-card__timer">
+                                <span id="timerDays">02</span>д
+                                <span id="timerHours">23</span>ч
+                                <span id="timerMins">59</span>м
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="hero__scroll">
-            <span class="hero__scroll-text">Листайте</span>
-            <div class="hero__scroll-line"></div>
-        </div>
+            <!-- Right Column - Carousel -->
+            <div class="hero__gallery">
+                <div class="carousel" id="heroCarousel">
+                    <div class="carousel__track">
+                        <div class="carousel__slide carousel__slide--active">
+                            <img src="https://images.unsplash.com/photo-1562778612-e1e0cda9915c?w=800&q=80" alt="Баня зимой">
+                        </div>
+                        <div class="carousel__slide">
+                            <img src="https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?w=800&q=80" alt="Баня на участке">
+                        </div>
+                        <div class="carousel__slide">
+                            <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&q=80" alt="Баня осенью">
+                        </div>
+                    </div>
 
-        <!-- Floating offer card -->
-        <div class="floating-offer">
-            <div class="floating-offer__icon">🎁</div>
-            <div class="floating-offer__content">
-                <div class="floating-offer__title">Подарок при заказе</div>
-                <div class="floating-offer__timer">
-                    <span id="timerDays">02</span>д
-                    <span id="timerHours">23</span>ч
-                    <span id="timerMins">59</span>м
+                    <div class="carousel__controls">
+                        <button class="carousel__arrow carousel__arrow--prev" aria-label="Предыдущее фото">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M15 18l-6-6 6-6"/>
+                            </svg>
+                        </button>
+                        <button class="carousel__arrow carousel__arrow--next" aria-label="Следующее фото">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 18l6-6-6-6"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="carousel__dots">
+                        <button class="carousel__dot carousel__dot--active" aria-label="Фото 1"></button>
+                        <button class="carousel__dot" aria-label="Фото 2"></button>
+                        <button class="carousel__dot" aria-label="Фото 3"></button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -106,9 +134,7 @@
                         поставили на фундамент — пользуйтесь.
                         Без грязи, шума и месяцев ожидания.
                     </p>
-                    <div class="feature-card__visual">
-                        <span class="feature-card__icon">⚡</span>
-                    </div>
+                    <div class="feature-card__icon">⚡</div>
                 </div>
 
                 <div class="feature-card">
@@ -150,105 +176,6 @@
         </div>
     </section>
 
-    <!-- Gallery Section -->
-    <section class="gallery" id="gallery">
-        <div class="container">
-            <div class="section-header section-header--center">
-                <span class="section-label">Галерея</span>
-                <h2 class="section-title">
-                    Бани, которые мы<br>
-                    <span class="text-accent">уже доставили</span>
-                </h2>
-            </div>
-
-            <div class="gallery__showcase">
-                <div class="gallery__main">
-                    <img src="https://images.unsplash.com/photo-1562778612-e1e0cda9915c?w=1200&q=80"
-                         alt="Баня зимой"
-                         class="gallery__main-img"
-                         id="galleryMain">
-                    <div class="gallery__main-overlay">
-                        <span class="gallery__main-caption">Баня 6×3м • Новгородская область</span>
-                    </div>
-                </div>
-
-                <div class="gallery__thumbs">
-                    <div class="gallery__thumb gallery__thumb--active">
-                        <img src="https://images.unsplash.com/photo-1562778612-e1e0cda9915c?w=400&q=80" alt="Баня 1">
-                    </div>
-                    <div class="gallery__thumb">
-                        <img src="https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?w=400&q=80" alt="Баня 2">
-                    </div>
-                    <div class="gallery__thumb">
-                        <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&q=80" alt="Баня 3">
-                    </div>
-                </div>
-            </div>
-
-            <div class="gallery__cta">
-                <button class="btn btn--secondary" id="galleryCta">
-                    Хочу такую же
-                    <span class="btn__icon">→</span>
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Process Section -->
-    <section class="process" id="process">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-label">Как это работает</span>
-                <h2 class="section-title">
-                    От заявки до<br>
-                    <span class="text-accent">первого пара</span>
-                </h2>
-            </div>
-
-            <div class="process__timeline">
-                <div class="process__step">
-                    <div class="process__step-marker">
-                        <span class="process__step-number">1</span>
-                    </div>
-                    <div class="process__step-content">
-                        <h3 class="process__step-title">Оставляете заявку</h3>
-                        <p class="process__step-text">Отвечаете на 5 простых вопросов в квизе — мы понимаем, что вам нужно</p>
-                    </div>
-                </div>
-
-                <div class="process__step">
-                    <div class="process__step-marker">
-                        <span class="process__step-number">2</span>
-                    </div>
-                    <div class="process__step-content">
-                        <h3 class="process__step-title">Подбираем баню</h3>
-                        <p class="process__step-text">Менеджер перезванивает, уточняет детали и предлагает лучший вариант</p>
-                    </div>
-                </div>
-
-                <div class="process__step">
-                    <div class="process__step-marker">
-                        <span class="process__step-number">3</span>
-                    </div>
-                    <div class="process__step-content">
-                        <h3 class="process__step-title">Изготовление</h3>
-                        <p class="process__step-text">За 14 дней собираем вашу баню на производстве в Новгородской области</p>
-                    </div>
-                </div>
-
-                <div class="process__step">
-                    <div class="process__step-marker">
-                        <span class="process__step-number">4</span>
-                    </div>
-                    <div class="process__step-content">
-                        <h3 class="process__step-title">Доставка и установка</h3>
-                        <p class="process__step-text">Привозим и устанавливаем за 1 час. Можно париться в тот же день!</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- CTA Section -->
     <section class="cta-section" id="cta">
         <div class="cta-section__bg"></div>
@@ -261,11 +188,9 @@
                     Ответьте на 5 вопросов — подберём идеальный вариант<br>
                     и рассчитаем точную стоимость
                 </p>
-                <button class="btn btn--primary btn--large btn--glow" id="finalCta">
-                    <span class="btn__content">
-                        <span class="btn__text">Подобрать баню</span>
-                        <span class="btn__icon">→</span>
-                    </span>
+                <button class="btn btn--primary btn--large" id="finalCta">
+                    <span>Подобрать баню</span>
+                    <span class="btn__arrow">→</span>
                 </button>
                 <p class="cta-section__note">Это бесплатно и займёт 2 минуты</p>
             </div>
