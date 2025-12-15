@@ -1,74 +1,234 @@
 /**
- * С ЛЁГКИМ ПАРОМ - Landing Page
- * Main JavaScript: Timer + A/B Testing Framework
+ * С ЛЁГКИМ ПАРОМ — Premium Landing
+ * Animations, Timer, A/B Testing
  */
 
 (function() {
     'use strict';
 
     // ===================================
+    // PRELOADER
+    // ===================================
+    function initPreloader() {
+        const preloader = document.getElementById('preloader');
+        if (!preloader) return;
+
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                preloader.classList.add('hidden');
+                document.body.style.overflow = '';
+            }, 500);
+        });
+
+        // Fallback - hide after 3 seconds regardless
+        setTimeout(() => {
+            preloader.classList.add('hidden');
+            document.body.style.overflow = '';
+        }, 3000);
+    }
+
+    // ===================================
     // COUNTDOWN TIMER
     // ===================================
-
-    const TIMER_DAYS = 3; // Количество дней для таймера
+    const TIMER_DAYS = 3;
 
     function initCountdown() {
-        const daysEl = document.getElementById('days');
-        const hoursEl = document.getElementById('hours');
-        const minutesEl = document.getElementById('minutes');
+        const daysEl = document.getElementById('timerDays');
+        const hoursEl = document.getElementById('timerHours');
+        const minsEl = document.getElementById('timerMins');
 
-        if (!daysEl || !hoursEl || !minutesEl) return;
+        if (!daysEl || !hoursEl || !minsEl) return;
 
-        // Получаем или создаём дату окончания
         let endDate = localStorage.getItem('sparom_timer_end');
 
         if (!endDate) {
-            // Создаём новую дату окончания
             const now = new Date();
             const end = new Date(now.getTime() + TIMER_DAYS * 24 * 60 * 60 * 1000);
             endDate = end.toISOString();
             localStorage.setItem('sparom_timer_end', endDate);
         }
 
-        function updateTimer() {
+        function update() {
             const now = new Date();
             const end = new Date(endDate);
             const diff = end - now;
 
             if (diff <= 0) {
-                // Таймер истёк - сбрасываем
                 localStorage.removeItem('sparom_timer_end');
                 daysEl.textContent = '00';
                 hoursEl.textContent = '00';
-                minutesEl.textContent = '00';
+                minsEl.textContent = '00';
                 return;
             }
 
             const days = Math.floor(diff / (1000 * 60 * 60 * 24));
             const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
 
             daysEl.textContent = String(days).padStart(2, '0');
             hoursEl.textContent = String(hours).padStart(2, '0');
-            minutesEl.textContent = String(minutes).padStart(2, '0');
+            minsEl.textContent = String(mins).padStart(2, '0');
         }
 
-        updateTimer();
-        setInterval(updateTimer, 1000);
+        update();
+        setInterval(update, 1000);
     }
 
     // ===================================
-    // A/B TESTING FRAMEWORK
+    // SCROLL ANIMATIONS
     // ===================================
+    function initScrollAnimations() {
+        const sections = document.querySelectorAll('.features, .gallery, .process, .cta-section');
 
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+
+                    // Animate children with stagger
+                    const children = entry.target.querySelectorAll('.feature-card, .process__step, .gallery__thumb');
+                    children.forEach((child, i) => {
+                        setTimeout(() => {
+                            child.classList.add('visible');
+                        }, i * 100);
+                    });
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        sections.forEach(section => {
+            section.classList.add('animate-on-scroll');
+            observer.observe(section);
+        });
+
+        // Individual cards animation
+        const cards = document.querySelectorAll('.feature-card, .process__step');
+        cards.forEach(card => {
+            card.classList.add('animate-on-scroll');
+        });
+    }
+
+    // ===================================
+    // GALLERY INTERACTION
+    // ===================================
+    function initGallery() {
+        const thumbs = document.querySelectorAll('.gallery__thumb');
+        const mainImg = document.getElementById('galleryMain');
+
+        if (!thumbs.length || !mainImg) return;
+
+        thumbs.forEach(thumb => {
+            thumb.addEventListener('click', () => {
+                // Remove active from all
+                thumbs.forEach(t => t.classList.remove('gallery__thumb--active'));
+
+                // Add active to clicked
+                thumb.classList.add('gallery__thumb--active');
+
+                // Update main image with fade effect
+                const newSrc = thumb.querySelector('img').src.replace('w=400', 'w=1200');
+                mainImg.style.opacity = '0';
+
+                setTimeout(() => {
+                    mainImg.src = newSrc;
+                    mainImg.style.opacity = '1';
+                }, 300);
+            });
+        });
+    }
+
+    // ===================================
+    // SMOOTH PARALLAX ON HERO
+    // ===================================
+    function initParallax() {
+        const heroImg = document.querySelector('.hero__bg-image');
+        if (!heroImg) return;
+
+        let ticking = false;
+
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const scrolled = window.pageYOffset;
+                    const rate = scrolled * 0.3;
+
+                    if (scrolled < window.innerHeight) {
+                        heroImg.style.transform = `scale(1.05) translateY(${rate}px)`;
+                    }
+
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+    }
+
+    // ===================================
+    // CTA BUTTONS
+    // ===================================
+    function initCTAButtons() {
+        const ctaButtons = document.querySelectorAll('#mainCta, #galleryCta, #finalCta');
+
+        ctaButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+
+                // Track click
+                if (typeof ym === 'function' && window.YM_COUNTER_ID) {
+                    ym(window.YM_COUNTER_ID, 'reachGoal', 'cta_click', {
+                        button: btn.id
+                    });
+                }
+
+                // Add ripple effect
+                const ripple = document.createElement('span');
+                ripple.style.cssText = `
+                    position: absolute;
+                    background: rgba(255,255,255,0.3);
+                    border-radius: 50%;
+                    transform: scale(0);
+                    animation: ripple 0.6s linear;
+                    pointer-events: none;
+                `;
+
+                const rect = btn.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = (e.clientX - rect.left - size/2) + 'px';
+                ripple.style.top = (e.clientY - rect.top - size/2) + 'px';
+
+                btn.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+
+                // Quiz placeholder
+                alert('Квиз скоро будет доступен!');
+            });
+        });
+
+        // Add ripple animation to page
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    // ===================================
+    // A/B TESTING
+    // ===================================
     const AB = {
-        // Хранилище выбранных вариантов
         variants: {},
 
-        // Инициализация A/B тестов
-        init: function() {
+        init() {
             const stored = localStorage.getItem('sparom_ab_variants');
-
             if (stored) {
                 try {
                     this.variants = JSON.parse(stored);
@@ -77,164 +237,105 @@
                 }
             }
 
-            // Определяем варианты для каждого теста
             if (window.AB_CONFIG) {
                 for (const testName in window.AB_CONFIG) {
-                    if (!this.variants[testName]) {
+                    if (this.variants[testName] === undefined) {
                         const config = window.AB_CONFIG[testName];
-                        const variantIndex = Math.floor(Math.random() * config.variants.length);
-                        this.variants[testName] = variantIndex;
+                        this.variants[testName] = Math.floor(Math.random() * config.variants.length);
                     }
                 }
-
                 localStorage.setItem('sparom_ab_variants', JSON.stringify(this.variants));
             }
 
-            this.applyVariants();
-            this.trackToMetrika();
+            this.apply();
+            console.log('[A/B] Variants:', this.variants);
         },
 
-        // Применяем выбранные варианты
-        applyVariants: function() {
+        apply() {
             if (!window.AB_CONFIG) return;
 
             // Headline
             if (window.AB_CONFIG.headline && this.variants.headline !== undefined) {
-                const headlineEl = document.querySelector('[data-ab="headline"]');
-                if (headlineEl) {
-                    headlineEl.innerHTML = window.AB_CONFIG.headline.variants[this.variants.headline];
-                }
-            }
+                const variant = window.AB_CONFIG.headline.variants[this.variants.headline];
+                const line1 = document.querySelector('.hero__title-line:first-child');
+                const line2 = document.querySelector('.hero__title-line--accent');
 
-            // CTA Button
-            if (window.AB_CONFIG.cta && this.variants.cta !== undefined) {
-                const ctaEl = document.querySelector('[data-ab="cta"]');
-                if (ctaEl) {
-                    const variant = window.AB_CONFIG.cta.variants[this.variants.cta];
-                    const textEl = ctaEl.querySelector('.btn__text');
-                    const subtextEl = ctaEl.querySelector('.btn__subtext');
-                    if (textEl) textEl.textContent = variant.text;
-                    if (subtextEl) subtextEl.textContent = variant.subtext;
-                }
+                if (line1 && variant.line1) line1.textContent = variant.line1;
+                if (line2 && variant.line2) line2.textContent = variant.line2;
             }
         },
 
-        // Отправляем варианты в Яндекс.Метрику
-        trackToMetrika: function() {
-            if (typeof ym === 'function' && window.YM_COUNTER_ID) {
-                ym(window.YM_COUNTER_ID, 'params', {
-                    ab_test: this.variants
-                });
-            }
-
-            // Логируем для дебага
-            console.log('[A/B Test] Variants:', this.variants);
-        },
-
-        // Получить текущий вариант теста
-        getVariant: function(testName) {
-            return this.variants[testName];
-        },
-
-        // Принудительно установить вариант (для тестирования)
-        setVariant: function(testName, variantIndex) {
-            this.variants[testName] = variantIndex;
+        setVariant(testName, index) {
+            this.variants[testName] = index;
             localStorage.setItem('sparom_ab_variants', JSON.stringify(this.variants));
-            this.applyVariants();
+            this.apply();
         },
 
-        // Сбросить все варианты
-        reset: function() {
+        reset() {
             localStorage.removeItem('sparom_ab_variants');
             this.variants = {};
             location.reload();
         }
     };
 
-    // Делаем доступным глобально для дебага
     window.AB = AB;
 
     // ===================================
-    // CTA BUTTON HANDLERS
+    // FLOATING OFFER ANIMATION
     // ===================================
+    function initFloatingOffer() {
+        const offer = document.querySelector('.floating-offer');
+        if (!offer) return;
 
-    function initCTAButtons() {
-        const ctaButtons = document.querySelectorAll('#mainCta, #galleryCta, #finalCta');
+        // Subtle hover animation
+        offer.addEventListener('mouseenter', () => {
+            offer.style.transform = 'translateY(-5px) scale(1.02)';
+        });
 
-        ctaButtons.forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-
-                // Отправляем событие в Метрику
-                if (typeof ym === 'function' && window.YM_COUNTER_ID) {
-                    ym(window.YM_COUNTER_ID, 'reachGoal', 'cta_click', {
-                        button: this.id,
-                        ab_variant: AB.variants
-                    });
-                }
-
-                // Здесь будет переход на квиз
-                // window.location.href = '/quiz';
-
-                // Пока показываем алерт
-                alert('Квиз скоро будет доступен!');
-            });
+        offer.addEventListener('mouseleave', () => {
+            offer.style.transform = 'translateY(0) scale(1)';
         });
     }
 
     // ===================================
-    // SMOOTH SCROLL
+    // HEADER SCROLL EFFECT
     // ===================================
+    function initHeaderScroll() {
+        const header = document.querySelector('.header');
+        if (!header) return;
 
-    function initSmoothScroll() {
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                }
-            });
+        let lastScroll = 0;
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+
+            if (currentScroll > 100) {
+                header.style.background = 'rgba(44, 24, 16, 0.9)';
+                header.style.backdropFilter = 'blur(10px)';
+            } else {
+                header.style.background = 'transparent';
+                header.style.backdropFilter = 'none';
+            }
+
+            lastScroll = currentScroll;
         });
     }
 
     // ===================================
-    // INTERSECTION OBSERVER FOR ANIMATIONS
+    // INIT
     // ===================================
-
-    function initScrollAnimations() {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.animationPlayState = 'running';
-                }
-            });
-        }, {
-            threshold: 0.1
-        });
-
-        document.querySelectorAll('.benefit-card').forEach(card => {
-            card.style.animationPlayState = 'paused';
-            observer.observe(card);
-        });
-    }
-
-    // ===================================
-    // INIT ON DOM READY
-    // ===================================
-
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', () => {
+        initPreloader();
         initCountdown();
-        AB.init();
-        initCTAButtons();
-        initSmoothScroll();
         initScrollAnimations();
+        initGallery();
+        initParallax();
+        initCTAButtons();
+        initFloatingOffer();
+        initHeaderScroll();
+        AB.init();
 
-        console.log('[Sparom] Landing page initialized');
-        console.log('[Sparom] To test A/B variants, use: AB.setVariant("headline", 1)');
-        console.log('[Sparom] To reset A/B tests: AB.reset()');
+        console.log('[Sparom] Premium landing initialized');
     });
 
 })();

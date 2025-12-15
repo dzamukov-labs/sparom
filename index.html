@@ -5,152 +5,269 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Готовая баня под ключ за 14 дней | С лёгким паром</title>
     <meta name="description" content="Готовая баня вашей мечты за 14 дней от 450 000 ₽. Доставка и установка за 1 час. Печь, мебель и электрика в комплекте.">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero__container">
-            <header class="header">
-                <div class="logo">
-                    <span class="logo__text">С лёгким паром</span>
-                    <span class="logo__subtext">готовые бани под ключ</span>
-                </div>
-            </header>
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="preloader__logo">С лёгким паром</div>
+    </div>
 
-            <div class="hero__content">
-                <h1 class="hero__title" data-ab="headline">
-                    Готовая баня за 14 дней — <span class="highlight">привезём и установим за 1 час</span>
-                </h1>
+    <!-- Hero Section - Full Screen Immersive -->
+    <section class="hero" id="hero">
+        <div class="hero__bg">
+            <div class="hero__bg-overlay"></div>
+            <img src="https://images.unsplash.com/photo-1562778612-e1e0cda9915c?w=1920&q=80"
+                 alt="Баня в зимнем лесу"
+                 class="hero__bg-image"
+                 id="heroImage">
+        </div>
 
-                <p class="hero__subtitle">
-                    От 450 000 ₽. Печь, мебель и электрика уже в комплекте.
-                </p>
+        <header class="header">
+            <a href="/" class="logo">
+                <span class="logo__main">С лёгким паром</span>
+            </a>
+        </header>
 
-                <div class="hero__cta">
-                    <button class="btn btn--primary" data-ab="cta" id="mainCta">
-                        <span class="btn__text">Подобрать баню под ваш участок</span>
-                        <span class="btn__subtext">и получить расчёт стоимости</span>
-                    </button>
-                </div>
+        <div class="hero__content">
+            <div class="hero__badge">
+                <span class="hero__badge-dot"></span>
+                Производство в Новгородской области
+            </div>
 
-                <div class="hero__promo">
-                    <div class="promo-timer">
-                        <div class="promo-timer__icon">🎁</div>
-                        <div class="promo-timer__content">
-                            <div class="promo-timer__title">Успейте получить подарок</div>
-                            <div class="promo-timer__gift">Комплект банных принадлежностей</div>
-                        </div>
-                        <div class="promo-timer__countdown">
-                            <div class="countdown">
-                                <div class="countdown__item">
-                                    <span class="countdown__value" id="days">02</span>
-                                    <span class="countdown__label">дн</span>
-                                </div>
-                                <span class="countdown__separator">:</span>
-                                <div class="countdown__item">
-                                    <span class="countdown__value" id="hours">23</span>
-                                    <span class="countdown__label">час</span>
-                                </div>
-                                <span class="countdown__separator">:</span>
-                                <div class="countdown__item">
-                                    <span class="countdown__value" id="minutes">59</span>
-                                    <span class="countdown__label">мин</span>
-                                </div>
-                            </div>
-                        </div>
+            <h1 class="hero__title">
+                <span class="hero__title-line">Ваша баня</span>
+                <span class="hero__title-line hero__title-line--accent">уже через 14 дней</span>
+            </h1>
+
+            <p class="hero__subtitle">
+                Готовая баня из бруса от 450 000 ₽<br>
+                Привезём, установим за час — и можно париться
+            </p>
+
+            <div class="hero__cta-group">
+                <button class="btn btn--primary btn--glow" id="mainCta">
+                    <span class="btn__content">
+                        <span class="btn__text">Подобрать свою баню</span>
+                        <span class="btn__icon">→</span>
+                    </span>
+                </button>
+
+                <div class="hero__trust">
+                    <div class="hero__trust-avatars">
+                        <div class="avatar">3000+</div>
                     </div>
+                    <span class="hero__trust-text">семей уже с нами</span>
                 </div>
             </div>
         </div>
 
-        <div class="hero__image">
-            <img src="https://placehold.co/1200x800/e8f0f5/666?text=Фото+бани" alt="Готовая баня зимой" class="hero__img" data-ab="hero-image" id="heroImage">
+        <div class="hero__scroll">
+            <span class="hero__scroll-text">Листайте</span>
+            <div class="hero__scroll-line"></div>
+        </div>
+
+        <!-- Floating offer card -->
+        <div class="floating-offer">
+            <div class="floating-offer__icon">🎁</div>
+            <div class="floating-offer__content">
+                <div class="floating-offer__title">Подарок при заказе</div>
+                <div class="floating-offer__timer">
+                    <span id="timerDays">02</span>д
+                    <span id="timerHours">23</span>ч
+                    <span id="timerMins">59</span>м
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- Benefits Section -->
-    <section class="benefits">
+    <!-- Features Section -->
+    <section class="features" id="features">
         <div class="container">
-            <h2 class="section-title">Почему 3000+ семей выбрали нас?</h2>
+            <div class="section-header">
+                <span class="section-label">Преимущества</span>
+                <h2 class="section-title">
+                    Почему выбирают<br>
+                    <span class="text-accent">именно нас</span>
+                </h2>
+            </div>
 
-            <div class="benefits__grid">
-                <div class="benefit-card">
-                    <div class="benefit-card__icon">⚡</div>
-                    <h3 class="benefit-card__title">Установка за 1 час</h3>
-                    <p class="benefit-card__text">Без стройки и грязи на участке. Привезли, установили — пользуйтесь.</p>
+            <div class="features__grid">
+                <div class="feature-card feature-card--large">
+                    <div class="feature-card__number">01</div>
+                    <h3 class="feature-card__title">Установка<br>за 1 час</h3>
+                    <p class="feature-card__text">
+                        Никакой стройки. Привезли готовую баню,
+                        поставили на фундамент — пользуйтесь.
+                        Без грязи, шума и месяцев ожидания.
+                    </p>
+                    <div class="feature-card__visual">
+                        <span class="feature-card__icon">⚡</span>
+                    </div>
                 </div>
 
-                <div class="benefit-card">
-                    <div class="benefit-card__icon">🔑</div>
-                    <h3 class="benefit-card__title">Всё включено</h3>
-                    <p class="benefit-card__text">Печь, мебель, электрика и фундамент — уже в стоимости.</p>
+                <div class="feature-card">
+                    <div class="feature-card__number">02</div>
+                    <h3 class="feature-card__title">Всё включено</h3>
+                    <p class="feature-card__text">
+                        Печь, мебель, электрика, фундамент —
+                        в стоимости. Без скрытых платежей.
+                    </p>
                 </div>
 
-                <div class="benefit-card">
-                    <div class="benefit-card__icon">🌡️</div>
-                    <h3 class="benefit-card__title">Нагрев за 45 минут</h3>
-                    <p class="benefit-card__text">Держит тепло до 3 часов даже в −30°C.</p>
+                <div class="feature-card">
+                    <div class="feature-card__number">03</div>
+                    <h3 class="feature-card__title">−30°C не страшны</h3>
+                    <p class="feature-card__text">
+                        Нагрев за 45 минут. Держит тепло
+                        до 3 часов даже в лютый мороз.
+                    </p>
                 </div>
 
-                <div class="benefit-card">
-                    <div class="benefit-card__icon">💪</div>
-                    <h3 class="benefit-card__title">Прочность на десятилетия</h3>
-                    <p class="benefit-card__text">Цельный брус весом 5 тонн. В 10 раз надёжнее бани-бочки.</p>
+                <div class="feature-card">
+                    <div class="feature-card__number">04</div>
+                    <h3 class="feature-card__title">На десятилетия</h3>
+                    <p class="feature-card__text">
+                        Цельный брус весом 5 тонн.
+                        В 10 раз надёжнее бани-бочки.
+                    </p>
                 </div>
 
-                <div class="benefit-card">
-                    <div class="benefit-card__icon">💰</div>
-                    <h3 class="benefit-card__title">Экономия на фундаменте</h3>
-                    <p class="benefit-card__text">Блочный фундамент включён. Забудьте про дорогой ленточный.</p>
-                </div>
-
-                <div class="benefit-card">
-                    <div class="benefit-card__icon">🎨</div>
-                    <h3 class="benefit-card__title">Под ваш участок</h3>
-                    <p class="benefit-card__text">Выберите размер, цвет и планировку под ваши задачи.</p>
+                <div class="feature-card">
+                    <div class="feature-card__number">05</div>
+                    <h3 class="feature-card__title">Под ваш участок</h3>
+                    <p class="feature-card__text">
+                        Любой размер, цвет и планировка.
+                        Подберём идеальный вариант.
+                    </p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Gallery Section -->
-    <section class="gallery">
+    <section class="gallery" id="gallery">
         <div class="container">
-            <h2 class="section-title">Как выглядит ваша будущая баня</h2>
+            <div class="section-header section-header--center">
+                <span class="section-label">Галерея</span>
+                <h2 class="section-title">
+                    Бани, которые мы<br>
+                    <span class="text-accent">уже доставили</span>
+                </h2>
+            </div>
 
-            <div class="gallery__grid">
-                <div class="gallery__item gallery__item--large">
-                    <img src="https://placehold.co/800x600/e8f0f5/666?text=Баня+1" alt="Баня зимой" loading="lazy">
+            <div class="gallery__showcase">
+                <div class="gallery__main">
+                    <img src="https://images.unsplash.com/photo-1562778612-e1e0cda9915c?w=1200&q=80"
+                         alt="Баня зимой"
+                         class="gallery__main-img"
+                         id="galleryMain">
+                    <div class="gallery__main-overlay">
+                        <span class="gallery__main-caption">Баня 6×3м • Новгородская область</span>
+                    </div>
                 </div>
-                <div class="gallery__item">
-                    <img src="https://placehold.co/600x450/e8f0f5/666?text=Баня+2" alt="Баня на участке" loading="lazy">
-                </div>
-                <div class="gallery__item">
-                    <img src="https://placehold.co/600x450/e8f0f5/666?text=Баня+3" alt="Баня осенью" loading="lazy">
+
+                <div class="gallery__thumbs">
+                    <div class="gallery__thumb gallery__thumb--active">
+                        <img src="https://images.unsplash.com/photo-1562778612-e1e0cda9915c?w=400&q=80" alt="Баня 1">
+                    </div>
+                    <div class="gallery__thumb">
+                        <img src="https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?w=400&q=80" alt="Баня 2">
+                    </div>
+                    <div class="gallery__thumb">
+                        <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&q=80" alt="Баня 3">
+                    </div>
                 </div>
             </div>
 
             <div class="gallery__cta">
-                <button class="btn btn--primary" id="galleryCta">
-                    Хочу такую же — подобрать размер
+                <button class="btn btn--secondary" id="galleryCta">
+                    Хочу такую же
+                    <span class="btn__icon">→</span>
                 </button>
             </div>
         </div>
     </section>
 
-    <!-- Final CTA Section -->
-    <section class="final-cta">
+    <!-- Process Section -->
+    <section class="process" id="process">
         <div class="container">
-            <div class="final-cta__content">
-                <h2 class="final-cta__title">Готовы к своей бане?</h2>
-                <p class="final-cta__text">Ответьте на 5 вопросов — подберём идеальный вариант и рассчитаем стоимость</p>
-                <button class="btn btn--primary btn--large" id="finalCta">
-                    Подобрать баню
+            <div class="section-header">
+                <span class="section-label">Как это работает</span>
+                <h2 class="section-title">
+                    От заявки до<br>
+                    <span class="text-accent">первого пара</span>
+                </h2>
+            </div>
+
+            <div class="process__timeline">
+                <div class="process__step">
+                    <div class="process__step-marker">
+                        <span class="process__step-number">1</span>
+                    </div>
+                    <div class="process__step-content">
+                        <h3 class="process__step-title">Оставляете заявку</h3>
+                        <p class="process__step-text">Отвечаете на 5 простых вопросов в квизе — мы понимаем, что вам нужно</p>
+                    </div>
+                </div>
+
+                <div class="process__step">
+                    <div class="process__step-marker">
+                        <span class="process__step-number">2</span>
+                    </div>
+                    <div class="process__step-content">
+                        <h3 class="process__step-title">Подбираем баню</h3>
+                        <p class="process__step-text">Менеджер перезванивает, уточняет детали и предлагает лучший вариант</p>
+                    </div>
+                </div>
+
+                <div class="process__step">
+                    <div class="process__step-marker">
+                        <span class="process__step-number">3</span>
+                    </div>
+                    <div class="process__step-content">
+                        <h3 class="process__step-title">Изготовление</h3>
+                        <p class="process__step-text">За 14 дней собираем вашу баню на производстве в Новгородской области</p>
+                    </div>
+                </div>
+
+                <div class="process__step">
+                    <div class="process__step-marker">
+                        <span class="process__step-number">4</span>
+                    </div>
+                    <div class="process__step-content">
+                        <h3 class="process__step-title">Доставка и установка</h3>
+                        <p class="process__step-text">Привозим и устанавливаем за 1 час. Можно париться в тот же день!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="cta">
+        <div class="cta-section__bg"></div>
+        <div class="container">
+            <div class="cta-section__content">
+                <h2 class="cta-section__title">
+                    Готовы к своей бане?
+                </h2>
+                <p class="cta-section__text">
+                    Ответьте на 5 вопросов — подберём идеальный вариант<br>
+                    и рассчитаем точную стоимость
+                </p>
+                <button class="btn btn--primary btn--large btn--glow" id="finalCta">
+                    <span class="btn__content">
+                        <span class="btn__text">Подобрать баню</span>
+                        <span class="btn__icon">→</span>
+                    </span>
                 </button>
+                <p class="cta-section__note">Это бесплатно и займёт 2 минуты</p>
             </div>
         </div>
     </section>
@@ -159,36 +276,38 @@
     <footer class="footer">
         <div class="container">
             <div class="footer__content">
+                <div class="footer__brand">
+                    <a href="/" class="logo logo--footer">
+                        <span class="logo__main">С лёгким паром</span>
+                    </a>
+                    <p class="footer__tagline">Готовые бани под ключ с 2014 года</p>
+                </div>
+
                 <div class="footer__legal">
                     <p>ИП Дзамуков Георгий Михайлович</p>
-                    <p>ОГРН ИП 319532100003969</p>
+                    <p>ОГРНИП 319532100003969</p>
                 </div>
-                <div class="footer__copyright">
-                    <p>© sparom.ru 2014–2025</p>
-                    <p>Сайт носит информационный характер и не является публичной офертой.</p>
-                </div>
+
                 <div class="footer__links">
                     <a href="/privacy" class="footer__link">Политика конфиденциальности</a>
                 </div>
             </div>
+
+            <div class="footer__bottom">
+                <p>© 2014–2025 sparom.ru. Все права защищены.</p>
+                <p>Сайт носит информационный характер и не является публичной офертой.</p>
+            </div>
         </div>
     </footer>
 
-    <!-- A/B Testing Config (will be expanded) -->
+    <!-- Scripts -->
     <script>
         window.AB_CONFIG = {
             headline: {
                 variants: [
-                    'Готовая баня за 14 дней — <span class="highlight">привезём и установим за 1 час</span>',
-                    'Своя баня через 14 дней — <span class="highlight">без стройки и грязи</span>',
-                    'Баня под ключ за 14 дней — <span class="highlight">просто добавьте воды</span>'
-                ]
-            },
-            cta: {
-                variants: [
-                    { text: 'Подобрать баню под ваш участок', subtext: 'и получить расчёт стоимости' },
-                    { text: 'Получить каталог и цены', subtext: 'бесплатно, без спама' },
-                    { text: 'Рассчитать стоимость', subtext: 'ответьте на 5 вопросов' }
+                    { line1: 'Ваша баня', line2: 'уже через 14 дней' },
+                    { line1: 'Своя баня', line2: 'без стройки и забот' },
+                    { line1: 'Баня мечты', line2: 'за 14 дней под ключ' }
                 ]
             }
         };
