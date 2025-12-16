@@ -44,13 +44,14 @@ export default async function handler(req, res) {
         };
 
         // Build message
-        let message = `🔥 <b>Новая заявка с сайта</b>\n\n`;
+        const pageUrl = data.page_url || 'sparom.ru';
+        let message = `🔥 <b>Новая заявка с сайта</b>\n${pageUrl}\n\n`;
 
         message += `📞 <b>Телефон:</b> ${data.phone || '—'}\n`;
         message += `📍 <b>Локация:</b> ${data.location || '—'}\n\n`;
 
         message += `<b>Ответы на квиз:</b>\n`;
-        message += `├ Дизайн: ${designMap[data.design] || data.design || '—'}\n`;
+        message += `├ Тип бани: ${designMap[data.design] || data.design || '—'}\n`;
         message += `├ Цвет: ${colorMap[data.color] || data.color || '—'}\n`;
         message += `├ Бюджет: ${budgetMap[data.budget] || data.budget || '—'}\n`;
         message += `└ Когда: ${whenMap[data.when] || data.when || '—'}\n`;

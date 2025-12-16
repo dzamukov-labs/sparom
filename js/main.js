@@ -374,7 +374,7 @@
             const data = collectAnswers();
             const utm = getUTMParams();
 
-            const payload = { ...data, ...utm };
+            const payload = { ...data, ...utm, page_url: window.location.href };
 
             // Track quiz completion
             if (typeof ym === 'function' && window.YM_COUNTER_ID) {
