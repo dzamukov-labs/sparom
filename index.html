@@ -18,7 +18,7 @@
         <div class="preloader__logo">С лёгким паром</div>
     </div>
 
-    <!-- Hero Section - Two Column Layout -->
+    <!-- Hero Section -->
     <section class="hero" id="hero">
         <div class="container hero__container">
             <!-- Left Column - Content -->
@@ -26,17 +26,11 @@
                 <header class="header">
                     <a href="/" class="logo">
                         <span class="logo__main">С лёгким паром</span>
-                        <span class="logo__sub">готовые бани под ключ</span>
                     </a>
                 </header>
 
                 <div class="hero__text">
-                    <div class="hero__badge">
-                        <span class="hero__badge-dot"></span>
-                        Производство в Новгородской области
-                    </div>
-
-                    <h1 class="hero__title" data-ab="headline">
+                    <h1 class="hero__title">
                         <span class="hero__title-line">Ваша баня</span>
                         <span class="hero__title-line hero__title-accent">уже через 14 дней</span>
                     </h1>
@@ -61,7 +55,9 @@
                     <!-- Timer -->
                     <div class="hero__offer">
                         <div class="offer-card">
-                            <div class="offer-card__icon">🎁</div>
+                            <svg class="offer-card__icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M20 12v10H4V12M2 7h20v5H2zM12 22V7M12 7H7.5a2.5 2.5 0 110-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 100-5C13 2 12 7 12 7z"/>
+                            </svg>
                             <div class="offer-card__content">
                                 <div class="offer-card__title">Подарок при заказе</div>
                                 <div class="offer-card__desc">Комплект банных принадлежностей</div>
@@ -118,10 +114,8 @@
     <section class="features" id="features">
         <div class="container">
             <div class="section-header">
-                <span class="section-label">Преимущества</span>
                 <h2 class="section-title">
-                    Почему выбирают<br>
-                    <span class="text-accent">именно нас</span>
+                    Почему выбирают <span class="text-accent">нас</span>
                 </h2>
             </div>
 
@@ -132,7 +126,6 @@
                     <p class="feature-card__text">
                         Никакой стройки. Привезли готовую баню,
                         поставили на фундамент — пользуйтесь.
-                        Без грязи, шума и месяцев ожидания.
                     </p>
                     <div class="feature-card__icon">⚡</div>
                 </div>
@@ -142,34 +135,16 @@
                     <h3 class="feature-card__title">Всё включено</h3>
                     <p class="feature-card__text">
                         Печь, мебель, электрика, фундамент —
-                        в стоимости. Без скрытых платежей.
+                        в стоимости.
                     </p>
                 </div>
 
                 <div class="feature-card">
                     <div class="feature-card__number">03</div>
-                    <h3 class="feature-card__title">−30°C не страшны</h3>
-                    <p class="feature-card__text">
-                        Нагрев за 45 минут. Держит тепло
-                        до 3 часов даже в лютый мороз.
-                    </p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-card__number">04</div>
                     <h3 class="feature-card__title">На десятилетия</h3>
                     <p class="feature-card__text">
                         Цельный брус весом 5 тонн.
                         В 10 раз надёжнее бани-бочки.
-                    </p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-card__number">05</div>
-                    <h3 class="feature-card__title">Под ваш участок</h3>
-                    <p class="feature-card__text">
-                        Любой размер, цвет и планировка.
-                        Подберём идеальный вариант.
                     </p>
                 </div>
             </div>
@@ -185,8 +160,7 @@
                     Готовы к своей бане?
                 </h2>
                 <p class="cta-section__text">
-                    Ответьте на 5 вопросов — подберём идеальный вариант<br>
-                    и рассчитаем точную стоимость
+                    Ответьте на 5 вопросов — подберём идеальный вариант
                 </p>
                 <button class="btn btn--primary btn--large" id="finalCta">
                     <span>Подобрать баню</span>
@@ -219,24 +193,179 @@
             </div>
 
             <div class="footer__bottom">
-                <p>© 2014–2025 sparom.ru. Все права защищены.</p>
-                <p>Сайт носит информационный характер и не является публичной офертой.</p>
+                <p>© 2014–2025 sparom.ru</p>
             </div>
         </div>
     </footer>
 
-    <!-- Scripts -->
-    <script>
-        window.AB_CONFIG = {
-            headline: {
-                variants: [
-                    { line1: 'Ваша баня', line2: 'уже через 14 дней' },
-                    { line1: 'Своя баня', line2: 'без стройки и забот' },
-                    { line1: 'Баня мечты', line2: 'за 14 дней под ключ' }
-                ]
-            }
-        };
-    </script>
+    <!-- Quiz Modal -->
+    <div class="quiz-modal" id="quizModal">
+        <div class="quiz-modal__overlay"></div>
+        <div class="quiz-modal__container">
+            <button class="quiz-modal__close" id="quizClose" aria-label="Закрыть">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+            </button>
+
+            <div class="quiz">
+                <!-- Progress -->
+                <div class="quiz__progress">
+                    <div class="quiz__progress-bar" id="quizProgress"></div>
+                </div>
+                <div class="quiz__step-info">
+                    <span id="quizStepNum">1</span> из 5
+                </div>
+
+                <!-- Steps Container -->
+                <div class="quiz__steps" id="quizSteps">
+
+                    <!-- Step 1: Design -->
+                    <div class="quiz__step quiz__step--active" data-step="1">
+                        <h3 class="quiz__question">Какая баня вам больше нравится?</h3>
+                        <div class="quiz__options quiz__options--cards">
+                            <label class="quiz__card">
+                                <input type="radio" name="design" value="solid" required>
+                                <div class="quiz__card-img">
+                                    <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&q=80" alt="Целиковая баня">
+                                </div>
+                                <div class="quiz__card-text">
+                                    <strong>Целиковая</strong>
+                                    <span>Больше пространства внутри</span>
+                                </div>
+                            </label>
+                            <label class="quiz__card">
+                                <input type="radio" name="design" value="porch">
+                                <div class="quiz__card-img">
+                                    <img src="https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?w=400&q=80" alt="Баня с крылечком">
+                                </div>
+                                <div class="quiz__card-text">
+                                    <strong>С крылечком</strong>
+                                    <span>Уютный уголок на свежем воздухе</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Color -->
+                    <div class="quiz__step" data-step="2">
+                        <h3 class="quiz__question">Какой цвет лучше впишется?</h3>
+                        <div class="quiz__options quiz__options--colors">
+                            <label class="quiz__color">
+                                <input type="radio" name="color" value="palisander" required>
+                                <div class="quiz__color-img">
+                                    <img src="https://images.unsplash.com/photo-1562778612-e1e0cda9915c?w=300&q=80" alt="Палисандр">
+                                </div>
+                                <span>Палисандр</span>
+                            </label>
+                            <label class="quiz__color">
+                                <input type="radio" name="color" value="dark-brown">
+                                <div class="quiz__color-img">
+                                    <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=300&q=80" alt="Тёмно-коричневый">
+                                </div>
+                                <span>Тёмно-коричневый</span>
+                            </label>
+                            <label class="quiz__color">
+                                <input type="radio" name="color" value="light-brown">
+                                <div class="quiz__color-img">
+                                    <img src="https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?w=300&q=80" alt="Светло-коричневый">
+                                </div>
+                                <span>Светло-коричневый</span>
+                            </label>
+                            <label class="quiz__color">
+                                <input type="radio" name="color" value="custom">
+                                <div class="quiz__color-img quiz__color-img--custom">
+                                    <span>?</span>
+                                </div>
+                                <span>Другой цвет</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Budget -->
+                    <div class="quiz__step" data-step="3">
+                        <h3 class="quiz__question">Ваш бюджет?</h3>
+                        <div class="quiz__options quiz__options--list">
+                            <label class="quiz__radio">
+                                <input type="radio" name="budget" value="350-400" required>
+                                <span>350 — 400 тыс. ₽</span>
+                            </label>
+                            <label class="quiz__radio">
+                                <input type="radio" name="budget" value="400-500">
+                                <span>400 — 500 тыс. ₽</span>
+                            </label>
+                            <label class="quiz__radio">
+                                <input type="radio" name="budget" value="500-700">
+                                <span>500 — 700 тыс. ₽</span>
+                            </label>
+                            <label class="quiz__radio">
+                                <input type="radio" name="budget" value="700+">
+                                <span>Более 700 тыс. ₽</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: When -->
+                    <div class="quiz__step" data-step="4">
+                        <h3 class="quiz__question">Когда планируете?</h3>
+                        <div class="quiz__options quiz__options--list">
+                            <label class="quiz__radio">
+                                <input type="radio" name="when" value="asap" required>
+                                <span>Как можно скорее</span>
+                            </label>
+                            <label class="quiz__radio">
+                                <input type="radio" name="when" value="season">
+                                <span>В этом сезоне</span>
+                            </label>
+                            <label class="quiz__radio">
+                                <input type="radio" name="when" value="later">
+                                <span>Пока присматриваюсь</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Contact -->
+                    <div class="quiz__step" data-step="5">
+                        <h3 class="quiz__question">Куда доставить и как связаться?</h3>
+                        <div class="quiz__form">
+                            <div class="quiz__field">
+                                <label for="quizLocation">Населённый пункт</label>
+                                <input type="text" id="quizLocation" name="location" placeholder="Например: Московская область, Чехов" required>
+                            </div>
+                            <div class="quiz__field">
+                                <label for="quizPhone">Телефон</label>
+                                <input type="tel" id="quizPhone" name="phone" placeholder="+7 (___) ___-__-__" required>
+                            </div>
+                            <p class="quiz__privacy">
+                                Нажимая кнопку, вы соглашаетесь с
+                                <a href="/privacy">политикой конфиденциальности</a>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Success -->
+                    <div class="quiz__step quiz__step--success" data-step="success">
+                        <div class="quiz__success">
+                            <div class="quiz__success-icon">✓</div>
+                            <h3 class="quiz__success-title">Заявка отправлена!</h3>
+                            <p class="quiz__success-text">Мы перезвоним в течение 15 минут и подберём идеальную баню под ваш запрос.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div class="quiz__nav" id="quizNav">
+                    <button class="quiz__btn quiz__btn--back" id="quizBack" style="visibility: hidden;">
+                        ← Назад
+                    </button>
+                    <button class="quiz__btn quiz__btn--next" id="quizNext">
+                        Далее →
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="js/main.js"></script>
 </body>
 </html>

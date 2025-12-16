@@ -201,6 +201,247 @@
     }
 
     // ===================================
+    // QUIZ MODAL
+    // ===================================
+    function initQuiz() {
+        const modal = document.getElementById('quizModal');
+        if (!modal) return;
+
+        const overlay = modal.querySelector('.quiz-modal__overlay');
+        const closeBtn = modal.querySelector('.quiz-modal__close');
+        const steps = modal.querySelectorAll('.quiz__step');
+        const progressBar = modal.querySelector('.quiz__progress-bar');
+        const stepInfo = modal.querySelector('.quiz__step-info');
+        const backBtn = modal.querySelector('.quiz__btn--back');
+        const nextBtn = modal.querySelector('.quiz__btn--next');
+
+        let currentStep = 0;
+        const totalSteps = 5;
+        const answers = {};
+
+        function openModal() {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            // Track quiz open
+            if (typeof ym === 'function' && window.YM_COUNTER_ID) {
+                ym(window.YM_COUNTER_ID, 'reachGoal', 'quiz_open');
+            }
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function goToStep(step) {
+            if (step < 0 || step > totalSteps) return;
+
+            currentStep = step;
+
+            // Update steps visibility
+            steps.forEach((s, i) => {
+                s.classList.toggle('quiz__step--active', i === step);
+            });
+
+            // Update progress bar
+            const progress = ((step + 1) / totalSteps) * 100;
+            if (progressBar) {
+                progressBar.style.width = progress + '%';
+            }
+
+            // Update step info
+            if (stepInfo) {
+                stepInfo.textContent = `Шаг ${step + 1} из ${totalSteps}`;
+            }
+
+            // Update navigation buttons
+            if (backBtn) {
+                backBtn.style.visibility = step === 0 ? 'hidden' : 'visible';
+            }
+
+            if (nextBtn) {
+                if (step === totalSteps - 1) {
+                    nextBtn.textContent = 'Получить расчёт';
+                } else {
+                    nextBtn.textContent = 'Далее →';
+                }
+            }
+
+            // Hide nav on success screen
+            const nav = modal.querySelector('.quiz__nav');
+            if (nav) {
+                nav.style.display = step >= totalSteps ? 'none' : 'flex';
+            }
+
+            // Hide step info and progress on success
+            if (stepInfo) {
+                stepInfo.style.display = step >= totalSteps ? 'none' : 'block';
+            }
+            const progressContainer = modal.querySelector('.quiz__progress');
+            if (progressContainer) {
+                progressContainer.style.display = step >= totalSteps ? 'none' : 'block';
+            }
+
+            validateCurrentStep();
+        }
+
+        function validateCurrentStep() {
+            if (!nextBtn) return;
+
+            let isValid = false;
+
+            switch (currentStep) {
+                case 0: // Design
+                    isValid = modal.querySelector('input[name="design"]:checked') !== null;
+                    break;
+                case 1: // Color
+                    isValid = modal.querySelector('input[name="color"]:checked') !== null;
+                    break;
+                case 2: // Budget
+                    isValid = modal.querySelector('input[name="budget"]:checked') !== null;
+                    break;
+                case 3: // When
+                    isValid = modal.querySelector('input[name="when"]:checked') !== null;
+                    break;
+                case 4: // Contact
+                    const phone = modal.querySelector('input[name="phone"]');
+                    isValid = phone && phone.value.trim().length >= 10;
+                    break;
+                default:
+                    isValid = true;
+            }
+
+            nextBtn.disabled = !isValid;
+        }
+
+        function collectAnswers() {
+            const design = modal.querySelector('input[name="design"]:checked');
+            const color = modal.querySelector('input[name="color"]:checked');
+            const budget = modal.querySelector('input[name="budget"]:checked');
+            const when = modal.querySelector('input[name="when"]:checked');
+            const location = modal.querySelector('input[name="location"]');
+            const phone = modal.querySelector('input[name="phone"]');
+
+            return {
+                design: design ? design.value : '',
+                color: color ? color.value : '',
+                budget: budget ? budget.value : '',
+                when: when ? when.value : '',
+                location: location ? location.value.trim() : '',
+                phone: phone ? phone.value.trim() : ''
+            };
+        }
+
+        function submitQuiz() {
+            const data = collectAnswers();
+
+            // Track quiz completion
+            if (typeof ym === 'function' && window.YM_COUNTER_ID) {
+                ym(window.YM_COUNTER_ID, 'reachGoal', 'quiz_complete', data);
+            }
+
+            console.log('[Quiz] Submitted:', data);
+
+            // Show success screen
+            goToStep(totalSteps);
+
+            // Here you would typically send data to server
+            // fetch('/api/lead', { method: 'POST', body: JSON.stringify(data) })
+        }
+
+        // Event listeners
+        if (overlay) {
+            overlay.addEventListener('click', closeModal);
+        }
+
+        if (closeBtn) {
+            closeBtn.addEventListener('click', closeModal);
+        }
+
+        // Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+
+        if (backBtn) {
+            backBtn.addEventListener('click', () => {
+                goToStep(currentStep - 1);
+            });
+        }
+
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                if (currentStep === totalSteps - 1) {
+                    submitQuiz();
+                } else {
+                    goToStep(currentStep + 1);
+                }
+            });
+        }
+
+        // Listen for option changes
+        modal.querySelectorAll('input[type="radio"]').forEach(input => {
+            input.addEventListener('change', () => {
+                validateCurrentStep();
+
+                // Auto-advance for first 4 steps (except contact)
+                if (currentStep < 4) {
+                    setTimeout(() => {
+                        goToStep(currentStep + 1);
+                    }, 300);
+                }
+            });
+        });
+
+        // Phone input validation
+        const phoneInput = modal.querySelector('input[name="phone"]');
+        if (phoneInput) {
+            phoneInput.addEventListener('input', () => {
+                // Format phone number
+                let value = phoneInput.value.replace(/\D/g, '');
+                if (value.length > 0 && value[0] === '8') {
+                    value = '7' + value.slice(1);
+                }
+                if (value.length > 11) {
+                    value = value.slice(0, 11);
+                }
+
+                // Format: +7 (XXX) XXX-XX-XX
+                let formatted = '';
+                if (value.length > 0) {
+                    formatted = '+' + value[0];
+                }
+                if (value.length > 1) {
+                    formatted += ' (' + value.slice(1, 4);
+                }
+                if (value.length > 4) {
+                    formatted += ') ' + value.slice(4, 7);
+                }
+                if (value.length > 7) {
+                    formatted += '-' + value.slice(7, 9);
+                }
+                if (value.length > 9) {
+                    formatted += '-' + value.slice(9, 11);
+                }
+
+                phoneInput.value = formatted;
+                validateCurrentStep();
+            });
+        }
+
+        // Initialize
+        goToStep(0);
+
+        // Expose open function
+        window.openQuiz = openModal;
+
+        return { open: openModal, close: closeModal };
+    }
+
+    // ===================================
     // CTA BUTTONS
     // ===================================
     function initCTAButtons() {
@@ -217,8 +458,10 @@
                     });
                 }
 
-                // Placeholder for quiz
-                alert('Квиз скоро будет доступен!');
+                // Open quiz
+                if (typeof window.openQuiz === 'function') {
+                    window.openQuiz();
+                }
             });
         });
     }
@@ -289,11 +532,13 @@
         initCarousel();
         initCountdown();
         initScrollAnimations();
+        initQuiz();
         initCTAButtons();
         AB.init();
 
         console.log('[Sparom] Landing initialized');
         console.log('[Sparom] Carousel: swipe or click arrows');
+        console.log('[Sparom] Quiz: openQuiz() to test');
         console.log('[Sparom] A/B test: AB.setVariant("headline", 1)');
     });
 
