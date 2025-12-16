@@ -236,13 +236,20 @@ a {
 
 .logo {
     display: inline-flex;
-    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.logo__icon {
+    font-size: 1.5rem;
+    color: var(--color-amber);
 }
 
 .logo__main {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--color-gray-500);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-wood-dark);
+    letter-spacing: -0.02em;
 }
 
 .logo__sub {
@@ -253,8 +260,16 @@ a {
     color: var(--color-gray-500);
 }
 
+.logo--footer {
+    opacity: 0.8;
+}
+
+.logo--footer .logo__icon {
+    font-size: 1.2rem;
+}
+
 .logo--footer .logo__main {
-    font-size: 0.85rem;
+    font-size: 0.95rem;
 }
 
 /* Hero Content */
@@ -357,12 +372,27 @@ a {
     background: var(--color-white);
     border: 2px solid var(--color-amber);
     border-radius: var(--radius-md);
-    max-width: 400px;
+    max-width: 420px;
 }
 
-.offer-card__icon {
-    font-size: 1.75rem;
+.offer-card__badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
     flex-shrink: 0;
+}
+
+.offer-card__badge-icon {
+    flex-shrink: 0;
+}
+
+.offer-card__badge span {
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-amber);
 }
 
 .offer-card__content {
@@ -371,7 +401,7 @@ a {
 }
 
 .offer-card__title {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     font-weight: 700;
     color: var(--color-wood-dark);
 }
@@ -493,6 +523,52 @@ a {
 
 .carousel__dot:hover {
     opacity: 1;
+}
+
+/* ===================================
+   HIGHLIGHTS SECTION
+   =================================== */
+.highlights {
+    padding: var(--space-xl) 0;
+    background: var(--color-wood-dark);
+}
+
+.highlights__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .highlights__grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-lg);
+    }
+}
+
+.highlight-item {
+    padding: var(--space-md);
+}
+
+.highlight-item__value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--color-amber);
+    margin-bottom: var(--space-xs);
+}
+
+@media (min-width: 768px) {
+    .highlight-item__value {
+        font-size: 1.75rem;
+    }
+}
+
+.highlight-item__label {
+    display: block;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.8);
 }
 
 /* ===================================
