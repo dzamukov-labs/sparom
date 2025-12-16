@@ -86,20 +86,10 @@ button {
     background: none;
 }
 
-/* Remove default focus outlines */
-button:focus,
-input:focus,
-select:focus,
-textarea:focus,
-a:focus {
-    outline: none;
-}
-
-button:focus-visible,
-input:focus-visible,
-a:focus-visible {
-    outline: 2px solid var(--color-amber);
-    outline-offset: 2px;
+/* Remove all focus outlines */
+*:focus,
+*:focus-visible {
+    outline: none !important;
 }
 
 a {
@@ -160,6 +150,8 @@ a {
     transition: all var(--transition-smooth);
     position: relative;
     overflow: hidden;
+    cursor: pointer;
+    z-index: 10;
 }
 
 .btn__arrow {
@@ -582,9 +574,54 @@ a {
 }
 
 .highlight-item__label {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
     font-size: 0.85rem;
     color: rgba(255, 255, 255, 0.8);
+}
+
+.highlight-item--tooltip {
+    position: relative;
+    cursor: help;
+}
+
+.highlight-item__hint {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+.highlight-item__tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 280px;
+    padding: var(--space-sm);
+    background: var(--color-white);
+    color: var(--color-gray-800);
+    font-size: 0.8rem;
+    line-height: 1.5;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-fast);
+    margin-bottom: var(--space-sm);
+    z-index: 100;
+}
+
+.highlight-item--tooltip:hover .highlight-item__tooltip {
+    opacity: 1;
+    visibility: visible;
 }
 
 /* ===================================
@@ -1037,16 +1074,16 @@ a {
 .quiz__options--colors {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-md);
+    gap: var(--space-sm);
 }
 
 .quiz__color-img {
-    min-height: 100px;
+    height: 80px;
 }
 
 @media (min-width: 480px) {
     .quiz__color-img {
-        min-height: 120px;
+        height: 100px;
     }
 }
 
