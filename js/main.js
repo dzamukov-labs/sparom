@@ -131,10 +131,8 @@
     }
 
     // ===================================
-    // COUNTDOWN TIMER
+    // COUNTDOWN TIMER - Weekly deadline (Thursday 23:59 MSK)
     // ===================================
-    const TIMER_DAYS = 3;
-
     function initCountdown() {
         const daysEl = document.getElementById('timerDays');
         const hoursEl = document.getElementById('timerHours');
@@ -142,22 +140,44 @@
 
         if (!daysEl || !hoursEl || !minsEl) return;
 
-        let endDate = localStorage.getItem('sparom_timer_end');
-
-        if (!endDate) {
+        function getNextThursdayMidnightMSK() {
+            // Get current time in Moscow (UTC+3)
             const now = new Date();
-            const end = new Date(now.getTime() + TIMER_DAYS * 24 * 60 * 60 * 1000);
-            endDate = end.toISOString();
-            localStorage.setItem('sparom_timer_end', endDate);
+            const mskOffset = 3 * 60; // Moscow is UTC+3
+            const localOffset = now.getTimezoneOffset();
+            const mskTime = new Date(now.getTime() + (mskOffset + localOffset) * 60 * 1000);
+
+            // Find next Thursday 23:59:59 MSK
+            // Thursday = 4 (0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat)
+            const dayOfWeek = mskTime.getDay();
+            let daysUntilThursday = (4 - dayOfWeek + 7) % 7;
+
+            // If it's Thursday, check if we're past 23:59
+            if (daysUntilThursday === 0) {
+                const hours = mskTime.getHours();
+                const mins = mskTime.getMinutes();
+                if (hours >= 23 && mins >= 59) {
+                    daysUntilThursday = 7; // Next Thursday
+                }
+            }
+
+            // Calculate end date in MSK
+            const endMSK = new Date(mskTime);
+            endMSK.setDate(endMSK.getDate() + daysUntilThursday);
+            endMSK.setHours(23, 59, 59, 999);
+
+            // Convert back to local time for comparison
+            const endLocal = new Date(endMSK.getTime() - (mskOffset + localOffset) * 60 * 1000);
+
+            return endLocal;
         }
 
         function update() {
             const now = new Date();
-            const end = new Date(endDate);
+            const end = getNextThursdayMidnightMSK();
             const diff = end - now;
 
             if (diff <= 0) {
-                localStorage.removeItem('sparom_timer_end');
                 daysEl.textContent = '00';
                 hoursEl.textContent = '00';
                 minsEl.textContent = '00';
@@ -216,7 +236,7 @@
         const nextBtn = modal.querySelector('.quiz__btn--next');
 
         let currentStep = 0;
-        const totalSteps = 5;
+        const totalSteps = 6;
         const answers = {};
 
         function openModal() {
@@ -262,7 +282,7 @@
 
             if (nextBtn) {
                 if (step === totalSteps - 1) {
-                    nextBtn.textContent = 'Получить расчёт';
+                    nextBtn.textContent = 'Получить подборку';
                 } else {
                     nextBtn.textContent = 'Далее →';
                 }
@@ -304,9 +324,15 @@
                 case 3: // When
                     isValid = modal.querySelector('input[name="when"]:checked') !== null;
                     break;
-                case 4: // Contact
+                case 4: // Location
+                    const location = modal.querySelector('input[name="location"]');
+                    isValid = location && location.value.trim().length >= 3;
+                    break;
+                case 5: // Phone
                     const phone = modal.querySelector('input[name="phone"]');
-                    isValid = phone && phone.value.trim().length >= 10;
+                    // Check for at least 11 digits (7 + 10 digits)
+                    const digits = phone ? phone.value.replace(/\D/g, '') : '';
+                    isValid = digits.length >= 11;
                     break;
                 default:
                     isValid = true;
@@ -396,26 +422,38 @@
             });
         });
 
-        // Phone input validation
+        // Phone input validation with prefilled +7
         const phoneInput = modal.querySelector('input[name="phone"]');
         if (phoneInput) {
-            phoneInput.addEventListener('input', () => {
-                // Format phone number
-                let value = phoneInput.value.replace(/\D/g, '');
-                if (value.length > 0 && value[0] === '8') {
-                    value = '7' + value.slice(1);
+            // Ensure +7 is always there
+            phoneInput.addEventListener('focus', () => {
+                if (!phoneInput.value || phoneInput.value.length < 3) {
+                    phoneInput.value = '+7 ';
                 }
+            });
+
+            phoneInput.addEventListener('input', () => {
+                // Get only digits
+                let value = phoneInput.value.replace(/\D/g, '');
+
+                // Always start with 7
+                if (value.length === 0) {
+                    value = '7';
+                } else if (value[0] === '8') {
+                    value = '7' + value.slice(1);
+                } else if (value[0] !== '7') {
+                    value = '7' + value;
+                }
+
+                // Limit to 11 digits
                 if (value.length > 11) {
                     value = value.slice(0, 11);
                 }
 
                 // Format: +7 (XXX) XXX-XX-XX
-                let formatted = '';
-                if (value.length > 0) {
-                    formatted = '+' + value[0];
-                }
+                let formatted = '+7 ';
                 if (value.length > 1) {
-                    formatted += ' (' + value.slice(1, 4);
+                    formatted += '(' + value.slice(1, 4);
                 }
                 if (value.length > 4) {
                     formatted += ') ' + value.slice(4, 7);
@@ -430,6 +468,19 @@
                 phoneInput.value = formatted;
                 validateCurrentStep();
             });
+
+            // Prevent deleting +7
+            phoneInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && phoneInput.value.length <= 4) {
+                    e.preventDefault();
+                }
+            });
+        }
+
+        // Location input validation
+        const locationInput = modal.querySelector('input[name="location"]');
+        if (locationInput) {
+            locationInput.addEventListener('input', validateCurrentStep);
         }
 
         // Initialize

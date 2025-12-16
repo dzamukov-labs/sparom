@@ -25,7 +25,7 @@
             <div class="hero__content">
                 <header class="header">
                     <a href="/" class="logo">
-                        <span class="logo__main">С лёгким паром</span>
+                        <span class="logo__main">sparom.ru</span>
                     </a>
                 </header>
 
@@ -47,16 +47,28 @@
                         </button>
 
                         <div class="hero__trust">
-                            <div class="hero__trust-badge">3000+</div>
-                            <span>семей уже с нами</span>
+                            <span class="hero__trust-text"><strong>3000+</strong> семей уже с нами</span>
                         </div>
                     </div>
 
                     <!-- Timer -->
                     <div class="hero__offer">
                         <div class="offer-card">
-                            <svg class="offer-card__icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <path d="M20 12v10H4V12M2 7h20v5H2zM12 22V7M12 7H7.5a2.5 2.5 0 110-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 100-5C13 2 12 7 12 7z"/>
+                            <svg class="offer-card__icon" width="36" height="36" viewBox="0 0 24 24" fill="none">
+                                <!-- Box body -->
+                                <rect x="3" y="10" width="18" height="11" rx="1" fill="#D4A04A" stroke="#2C1810" stroke-width="1"/>
+                                <!-- Box lid -->
+                                <rect x="2" y="7" width="20" height="4" rx="1" fill="#E8C078" stroke="#2C1810" stroke-width="1"/>
+                                <!-- Ribbon vertical -->
+                                <rect x="10.5" y="7" width="3" height="14" fill="#C41E3A"/>
+                                <!-- Ribbon horizontal -->
+                                <rect x="2" y="8" width="20" height="2" fill="#C41E3A"/>
+                                <!-- Bow left -->
+                                <ellipse cx="9" cy="5.5" rx="2.5" ry="2" fill="#C41E3A" stroke="#8B0000" stroke-width="0.5"/>
+                                <!-- Bow right -->
+                                <ellipse cx="15" cy="5.5" rx="2.5" ry="2" fill="#C41E3A" stroke="#8B0000" stroke-width="0.5"/>
+                                <!-- Bow center -->
+                                <circle cx="12" cy="5.5" r="1.5" fill="#FFD700"/>
                             </svg>
                             <div class="offer-card__content">
                                 <div class="offer-card__title">Подарок при заказе</div>
@@ -160,7 +172,7 @@
                     Готовы к своей бане?
                 </h2>
                 <p class="cta-section__text">
-                    Ответьте на 5 вопросов — подберём идеальный вариант
+                    Ответьте на 6 вопросов — подберём идеальный вариант
                 </p>
                 <button class="btn btn--primary btn--large" id="finalCta">
                     <span>Подобрать баню</span>
@@ -177,9 +189,8 @@
             <div class="footer__content">
                 <div class="footer__brand">
                     <a href="/" class="logo logo--footer">
-                        <span class="logo__main">С лёгким паром</span>
+                        <span class="logo__main">sparom.ru</span>
                     </a>
-                    <p class="footer__tagline">Готовые бани под ключ с 2014 года</p>
                 </div>
 
                 <div class="footer__legal">
@@ -214,7 +225,7 @@
                     <div class="quiz__progress-bar" id="quizProgress"></div>
                 </div>
                 <div class="quiz__step-info">
-                    <span id="quizStepNum">1</span> из 5
+                    <span id="quizStepNum">1</span> из 6
                 </div>
 
                 <!-- Steps Container -->
@@ -231,7 +242,7 @@
                                 </div>
                                 <div class="quiz__card-text">
                                     <strong>Целиковая</strong>
-                                    <span>Больше пространства внутри</span>
+                                    <span>Больше пространства для семьи и друзей</span>
                                 </div>
                             </label>
                             <label class="quiz__card">
@@ -241,7 +252,7 @@
                                 </div>
                                 <div class="quiz__card-text">
                                     <strong>С крылечком</strong>
-                                    <span>Уютный уголок на свежем воздухе</span>
+                                    <span>Уютный уголок для отдыха на воздухе</span>
                                 </div>
                             </label>
                         </div>
@@ -249,7 +260,7 @@
 
                     <!-- Step 2: Color -->
                     <div class="quiz__step" data-step="2">
-                        <h3 class="quiz__question">Какой цвет лучше впишется?</h3>
+                        <h3 class="quiz__question">Какой цвет лучше впишется в ваш участок?</h3>
                         <div class="quiz__options quiz__options--colors">
                             <label class="quiz__color">
                                 <input type="radio" name="color" value="palisander" required>
@@ -277,64 +288,73 @@
                                 <div class="quiz__color-img quiz__color-img--custom">
                                     <span>?</span>
                                 </div>
-                                <span>Другой цвет</span>
+                                <span>Индивидуальный</span>
                             </label>
                         </div>
                     </div>
 
                     <!-- Step 3: Budget -->
                     <div class="quiz__step" data-step="3">
-                        <h3 class="quiz__question">Ваш бюджет?</h3>
+                        <h3 class="quiz__question">На какую сумму рассчитываете?</h3>
                         <div class="quiz__options quiz__options--list">
                             <label class="quiz__radio">
-                                <input type="radio" name="budget" value="350-400" required>
-                                <span>350 — 400 тыс. ₽</span>
-                            </label>
-                            <label class="quiz__radio">
-                                <input type="radio" name="budget" value="400-500">
+                                <input type="radio" name="budget" value="400-500" required>
                                 <span>400 — 500 тыс. ₽</span>
                             </label>
                             <label class="quiz__radio">
-                                <input type="radio" name="budget" value="500-700">
-                                <span>500 — 700 тыс. ₽</span>
+                                <input type="radio" name="budget" value="500-600">
+                                <span>500 — 600 тыс. ₽</span>
                             </label>
                             <label class="quiz__radio">
-                                <input type="radio" name="budget" value="700+">
-                                <span>Более 700 тыс. ₽</span>
+                                <input type="radio" name="budget" value="600-800">
+                                <span>600 — 800 тыс. ₽</span>
+                            </label>
+                            <label class="quiz__radio">
+                                <input type="radio" name="budget" value="800+">
+                                <span>Более 800 тыс. ₽</span>
                             </label>
                         </div>
                     </div>
 
                     <!-- Step 4: When -->
                     <div class="quiz__step" data-step="4">
-                        <h3 class="quiz__question">Когда планируете?</h3>
+                        <h3 class="quiz__question">Когда планируете начать пользоваться баней?</h3>
                         <div class="quiz__options quiz__options--list">
                             <label class="quiz__radio">
                                 <input type="radio" name="when" value="asap" required>
                                 <span>Как можно скорее</span>
                             </label>
                             <label class="quiz__radio">
-                                <input type="radio" name="when" value="season">
-                                <span>В этом сезоне</span>
+                                <input type="radio" name="when" value="month">
+                                <span>В течение месяца</span>
                             </label>
                             <label class="quiz__radio">
-                                <input type="radio" name="when" value="later">
-                                <span>Пока присматриваюсь</span>
+                                <input type="radio" name="when" value="2-3months">
+                                <span>В течение 2-3 месяцев</span>
+                            </label>
+                            <label class="quiz__radio">
+                                <input type="radio" name="when" value="looking">
+                                <span>Пока изучаю варианты</span>
                             </label>
                         </div>
                     </div>
 
-                    <!-- Step 5: Contact -->
+                    <!-- Step 5: Location -->
                     <div class="quiz__step" data-step="5">
-                        <h3 class="quiz__question">Куда доставить и как связаться?</h3>
+                        <h3 class="quiz__question">Куда доставить баню?</h3>
                         <div class="quiz__form">
                             <div class="quiz__field">
-                                <label for="quizLocation">Населённый пункт</label>
                                 <input type="text" id="quizLocation" name="location" placeholder="Например: Московская область, Чехов" required>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 6: Contact -->
+                    <div class="quiz__step" data-step="6">
+                        <h3 class="quiz__question">Оставьте номер — отправим подборку в WhatsApp</h3>
+                        <div class="quiz__form">
                             <div class="quiz__field">
-                                <label for="quizPhone">Телефон</label>
-                                <input type="tel" id="quizPhone" name="phone" placeholder="+7 (___) ___-__-__" required>
+                                <input type="tel" id="quizPhone" name="phone" placeholder="+7" value="+7 " required>
                             </div>
                             <p class="quiz__privacy">
                                 Нажимая кнопку, вы соглашаетесь с
@@ -347,8 +367,17 @@
                     <div class="quiz__step quiz__step--success" data-step="success">
                         <div class="quiz__success">
                             <div class="quiz__success-icon">✓</div>
-                            <h3 class="quiz__success-title">Заявка отправлена!</h3>
-                            <p class="quiz__success-text">Мы перезвоним в течение 15 минут и подберём идеальную баню под ваш запрос.</p>
+                            <h3 class="quiz__success-title">Заявка принята!</h3>
+                            <p class="quiz__success-text">Пришлём подборку в течение 5 минут!</p>
+                            <div class="quiz__success-telegram">
+                                <p class="quiz__success-bonus">А пока — увидьте как ваша баня будет смотреться на вашем участке! Загрузите фото в нашего бота, через минуту получите визуализацию.</p>
+                                <a href="https://t.me/sparom_bot" target="_blank" class="btn btn--telegram">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161l-1.97 9.284c-.146.658-.537.818-1.084.508l-3-2.211-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.332-.373-.119l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.538-.194 1.006.128.833.937z"/>
+                                    </svg>
+                                    <span>Перейти в Telegram-бота</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
