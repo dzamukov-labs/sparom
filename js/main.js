@@ -131,74 +131,92 @@
     }
 
     // ===================================
-    // COUNTDOWN TIMER - Weekly deadline (Thursday 23:59 MSK)
+    // QUEUE COUNTER - Dynamic number 11-17 based on date
     // ===================================
-    function initCountdown() {
-        const daysEl = document.getElementById('timerDays');
-        const hoursEl = document.getElementById('timerHours');
-        const minsEl = document.getElementById('timerMins');
-        const secsEl = document.getElementById('timerSecs');
+    function initQueueCounter() {
+        const queueEl = document.getElementById('queueCount');
+        if (!queueEl) return;
 
-        if (!daysEl || !hoursEl || !minsEl) return;
+        // Generate pseudo-random number based on date (changes daily)
+        const today = new Date();
+        const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
 
-        function getNextThursdayMidnightMSK() {
-            // Get current time in Moscow (UTC+3)
-            const now = new Date();
-            const mskOffset = 3 * 60; // Moscow is UTC+3
-            const localOffset = now.getTimezoneOffset();
-            const mskTime = new Date(now.getTime() + (mskOffset + localOffset) * 60 * 1000);
+        // Use day of year to get a number that changes daily but is deterministic
+        const seed = dayOfYear * 7 + today.getFullYear();
+        const range = 17 - 11 + 1; // 7 possible values (11-17)
+        const queueNumber = 11 + (seed % range);
 
-            // Find next Thursday 23:59:59 MSK
-            // Thursday = 4 (0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat)
-            const dayOfWeek = mskTime.getDay();
-            let daysUntilThursday = (4 - dayOfWeek + 7) % 7;
+        queueEl.textContent = queueNumber;
+    }
 
-            // If it's Thursday, check if we're past 23:59
-            if (daysUntilThursday === 0) {
-                const hours = mskTime.getHours();
-                const mins = mskTime.getMinutes();
-                if (hours >= 23 && mins >= 59) {
-                    daysUntilThursday = 7; // Next Thursday
+    // ===================================
+    // VIDEO CAROUSEL
+    // ===================================
+    function initVideoCarousel() {
+        const carousel = document.getElementById('videoCarousel');
+        if (!carousel) return;
+
+        const slides = carousel.querySelectorAll('.video-carousel__slide');
+        const dots = carousel.querySelectorAll('.video-carousel__dot');
+        const prevBtn = carousel.querySelector('.video-carousel__arrow--prev');
+        const nextBtn = carousel.querySelector('.video-carousel__arrow--next');
+
+        let currentIndex = 0;
+
+        function showSlide(index) {
+            if (index >= slides.length) index = 0;
+            if (index < 0) index = slides.length - 1;
+            currentIndex = index;
+
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('video-carousel__slide--active', i === index);
+            });
+
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('video-carousel__dot--active', i === index);
+            });
+        }
+
+        function nextSlide() {
+            showSlide(currentIndex + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentIndex - 1);
+        }
+
+        if (nextBtn) {
+            nextBtn.addEventListener('click', nextSlide);
+        }
+
+        if (prevBtn) {
+            prevBtn.addEventListener('click', prevSlide);
+        }
+
+        dots.forEach((dot, i) => {
+            dot.addEventListener('click', () => showSlide(i));
+        });
+
+        // Touch support
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        carousel.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        carousel.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            const diff = touchStartX - touchEndX;
+
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
                 }
             }
-
-            // Calculate end date in MSK
-            const endMSK = new Date(mskTime);
-            endMSK.setDate(endMSK.getDate() + daysUntilThursday);
-            endMSK.setHours(23, 59, 59, 999);
-
-            // Convert back to local time for comparison
-            const endLocal = new Date(endMSK.getTime() - (mskOffset + localOffset) * 60 * 1000);
-
-            return endLocal;
-        }
-
-        function update() {
-            const now = new Date();
-            const end = getNextThursdayMidnightMSK();
-            const diff = end - now;
-
-            if (diff <= 0) {
-                daysEl.textContent = '00';
-                hoursEl.textContent = '00';
-                minsEl.textContent = '00';
-                if (secsEl) secsEl.textContent = '00';
-                return;
-            }
-
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const secs = Math.floor((diff % (1000 * 60)) / 1000);
-
-            daysEl.textContent = String(days).padStart(2, '0');
-            hoursEl.textContent = String(hours).padStart(2, '0');
-            minsEl.textContent = String(mins).padStart(2, '0');
-            if (secsEl) secsEl.textContent = String(secs).padStart(2, '0');
-        }
-
-        update();
-        setInterval(update, 1000);
+        }, { passive: true });
     }
 
     // ===================================
@@ -607,7 +625,8 @@
     document.addEventListener('DOMContentLoaded', () => {
         initPreloader();
         initCarousel();
-        initCountdown();
+        initQueueCounter();
+        initVideoCarousel();
         initScrollAnimations();
         initQuiz();
         initCTAButtons();

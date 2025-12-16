@@ -32,43 +32,26 @@
 
                 <div class="hero__text">
                     <h1 class="hero__title">
-                        <span class="hero__title-line">Ваша баня</span>
-                        <span class="hero__title-line hero__title-accent">уже через 14 дней</span>
+                        <span class="hero__title-line">Ваше личное место силы.</span>
+                        <span class="hero__title-line hero__title-accent">Настоящая русская баня «под ключ» без стройки и нервов.</span>
                     </h1>
 
                     <p class="hero__subtitle">
-                        от 450 000 ₽ под ключ · Рассрочка · Бесплатная доставка
+                        Привезём полностью готовую, установим за 1 час. Никаких скрытых доплат: печь, мебель и электрика уже внутри. Личный контроль качества и сервис, проверенный годами (с 2014 г).
                     </p>
 
                     <div class="hero__cta-group">
-                        <button class="btn btn--primary" id="mainCta">
-                            <span>Подобрать свою баню</span>
+                        <button class="btn btn--primary btn--wide" id="mainCta">
+                            <span>Подобрать комплектацию под мой участок</span>
                             <span class="btn__arrow">→</span>
                         </button>
-
-                        <div class="hero__trust">
-                            <span class="hero__trust-text"><strong>3000+</strong> парятся в наших банях с 2014 года</span>
-                        </div>
                     </div>
 
-                    <!-- Timer -->
-                    <div class="hero__offer">
-                        <div class="offer-card">
-                            <div class="offer-card__badge">
-                                <svg class="offer-card__badge-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="#D4A04A" stroke="#2C1810" stroke-width="1"/>
-                                </svg>
-                            </div>
-                            <div class="offer-card__content">
-                                <div class="offer-card__title">Печи Grill'D и Везувий</div>
-                                <div class="offer-card__desc">в подарок при заказе</div>
-                            </div>
-                            <div class="offer-card__timer">
-                                <span id="timerDays">02</span>д
-                                <span id="timerHours">23</span>ч
-                                <span id="timerMins">59</span>м
-                                <span id="timerSecs">59</span>с
-                            </div>
+                    <!-- Queue Counter -->
+                    <div class="hero__queue">
+                        <div class="queue-badge">
+                            <span class="queue-badge__icon">🔥</span>
+                            <span class="queue-badge__text">Высокий сезон: сейчас в очереди на производство <strong id="queueCount">14</strong> бань</span>
                         </div>
                     </div>
                 </div>
@@ -133,6 +116,77 @@
                     <div class="highlight-item__tooltip">
                         Московская, Ленинградская, Владимирская, Вологодская, Ивановская, Калужская, Костромская, Новгородская, Тверская, Ярославская области
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Reviews Section -->
+    <section class="reviews" id="reviews">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">
+                    Более <span class="text-accent">100 честных обзоров</span> наших бань
+                </h2>
+            </div>
+
+            <div class="video-carousel" id="videoCarousel">
+                <div class="video-carousel__track">
+                    <div class="video-carousel__slide video-carousel__slide--active">
+                        <div class="video-card">
+                            <iframe
+                                src="https://vk.com/video_ext.php?oid=-50174471&id=456239285&hd=2"
+                                width="100%"
+                                height="100%"
+                                allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
+                                frameborder="0"
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                    </div>
+                    <div class="video-carousel__slide">
+                        <div class="video-card">
+                            <iframe
+                                src="https://vk.com/video_ext.php?oid=-50174471&id=456239268&hd=2"
+                                width="100%"
+                                height="100%"
+                                allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
+                                frameborder="0"
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                    </div>
+                    <div class="video-carousel__slide">
+                        <div class="video-card">
+                            <iframe
+                                src="https://vk.com/video_ext.php?oid=-50174471&id=456239265&hd=2"
+                                width="100%"
+                                height="100%"
+                                allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
+                                frameborder="0"
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-carousel__controls">
+                    <button class="video-carousel__arrow video-carousel__arrow--prev" aria-label="Предыдущее видео">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 18l-6-6 6-6"/>
+                        </svg>
+                    </button>
+                    <button class="video-carousel__arrow video-carousel__arrow--next" aria-label="Следующее видео">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18l6-6-6-6"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="video-carousel__dots">
+                    <button class="video-carousel__dot video-carousel__dot--active" aria-label="Видео 1"></button>
+                    <button class="video-carousel__dot" aria-label="Видео 2"></button>
+                    <button class="video-carousel__dot" aria-label="Видео 3"></button>
                 </div>
             </div>
         </div>
