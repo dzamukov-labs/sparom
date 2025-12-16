@@ -359,21 +359,43 @@
             };
         }
 
-        function submitQuiz() {
+        function getUTMParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                utm_source: params.get('utm_source') || '',
+                utm_medium: params.get('utm_medium') || '',
+                utm_campaign: params.get('utm_campaign') || '',
+                utm_content: params.get('utm_content') || '',
+                utm_term: params.get('utm_term') || ''
+            };
+        }
+
+        async function submitQuiz() {
             const data = collectAnswers();
+            const utm = getUTMParams();
+
+            const payload = { ...data, ...utm };
 
             // Track quiz completion
             if (typeof ym === 'function' && window.YM_COUNTER_ID) {
-                ym(window.YM_COUNTER_ID, 'reachGoal', 'quiz_complete', data);
+                ym(window.YM_COUNTER_ID, 'reachGoal', 'quiz_complete', payload);
             }
 
-            console.log('[Quiz] Submitted:', data);
+            console.log('[Quiz] Submitted:', payload);
 
-            // Show success screen
+            // Show success screen immediately
             goToStep(totalSteps);
 
-            // Here you would typically send data to server
-            // fetch('/api/lead', { method: 'POST', body: JSON.stringify(data) })
+            // Send to Telegram
+            try {
+                await fetch('/api/quiz', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+            } catch (err) {
+                console.error('[Quiz] Send error:', err);
+            }
         }
 
         // Event listeners
