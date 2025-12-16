@@ -137,6 +137,7 @@
         const daysEl = document.getElementById('timerDays');
         const hoursEl = document.getElementById('timerHours');
         const minsEl = document.getElementById('timerMins');
+        const secsEl = document.getElementById('timerSecs');
 
         if (!daysEl || !hoursEl || !minsEl) return;
 
@@ -181,16 +182,19 @@
                 daysEl.textContent = '00';
                 hoursEl.textContent = '00';
                 minsEl.textContent = '00';
+                if (secsEl) secsEl.textContent = '00';
                 return;
             }
 
             const days = Math.floor(diff / (1000 * 60 * 60 * 24));
             const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const secs = Math.floor((diff % (1000 * 60)) / 1000);
 
             daysEl.textContent = String(days).padStart(2, '0');
             hoursEl.textContent = String(hours).padStart(2, '0');
             minsEl.textContent = String(mins).padStart(2, '0');
+            if (secsEl) secsEl.textContent = String(secs).padStart(2, '0');
         }
 
         update();
