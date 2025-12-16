@@ -126,126 +126,79 @@
         </div>
     </section>
 
-    <!-- Video Reviews Section -->
-    <section class="reviews" id="reviews">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">
-                    Более <span class="text-accent">100 честных обзоров</span> наших бань
-                </h2>
-            </div>
-
-            <div class="video-carousel" id="videoCarousel">
-                <div class="video-carousel__track">
-                    <div class="video-carousel__slide video-carousel__slide--active">
-                        <div class="video-card">
-                            <iframe
-                                src="https://vk.com/video_ext.php?oid=-50174471&id=456239285&hd=2"
-                                width="100%"
-                                height="100%"
-                                allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
-                                frameborder="0"
-                                allowfullscreen>
-                            </iframe>
-                        </div>
-                    </div>
-                    <div class="video-carousel__slide">
-                        <div class="video-card">
-                            <iframe
-                                src="https://vk.com/video_ext.php?oid=-50174471&id=456239268&hd=2"
-                                width="100%"
-                                height="100%"
-                                allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
-                                frameborder="0"
-                                allowfullscreen>
-                            </iframe>
-                        </div>
-                    </div>
-                    <div class="video-carousel__slide">
-                        <div class="video-card">
-                            <iframe
-                                src="https://vk.com/video_ext.php?oid=-50174471&id=456239265&hd=2"
-                                width="100%"
-                                height="100%"
-                                allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
-                                frameborder="0"
-                                allowfullscreen>
-                            </iframe>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="video-carousel__controls">
-                    <button class="video-carousel__arrow video-carousel__arrow--prev" aria-label="Предыдущее видео">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M15 18l-6-6 6-6"/>
-                        </svg>
-                    </button>
-                    <button class="video-carousel__arrow video-carousel__arrow--next" aria-label="Следующее видео">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M9 18l6-6-6-6"/>
-                        </svg>
-                    </button>
-                </div>
-
-                <div class="video-carousel__dots">
-                    <button class="video-carousel__dot video-carousel__dot--active" aria-label="Видео 1"></button>
-                    <button class="video-carousel__dot" aria-label="Видео 2"></button>
-                    <button class="video-carousel__dot" aria-label="Видео 3"></button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
+    <!-- Features Section - Bento Grid -->
     <section class="features" id="features">
         <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">
-                    Почему выбирают <span class="text-accent">нас</span>
-                </h2>
-            </div>
-
             <div class="features__grid">
-                <div class="feature-card feature-card--large">
-                    <div class="feature-card__number">01</div>
-                    <h3 class="feature-card__title">Установка<br>за 1 час</h3>
-                    <p class="feature-card__text">
-                        Никакой стройки. Привезли готовую баню,
-                        поставили на фундамент — пользуйтесь.
-                    </p>
-                    <div class="feature-card__icon">⚡</div>
+                <!-- Block 1: Large accent -->
+                <div class="feature-card feature-card--accent">
+                    <div class="feature-card__content">
+                        <h3 class="feature-card__title">Установка за 1 час — без грязи, строителей и долгостроя</h3>
+                        <p class="feature-card__text">Мы уважаем ваше личное пространство. Никаких бригад, живущих месяцами на участке. Привезем готовую баню, бережно поставим краном на блоки, не повредив участок. Вечером — уже первый пар.</p>
+                    </div>
+                    <div class="feature-card__visual">
+                        <svg class="feature-card__icon-svg" viewBox="0 0 64 64" fill="none">
+                            <circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="2" opacity="0.3"/>
+                            <path d="M32 18v14l8 8" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                        </svg>
+                    </div>
                 </div>
 
+                <!-- Block 2: Technical -->
                 <div class="feature-card">
-                    <div class="feature-card__number">02</div>
-                    <h3 class="feature-card__title">Всё включено</h3>
-                    <p class="feature-card__text">
-                        Печь, мебель, электрика, фундамент —
-                        в стоимости.
-                    </p>
+                    <h3 class="feature-card__title">Это не «времянка», а капитальное строение весом 5 тонн</h3>
+                    <p class="feature-card__text">В 10 раз надежнее бани-бочки. Настоящий профилированный брус, который служит десятилетиями. Стены держат тепло как термос: в -30°C внутри жарко уже через 45 минут.</p>
                 </div>
 
+                <!-- Block 3: QC -->
                 <div class="feature-card">
-                    <div class="feature-card__number">03</div>
-                    <h3 class="feature-card__title">На десятилетия</h3>
-                    <p class="feature-card__text">
-                        Цельный брус весом 5 тонн.
-                        В 10 раз надёжнее бани-бочки.
-                    </p>
+                    <h3 class="feature-card__title">Двойной контроль качества (ОТК)</h3>
+                    <p class="feature-card__text">Мы проверяем материалы до строительства бани. Если бригада накосячила в процессе, мы заставляем переделывать ДО того, как баня приедет к вам. Вы получаете баню, за которую нам не стыдно.</p>
                 </div>
 
+                <!-- Block 4: Price -->
                 <div class="feature-card">
-                    <div class="feature-card__number">04</div>
-                    <h3 class="feature-card__title">Нагрев за 45 минут</h3>
-                    <p class="feature-card__text">
-                        Толстые стены держат жар.
-                        Приехали на дачу — через час паритесь.
-                    </p>
+                    <h3 class="feature-card__title">Честная цена «под ключ» без сюрпризов</h3>
+                    <p class="feature-card__text">В стоимость уже включено то, за что другие просят доплату: заводская печь (не самоделка!), вся электрика, мебель и блочный фундамент. Никаких «доплатите за разгрузку» не будет.</p>
+                </div>
+
+                <!-- Block 5: Social proof with video -->
+                <div class="feature-card feature-card--video">
+                    <div class="feature-card__content">
+                        <h3 class="feature-card__title">Публичная репутация с 2014 года</h3>
+                        <p class="feature-card__text">Более 100 видео-отчетов и честных обзоров. Мы не прячем лица и всегда на связи. Для нас имя важнее сиюминутной прибыли.</p>
+                    </div>
+                    <div class="feature-card__videos">
+                        <button class="video-thumb" data-video="https://vk.com/video_ext.php?oid=-50174471&id=456239285&hd=2" aria-label="Смотреть обзор 1">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <button class="video-thumb" data-video="https://vk.com/video_ext.php?oid=-50174471&id=456239268&hd=2" aria-label="Смотреть обзор 2">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <button class="video-thumb" data-video="https://vk.com/video_ext.php?oid=-50174471&id=456239265&hd=2" aria-label="Смотреть обзор 3">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <span class="video-thumb__label">100+ видео</span>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- Video Modal -->
+    <div class="video-modal" id="videoModal">
+        <div class="video-modal__overlay"></div>
+        <div class="video-modal__content">
+            <button class="video-modal__close" aria-label="Закрыть">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+            </button>
+            <div class="video-modal__frame">
+                <iframe id="videoFrame" src="" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
 
     <!-- CTA Section -->
     <section class="cta-section" id="cta">
