@@ -367,7 +367,12 @@
             const data = collectAnswers();
             const utm = getUTMParams();
 
-            const payload = { ...data, ...utm, page_url: window.location.href };
+            const payload = {
+                ...data,
+                ...utm,
+                page_url: window.location.href,
+                ab_variant: window.AB ? JSON.stringify(window.AB.variants) : ''
+            };
 
             // Track quiz completion
             if (typeof ym === 'function' && window.YM_COUNTER_ID) {
@@ -535,10 +540,18 @@
     // ===================================
     // A/B TESTING
     // ===================================
+    // Яндекс.Метрика counter ID
+    window.YM_COUNTER_ID = 35165775;
+
     const AB = {
         variants: {},
 
         init() {
+            // 1. Check URL params first (from Yandex Direct)
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlVariant = urlParams.get('variant') || urlParams.get('ab');
+
+            // 2. Load stored variants
             const stored = localStorage.getItem('sparom_ab_variants');
             if (stored) {
                 try {
@@ -548,6 +561,19 @@
                 }
             }
 
+            // 3. URL param overrides stored (format: "a", "b" or "headline:1")
+            if (urlVariant) {
+                if (urlVariant === 'a' || urlVariant === '0') {
+                    this.variants.headline = 0;
+                } else if (urlVariant === 'b' || urlVariant === '1') {
+                    this.variants.headline = 1;
+                } else if (urlVariant.includes(':')) {
+                    const [test, idx] = urlVariant.split(':');
+                    this.variants[test] = parseInt(idx, 10);
+                }
+            }
+
+            // 4. Random assign if not set and config exists
             if (window.AB_CONFIG) {
                 for (const testName in window.AB_CONFIG) {
                     if (this.variants[testName] === undefined) {
@@ -555,9 +581,9 @@
                         this.variants[testName] = Math.floor(Math.random() * config.variants.length);
                     }
                 }
-                localStorage.setItem('sparom_ab_variants', JSON.stringify(this.variants));
             }
 
+            localStorage.setItem('sparom_ab_variants', JSON.stringify(this.variants));
             this.apply();
             console.log('[A/B] Variants:', this.variants);
         },
@@ -567,11 +593,11 @@
 
             if (window.AB_CONFIG.headline && this.variants.headline !== undefined) {
                 const variant = window.AB_CONFIG.headline.variants[this.variants.headline];
-                const line1 = document.querySelector('.hero__title-line:not(.hero__title-accent)');
-                const line2 = document.querySelector('.hero__title-accent');
+                const title = document.querySelector('.hero__title');
+                const tagline = document.querySelector('.hero__tagline');
 
-                if (line1 && variant.line1) line1.textContent = variant.line1;
-                if (line2 && variant.line2) line2.textContent = variant.line2;
+                if (title && variant.title) title.textContent = variant.title;
+                if (tagline && variant.tagline) tagline.textContent = variant.tagline;
             }
         },
 
@@ -585,6 +611,13 @@
             localStorage.removeItem('sparom_ab_variants');
             this.variants = {};
             location.reload();
+        },
+
+        // Получить текущий вариант для аналитики
+        getVariantString() {
+            return Object.entries(this.variants)
+                .map(([k, v]) => `${k}:${v}`)
+                .join(',');
         }
     };
 

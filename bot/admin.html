@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sparom Bot Admin</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 { color: #2C1810; margin-bottom: 20px; }
+        h2 { color: #5D3A1A; margin: 20px 0 10px; font-size: 1.2rem; }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .stats { display: flex; gap: 20px; }
+        .stat {
+            text-align: center;
+            flex: 1;
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #D4A04A;
+        }
+        .stat-label { color: #666; font-size: 0.9rem; }
+        input, textarea, button {
+            font-family: inherit;
+            font-size: 1rem;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #D4A04A;
+        }
+        button {
+            background: #D4A04A;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        button:hover { background: #c4903a; }
+        button.secondary {
+            background: #666;
+        }
+        .users-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .user-item:last-child { border-bottom: none; }
+        .user-name { font-weight: 500; }
+        .user-id { color: #999; font-size: 0.85rem; }
+        .user-actions { display: flex; gap: 5px; }
+        .user-actions button {
+            width: auto;
+            padding: 5px 10px;
+            font-size: 0.85rem;
+            margin: 0;
+        }
+        .message-form { display: none; }
+        .message-form.active { display: block; }
+        .status { padding: 10px; border-radius: 8px; margin-top: 10px; }
+        .status.success { background: #d4edda; color: #155724; }
+        .status.error { background: #f8d7da; color: #721c24; }
+        .login-form { max-width: 300px; margin: 100px auto; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <!-- Login -->
+    <div id="loginSection" class="card login-form">
+        <h1>🔐 Вход</h1>
+        <input type="password" id="password" placeholder="Пароль">
+        <button onclick="login()">Войти</button>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="hidden">
+        <h1>🤖 Sparom Bot Admin</h1>
+
+        <!-- Stats -->
+        <div class="card">
+            <h2>📊 Статистика</h2>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value" id="totalUsers">—</div>
+                    <div class="stat-label">Всего пользователей</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="actions24h">—</div>
+                    <div class="stat-label">Действий за 24ч</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Broadcast -->
+        <div class="card">
+            <h2>📢 Рассылка всем</h2>
+            <textarea id="broadcastMessage" rows="3" placeholder="Текст сообщения..."></textarea>
+            <button onclick="broadcast()">Отправить всем</button>
+            <div id="broadcastStatus" class="status hidden"></div>
+        </div>
+
+        <!-- Users -->
+        <div class="card">
+            <h2>👥 Пользователи</h2>
+            <button class="secondary" onclick="loadUsers()">Обновить список</button>
+            <div class="users-list" id="usersList"></div>
+        </div>
+
+        <!-- Message to user -->
+        <div id="messageForm" class="card message-form">
+            <h2>💬 Сообщение пользователю</h2>
+            <p id="messageToUser"></p>
+            <textarea id="userMessage" rows="3" placeholder="Текст сообщения..."></textarea>
+            <button onclick="sendToUser()">Отправить</button>
+            <button class="secondary" onclick="closeMessageForm()">Отмена</button>
+            <div id="messageStatus" class="status hidden"></div>
+        </div>
+    </div>
+
+    <script>
+        // Конфиг - измени на свой URL
+        const API_URL = window.location.hostname === 'localhost'
+            ? 'http://localhost:3000'
+            : 'https://your-bot-server.com'; // Замени на реальный URL
+
+        let password = '';
+        let selectedUserId = null;
+
+        function login() {
+            password = document.getElementById('password').value;
+            loadStats().then(success => {
+                if (success) {
+                    document.getElementById('loginSection').classList.add('hidden');
+                    document.getElementById('dashboard').classList.remove('hidden');
+                    loadUsers();
+                } else {
+                    alert('Неверный пароль');
+                }
+            });
+        }
+
+        async function loadStats() {
+            try {
+                const res = await fetch(`${API_URL}/api/stats?password=${password}`);
+                if (res.status === 401) return false;
+                const data = await res.json();
+                document.getElementById('totalUsers').textContent = data.total_users;
+                document.getElementById('actions24h').textContent = data.actions_24h;
+                return true;
+            } catch (e) {
+                console.error(e);
+                return false;
+            }
+        }
+
+        async function loadUsers() {
+            try {
+                const res = await fetch(`${API_URL}/api/users?password=${password}`);
+                const data = await res.json();
+                const list = document.getElementById('usersList');
+
+                if (!data.users || data.users.length === 0) {
+                    list.innerHTML = '<p style="padding: 20px; color: #999;">Пользователей пока нет</p>';
+                    return;
+                }
+
+                list.innerHTML = data.users.map(u => `
+                    <div class="user-item">
+                        <div>
+                            <div class="user-name">${u.first_name || ''} ${u.last_name || ''} ${u.username ? '@' + u.username : ''}</div>
+                            <div class="user-id">ID: ${u.telegram_id}</div>
+                        </div>
+                        <div class="user-actions">
+                            <button onclick="openMessageForm(${u.telegram_id}, '${u.first_name || u.username || u.telegram_id}')">✉️</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function openMessageForm(userId, name) {
+            selectedUserId = userId;
+            document.getElementById('messageToUser').textContent = `Кому: ${name} (${userId})`;
+            document.getElementById('messageForm').classList.add('active');
+            document.getElementById('userMessage').value = '';
+            document.getElementById('messageStatus').classList.add('hidden');
+        }
+
+        function closeMessageForm() {
+            document.getElementById('messageForm').classList.remove('active');
+            selectedUserId = null;
+        }
+
+        async function sendToUser() {
+            if (!selectedUserId) return;
+
+            const message = document.getElementById('userMessage').value;
+            if (!message.trim()) return;
+
+            const statusEl = document.getElementById('messageStatus');
+
+            try {
+                const res = await fetch(`${API_URL}/api/send`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password, telegram_id: selectedUserId, message })
+                });
+
+                const data = await res.json();
+
+                if (data.success) {
+                    statusEl.textContent = 'Сообщение отправлено!';
+                    statusEl.className = 'status success';
+                } else {
+                    statusEl.textContent = 'Ошибка: ' + data.error;
+                    statusEl.className = 'status error';
+                }
+            } catch (e) {
+                statusEl.textContent = 'Ошибка сети';
+                statusEl.className = 'status error';
+            }
+            statusEl.classList.remove('hidden');
+        }
+
+        async function broadcast() {
+            const message = document.getElementById('broadcastMessage').value;
+            if (!message.trim()) return;
+
+            if (!confirm('Отправить сообщение ВСЕМ пользователям?')) return;
+
+            const statusEl = document.getElementById('broadcastStatus');
+            statusEl.textContent = 'Отправка...';
+            statusEl.className = 'status';
+            statusEl.classList.remove('hidden');
+
+            try {
+                const res = await fetch(`${API_URL}/api/broadcast`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password, message })
+                });
+
+                const data = await res.json();
+
+                if (data.sent !== undefined) {
+                    statusEl.textContent = `Отправлено: ${data.sent}, ошибок: ${data.failed}`;
+                    statusEl.className = 'status success';
+                } else {
+                    statusEl.textContent = 'Ошибка: ' + data.error;
+                    statusEl.className = 'status error';
+                }
+            } catch (e) {
+                statusEl.textContent = 'Ошибка сети';
+                statusEl.className = 'status error';
+            }
+        }
+
+        // Enter для логина
+        document.getElementById('password').addEventListener('keypress', e => {
+            if (e.key === 'Enter') login();
+        });
+    </script>
+</body>
+</html>
