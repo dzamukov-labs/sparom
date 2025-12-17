@@ -196,43 +196,17 @@ a {
     }
 }
 
-/* Queue Badge */
-.hero__queue {
-    margin-top: var(--space-xs);
-}
-
-.queue-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-xs);
-    padding: 6px var(--space-sm);
-    background: rgba(212, 160, 74, 0.1);
-    border: 1px solid rgba(212, 160, 74, 0.4);
-    border-radius: var(--radius-full);
-}
-
-.queue-badge__icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 16px;
-    height: 16px;
-    flex-shrink: 0;
-}
-
-.queue-badge__icon svg {
-    width: 100%;
-    height: 100%;
-}
-
-.queue-badge__text {
+/* Gallery Caption */
+.hero__gallery-caption {
+    text-align: center;
     font-size: 0.8rem;
     color: var(--color-gray-500);
+    margin-top: var(--space-sm);
 }
 
-.queue-badge__text strong {
-    color: var(--color-amber);
-    font-weight: 700;
+.hero__gallery-caption span {
+    font-weight: 600;
+    color: var(--color-gray-800);
 }
 
 /* ===================================
@@ -396,26 +370,27 @@ a {
 }
 
 .hero__title {
-    margin-bottom: var(--space-sm);
-}
-
-.hero__title-line {
-    display: block;
-    font-size: clamp(1.6rem, 5vw, 2.75rem);
+    font-size: clamp(1.75rem, 5vw, 2.5rem);
     font-weight: 800;
-    line-height: 1.15;
+    line-height: 1.2;
     color: var(--color-wood-dark);
+    margin-bottom: var(--space-xs);
 }
 
-.hero__title-accent {
+.hero__tagline {
+    font-size: clamp(1.1rem, 3vw, 1.35rem);
+    font-weight: 600;
+    line-height: 1.35;
     color: var(--color-amber);
+    margin-bottom: var(--space-md);
 }
 
 .hero__subtitle {
-    font-size: clamp(0.9rem, 1.8vw, 1.05rem);
+    font-size: 0.9rem;
     color: var(--color-gray-500);
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--space-lg);
     line-height: 1.6;
+    max-width: 440px;
 }
 
 /* CTA Group */
@@ -423,14 +398,6 @@ a {
     display: flex;
     flex-direction: column;
     gap: var(--space-sm);
-    margin-bottom: var(--space-sm);
-}
-
-@media (min-width: 640px) {
-    .hero__cta-group {
-        flex-direction: row;
-        align-items: center;
-    }
 }
 
 .hero__trust {
