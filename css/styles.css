@@ -706,6 +706,20 @@ a {
     visibility: visible;
 }
 
+.highlights__note {
+    text-align: center;
+    margin-top: var(--space-lg);
+    padding-top: var(--space-md);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.highlights__note span {
+    font-weight: 600;
+    color: var(--color-amber);
+}
+
 /* ===================================
    FEATURES SECTION - BENTO GRID
    =================================== */
@@ -882,12 +896,14 @@ a {
     justify-content: center;
     opacity: 0;
     visibility: hidden;
+    pointer-events: none;
     transition: all var(--transition-fast);
 }
 
 .video-modal.active {
     opacity: 1;
     visibility: visible;
+    pointer-events: all;
 }
 
 .video-modal__overlay {
@@ -1108,12 +1124,14 @@ a {
     padding: var(--space-md);
     opacity: 0;
     visibility: hidden;
+    pointer-events: none;
     transition: all var(--transition-smooth);
 }
 
 .quiz-modal.active {
     opacity: 1;
     visibility: visible;
+    pointer-events: all;
 }
 
 .quiz-modal__overlay {
