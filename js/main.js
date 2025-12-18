@@ -495,6 +495,19 @@
                     e.preventDefault();
                 }
             });
+
+            // Keep cursor after +7
+            phoneInput.addEventListener('click', () => {
+                if (phoneInput.selectionStart < 3) {
+                    phoneInput.setSelectionRange(3, 3);
+                }
+            });
+
+            phoneInput.addEventListener('keyup', () => {
+                if (phoneInput.selectionStart < 3) {
+                    phoneInput.setSelectionRange(3, 3);
+                }
+            });
         }
 
         // Location input validation

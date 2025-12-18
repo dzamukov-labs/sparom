@@ -698,9 +698,25 @@
     <script>
         const API_URL = 'https://sparom.onrender.com';
 
-        let password = '';
+        let password = sessionStorage.getItem('sparom_admin_pwd') || '';
         let selectedUserId = null;
         let selectedUserName = '';
+
+        // Auto-login if password saved
+        document.addEventListener('DOMContentLoaded', () => {
+            if (password) {
+                loadStats().then(success => {
+                    if (success) {
+                        document.getElementById('loginSection').classList.add('hidden');
+                        document.getElementById('dashboard').classList.remove('hidden');
+                        loadUsers();
+                    } else {
+                        sessionStorage.removeItem('sparom_admin_pwd');
+                        password = '';
+                    }
+                });
+            }
+        });
 
         // Login
         function login() {
@@ -709,6 +725,7 @@
 
             loadStats().then(success => {
                 if (success) {
+                    sessionStorage.setItem('sparom_admin_pwd', password);
                     document.getElementById('loginSection').classList.add('hidden');
                     document.getElementById('dashboard').classList.remove('hidden');
                     loadUsers();
@@ -719,6 +736,7 @@
         }
 
         function logout() {
+            sessionStorage.removeItem('sparom_admin_pwd');
             password = '';
             document.getElementById('dashboard').classList.add('hidden');
             document.getElementById('loginSection').classList.remove('hidden');
