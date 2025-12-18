@@ -115,6 +115,22 @@ async function logAction(ctx, action, data = {}) {
     }
 }
 
+// Сохранить сообщение в историю
+async function saveMessage(telegramId, direction, text) {
+    if (!supabase || !text) return;
+
+    try {
+        await supabase.from('bot_messages').insert({
+            telegram_id: telegramId,
+            direction, // 'in' (от пользователя) или 'out' (от админа)
+            message: text,
+            created_at: new Date().toISOString()
+        });
+    } catch (err) {
+        console.error('Error saving message:', err.message);
+    }
+}
+
 // Главное меню
 function mainMenu() {
     return Markup.keyboard([
@@ -224,6 +240,27 @@ SIZES.forEach(size => {
     });
 });
 
+// Слушаем все текстовые сообщения от пользователей (кроме команд)
+bot.on('text', async (ctx) => {
+    const text = ctx.message.text;
+
+    // Пропускаем команды и нажатия на клавиатуру
+    if (text.startsWith('/') || text.includes('📸') || text.includes('📐')) {
+        return;
+    }
+
+    await saveUser(ctx);
+    await saveMessage(ctx.from.id, 'in', text);
+    await logAction(ctx, 'message', { text: text.substring(0, 100) });
+
+    // Автоответ
+    await ctx.reply(
+        '✉️ Спасибо за сообщение! Мы свяжемся с вами в ближайшее время.\n\n' +
+        'А пока можете посмотреть фото и планировки наших бань:',
+        mainMenu()
+    );
+});
+
 // Express для админки и webhook
 const app = express();
 app.use(cors());
@@ -239,7 +276,7 @@ app.get('/api/users', async (req, res) => {
         return res.json({ users: [], message: 'Supabase not configured' });
     }
 
-    const { data, error } = await supabase
+    const { data: users, error } = await supabase
         .from('bot_users')
         .select('*')
         .order('updated_at', { ascending: false });
@@ -248,7 +285,22 @@ app.get('/api/users', async (req, res) => {
         return res.status(500).json({ error: error.message });
     }
 
-    res.json({ users: data });
+    // Добавляем последнее сообщение для каждого пользователя
+    const usersWithLastMessage = await Promise.all((users || []).map(async (user) => {
+        const { data: messages } = await supabase
+            .from('bot_messages')
+            .select('message, direction, created_at')
+            .eq('telegram_id', user.telegram_id)
+            .order('created_at', { ascending: false })
+            .limit(1);
+
+        return {
+            ...user,
+            last_message: messages?.[0] || null
+        };
+    }));
+
+    res.json({ users: usersWithLastMessage });
 });
 
 // API: Статистика
@@ -278,18 +330,57 @@ app.get('/api/stats', async (req, res) => {
 
 // API: Отправить сообщение пользователю
 app.post('/api/send', async (req, res) => {
-    const { password, telegram_id, message } = req.body;
+    const { password, telegram_id, message, parse_mode } = req.body;
 
     if (password !== ADMIN_PASSWORD) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
 
     try {
-        await bot.telegram.sendMessage(telegram_id, message);
+        const options = parse_mode ? { parse_mode } : {};
+        await bot.telegram.sendMessage(telegram_id, message, options);
+
+        // Сохраняем исходящее сообщение в историю
+        await saveMessage(telegram_id, 'out', message);
+
         res.json({ success: true });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
+});
+
+// API: История сообщений с пользователем
+app.get('/api/messages/:telegram_id', async (req, res) => {
+    if (req.query.password !== ADMIN_PASSWORD) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    if (!supabase) {
+        return res.json({ messages: [], message: 'Supabase not configured' });
+    }
+
+    const { telegram_id } = req.params;
+    const { direction, limit = 50 } = req.query;
+
+    let query = supabase
+        .from('bot_messages')
+        .select('*')
+        .eq('telegram_id', telegram_id)
+        .order('created_at', { ascending: true })
+        .limit(parseInt(limit));
+
+    // Фильтр по направлению (in/out)
+    if (direction === 'in' || direction === 'out') {
+        query = query.eq('direction', direction);
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+        return res.status(500).json({ error: error.message });
+    }
+
+    res.json({ messages: data || [] });
 });
 
 // API: Рассылка всем

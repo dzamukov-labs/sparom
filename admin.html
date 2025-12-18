@@ -387,6 +387,8 @@
         .user-details {
             display: flex;
             flex-direction: column;
+            flex: 1;
+            min-width: 0;
         }
 
         .user-name {
@@ -397,6 +399,32 @@
         .user-id {
             font-size: 0.8rem;
             color: var(--gray-500);
+        }
+
+        .user-last-msg {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 300px;
+            margin-top: 4px;
+        }
+
+        .user-last-msg.incoming::before {
+            content: '← ';
+            color: var(--amber);
+        }
+
+        .user-last-msg.outgoing::before {
+            content: '→ ';
+            color: var(--wood-light);
+        }
+
+        .user-last-time {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            margin-left: 8px;
         }
 
         .user-actions .btn {
@@ -555,6 +583,126 @@
             font-size: 0.95rem;
         }
 
+        /* Chat History */
+        .chat-container {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 16px;
+            background: var(--gray-100);
+            border-radius: var(--radius-md);
+            margin-bottom: 16px;
+        }
+
+        .chat-message {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 12px;
+            max-width: 80%;
+        }
+
+        .chat-message.incoming {
+            align-items: flex-start;
+        }
+
+        .chat-message.outgoing {
+            align-items: flex-end;
+            margin-left: auto;
+        }
+
+        .chat-bubble {
+            padding: 10px 14px;
+            border-radius: 16px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+
+        .chat-message.incoming .chat-bubble {
+            background: var(--white);
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-message.outgoing .chat-bubble {
+            background: linear-gradient(135deg, var(--amber) 0%, var(--amber-light) 100%);
+            color: var(--wood-dark);
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-time {
+            font-size: 0.7rem;
+            color: var(--gray-500);
+            margin-top: 4px;
+            padding: 0 4px;
+        }
+
+        .chat-empty {
+            text-align: center;
+            color: var(--gray-500);
+            padding: 32px;
+        }
+
+        .chat-filter {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .chat-filter button {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--gray-200);
+            background: var(--white);
+            color: var(--gray-800);
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .chat-filter button.active {
+            background: var(--amber);
+            border-color: var(--amber);
+            color: var(--wood-dark);
+        }
+
+        .chat-filter button:hover:not(.active) {
+            border-color: var(--amber);
+        }
+
+        /* Formatting Toolbar */
+        .format-toolbar {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 8px;
+            padding: 8px;
+            background: var(--gray-100);
+            border-radius: var(--radius-sm);
+        }
+
+        .format-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            background: transparent;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--gray-800);
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .format-btn:hover {
+            background: var(--white);
+        }
+
+        .format-btn[data-format="bold"] { font-weight: bold; }
+        .format-btn[data-format="italic"] { font-style: italic; }
+        .format-btn[data-format="code"] { font-family: monospace; }
+
         /* Hidden */
         .hidden {
             display: none !important;
@@ -675,7 +823,40 @@
         </div>
     </div>
 
-    <!-- Message Modal -->
+    <!-- Chat History Modal -->
+    <div class="modal-overlay" id="chatModal">
+        <div class="modal" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3 class="modal-title">💬 История чата</h3>
+                <button class="modal-close" onclick="closeChatModal()">×</button>
+            </div>
+            <div class="modal-recipient" id="chatRecipient">
+                <div class="modal-recipient-avatar" id="chatAvatar">?</div>
+                <span class="modal-recipient-name" id="chatName">Пользователь</span>
+            </div>
+            <div class="chat-filter">
+                <button class="active" onclick="filterChat('all')">Все</button>
+                <button onclick="filterChat('in')">Входящие</button>
+                <button onclick="filterChat('out')">Исходящие</button>
+            </div>
+            <div class="chat-container" id="chatContainer">
+                <div class="chat-empty">Загрузка...</div>
+            </div>
+            <div class="format-toolbar">
+                <button class="format-btn" data-format="bold" onclick="insertFormat('b')" title="Жирный">B</button>
+                <button class="format-btn" data-format="italic" onclick="insertFormat('i')" title="Курсив">I</button>
+                <button class="format-btn" data-format="code" onclick="insertFormat('code')" title="Код">&lt;/&gt;</button>
+            </div>
+            <textarea id="chatMessage" placeholder="Напишите сообщение..."></textarea>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeChatModal()">Закрыть</button>
+                <button class="btn btn-primary" onclick="sendFromChat()">Отправить</button>
+            </div>
+            <div id="chatStatus" class="status hidden"></div>
+        </div>
+    </div>
+
+    <!-- Message Modal (quick send) -->
     <div class="modal-overlay" id="messageModal">
         <div class="modal">
             <div class="modal-header">
@@ -685,6 +866,11 @@
             <div class="modal-recipient" id="modalRecipient">
                 <div class="modal-recipient-avatar" id="modalAvatar">?</div>
                 <span class="modal-recipient-name" id="modalName">Пользователь</span>
+            </div>
+            <div class="format-toolbar">
+                <button class="format-btn" data-format="bold" onclick="insertFormat('b', 'userMessage')" title="Жирный">B</button>
+                <button class="format-btn" data-format="italic" onclick="insertFormat('i', 'userMessage')" title="Курсив">I</button>
+                <button class="format-btn" data-format="code" onclick="insertFormat('code', 'userMessage')" title="Код">&lt;/&gt;</button>
             </div>
             <textarea id="userMessage" placeholder="Напишите личное сообщение..."></textarea>
             <div class="modal-actions">
@@ -787,6 +973,22 @@
                     const fullName = [u.first_name, u.last_name].filter(Boolean).join(' ') || u.username || 'Без имени';
                     const initial = name.charAt(0).toUpperCase();
 
+                    // Последнее сообщение
+                    let lastMsgHtml = '';
+                    if (u.last_message) {
+                        const msgDir = u.last_message.direction === 'in' ? 'incoming' : 'outgoing';
+                        const msgText = u.last_message.message.length > 40
+                            ? u.last_message.message.substring(0, 40) + '...'
+                            : u.last_message.message;
+                        const msgTime = formatTime(u.last_message.created_at);
+                        lastMsgHtml = `
+                            <div class="user-last-msg ${msgDir}">
+                                ${escapeHtml(msgText)}
+                                <span class="user-last-time">${msgTime}</span>
+                            </div>
+                        `;
+                    }
+
                     return `
                         <div class="user-item">
                             <div class="user-info">
@@ -794,11 +996,12 @@
                                 <div class="user-details">
                                     <span class="user-name">${fullName}${u.username ? ' @' + u.username : ''}</span>
                                     <span class="user-id">ID: ${u.telegram_id}</span>
+                                    ${lastMsgHtml}
                                 </div>
                             </div>
                             <div class="user-actions">
-                                <button class="btn btn-secondary" onclick="openMessageModal(${u.telegram_id}, '${name.replace(/'/g, "\\'")}')">
-                                    ✉️ Написать
+                                <button class="btn btn-secondary" onclick="openChatModal(${u.telegram_id}, '${name.replace(/'/g, "\\'")}')">
+                                    💬 Чат
                                 </button>
                             </div>
                         </div>
@@ -846,7 +1049,12 @@
                 const res = await fetch(`${API_URL}/api/send`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ password, telegram_id: selectedUserId, message })
+                    body: JSON.stringify({
+                        password,
+                        telegram_id: selectedUserId,
+                        message,
+                        parse_mode: 'HTML'
+                    })
                 });
 
                 const data = await res.json();
@@ -854,7 +1062,10 @@
                 if (data.success) {
                     statusEl.textContent = '✓ Сообщение отправлено!';
                     statusEl.className = 'status success';
-                    setTimeout(closeMessageModal, 1500);
+                    setTimeout(() => {
+                        closeMessageModal();
+                        loadUsers(); // Обновить список с последними сообщениями
+                    }, 1500);
                 } else {
                     statusEl.textContent = '✕ ' + (data.error || 'Ошибка отправки');
                     statusEl.className = 'status error';
@@ -909,6 +1120,190 @@
         document.getElementById('messageModal').addEventListener('click', e => {
             if (e.target.id === 'messageModal') closeMessageModal();
         });
+        document.getElementById('chatModal').addEventListener('click', e => {
+            if (e.target.id === 'chatModal') closeChatModal();
+        });
+
+        // ==================== CHAT HISTORY ====================
+
+        let chatMessages = [];
+        let currentFilter = 'all';
+
+        async function openChatModal(userId, name) {
+            selectedUserId = userId;
+            selectedUserName = name;
+            currentFilter = 'all';
+
+            document.getElementById('chatAvatar').textContent = name.charAt(0).toUpperCase();
+            document.getElementById('chatName').textContent = name;
+            document.getElementById('chatMessage').value = '';
+            document.getElementById('chatStatus').classList.add('hidden');
+
+            // Сбросить фильтры
+            document.querySelectorAll('.chat-filter button').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('.chat-filter button').classList.add('active');
+
+            document.getElementById('chatModal').classList.add('active');
+            await loadChatHistory();
+        }
+
+        function closeChatModal() {
+            document.getElementById('chatModal').classList.remove('active');
+            selectedUserId = null;
+        }
+
+        async function loadChatHistory() {
+            const container = document.getElementById('chatContainer');
+            container.innerHTML = '<div class="chat-empty">⏳ Загрузка...</div>';
+
+            try {
+                const dirParam = currentFilter !== 'all' ? `&direction=${currentFilter}` : '';
+                const res = await fetch(`${API_URL}/api/messages/${selectedUserId}?password=${encodeURIComponent(password)}${dirParam}`);
+                const data = await res.json();
+
+                chatMessages = data.messages || [];
+                renderChat();
+            } catch (e) {
+                console.error('Chat error:', e);
+                container.innerHTML = '<div class="chat-empty">❌ Ошибка загрузки</div>';
+            }
+        }
+
+        function renderChat() {
+            const container = document.getElementById('chatContainer');
+
+            if (chatMessages.length === 0) {
+                container.innerHTML = '<div class="chat-empty">💬 Сообщений пока нет</div>';
+                return;
+            }
+
+            container.innerHTML = chatMessages.map(msg => {
+                const dir = msg.direction === 'in' ? 'incoming' : 'outgoing';
+                const time = formatDateTime(msg.created_at);
+                return `
+                    <div class="chat-message ${dir}">
+                        <div class="chat-bubble">${escapeHtml(msg.message)}</div>
+                        <div class="chat-time">${time}</div>
+                    </div>
+                `;
+            }).join('');
+
+            // Прокрутить вниз
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function filterChat(filter) {
+            currentFilter = filter;
+
+            // Обновить активную кнопку
+            document.querySelectorAll('.chat-filter button').forEach((btn, i) => {
+                btn.classList.toggle('active',
+                    (filter === 'all' && i === 0) ||
+                    (filter === 'in' && i === 1) ||
+                    (filter === 'out' && i === 2)
+                );
+            });
+
+            loadChatHistory();
+        }
+
+        async function sendFromChat() {
+            if (!selectedUserId) return;
+
+            const messageEl = document.getElementById('chatMessage');
+            const message = messageEl.value;
+            if (!message.trim()) return;
+
+            const statusEl = document.getElementById('chatStatus');
+            statusEl.textContent = '⏳ Отправка...';
+            statusEl.className = 'status info';
+            statusEl.classList.remove('hidden');
+
+            try {
+                const res = await fetch(`${API_URL}/api/send`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        password,
+                        telegram_id: selectedUserId,
+                        message,
+                        parse_mode: 'HTML'
+                    })
+                });
+
+                const data = await res.json();
+
+                if (data.success) {
+                    statusEl.textContent = '✓ Отправлено!';
+                    statusEl.className = 'status success';
+                    messageEl.value = '';
+
+                    // Обновить историю
+                    await loadChatHistory();
+                    setTimeout(() => statusEl.classList.add('hidden'), 2000);
+                } else {
+                    statusEl.textContent = '✕ ' + (data.error || 'Ошибка');
+                    statusEl.className = 'status error';
+                }
+            } catch (e) {
+                statusEl.textContent = '✕ Ошибка сети';
+                statusEl.className = 'status error';
+            }
+        }
+
+        // ==================== FORMATTING ====================
+
+        function insertFormat(tag, textareaId = 'chatMessage') {
+            const textarea = document.getElementById(textareaId);
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const text = textarea.value;
+            const selected = text.substring(start, end);
+
+            const formatted = `<${tag}>${selected}</${tag}>`;
+            textarea.value = text.substring(0, start) + formatted + text.substring(end);
+
+            // Установить курсор
+            const cursorPos = start + tag.length + 2 + selected.length;
+            textarea.focus();
+            textarea.setSelectionRange(cursorPos, cursorPos);
+        }
+
+        // ==================== HELPERS ====================
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatTime(isoString) {
+            if (!isoString) return '';
+            const date = new Date(isoString);
+            const now = new Date();
+            const diffDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
+
+            if (diffDays === 0) {
+                return date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+            } else if (diffDays === 1) {
+                return 'вчера';
+            } else if (diffDays < 7) {
+                return date.toLocaleDateString('ru-RU', { weekday: 'short' });
+            } else {
+                return date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
+            }
+        }
+
+        function formatDateTime(isoString) {
+            if (!isoString) return '';
+            const date = new Date(isoString);
+            return date.toLocaleDateString('ru-RU', {
+                day: 'numeric',
+                month: 'short',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
     </script>
 </body>
 </html>
