@@ -266,6 +266,21 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Получить URL аватарки пользователя
+async function getUserAvatarUrl(telegramId) {
+    try {
+        const photos = await bot.telegram.getUserProfilePhotos(telegramId, 0, 1);
+        if (photos.total_count > 0) {
+            const fileId = photos.photos[0][0].file_id;
+            const fileUrl = await bot.telegram.getFileLink(fileId);
+            return fileUrl.href;
+        }
+    } catch (err) {
+        // Пользователь мог заблокировать бота или удалить аватар
+    }
+    return null;
+}
+
 // API: Получить всех пользователей
 app.get('/api/users', async (req, res) => {
     if (req.query.password !== ADMIN_PASSWORD) {
@@ -285,22 +300,26 @@ app.get('/api/users', async (req, res) => {
         return res.status(500).json({ error: error.message });
     }
 
-    // Добавляем последнее сообщение для каждого пользователя
-    const usersWithLastMessage = await Promise.all((users || []).map(async (user) => {
-        const { data: messages } = await supabase
-            .from('bot_messages')
-            .select('message, direction, created_at')
-            .eq('telegram_id', user.telegram_id)
-            .order('created_at', { ascending: false })
-            .limit(1);
+    // Добавляем последнее сообщение и аватарку для каждого пользователя
+    const usersWithData = await Promise.all((users || []).map(async (user) => {
+        const [messagesResult, avatarUrl] = await Promise.all([
+            supabase
+                .from('bot_messages')
+                .select('message, direction, created_at')
+                .eq('telegram_id', user.telegram_id)
+                .order('created_at', { ascending: false })
+                .limit(1),
+            getUserAvatarUrl(user.telegram_id)
+        ]);
 
         return {
             ...user,
-            last_message: messages?.[0] || null
+            last_message: messagesResult.data?.[0] || null,
+            avatar_url: avatarUrl
         };
     }));
 
-    res.json({ users: usersWithLastMessage });
+    res.json({ users: usersWithData });
 });
 
 // API: Статистика

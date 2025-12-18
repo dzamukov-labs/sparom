@@ -374,6 +374,7 @@
         .user-avatar {
             width: 44px;
             height: 44px;
+            min-width: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -382,6 +383,13 @@
             color: var(--white);
             font-weight: 600;
             font-size: 1rem;
+            overflow: hidden;
+        }
+
+        .user-avatar-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .user-details {
@@ -708,6 +716,17 @@
             display: none !important;
         }
 
+        /* Initial loading state - prevents flash */
+        .login-wrapper,
+        .dashboard {
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        .login-wrapper.ready,
+        .dashboard.ready {
+            opacity: 1;
+        }
+
         /* Responsive */
         @media (max-width: 640px) {
             .dashboard {
@@ -748,9 +767,22 @@
     <!-- Login Screen -->
     <div class="login-wrapper" id="loginSection">
         <div class="login-card">
-            <div class="login-logo">♨️</div>
+            <div class="login-logo">
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                    <rect width="48" height="48" rx="12" fill="url(#logo-gradient)"/>
+                    <path d="M14 32C14 32 16 28 24 28C32 28 34 32 34 32" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M18 24C18 24 19 20 24 20C29 20 30 24 30 24" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+                    <path d="M21 18C21 18 22 15 24 15C26 15 27 18 27 18" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="0" y1="0" x2="48" y2="48">
+                            <stop stop-color="#D4A04A"/>
+                            <stop offset="1" stop-color="#8B5E3C"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
             <h1 class="login-title">С лёгким паром</h1>
-            <p class="login-subtitle">Админ-панель Telegram-бота</p>
+            <p class="login-subtitle">Админ-панель</p>
 
             <div class="input-group">
                 <input type="password" id="password" placeholder="Введите пароль">
@@ -767,7 +799,6 @@
     <div class="dashboard hidden" id="dashboard">
         <header class="header">
             <div class="header-left">
-                <span class="header-logo">♨️</span>
                 <span class="header-title">Админ-панель</span>
                 <span class="header-badge">Online</span>
             </div>
@@ -777,24 +808,32 @@
         <!-- Stats -->
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-icon">👥</div>
+                <div class="stat-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                </div>
                 <div class="stat-value" id="totalUsers">—</div>
-                <div class="stat-label">Пользователей в боте</div>
+                <div class="stat-label">Пользователей</div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon">⚡</div>
+                <div class="stat-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/>
+                    </svg>
+                </div>
                 <div class="stat-value" id="actions24h">—</div>
-                <div class="stat-label">Действий за 24 часа</div>
+                <div class="stat-label">Действий за 24ч</div>
             </div>
         </div>
 
         <!-- Broadcast -->
         <div class="card">
             <div class="card-header">
-                <h2 class="card-title">
-                    <span class="card-title-icon">📢</span>
-                    Рассылка всем
-                </h2>
+                <h2 class="card-title">Рассылка</h2>
             </div>
             <textarea id="broadcastMessage" placeholder="Напишите сообщение для всех пользователей..."></textarea>
             <button class="btn btn-primary" onclick="broadcast()" style="width: auto;">
@@ -806,17 +845,13 @@
         <!-- Users -->
         <div class="card">
             <div class="card-header">
-                <h2 class="card-title">
-                    <span class="card-title-icon">👥</span>
-                    Пользователи
-                </h2>
+                <h2 class="card-title">Пользователи</h2>
                 <button class="btn btn-secondary" onclick="loadUsers()" style="width: auto; padding: 8px 16px; font-size: 0.85rem;">
                     Обновить
                 </button>
             </div>
             <div class="users-list" id="usersList">
                 <div class="empty-state">
-                    <div class="empty-state-icon">👥</div>
                     <p class="empty-state-text">Загрузка...</p>
                 </div>
             </div>
@@ -827,7 +862,7 @@
     <div class="modal-overlay" id="chatModal">
         <div class="modal" style="max-width: 600px;">
             <div class="modal-header">
-                <h3 class="modal-title">💬 История чата</h3>
+                <h3 class="modal-title">История чата</h3>
                 <button class="modal-close" onclick="closeChatModal()">×</button>
             </div>
             <div class="modal-recipient" id="chatRecipient">
@@ -889,43 +924,52 @@
         let selectedUserName = '';
 
         // Auto-login if password saved
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            const loginEl = document.getElementById('loginSection');
+            const dashEl = document.getElementById('dashboard');
+
             if (password) {
-                loadStats().then(success => {
-                    if (success) {
-                        document.getElementById('loginSection').classList.add('hidden');
-                        document.getElementById('dashboard').classList.remove('hidden');
-                        loadUsers();
-                    } else {
-                        sessionStorage.removeItem('sparom_admin_pwd');
-                        password = '';
-                    }
-                });
+                const success = await loadStats();
+                if (success) {
+                    loginEl.classList.add('hidden');
+                    dashEl.classList.remove('hidden');
+                    dashEl.classList.add('ready');
+                    loadUsers();
+                } else {
+                    sessionStorage.removeItem('sparom_admin_pwd');
+                    password = '';
+                    loginEl.classList.add('ready');
+                }
+            } else {
+                loginEl.classList.add('ready');
             }
         });
 
         // Login
-        function login() {
+        async function login() {
             password = document.getElementById('password').value;
             if (!password) return;
 
-            loadStats().then(success => {
-                if (success) {
-                    sessionStorage.setItem('sparom_admin_pwd', password);
-                    document.getElementById('loginSection').classList.add('hidden');
-                    document.getElementById('dashboard').classList.remove('hidden');
-                    loadUsers();
-                } else {
-                    alert('Неверный пароль');
-                }
-            });
+            const success = await loadStats();
+            if (success) {
+                sessionStorage.setItem('sparom_admin_pwd', password);
+                document.getElementById('loginSection').classList.add('hidden');
+                document.getElementById('loginSection').classList.remove('ready');
+                document.getElementById('dashboard').classList.remove('hidden');
+                document.getElementById('dashboard').classList.add('ready');
+                loadUsers();
+            } else {
+                alert('Неверный пароль');
+            }
         }
 
         function logout() {
             sessionStorage.removeItem('sparom_admin_pwd');
             password = '';
             document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('ready');
             document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('loginSection').classList.add('ready');
             document.getElementById('password').value = '';
         }
 
@@ -949,7 +993,6 @@
             const list = document.getElementById('usersList');
             list.innerHTML = `
                 <div class="empty-state">
-                    <div class="empty-state-icon">⏳</div>
                     <p class="empty-state-text">Загрузка...</p>
                 </div>
             `;
@@ -961,7 +1004,6 @@
                 if (!data.users || data.users.length === 0) {
                     list.innerHTML = `
                         <div class="empty-state">
-                            <div class="empty-state-icon">🌱</div>
                             <p class="empty-state-text">Пользователей пока нет</p>
                         </div>
                     `;
@@ -972,6 +1014,7 @@
                     const name = u.first_name || u.username || 'Пользователь';
                     const fullName = [u.first_name, u.last_name].filter(Boolean).join(' ') || u.username || 'Без имени';
                     const initial = name.charAt(0).toUpperCase();
+                    const avatarUrl = u.avatar_url;
 
                     // Последнее сообщение
                     let lastMsgHtml = '';
@@ -989,10 +1032,15 @@
                         `;
                     }
 
+                    // Аватар: изображение или инициал
+                    const avatarHtml = avatarUrl
+                        ? `<img src="${avatarUrl}" alt="${initial}" class="user-avatar-img">`
+                        : initial;
+
                     return `
                         <div class="user-item">
                             <div class="user-info">
-                                <div class="user-avatar">${initial}</div>
+                                <div class="user-avatar">${avatarHtml}</div>
                                 <div class="user-details">
                                     <span class="user-name">${fullName}${u.username ? ' @' + u.username : ''}</span>
                                     <span class="user-id">ID: ${u.telegram_id}</span>
@@ -1001,7 +1049,7 @@
                             </div>
                             <div class="user-actions">
                                 <button class="btn btn-secondary" onclick="openChatModal(${u.telegram_id}, '${name.replace(/'/g, "\\'")}')">
-                                    💬 Чат
+                                    Чат
                                 </button>
                             </div>
                         </div>
@@ -1011,7 +1059,6 @@
                 console.error('Users error:', e);
                 list.innerHTML = `
                     <div class="empty-state">
-                        <div class="empty-state-icon">❌</div>
                         <p class="empty-state-text">Ошибка загрузки</p>
                     </div>
                 `;
@@ -1041,7 +1088,7 @@
             if (!message.trim()) return;
 
             const statusEl = document.getElementById('messageStatus');
-            statusEl.textContent = '⏳ Отправка...';
+            statusEl.textContent = 'Отправка...';
             statusEl.className = 'status info';
             statusEl.classList.remove('hidden');
 
@@ -1060,18 +1107,18 @@
                 const data = await res.json();
 
                 if (data.success) {
-                    statusEl.textContent = '✓ Сообщение отправлено!';
+                    statusEl.textContent = 'Сообщение отправлено';
                     statusEl.className = 'status success';
                     setTimeout(() => {
                         closeMessageModal();
                         loadUsers(); // Обновить список с последними сообщениями
                     }, 1500);
                 } else {
-                    statusEl.textContent = '✕ ' + (data.error || 'Ошибка отправки');
+                    statusEl.textContent = data.error || 'Ошибка отправки';
                     statusEl.className = 'status error';
                 }
             } catch (e) {
-                statusEl.textContent = '✕ Ошибка сети';
+                statusEl.textContent = 'Ошибка сети';
                 statusEl.className = 'status error';
             }
         }
@@ -1081,10 +1128,10 @@
             const message = document.getElementById('broadcastMessage').value;
             if (!message.trim()) return;
 
-            if (!confirm('Отправить это сообщение ВСЕМ пользователям бота?')) return;
+            if (!confirm('Отправить это сообщение ВСЕМ пользователям?')) return;
 
             const statusEl = document.getElementById('broadcastStatus');
-            statusEl.textContent = '⏳ Отправка...';
+            statusEl.textContent = 'Отправка...';
             statusEl.className = 'status info';
             statusEl.classList.remove('hidden');
 
@@ -1098,15 +1145,15 @@
                 const data = await res.json();
 
                 if (data.sent !== undefined) {
-                    statusEl.textContent = `✓ Отправлено: ${data.sent}, ошибок: ${data.failed}`;
+                    statusEl.textContent = `Отправлено: ${data.sent}, ошибок: ${data.failed}`;
                     statusEl.className = 'status success';
                     document.getElementById('broadcastMessage').value = '';
                 } else {
-                    statusEl.textContent = '✕ ' + (data.error || 'Ошибка рассылки');
+                    statusEl.textContent = data.error || 'Ошибка рассылки';
                     statusEl.className = 'status error';
                 }
             } catch (e) {
-                statusEl.textContent = '✕ Ошибка сети';
+                statusEl.textContent = 'Ошибка сети';
                 statusEl.className = 'status error';
             }
         }
@@ -1154,7 +1201,7 @@
 
         async function loadChatHistory() {
             const container = document.getElementById('chatContainer');
-            container.innerHTML = '<div class="chat-empty">⏳ Загрузка...</div>';
+            container.innerHTML = '<div class="chat-empty">Загрузка...</div>';
 
             try {
                 const dirParam = currentFilter !== 'all' ? `&direction=${currentFilter}` : '';
@@ -1165,7 +1212,7 @@
                 renderChat();
             } catch (e) {
                 console.error('Chat error:', e);
-                container.innerHTML = '<div class="chat-empty">❌ Ошибка загрузки</div>';
+                container.innerHTML = '<div class="chat-empty">Ошибка загрузки</div>';
             }
         }
 
@@ -1173,7 +1220,7 @@
             const container = document.getElementById('chatContainer');
 
             if (chatMessages.length === 0) {
-                container.innerHTML = '<div class="chat-empty">💬 Сообщений пока нет</div>';
+                container.innerHTML = '<div class="chat-empty">Сообщений пока нет</div>';
                 return;
             }
 
@@ -1215,7 +1262,7 @@
             if (!message.trim()) return;
 
             const statusEl = document.getElementById('chatStatus');
-            statusEl.textContent = '⏳ Отправка...';
+            statusEl.textContent = 'Отправка...';
             statusEl.className = 'status info';
             statusEl.classList.remove('hidden');
 
@@ -1234,7 +1281,7 @@
                 const data = await res.json();
 
                 if (data.success) {
-                    statusEl.textContent = '✓ Отправлено!';
+                    statusEl.textContent = 'Отправлено';
                     statusEl.className = 'status success';
                     messageEl.value = '';
 
@@ -1242,11 +1289,11 @@
                     await loadChatHistory();
                     setTimeout(() => statusEl.classList.add('hidden'), 2000);
                 } else {
-                    statusEl.textContent = '✕ ' + (data.error || 'Ошибка');
+                    statusEl.textContent = data.error || 'Ошибка';
                     statusEl.className = 'status error';
                 }
             } catch (e) {
-                statusEl.textContent = '✕ Ошибка сети';
+                statusEl.textContent = 'Ошибка сети';
                 statusEl.className = 'status error';
             }
         }

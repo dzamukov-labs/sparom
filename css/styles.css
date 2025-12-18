@@ -1209,12 +1209,12 @@ a {
 /* Quiz Steps */
 .quiz__steps {
     position: relative;
-    min-height: 420px;
+    min-height: 520px;
 }
 
 @media (min-width: 480px) {
     .quiz__steps {
-        min-height: 380px;
+        min-height: 480px;
     }
 }
 
