@@ -436,6 +436,61 @@ app.post('/api/broadcast', async (req, res) => {
 // Health check
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
+// API: Тест Яндекс.Директ
+app.get('/api/yandex-test', async (req, res) => {
+    if (req.query.password !== ADMIN_PASSWORD) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const token = process.env.YANDEX_DIRECT_TOKEN;
+    if (!token) {
+        return res.json({ success: false, error: 'YANDEX_DIRECT_TOKEN не задан' });
+    }
+
+    try {
+        const response = await fetch('https://api.direct.yandex.com/json/v5/campaigns', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept-Language': 'ru',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                method: 'get',
+                params: {
+                    SelectionCriteria: {},
+                    FieldNames: ['Id', 'Name', 'Status', 'State']
+                }
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+            return res.json({
+                success: false,
+                error: data.error.error_string || data.error.error_detail,
+                code: data.error.error_code
+            });
+        }
+
+        const campaigns = data.result?.Campaigns || [];
+        res.json({
+            success: true,
+            campaigns_count: campaigns.length,
+            campaigns: campaigns.map(c => ({
+                id: c.Id,
+                name: c.Name,
+                status: c.Status,
+                state: c.State
+            }))
+        });
+
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
 // Запуск
 async function start() {
     // Polling mode (для локальной разработки)
