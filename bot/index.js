@@ -680,18 +680,38 @@ app.post('/api/yandex/raw', async (req, res) => {
 app.get('/api/yandex/stats', async (req, res) => {
     if (!checkYandexAuth(req, res)) return;
 
-    const { campaign_ids, date_from, date_to } = req.query;
+    const { campaign_ids, date_from, date_to, goal_id } = req.query;
     const dateFrom = date_from || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
     const dateTo = date_to || new Date().toISOString().split('T')[0];
 
     try {
+        // Базовые поля для отчета
+        let fieldNames = ['Date', 'CampaignId', 'CampaignName', 'Impressions', 'Clicks', 'Cost', 'Ctr', 'AvgCpc'];
+
+        // Если указана конкретная цель, добавляем поля по целям
+        if (goal_id) {
+            fieldNames.push('GoalId', 'GoalName', 'GoalConversions', 'GoalCost', 'GoalConversionRate');
+        } else {
+            // Общие конверсии (все автоцели + настроенные)
+            fieldNames.push('Conversions', 'CostPerConversion');
+        }
+
+        // Формируем фильтры
+        const filters = [];
+        if (campaign_ids) {
+            filters.push({ Field: 'CampaignId', Operator: 'IN', Values: campaign_ids.split(',').map(Number) });
+        }
+        if (goal_id) {
+            filters.push({ Field: 'GoalId', Operator: 'EQUALS', Values: [parseInt(goal_id)] });
+        }
+
         const reportParams = {
             SelectionCriteria: {
                 DateFrom: dateFrom,
                 DateTo: dateTo,
-                Filter: campaign_ids ? [{ Field: 'CampaignId', Operator: 'IN', Values: campaign_ids.split(',').map(Number) }] : []
+                Filter: filters.length > 0 ? filters : []
             },
-            FieldNames: ['Date', 'CampaignId', 'CampaignName', 'Impressions', 'Clicks', 'Cost', 'Ctr', 'AvgCpc', 'Conversions', 'CostPerConversion'],
+            FieldNames: fieldNames,
             ReportName: 'Stats_' + Date.now(),
             ReportType: 'CAMPAIGN_PERFORMANCE_REPORT',
             DateRangeType: 'CUSTOM_DATE',
@@ -700,7 +720,13 @@ app.get('/api/yandex/stats', async (req, res) => {
         };
 
         const data = await yandexReportRequest(reportParams);
-        res.json({ success: true, date_from: dateFrom, date_to: dateTo, ...data });
+        res.json({
+            success: true,
+            date_from: dateFrom,
+            date_to: dateTo,
+            goal_id: goal_id || null,
+            ...data
+        });
     } catch (err) {
         res.json({ success: false, error: err.message });
     }
@@ -1126,6 +1152,70 @@ app.get('/api/yandex/negative-keywords', async (req, res) => {
             FieldNames: ['Id', 'Name', 'NegativeKeywords']
         });
         res.json({ success: !data.error, sets: data.result?.NegativeKeywordSharedSets || [], error: data.error?.error_string });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// === ЦЕЛИ (GOALS) ===
+// Получить список целей из Яндекс.Метрики для кампаний
+app.get('/api/yandex/goals', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    try {
+        // Получаем список кампаний
+        const campaignsData = await yandexDirectRequest('campaigns', 'get', {
+            SelectionCriteria: {},
+            FieldNames: ['Id', 'Name']
+        });
+
+        if (campaignsData.error) {
+            return res.json({ success: false, error: campaignsData.error.error_string });
+        }
+
+        const campaigns = campaignsData.result?.Campaigns || [];
+
+        // Для каждой кампании получаем цели через Reports API
+        // Используем отчет CAMPAIGN_PERFORMANCE_REPORT с группировкой по GoalId
+        const reportParams = {
+            SelectionCriteria: {
+                DateFrom: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                DateTo: new Date().toISOString().split('T')[0]
+            },
+            FieldNames: ['CampaignId', 'GoalId', 'GoalName', 'GoalCost', 'GoalConversions', 'GoalConversionRate'],
+            ReportName: 'Goals_' + Date.now(),
+            ReportType: 'CAMPAIGN_PERFORMANCE_REPORT',
+            DateRangeType: 'CUSTOM_DATE',
+            Format: 'TSV',
+            IncludeVAT: 'YES'
+        };
+
+        const goalsData = await yandexReportRequest(reportParams);
+
+        // Группируем цели по уникальным ID и именам
+        const goalsMap = new Map();
+        goalsData.rows?.forEach(row => {
+            if (row.GoalId && row.GoalId !== '--') {
+                goalsMap.set(row.GoalId, {
+                    id: row.GoalId,
+                    name: row.GoalName || 'Без названия',
+                    campaigns: goalsMap.get(row.GoalId)?.campaigns || []
+                });
+
+                const existingCampaigns = goalsMap.get(row.GoalId).campaigns;
+                if (!existingCampaigns.includes(row.CampaignId)) {
+                    existingCampaigns.push(row.CampaignId);
+                }
+            }
+        });
+
+        const goals = Array.from(goalsMap.values());
+
+        res.json({
+            success: true,
+            goals,
+            total: goals.length
+        });
     } catch (err) {
         res.json({ success: false, error: err.message });
     }
