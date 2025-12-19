@@ -637,6 +637,98 @@ a {
 }
 
 /* ==========================================================================
+   Why Us Section
+   ========================================================================== */
+
+.why-us {
+    padding: var(--space-2xl) 0;
+    background: var(--color-bg);
+}
+
+.why-us__title {
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: var(--space-xl);
+    color: var(--color-text);
+}
+
+.why-us__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+}
+
+.benefit-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: var(--space-lg);
+    background: var(--color-white);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition);
+}
+
+.benefit-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.benefit-card__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    margin-bottom: var(--space-md);
+    background: var(--color-accent-light);
+    border-radius: var(--radius-md);
+    color: var(--color-accent);
+}
+
+.benefit-card__title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin-bottom: var(--space-xs);
+    color: var(--color-text);
+}
+
+.benefit-card__text {
+    font-size: 0.9375rem;
+    color: var(--color-text-light);
+    line-height: 1.5;
+}
+
+/* Why Us Responsive */
+@media (min-width: 480px) {
+    .why-us__grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 768px) {
+    .why-us {
+        padding: var(--space-3xl) 0;
+    }
+
+    .why-us__grid {
+        gap: var(--space-lg);
+    }
+
+    .benefit-card {
+        padding: var(--space-xl);
+    }
+}
+
+@media (min-width: 1024px) {
+    .why-us__grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* ==========================================================================
    Breadcrumbs
    ========================================================================== */
 
