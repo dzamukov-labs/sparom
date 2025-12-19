@@ -1221,6 +1221,24 @@ app.get('/api/yandex/goals', async (req, res) => {
     }
 });
 
+// Автопинг для предотвращения засыпания на Render.com (бесплатный тариф)
+function startKeepAlive() {
+    const PING_INTERVAL = 14 * 60 * 1000; // 14 минут
+    const selfUrl = process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
+
+    setInterval(async () => {
+        try {
+            const response = await fetch(`${selfUrl}/health`);
+            const data = await response.json();
+            console.log(`[Keep-Alive] Ping successful at ${new Date().toISOString()}, status: ${data.status}`);
+        } catch (err) {
+            console.error(`[Keep-Alive] Ping failed: ${err.message}`);
+        }
+    }, PING_INTERVAL);
+
+    console.log(`[Keep-Alive] Started - pinging every 14 minutes to prevent sleep`);
+}
+
 // Запуск
 async function start() {
     // Polling mode (для локальной разработки)
@@ -1242,6 +1260,11 @@ async function start() {
 
     app.listen(PORT, () => {
         console.log(`Admin API running on port ${PORT}`);
+
+        // Запускаем автопинг только в production (на Render.com)
+        if (process.env.RENDER_EXTERNAL_URL) {
+            startKeepAlive();
+        }
     });
 }
 
