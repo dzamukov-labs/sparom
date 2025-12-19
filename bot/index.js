@@ -486,6 +486,31 @@ async function yandexReportRequest(reportParams) {
     return { headers, rows };
 }
 
+// Хелпер для Яндекс.Метрика API
+async function yandexMetrikaRequest(method, endpoint, params = {}) {
+    const token = process.env.YANDEX_DIRECT_TOKEN;
+    const counterId = '35165775';
+
+    const url = new URL(`https://api-metrika.yandex.net/stat/v1/data${endpoint}`);
+    url.searchParams.append('id', counterId);
+
+    Object.keys(params).forEach(key => {
+        if (params[key] !== undefined && params[key] !== null) {
+            url.searchParams.append(key, params[key]);
+        }
+    });
+
+    const response = await fetch(url.toString(), {
+        method: method || 'GET',
+        headers: {
+            'Authorization': `OAuth ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+
+    return response.json();
+}
+
 // API: Полный анализ кампаний
 app.get('/api/yandex-analysis', async (req, res) => {
     if (req.query.password !== ADMIN_PASSWORD) {
@@ -680,18 +705,38 @@ app.post('/api/yandex/raw', async (req, res) => {
 app.get('/api/yandex/stats', async (req, res) => {
     if (!checkYandexAuth(req, res)) return;
 
-    const { campaign_ids, date_from, date_to } = req.query;
+    const { campaign_ids, date_from, date_to, goal_id } = req.query;
     const dateFrom = date_from || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
     const dateTo = date_to || new Date().toISOString().split('T')[0];
 
     try {
+        // Базовые поля для отчета
+        let fieldNames = ['Date', 'CampaignId', 'CampaignName', 'Impressions', 'Clicks', 'Cost', 'Ctr', 'AvgCpc'];
+
+        // Если указана конкретная цель, добавляем поля по целям
+        if (goal_id) {
+            fieldNames.push('GoalId', 'GoalName', 'GoalConversions', 'GoalCost', 'GoalConversionRate');
+        } else {
+            // Общие конверсии (все автоцели + настроенные)
+            fieldNames.push('Conversions', 'CostPerConversion');
+        }
+
+        // Формируем фильтры
+        const filters = [];
+        if (campaign_ids) {
+            filters.push({ Field: 'CampaignId', Operator: 'IN', Values: campaign_ids.split(',').map(Number) });
+        }
+        if (goal_id) {
+            filters.push({ Field: 'GoalId', Operator: 'EQUALS', Values: [parseInt(goal_id)] });
+        }
+
         const reportParams = {
             SelectionCriteria: {
                 DateFrom: dateFrom,
                 DateTo: dateTo,
-                Filter: campaign_ids ? [{ Field: 'CampaignId', Operator: 'IN', Values: campaign_ids.split(',').map(Number) }] : []
+                Filter: filters.length > 0 ? filters : []
             },
-            FieldNames: ['Date', 'CampaignId', 'CampaignName', 'Impressions', 'Clicks', 'Cost', 'Ctr', 'AvgCpc', 'Conversions', 'CostPerConversion'],
+            FieldNames: fieldNames,
             ReportName: 'Stats_' + Date.now(),
             ReportType: 'CAMPAIGN_PERFORMANCE_REPORT',
             DateRangeType: 'CUSTOM_DATE',
@@ -700,7 +745,13 @@ app.get('/api/yandex/stats', async (req, res) => {
         };
 
         const data = await yandexReportRequest(reportParams);
-        res.json({ success: true, date_from: dateFrom, date_to: dateTo, ...data });
+        res.json({
+            success: true,
+            date_from: dateFrom,
+            date_to: dateTo,
+            goal_id: goal_id || null,
+            ...data
+        });
     } catch (err) {
         res.json({ success: false, error: err.message });
     }
@@ -1131,6 +1182,517 @@ app.get('/api/yandex/negative-keywords', async (req, res) => {
     }
 });
 
+// === ЦЕЛИ (GOALS) ===
+// Получить список целей из Яндекс.Метрики для кампаний
+app.get('/api/yandex/goals', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    try {
+        // Получаем список кампаний
+        const campaignsData = await yandexDirectRequest('campaigns', 'get', {
+            SelectionCriteria: {},
+            FieldNames: ['Id', 'Name']
+        });
+
+        if (campaignsData.error) {
+            return res.json({ success: false, error: campaignsData.error.error_string });
+        }
+
+        const campaigns = campaignsData.result?.Campaigns || [];
+
+        // Для каждой кампании получаем цели через Reports API
+        // Используем отчет CAMPAIGN_PERFORMANCE_REPORT с группировкой по GoalId
+        const reportParams = {
+            SelectionCriteria: {
+                DateFrom: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                DateTo: new Date().toISOString().split('T')[0]
+            },
+            FieldNames: ['CampaignId', 'GoalId', 'GoalName', 'GoalCost', 'GoalConversions', 'GoalConversionRate'],
+            ReportName: 'Goals_' + Date.now(),
+            ReportType: 'CAMPAIGN_PERFORMANCE_REPORT',
+            DateRangeType: 'CUSTOM_DATE',
+            Format: 'TSV',
+            IncludeVAT: 'YES'
+        };
+
+        const goalsData = await yandexReportRequest(reportParams);
+
+        // Группируем цели по уникальным ID и именам
+        const goalsMap = new Map();
+        goalsData.rows?.forEach(row => {
+            if (row.GoalId && row.GoalId !== '--') {
+                goalsMap.set(row.GoalId, {
+                    id: row.GoalId,
+                    name: row.GoalName || 'Без названия',
+                    campaigns: goalsMap.get(row.GoalId)?.campaigns || []
+                });
+
+                const existingCampaigns = goalsMap.get(row.GoalId).campaigns;
+                if (!existingCampaigns.includes(row.CampaignId)) {
+                    existingCampaigns.push(row.CampaignId);
+                }
+            }
+        });
+
+        const goals = Array.from(goalsMap.values());
+
+        res.json({
+            success: true,
+            goals,
+            total: goals.length
+        });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// === КОМПЛЕКСНАЯ АНАЛИТИКА ===
+// Полный анализ для создания новой кампании
+app.get('/api/yandex/full-analysis', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    try {
+        const analysis = {
+            timestamp: new Date().toISOString(),
+            new_landing: 'sparom.ru/special-d',
+            old_landing: 'sparom.ru/special'
+        };
+
+        // 1. Получаем все кампании
+        const campaignsData = await yandexDirectRequest('campaigns', 'get', {
+            SelectionCriteria: {},
+            FieldNames: ['Id', 'Name', 'Status', 'State', 'Statistics', 'DailyBudget', 'StartDate']
+        });
+
+        analysis.campaigns = {
+            total: campaignsData.result?.Campaigns?.length || 0,
+            items: campaignsData.result?.Campaigns || []
+        };
+
+        // 2. Получаем статистику по кампаниям за последние 30 дней
+        const statsReport = await yandexReportRequest({
+            SelectionCriteria: {
+                DateFrom: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                DateTo: new Date().toISOString().split('T')[0]
+            },
+            FieldNames: ['CampaignId', 'CampaignName', 'Impressions', 'Clicks', 'Cost', 'Ctr', 'AvgCpc', 'Conversions', 'CostPerConversion'],
+            ReportName: 'FullAnalysis_' + Date.now(),
+            ReportType: 'CAMPAIGN_PERFORMANCE_REPORT',
+            DateRangeType: 'CUSTOM_DATE',
+            Format: 'TSV',
+            IncludeVAT: 'YES'
+        });
+
+        analysis.campaigns.stats = statsReport.rows || [];
+
+        // 3. Получаем ключевые слова с лучшим CTR
+        const keywordsReport = await yandexReportRequest({
+            SelectionCriteria: {
+                DateFrom: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                DateTo: new Date().toISOString().split('T')[0]
+            },
+            FieldNames: ['CampaignName', 'Keyword', 'Impressions', 'Clicks', 'Ctr', 'AvgCpc', 'Conversions'],
+            ReportName: 'Keywords_' + Date.now(),
+            ReportType: 'SEARCH_QUERY_PERFORMANCE_REPORT',
+            DateRangeType: 'CUSTOM_DATE',
+            Format: 'TSV',
+            IncludeVAT: 'YES'
+        });
+
+        analysis.keywords = {
+            total: keywordsReport.rows?.length || 0,
+            top_converting: (keywordsReport.rows || [])
+                .filter(k => parseFloat(k.Conversions || 0) > 0)
+                .sort((a, b) => parseFloat(b.Conversions || 0) - parseFloat(a.Conversions || 0))
+                .slice(0, 20),
+            top_ctr: (keywordsReport.rows || [])
+                .filter(k => parseFloat(k.Clicks || 0) > 10)
+                .sort((a, b) => parseFloat(b.Ctr || 0) - parseFloat(a.Ctr || 0))
+                .slice(0, 20)
+        };
+
+        // 4. Данные из Яндекс.Метрики
+        try {
+            // Источники трафика
+            const sourcesData = await yandexMetrikaRequest('GET', '', {
+                metrics: 'ym:s:visits,ym:s:bounceRate,ym:s:pageDepth,ym:s:avgVisitDurationSeconds',
+                dimensions: 'ym:s:lastSignTrafficSource',
+                date1: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                date2: new Date().toISOString().split('T')[0],
+                limit: 10
+            });
+
+            analysis.metrika = {
+                sources: sourcesData.data || [],
+                query: sourcesData.query || {}
+            };
+
+            // Конверсии по целям
+            const goalsData = await yandexMetrikaRequest('GET', '', {
+                metrics: 'ym:s:goal204286948reaches,ym:s:goal204286948conversionRate',
+                dimensions: 'ym:s:date',
+                date1: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                date2: new Date().toISOString().split('T')[0],
+                group: 'day'
+            });
+
+            analysis.metrika.goal_stats = goalsData.data || [];
+        } catch (metrikaError) {
+            analysis.metrika = { error: metrikaError.message };
+        }
+
+        // 5. Рекомендации на основе анализа
+        analysis.recommendations = generateRecommendations(analysis);
+
+        res.json({ success: true, analysis });
+    } catch (err) {
+        res.json({ success: false, error: err.message, stack: err.stack });
+    }
+});
+
+// Генерация рекомендаций на основе анализа
+function generateRecommendations(analysis) {
+    const recommendations = {
+        budget: {},
+        keywords: [],
+        ad_copy: [],
+        targeting: []
+    };
+
+    // Анализ бюджета
+    const totalCost = analysis.campaigns.stats?.reduce((sum, c) => sum + parseFloat(c.Cost || 0), 0) || 0;
+    const totalConversions = analysis.campaigns.stats?.reduce((sum, c) => sum + parseFloat(c.Conversions || 0), 0) || 0;
+    const avgCPA = totalConversions > 0 ? totalCost / totalConversions : 0;
+
+    recommendations.budget = {
+        current_monthly: Math.round(totalCost),
+        avg_cpa: Math.round(avgCPA),
+        recommended_daily: Math.round(totalCost / 30 * 1.2), // +20% для новой кампании
+        reason: 'На основе текущих затрат с запасом 20% для тестирования'
+    };
+
+    // Топ ключевых слов
+    recommendations.keywords = analysis.keywords.top_converting.slice(0, 10).map(k => ({
+        keyword: k.Keyword,
+        conversions: k.Conversions,
+        ctr: k.Ctr,
+        reason: 'Высокая конверсия в текущих кампаниях'
+    }));
+
+    // Рекомендации по текстам
+    const avgCtr = analysis.campaigns.stats?.reduce((sum, c) => sum + parseFloat(c.Ctr || 0), 0) / (analysis.campaigns.stats?.length || 1);
+    recommendations.ad_copy.push({
+        suggestion: 'Использовать УТП нового лендинга',
+        current_avg_ctr: avgCtr?.toFixed(2),
+        reason: 'Новый лендинг имеет улучшенную структуру и оффер'
+    });
+
+    return recommendations;
+}
+
+// === ГЕНЕРАЦИЯ СТРАТЕГИИ КАМПАНИИ ===
+// Генерирует готовую стратегию для новой кампании на основе анализа
+app.post('/api/yandex/generate-campaign-strategy', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    try {
+        const { region = 'Москва и МО', campaign_type = 'РСЯ' } = req.body;
+
+        const strategy = {
+            timestamp: new Date().toISOString(),
+            region,
+            campaign_type,
+            landing_url: 'https://sparom.ru/special-d',
+            goal_id: '204286948'
+        };
+
+        // УТП нового лендинга
+        const utp = {
+            price: 'от 450,000₽ под ключ',
+            installment: 'рассрочка от 12,900₽/мес',
+            delivery: 'бесплатная доставка',
+            speed: 'установка за 1 час',
+            quality: 'капитальное строение 5 тонн',
+            complete: 'печь, электрика, мебель включены',
+            reputation: 'с 2014 года, 100+ видео'
+        };
+
+        // Генерируем структуру кампании для РСЯ Москва
+        strategy.campaign = {
+            name: `РСЯ | ${region} | sparom.ru/special-d | ${new Date().toISOString().split('T')[0]}`,
+            type: 'TEXT_CAMPAIGN',
+            daily_budget: 1500, // На основе анализа (текущий средний)
+            strategy_type: 'AVERAGE_CPA',
+            target_cpa: 300, // Средний CPA из анализа
+            regions: region === 'Москва и МО' ? [1, 213] : [2, 10174] // Москва или СПб
+        };
+
+        // Группы объявлений с ключевыми словами
+        strategy.ad_groups = [
+            {
+                name: 'Купить готовую баню',
+                keywords: [
+                    { text: 'купить готовую баню', bid: 15 },
+                    { text: 'готовая баня под ключ', bid: 18 },
+                    { text: 'баня под ключ цена', bid: 12 },
+                    { text: 'мобильная баня купить', bid: 10 },
+                    { text: 'готовая баня с доставкой', bid: 14 }
+                ],
+                ads: [
+                    {
+                        title: 'Готовая баня под ключ за 14 дней',
+                        title2: 'Установка за 1 час. С печью и мебелью',
+                        text: `От 450,000₽ под ключ. Рассрочка от 12,900₽/мес. Бесплатная доставка. Всё включено: печь, электрика, мебель. Капитальное строение 5 тонн.`,
+                        url: 'https://sparom.ru/special-d',
+                        display_url: 'sparom.ru/bani'
+                    },
+                    {
+                        title: 'Баня вашей мечты за 450,000₽',
+                        title2: 'Не времянка, а капитальное 5 тонн',
+                        text: `Установка за 1 час без грязи. Печь, мебель, электрика - всё включено. Рассрочка 12,900₽/мес. Публичная репутация с 2014 года.`,
+                        url: 'https://sparom.ru/special-d',
+                        display_url: 'sparom.ru'
+                    }
+                ]
+            },
+            {
+                name: 'Быстрая установка бани',
+                keywords: [
+                    { text: 'баня за день', bid: 12 },
+                    { text: 'быстрая установка бани', bid: 11 },
+                    { text: 'баня без строительства', bid: 13 },
+                    { text: 'готовая баня доставка установка', bid: 15 }
+                ],
+                ads: [
+                    {
+                        title: 'Баня за 1 час - без стройки и нервов',
+                        title2: 'Привезём готовую, установим краном',
+                        text: `Никаких бригад месяцами на участке. Вечером - первый пар. От 450,000₽ под ключ. Всё включено. Рассрочка без переплат.`,
+                        url: 'https://sparom.ru/special-d',
+                        display_url: 'sparom.ru/bystro'
+                    }
+                ]
+            },
+            {
+                name: 'Баня в рассрочку',
+                keywords: [
+                    { text: 'баня в рассрочку', bid: 14 },
+                    { text: 'купить баню в кредит', bid: 13 },
+                    { text: 'баня под ключ недорого', bid: 11 }
+                ],
+                ads: [
+                    {
+                        title: 'Баня от 12,900₽/мес в рассрочку',
+                        title2: 'Без переплат. Установка за 1 час',
+                        text: `Готовая баня под ключ от 450,000₽. Рассрочка без процентов. Печь, мебель, электрика включены. Капитальное строение 5 тонн.`,
+                        url: 'https://sparom.ru/special-d',
+                        display_url: 'sparom.ru/rassrochka'
+                    }
+                ]
+            }
+        ];
+
+        // Настройки таргетинга для РСЯ
+        strategy.targeting = {
+            interests: ['Дача и сад', 'Строительство и ремонт', 'Загородная недвижимость'],
+            behavioral: ['Посещали сайты про бани', 'Искали строительство бани'],
+            age: '25-65',
+            device_targeting: 'all'
+        };
+
+        // Рекомендации по запуску
+        strategy.recommendations = {
+            budget: {
+                daily: 1500,
+                weekly: 10500,
+                reason: 'На основе текущего CPA 240₽ и целевых 2 конверсии в день'
+            },
+            bids: {
+                start: 12,
+                max: 25,
+                reason: 'Средняя ставка из успешных кампаний'
+            },
+            images: {
+                needed: true,
+                formats: ['1:1 (450x450)', '4:3 (600x450)', '16:9 (1080x607)'],
+                recommendation: 'Использовать фото зимних бань с сайта'
+            },
+            testing_period: '7-10 дней для накопления статистики',
+            optimization: 'Отключить площадки с CR < 1%, повышать ставки на площадках с CR > 3%'
+        };
+
+        res.json({ success: true, strategy });
+    } catch (err) {
+        res.json({ success: false, error: err.message, stack: err.stack });
+    }
+});
+
+// === СОЗДАНИЕ КАМПАНИИ ===
+// Автоматически создает кампанию по готовой стратегии
+app.post('/api/yandex/create-campaign-auto', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    try {
+        const { strategy, use_existing_images = true } = req.body;
+
+        if (!strategy) {
+            return res.json({ success: false, error: 'Strategy is required. Call /generate-campaign-strategy first.' });
+        }
+
+        const results = {
+            timestamp: new Date().toISOString(),
+            campaign: null,
+            ad_groups: [],
+            ads: [],
+            errors: []
+        };
+
+        // 1. Создаем кампанию
+        const campaignData = await yandexDirectRequest('campaigns', 'add', {
+            Campaigns: [{
+                Name: strategy.campaign.name,
+                StartDate: new Date().toISOString().split('T')[0],
+                Type: strategy.campaign.type,
+                TextCampaign: {
+                    BiddingStrategy: {
+                        Search: {
+                            BiddingStrategyType: 'SERVING_OFF'
+                        },
+                        Network: {
+                            BiddingStrategyType: strategy.campaign.strategy_type || 'AVERAGE_CPA',
+                            NetworkDefault: {
+                                AverageCpa: (strategy.campaign.target_cpa * 1000000).toString(), // в микрорублях
+                                WeeklySpendLimit: (strategy.campaign.daily_budget * 7 * 1000000).toString()
+                            }
+                        }
+                    },
+                    Settings: [
+                        { Option: 'ADD_METRICA_TAG', Value: 'YES' },
+                        { Option: 'ADD_OPENSTAT_TAG', Value: 'YES' }
+                    ]
+                }
+            }]
+        });
+
+        if (campaignData.error) {
+            results.errors.push({ step: 'campaign_creation', error: campaignData.error.error_string });
+            return res.json({ success: false, results });
+        }
+
+        const campaignId = campaignData.result?.AddResults?.[0]?.Id;
+        results.campaign = { id: campaignId, name: strategy.campaign.name };
+
+        // 2. Создаем группы объявлений
+        for (const group of strategy.ad_groups) {
+            const adGroupData = await yandexDirectRequest('adgroups', 'add', {
+                AdGroups: [{
+                    Name: group.name,
+                    CampaignId: campaignId,
+                    RegionIds: strategy.campaign.regions,
+                    NegativeKeywords: []
+                }]
+            });
+
+            if (adGroupData.error) {
+                results.errors.push({ step: 'adgroup_creation', group: group.name, error: adGroupData.error.error_string });
+                continue;
+            }
+
+            const adGroupId = adGroupData.result?.AddResults?.[0]?.Id;
+            results.ad_groups.push({ id: adGroupId, name: group.name });
+
+            // 3. Добавляем ключевые слова
+            const keywordsData = await yandexDirectRequest('keywords', 'add', {
+                Keywords: group.keywords.map(kw => ({
+                    AdGroupId: adGroupId,
+                    Keyword: kw.text,
+                    Bid: kw.bid * 1000000 // в микрорублях
+                }))
+            });
+
+            if (keywordsData.error) {
+                results.errors.push({ step: 'keywords_creation', group: group.name, error: keywordsData.error.error_string });
+            }
+
+            // 4. Создаем объявления
+            for (const ad of group.ads) {
+                const adData = await yandexDirectRequest('ads', 'add', {
+                    Ads: [{
+                        AdGroupId: adGroupId,
+                        TextAd: {
+                            Title: ad.title,
+                            Title2: ad.title2,
+                            Text: ad.text,
+                            Href: ad.url,
+                            Mobile: 'YES'
+                        }
+                    }]
+                });
+
+                if (adData.error) {
+                    results.errors.push({ step: 'ad_creation', group: group.name, error: adData.error.error_string });
+                } else {
+                    results.ads.push({
+                        id: adData.result?.AddResults?.[0]?.Id,
+                        group: group.name,
+                        title: ad.title
+                    });
+                }
+            }
+        }
+
+        // 5. Настраиваем цель Метрики
+        try {
+            await yandexDirectRequest('campaigns', 'update', {
+                Campaigns: [{
+                    Id: campaignId,
+                    TextCampaign: {
+                        CounterIds: [35165775]
+                    }
+                }]
+            });
+        } catch (err) {
+            results.errors.push({ step: 'metrika_setup', error: err.message });
+        }
+
+        const success = results.campaign && results.ad_groups.length > 0;
+        res.json({ success, results, message: success ? 'Campaign created successfully!' : 'Campaign creation failed' });
+
+    } catch (err) {
+        res.json({ success: false, error: err.message, stack: err.stack });
+    }
+});
+
+// Автопинг для предотвращения засыпания (работает на Render.com, Vercel, и локально)
+function startKeepAlive() {
+    const PING_INTERVAL = 14 * 60 * 1000; // 14 минут
+
+    // Автоопределение URL в зависимости от окружения
+    let selfUrl;
+    if (process.env.RENDER_EXTERNAL_URL) {
+        // Render.com
+        selfUrl = process.env.RENDER_EXTERNAL_URL;
+    } else if (process.env.VERCEL_URL) {
+        // Vercel
+        selfUrl = `https://${process.env.VERCEL_URL}`;
+    } else {
+        // Локальная разработка
+        selfUrl = `http://localhost:${PORT}`;
+    }
+
+    setInterval(async () => {
+        try {
+            const response = await fetch(`${selfUrl}/health`);
+            const data = await response.json();
+            console.log(`[Keep-Alive] Ping successful at ${new Date().toISOString()}, status: ${data.status}`);
+        } catch (err) {
+            console.error(`[Keep-Alive] Ping failed: ${err.message}`);
+        }
+    }, PING_INTERVAL);
+
+    console.log(`[Keep-Alive] Started - pinging ${selfUrl}/health every 14 minutes`);
+}
+
 // Запуск
 async function start() {
     // Polling mode (для локальной разработки)
@@ -1152,6 +1714,9 @@ async function start() {
 
     app.listen(PORT, () => {
         console.log(`Admin API running on port ${PORT}`);
+
+        // Запускаем автопинг ВСЕГДА (во всех окружениях)
+        startKeepAlive();
     });
 }
 
