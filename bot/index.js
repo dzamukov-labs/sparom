@@ -437,7 +437,7 @@ app.post('/api/broadcast', async (req, res) => {
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
 // Хелпер для запросов к Яндекс.Директ API
-async function yandexDirectRequest(endpoint, params) {
+async function yandexDirectRequest(endpoint, method, params) {
     const token = process.env.YANDEX_DIRECT_TOKEN;
     const response = await fetch(`https://api.direct.yandex.com/json/v5/${endpoint}`, {
         method: 'POST',
@@ -446,9 +446,44 @@ async function yandexDirectRequest(endpoint, params) {
             'Accept-Language': 'ru',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ method: 'get', params })
+        body: JSON.stringify({ method: method || 'get', params })
     });
     return response.json();
+}
+
+// Хелпер для Reports API (асинхронный)
+async function yandexReportRequest(reportParams) {
+    const token = process.env.YANDEX_DIRECT_TOKEN;
+    const response = await fetch('https://api.direct.yandex.com/json/v5/reports', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept-Language': 'ru',
+            'Content-Type': 'application/json',
+            'processingMode': 'auto',
+            'returnMoneyInMicros': 'false',
+            'skipReportHeader': 'true',
+            'skipReportSummary': 'true'
+        },
+        body: JSON.stringify({ params: reportParams })
+    });
+
+    // Reports API возвращает TSV, не JSON
+    const text = await response.text();
+
+    // Парсим TSV в JSON
+    const lines = text.trim().split('\n');
+    if (lines.length < 2) return { rows: [], headers: [] };
+
+    const headers = lines[0].split('\t');
+    const rows = lines.slice(1).map(line => {
+        const values = line.split('\t');
+        const row = {};
+        headers.forEach((h, i) => row[h] = values[i]);
+        return row;
+    });
+
+    return { headers, rows };
 }
 
 // API: Полный анализ кампаний
@@ -464,7 +499,7 @@ app.get('/api/yandex-analysis', async (req, res) => {
 
     try {
         // 1. Получаем кампании
-        const campaignsData = await yandexDirectRequest('campaigns', {
+        const campaignsData = await yandexDirectRequest('campaigns', 'get', {
             SelectionCriteria: {},
             FieldNames: ['Id', 'Name', 'Status', 'State', 'Type', 'DailyBudget', 'Statistics']
         });
@@ -481,14 +516,14 @@ app.get('/api/yandex-analysis', async (req, res) => {
         const campaignIds = campaigns.map(c => c.Id);
 
         // 2. Получаем группы объявлений
-        const adGroupsData = await yandexDirectRequest('adgroups', {
+        const adGroupsData = await yandexDirectRequest('adgroups', 'get', {
             SelectionCriteria: { CampaignIds: campaignIds },
             FieldNames: ['Id', 'Name', 'CampaignId', 'Status']
         });
         const adGroups = adGroupsData.result?.AdGroups || [];
 
         // 3. Получаем объявления
-        const adsData = await yandexDirectRequest('ads', {
+        const adsData = await yandexDirectRequest('ads', 'get', {
             SelectionCriteria: { CampaignIds: campaignIds },
             FieldNames: ['Id', 'CampaignId', 'AdGroupId', 'Status', 'State', 'Type'],
             TextAdFieldNames: ['Title', 'Title2', 'Text', 'Href', 'DisplayDomain']
@@ -496,7 +531,7 @@ app.get('/api/yandex-analysis', async (req, res) => {
         const ads = adsData.result?.Ads || [];
 
         // 4. Получаем ключевые слова
-        const keywordsData = await yandexDirectRequest('keywords', {
+        const keywordsData = await yandexDirectRequest('keywords', 'get', {
             SelectionCriteria: { CampaignIds: campaignIds },
             FieldNames: ['Id', 'Keyword', 'CampaignId', 'AdGroupId', 'Status', 'State']
         });
@@ -602,6 +637,495 @@ app.get('/api/yandex-test', async (req, res) => {
             }))
         });
 
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// ============================================
+// ПОЛНЫЙ API ЯНДЕКС.ДИРЕКТ - ВСЕ ВОЗМОЖНОСТИ
+// ============================================
+
+// Проверка авторизации для Яндекс API
+function checkYandexAuth(req, res) {
+    if (req.query.password !== ADMIN_PASSWORD && req.body?.password !== ADMIN_PASSWORD) {
+        res.status(401).json({ error: 'Unauthorized' });
+        return false;
+    }
+    if (!process.env.YANDEX_DIRECT_TOKEN) {
+        res.json({ success: false, error: 'YANDEX_DIRECT_TOKEN не задан' });
+        return false;
+    }
+    return true;
+}
+
+// === УНИВЕРСАЛЬНЫЙ API (любой метод к любому сервису) ===
+app.post('/api/yandex/raw', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    const { service, method, params } = req.body;
+    if (!service || !method) {
+        return res.json({ success: false, error: 'Укажите service и method' });
+    }
+
+    try {
+        const result = await yandexDirectRequest(service, method, params || {});
+        res.json({ success: !result.error, ...result });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// === СТАТИСТИКА И ОТЧЁТЫ ===
+app.get('/api/yandex/stats', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    const { campaign_ids, date_from, date_to } = req.query;
+    const dateFrom = date_from || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+    const dateTo = date_to || new Date().toISOString().split('T')[0];
+
+    try {
+        const reportParams = {
+            SelectionCriteria: {
+                DateFrom: dateFrom,
+                DateTo: dateTo,
+                Filter: campaign_ids ? [{ Field: 'CampaignId', Operator: 'IN', Values: campaign_ids.split(',').map(Number) }] : []
+            },
+            FieldNames: ['Date', 'CampaignId', 'CampaignName', 'Impressions', 'Clicks', 'Cost', 'Ctr', 'AvgCpc', 'Conversions', 'CostPerConversion'],
+            ReportName: 'Stats_' + Date.now(),
+            ReportType: 'CAMPAIGN_PERFORMANCE_REPORT',
+            DateRangeType: 'CUSTOM_DATE',
+            Format: 'TSV',
+            IncludeVAT: 'YES'
+        };
+
+        const data = await yandexReportRequest(reportParams);
+        res.json({ success: true, date_from: dateFrom, date_to: dateTo, ...data });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// === КАМПАНИИ ===
+// Получить кампании
+app.get('/api/yandex/campaigns', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    const { state } = req.query; // ON, OFF, ARCHIVED и т.д.
+
+    try {
+        const params = {
+            SelectionCriteria: state ? { States: [state] } : {},
+            FieldNames: ['Id', 'Name', 'Status', 'State', 'Type', 'DailyBudget', 'StartDate', 'EndDate', 'Statistics']
+        };
+        const data = await yandexDirectRequest('campaigns', 'get', params);
+        res.json({ success: !data.error, campaigns: data.result?.Campaigns || [], error: data.error?.error_string });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// Создать кампанию
+app.post('/api/yandex/campaigns/add', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    const { name, daily_budget, start_date, negative_keywords, regions } = req.body;
+    if (!name) return res.json({ success: false, error: 'Укажите name' });
+
+    try {
+        const params = {
+            Campaigns: [{
+                Name: name,
+                StartDate: start_date || new Date().toISOString().split('T')[0],
+                DailyBudget: daily_budget ? { Amount: daily_budget * 1000000, Mode: 'STANDARD' } : undefined,
+                NegativeKeywords: negative_keywords ? { Items: negative_keywords } : undefined,
+                TextCampaign: {
+                    BiddingStrategy: {
+                        Search: { BiddingStrategyType: 'HIGHEST_POSITION' },
+                        Network: { BiddingStrategyType: 'SERVING_OFF' }
+                    },
+                    Settings: [
+                        { Option: 'ADD_METRICA_TAG', Value: 'YES' },
+                        { Option: 'ADD_TO_FAVORITES', Value: 'NO' }
+                    ]
+                }
+            }]
+        };
+
+        if (regions) params.Campaigns[0].TextCampaign.CounterIds = regions;
+
+        const data = await yandexDirectRequest('campaigns', 'add', params);
+        res.json({ success: !data.error, result: data.result, error: data.error?.error_string });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// Обновить кампанию
+app.post('/api/yandex/campaigns/update', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    const { id, name, daily_budget } = req.body;
+    if (!id) return res.json({ success: false, error: 'Укажите id' });
+
+    try {
+        const campaign = { Id: id };
+        if (name) campaign.Name = name;
+        if (daily_budget) campaign.DailyBudget = { Amount: daily_budget * 1000000, Mode: 'STANDARD' };
+
+        const data = await yandexDirectRequest('campaigns', 'update', { Campaigns: [campaign] });
+        res.json({ success: !data.error, result: data.result, error: data.error?.error_string });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// Действия с кампаниями (запуск, пауза, архив)
+app.post('/api/yandex/campaigns/action', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    const { ids, action } = req.body; // action: suspend, resume, archive, unarchive, delete
+    if (!ids || !action) return res.json({ success: false, error: 'Укажите ids и action' });
+
+    try {
+        const data = await yandexDirectRequest('campaigns', action, { SelectionCriteria: { Ids: ids } });
+        res.json({ success: !data.error, result: data.result, error: data.error?.error_string });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// === ГРУППЫ ОБЪЯВЛЕНИЙ ===
+app.get('/api/yandex/adgroups', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    const { campaign_ids } = req.query;
+    if (!campaign_ids) return res.json({ success: false, error: 'Укажите campaign_ids' });
+
+    try {
+        const params = {
+            SelectionCriteria: { CampaignIds: campaign_ids.split(',').map(Number) },
+            FieldNames: ['Id', 'Name', 'CampaignId', 'Status', 'Type', 'RegionIds']
+        };
+        const data = await yandexDirectRequest('adgroups', 'get', params);
+        res.json({ success: !data.error, ad_groups: data.result?.AdGroups || [], error: data.error?.error_string });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+app.post('/api/yandex/adgroups/add', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    const { campaign_id, name, region_ids } = req.body;
+    if (!campaign_id || !name) return res.json({ success: false, error: 'Укажите campaign_id и name' });
+
+    try {
+        const params = {
+            AdGroups: [{
+                Name: name,
+                CampaignId: campaign_id,
+                RegionIds: region_ids || [225] // 225 = Россия
+            }]
+        };
+        const data = await yandexDirectRequest('adgroups', 'add', params);
+        res.json({ success: !data.error, result: data.result, error: data.error?.error_string });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// === ОБЪЯВЛЕНИЯ ===
+app.get('/api/yandex/ads', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    const { campaign_ids, adgroup_ids } = req.query;
+    if (!campaign_ids && !adgroup_ids) return res.json({ success: false, error: 'Укажите campaign_ids или adgroup_ids' });
+
+    try {
+        const criteria = {};
+        if (campaign_ids) criteria.CampaignIds = campaign_ids.split(',').map(Number);
+        if (adgroup_ids) criteria.AdGroupIds = adgroup_ids.split(',').map(Number);
+
+        const params = {
+            SelectionCriteria: criteria,
+            FieldNames: ['Id', 'CampaignId', 'AdGroupId', 'Status', 'State', 'Type', 'StatusClarification'],
+            TextAdFieldNames: ['Title', 'Title2', 'Text', 'Href', 'DisplayDomain', 'Mobile', 'DisplayUrlPath']
+        };
+        const data = await yandexDirectRequest('ads', 'get', params);
+        res.json({ success: !data.error, ads: data.result?.Ads || [], error: data.error?.error_string });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+app.post('/api/yandex/ads/add', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    const { adgroup_id, title, title2, text, href, display_url } = req.body;
+    if (!adgroup_id || !title || !text || !href) {
+        return res.json({ success: false, error: 'Укажите adgroup_id, title, text, href' });
+    }
+
+    try {
+        const params = {
+            Ads: [{
+                AdGroupId: adgroup_id,
+                TextAd: {
+                    Title: title.substring(0, 56),
+                    Title2: title2?.substring(0, 30),
+                    Text: text.substring(0, 81),
+                    Href: href,
+                    DisplayUrlPath: display_url
+                }
+            }]
+        };
+        const data = await yandexDirectRequest('ads', 'add', params);
+        res.json({ success: !data.error, result: data.result, error: data.error?.error_string });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+app.post('/api/yandex/ads/update', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    const { id, title, title2, text, href } = req.body;
+    if (!id) return res.json({ success: false, error: 'Укажите id' });
+
+    try {
+        const ad = { Id: id, TextAd: {} };
+        if (title) ad.TextAd.Title = title.substring(0, 56);
+        if (title2) ad.TextAd.Title2 = title2.substring(0, 30);
+        if (text) ad.TextAd.Text = text.substring(0, 81);
+        if (href) ad.TextAd.Href = href;
+
+        const data = await yandexDirectRequest('ads', 'update', { Ads: [ad] });
+        res.json({ success: !data.error, result: data.result, error: data.error?.error_string });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+app.post('/api/yandex/ads/action', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    const { ids, action } = req.body; // action: suspend, resume, archive, unarchive, moderate
+    if (!ids || !action) return res.json({ success: false, error: 'Укажите ids и action' });
+
+    try {
+        const data = await yandexDirectRequest('ads', action, { SelectionCriteria: { Ids: ids } });
+        res.json({ success: !data.error, result: data.result, error: data.error?.error_string });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// === КЛЮЧЕВЫЕ СЛОВА ===
+app.get('/api/yandex/keywords', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    const { campaign_ids, adgroup_ids } = req.query;
+    if (!campaign_ids && !adgroup_ids) return res.json({ success: false, error: 'Укажите campaign_ids или adgroup_ids' });
+
+    try {
+        const criteria = {};
+        if (campaign_ids) criteria.CampaignIds = campaign_ids.split(',').map(Number);
+        if (adgroup_ids) criteria.AdGroupIds = adgroup_ids.split(',').map(Number);
+
+        const params = {
+            SelectionCriteria: criteria,
+            FieldNames: ['Id', 'Keyword', 'CampaignId', 'AdGroupId', 'Status', 'State', 'Bid', 'ContextBid']
+        };
+        const data = await yandexDirectRequest('keywords', 'get', params);
+        res.json({ success: !data.error, keywords: data.result?.Keywords || [], error: data.error?.error_string });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+app.post('/api/yandex/keywords/add', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    const { adgroup_id, keywords } = req.body; // keywords = ["купить баню", "баня под ключ"]
+    if (!adgroup_id || !keywords) return res.json({ success: false, error: 'Укажите adgroup_id и keywords' });
+
+    try {
+        const params = {
+            Keywords: keywords.map(kw => ({
+                AdGroupId: adgroup_id,
+                Keyword: kw
+            }))
+        };
+        const data = await yandexDirectRequest('keywords', 'add', params);
+        res.json({ success: !data.error, result: data.result, error: data.error?.error_string });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+app.post('/api/yandex/keywords/action', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    const { ids, action } = req.body; // action: suspend, resume, delete
+    if (!ids || !action) return res.json({ success: false, error: 'Укажите ids и action' });
+
+    try {
+        const data = await yandexDirectRequest('keywords', action, { SelectionCriteria: { Ids: ids } });
+        res.json({ success: !data.error, result: data.result, error: data.error?.error_string });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// === СТАВКИ ===
+app.get('/api/yandex/bids', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    const { campaign_ids, adgroup_ids, keyword_ids } = req.query;
+
+    try {
+        const criteria = {};
+        if (campaign_ids) criteria.CampaignIds = campaign_ids.split(',').map(Number);
+        if (adgroup_ids) criteria.AdGroupIds = adgroup_ids.split(',').map(Number);
+        if (keyword_ids) criteria.KeywordIds = keyword_ids.split(',').map(Number);
+
+        const params = {
+            SelectionCriteria: criteria,
+            FieldNames: ['KeywordId', 'CampaignId', 'AdGroupId', 'Bid', 'ContextBid']
+        };
+        const data = await yandexDirectRequest('bids', 'get', params);
+        res.json({ success: !data.error, bids: data.result?.Bids || [], error: data.error?.error_string });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+app.post('/api/yandex/bids/set', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    const { keyword_id, bid, context_bid } = req.body;
+    if (!keyword_id) return res.json({ success: false, error: 'Укажите keyword_id' });
+
+    try {
+        const bidItem = { KeywordId: keyword_id };
+        if (bid) bidItem.Bid = bid * 1000000; // в микро-единицах
+        if (context_bid) bidItem.ContextBid = context_bid * 1000000;
+
+        const data = await yandexDirectRequest('bids', 'set', { Bids: [bidItem] });
+        res.json({ success: !data.error, result: data.result, error: data.error?.error_string });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// === СПРАВОЧНИКИ (регионы, валюты, и т.д.) ===
+app.get('/api/yandex/dictionaries', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    const { names } = req.query; // GeoRegions, Currencies, TimeZones, и т.д.
+    if (!names) return res.json({ success: false, error: 'Укажите names (например: GeoRegions,Currencies)' });
+
+    try {
+        const data = await yandexDirectRequest('dictionaries', 'get', { DictionaryNames: names.split(',') });
+        res.json({ success: !data.error, ...data.result, error: data.error?.error_string });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// === ИНФОРМАЦИЯ ОБ АККАУНТЕ ===
+app.get('/api/yandex/account', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    try {
+        const data = await yandexDirectRequest('clients', 'get', {
+            FieldNames: ['Login', 'ClientId', 'AccountQuality', 'Phone', 'CountryId', 'Currency', 'Archived', 'Representatives']
+        });
+        res.json({ success: !data.error, account: data.result?.Clients?.[0], error: data.error?.error_string });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// === БЫСТРЫЕ ССЫЛКИ (SITELINKS) ===
+app.get('/api/yandex/sitelinks', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    const { ids } = req.query;
+
+    try {
+        const params = {
+            SelectionCriteria: ids ? { Ids: ids.split(',').map(Number) } : {},
+            FieldNames: ['Id', 'Sitelinks']
+        };
+        const data = await yandexDirectRequest('sitelinks', 'get', params);
+        res.json({ success: !data.error, sitelinks: data.result?.SitelinksSets || [], error: data.error?.error_string });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+app.post('/api/yandex/sitelinks/add', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    const { sitelinks } = req.body; // [{ title: "О нас", href: "https://..." }, ...]
+    if (!sitelinks) return res.json({ success: false, error: 'Укажите sitelinks' });
+
+    try {
+        const params = {
+            SitelinksSets: [{
+                Sitelinks: sitelinks.map(s => ({ Title: s.title, Href: s.href, Description: s.description }))
+            }]
+        };
+        const data = await yandexDirectRequest('sitelinks', 'add', params);
+        res.json({ success: !data.error, result: data.result, error: data.error?.error_string });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// === VCARDS (визитки) ===
+app.get('/api/yandex/vcards', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    try {
+        const params = {
+            SelectionCriteria: {},
+            FieldNames: ['Id', 'CompanyName', 'Phone', 'Street', 'City', 'WorkTime']
+        };
+        const data = await yandexDirectRequest('vcards', 'get', params);
+        res.json({ success: !data.error, vcards: data.result?.VCards || [], error: data.error?.error_string });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// === РЕТАРГЕТИНГ ===
+app.get('/api/yandex/retargeting', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    try {
+        const data = await yandexDirectRequest('retargetinglists', 'get', {
+            SelectionCriteria: {},
+            FieldNames: ['Id', 'Name', 'Description', 'IsAvailable']
+        });
+        res.json({ success: !data.error, lists: data.result?.RetargetingLists || [], error: data.error?.error_string });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// === МИНУС-СЛОВА ===
+app.get('/api/yandex/negative-keywords', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    try {
+        const data = await yandexDirectRequest('negativekeywordsharedsets', 'get', {
+            SelectionCriteria: {},
+            FieldNames: ['Id', 'Name', 'NegativeKeywords']
+        });
+        res.json({ success: !data.error, sets: data.result?.NegativeKeywordSharedSets || [], error: data.error?.error_string });
     } catch (err) {
         res.json({ success: false, error: err.message });
     }
