@@ -436,6 +436,122 @@ app.post('/api/broadcast', async (req, res) => {
 // Health check
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
+// Хелпер для запросов к Яндекс.Директ API
+async function yandexDirectRequest(endpoint, params) {
+    const token = process.env.YANDEX_DIRECT_TOKEN;
+    const response = await fetch(`https://api.direct.yandex.com/json/v5/${endpoint}`, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept-Language': 'ru',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ method: 'get', params })
+    });
+    return response.json();
+}
+
+// API: Полный анализ кампаний
+app.get('/api/yandex-analysis', async (req, res) => {
+    if (req.query.password !== ADMIN_PASSWORD) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const token = process.env.YANDEX_DIRECT_TOKEN;
+    if (!token) {
+        return res.json({ success: false, error: 'YANDEX_DIRECT_TOKEN не задан' });
+    }
+
+    try {
+        // 1. Получаем кампании
+        const campaignsData = await yandexDirectRequest('campaigns', {
+            SelectionCriteria: {},
+            FieldNames: ['Id', 'Name', 'Status', 'State', 'Type', 'DailyBudget', 'Statistics']
+        });
+
+        if (campaignsData.error) {
+            return res.json({ success: false, error: campaignsData.error.error_string });
+        }
+
+        const campaigns = campaignsData.result?.Campaigns || [];
+        if (campaigns.length === 0) {
+            return res.json({ success: true, message: 'Кампаний нет', campaigns: [] });
+        }
+
+        const campaignIds = campaigns.map(c => c.Id);
+
+        // 2. Получаем группы объявлений
+        const adGroupsData = await yandexDirectRequest('adgroups', {
+            SelectionCriteria: { CampaignIds: campaignIds },
+            FieldNames: ['Id', 'Name', 'CampaignId', 'Status']
+        });
+        const adGroups = adGroupsData.result?.AdGroups || [];
+
+        // 3. Получаем объявления
+        const adsData = await yandexDirectRequest('ads', {
+            SelectionCriteria: { CampaignIds: campaignIds },
+            FieldNames: ['Id', 'CampaignId', 'AdGroupId', 'Status', 'State', 'Type'],
+            TextAdFieldNames: ['Title', 'Title2', 'Text', 'Href', 'DisplayDomain']
+        });
+        const ads = adsData.result?.Ads || [];
+
+        // 4. Получаем ключевые слова
+        const keywordsData = await yandexDirectRequest('keywords', {
+            SelectionCriteria: { CampaignIds: campaignIds },
+            FieldNames: ['Id', 'Keyword', 'CampaignId', 'AdGroupId', 'Status', 'State']
+        });
+        const keywords = keywordsData.result?.Keywords || [];
+
+        res.json({
+            success: true,
+            summary: {
+                campaigns_count: campaigns.length,
+                ad_groups_count: adGroups.length,
+                ads_count: ads.length,
+                keywords_count: keywords.length
+            },
+            campaigns: campaigns.map(c => ({
+                id: c.Id,
+                name: c.Name,
+                status: c.Status,
+                state: c.State,
+                type: c.Type,
+                daily_budget: c.DailyBudget,
+                stats: c.Statistics
+            })),
+            ad_groups: adGroups.map(g => ({
+                id: g.Id,
+                name: g.Name,
+                campaign_id: g.CampaignId,
+                status: g.Status
+            })),
+            ads: ads.map(a => ({
+                id: a.Id,
+                campaign_id: a.CampaignId,
+                ad_group_id: a.AdGroupId,
+                status: a.Status,
+                state: a.State,
+                type: a.Type,
+                title: a.TextAd?.Title,
+                title2: a.TextAd?.Title2,
+                text: a.TextAd?.Text,
+                href: a.TextAd?.Href,
+                domain: a.TextAd?.DisplayDomain
+            })),
+            keywords: keywords.map(k => ({
+                id: k.Id,
+                keyword: k.Keyword,
+                campaign_id: k.CampaignId,
+                status: k.Status,
+                state: k.State
+            }))
+        });
+
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
 // API: Тест Яндекс.Директ
 app.get('/api/yandex-test', async (req, res) => {
     if (req.query.password !== ADMIN_PASSWORD) {
