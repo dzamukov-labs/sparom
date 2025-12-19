@@ -486,6 +486,31 @@ async function yandexReportRequest(reportParams) {
     return { headers, rows };
 }
 
+// Хелпер для Яндекс.Метрика API
+async function yandexMetrikaRequest(method, endpoint, params = {}) {
+    const token = process.env.YANDEX_DIRECT_TOKEN;
+    const counterId = '35165775';
+
+    const url = new URL(`https://api-metrika.yandex.net/stat/v1/data${endpoint}`);
+    url.searchParams.append('id', counterId);
+
+    Object.keys(params).forEach(key => {
+        if (params[key] !== undefined && params[key] !== null) {
+            url.searchParams.append(key, params[key]);
+        }
+    });
+
+    const response = await fetch(url.toString(), {
+        method: method || 'GET',
+        headers: {
+            'Authorization': `OAuth ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+
+    return response.json();
+}
+
 // API: Полный анализ кампаний
 app.get('/api/yandex-analysis', async (req, res) => {
     if (req.query.password !== ADMIN_PASSWORD) {
@@ -1220,6 +1245,150 @@ app.get('/api/yandex/goals', async (req, res) => {
         res.json({ success: false, error: err.message });
     }
 });
+
+// === КОМПЛЕКСНАЯ АНАЛИТИКА ===
+// Полный анализ для создания новой кампании
+app.get('/api/yandex/full-analysis', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    try {
+        const analysis = {
+            timestamp: new Date().toISOString(),
+            new_landing: 'sparom.ru/special-d',
+            old_landing: 'sparom.ru/special'
+        };
+
+        // 1. Получаем все кампании
+        const campaignsData = await yandexDirectRequest('campaigns', 'get', {
+            SelectionCriteria: {},
+            FieldNames: ['Id', 'Name', 'Status', 'State', 'Statistics', 'DailyBudget', 'StartDate']
+        });
+
+        analysis.campaigns = {
+            total: campaignsData.result?.Campaigns?.length || 0,
+            items: campaignsData.result?.Campaigns || []
+        };
+
+        // 2. Получаем статистику по кампаниям за последние 30 дней
+        const statsReport = await yandexReportRequest({
+            SelectionCriteria: {
+                DateFrom: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                DateTo: new Date().toISOString().split('T')[0]
+            },
+            FieldNames: ['CampaignId', 'CampaignName', 'Impressions', 'Clicks', 'Cost', 'Ctr', 'AvgCpc', 'Conversions', 'CostPerConversion'],
+            ReportName: 'FullAnalysis_' + Date.now(),
+            ReportType: 'CAMPAIGN_PERFORMANCE_REPORT',
+            DateRangeType: 'CUSTOM_DATE',
+            Format: 'TSV',
+            IncludeVAT: 'YES'
+        });
+
+        analysis.campaigns.stats = statsReport.rows || [];
+
+        // 3. Получаем ключевые слова с лучшим CTR
+        const keywordsReport = await yandexReportRequest({
+            SelectionCriteria: {
+                DateFrom: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                DateTo: new Date().toISOString().split('T')[0]
+            },
+            FieldNames: ['CampaignName', 'Keyword', 'Impressions', 'Clicks', 'Ctr', 'AvgCpc', 'Conversions'],
+            ReportName: 'Keywords_' + Date.now(),
+            ReportType: 'SEARCH_QUERY_PERFORMANCE_REPORT',
+            DateRangeType: 'CUSTOM_DATE',
+            Format: 'TSV',
+            IncludeVAT: 'YES'
+        });
+
+        analysis.keywords = {
+            total: keywordsReport.rows?.length || 0,
+            top_converting: (keywordsReport.rows || [])
+                .filter(k => parseFloat(k.Conversions || 0) > 0)
+                .sort((a, b) => parseFloat(b.Conversions || 0) - parseFloat(a.Conversions || 0))
+                .slice(0, 20),
+            top_ctr: (keywordsReport.rows || [])
+                .filter(k => parseFloat(k.Clicks || 0) > 10)
+                .sort((a, b) => parseFloat(b.Ctr || 0) - parseFloat(a.Ctr || 0))
+                .slice(0, 20)
+        };
+
+        // 4. Данные из Яндекс.Метрики
+        try {
+            // Источники трафика
+            const sourcesData = await yandexMetrikaRequest('GET', '', {
+                metrics: 'ym:s:visits,ym:s:bounceRate,ym:s:pageDepth,ym:s:avgVisitDurationSeconds',
+                dimensions: 'ym:s:lastSignTrafficSource',
+                date1: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                date2: new Date().toISOString().split('T')[0],
+                limit: 10
+            });
+
+            analysis.metrika = {
+                sources: sourcesData.data || [],
+                query: sourcesData.query || {}
+            };
+
+            // Конверсии по целям
+            const goalsData = await yandexMetrikaRequest('GET', '', {
+                metrics: 'ym:s:goal204286948reaches,ym:s:goal204286948conversionRate',
+                dimensions: 'ym:s:date',
+                date1: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                date2: new Date().toISOString().split('T')[0],
+                group: 'day'
+            });
+
+            analysis.metrika.goal_stats = goalsData.data || [];
+        } catch (metrikaError) {
+            analysis.metrika = { error: metrikaError.message };
+        }
+
+        // 5. Рекомендации на основе анализа
+        analysis.recommendations = generateRecommendations(analysis);
+
+        res.json({ success: true, analysis });
+    } catch (err) {
+        res.json({ success: false, error: err.message, stack: err.stack });
+    }
+});
+
+// Генерация рекомендаций на основе анализа
+function generateRecommendations(analysis) {
+    const recommendations = {
+        budget: {},
+        keywords: [],
+        ad_copy: [],
+        targeting: []
+    };
+
+    // Анализ бюджета
+    const totalCost = analysis.campaigns.stats?.reduce((sum, c) => sum + parseFloat(c.Cost || 0), 0) || 0;
+    const totalConversions = analysis.campaigns.stats?.reduce((sum, c) => sum + parseFloat(c.Conversions || 0), 0) || 0;
+    const avgCPA = totalConversions > 0 ? totalCost / totalConversions : 0;
+
+    recommendations.budget = {
+        current_monthly: Math.round(totalCost),
+        avg_cpa: Math.round(avgCPA),
+        recommended_daily: Math.round(totalCost / 30 * 1.2), // +20% для новой кампании
+        reason: 'На основе текущих затрат с запасом 20% для тестирования'
+    };
+
+    // Топ ключевых слов
+    recommendations.keywords = analysis.keywords.top_converting.slice(0, 10).map(k => ({
+        keyword: k.Keyword,
+        conversions: k.Conversions,
+        ctr: k.Ctr,
+        reason: 'Высокая конверсия в текущих кампаниях'
+    }));
+
+    // Рекомендации по текстам
+    const avgCtr = analysis.campaigns.stats?.reduce((sum, c) => sum + parseFloat(c.Ctr || 0), 0) / (analysis.campaigns.stats?.length || 1);
+    recommendations.ad_copy.push({
+        suggestion: 'Использовать УТП нового лендинга',
+        current_avg_ctr: avgCtr?.toFixed(2),
+        reason: 'Новый лендинг имеет улучшенную структуру и оффер'
+    });
+
+    return recommendations;
+}
 
 // Автопинг для предотвращения засыпания (работает на Render.com, Vercel, и локально)
 function startKeepAlive() {
