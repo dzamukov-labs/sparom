@@ -3,6 +3,7 @@
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/privacy", "destination": "/privacy.html" },
     { "source": "/new", "destination": "/new/index.html" },
+    { "source": "/new/proekty/:slug", "destination": "/new/proekty/:slug.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [
