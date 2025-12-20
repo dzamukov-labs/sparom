@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Готовая баня под ключ за 14 дней | С лёгким паром</title>
+    <meta name="description" content="Готовая баня вашей мечты за 14 дней от 450 000 ₽. Доставка и установка за 1 час. Печь, мебель и электрика в комплекте.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+        (function(m,e,t,r,i,k,a){
+            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js', 'ym');
+
+        ym(35165775, 'init', {webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/35165775" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="preloader__logo">С лёгким паром</div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="container hero__container">
+            <!-- Left Column - Content -->
+            <div class="hero__content">
+                <header class="header">
+                    <a href="/" class="logo">
+                        <span class="logo__icon">♨</span>
+                        <span class="logo__main">С лёгким паром</span>
+                    </a>
+                </header>
+
+                <div class="hero__text">
+                    <h1 class="hero__title">Ваше личное место силы</h1>
+                    <p class="hero__tagline">Настоящая русская баня «под ключ» без стройки и нервов</p>
+                    <p class="hero__subtitle">Привезём полностью готовую, установим за 1 час. Никаких скрытых доплат: печь, мебель и электрика уже внутри.</p>
+
+                    <div class="hero__cta-group">
+                        <button class="btn btn--primary btn--wide" id="mainCta">
+                            <span>Подобрать комплектацию</span>
+                            <span class="btn__arrow">→</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Carousel -->
+            <div class="hero__gallery">
+                <div class="carousel" id="heroCarousel">
+                    <div class="carousel__track">
+                        <div class="carousel__slide carousel__slide--active">
+                            <img src="/images/banya-winter-1.png" alt="Баня зимой">
+                        </div>
+                        <div class="carousel__slide">
+                            <img src="/images/banya-winter-2.png" alt="Баня зимой вид 2">
+                        </div>
+                        <div class="carousel__slide">
+                            <img src="/images/banya-winter-3.png" alt="Баня летом">
+                        </div>
+                    </div>
+
+                    <div class="carousel__controls">
+                        <button class="carousel__arrow carousel__arrow--prev" aria-label="Предыдущее фото">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M15 18l-6-6 6-6"/>
+                            </svg>
+                        </button>
+                        <button class="carousel__arrow carousel__arrow--next" aria-label="Следующее фото">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 18l6-6-6-6"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="carousel__dots">
+                        <button class="carousel__dot carousel__dot--active" aria-label="Фото 1"></button>
+                        <button class="carousel__dot" aria-label="Фото 2"></button>
+                        <button class="carousel__dot" aria-label="Фото 3"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing highlights -->
+    <section class="highlights" id="highlights">
+        <div class="container">
+            <div class="highlights__grid">
+                <div class="highlight-item">
+                    <span class="highlight-item__value">от 450 000 ₽</span>
+                    <span class="highlight-item__label">стоимость под ключ</span>
+                </div>
+                <div class="highlight-item">
+                    <span class="highlight-item__value">от 12 900 ₽/мес</span>
+                    <span class="highlight-item__label">рассрочка без переплат</span>
+                </div>
+                <div class="highlight-item highlight-item--tooltip">
+                    <span class="highlight-item__value">0 ₽</span>
+                    <span class="highlight-item__label">
+                        бесплатная доставка
+                        <span class="highlight-item__hint">?</span>
+                    </span>
+                    <div class="highlight-item__tooltip">
+                        Московская, Ленинградская, Владимирская, Вологодская, Ивановская, Калужская, Костромская, Новгородская, Тверская, Ярославская области. В другие области доставка рассчитывается по километражу.
+                    </div>
+                </div>
+            </div>
+            <p class="highlights__note">Высокий сезон: в очереди <span id="queueCount">13</span> бань</p>
+        </div>
+    </section>
+
+    <!-- Features Section - Bento Grid -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="features__grid">
+                <!-- Block 1: Accent -->
+                <div class="feature-card feature-card--accent">
+                    <h3 class="feature-card__title">Установка за 1 час — без грязи и долгостроя</h3>
+                    <p class="feature-card__text">Мы уважаем ваше пространство. Никаких бригад, живущих месяцами на участке. Привезем готовую баню, поставим краном на блоки, не повредив участок. Вечером — первый пар.</p>
+                </div>
+
+                <!-- Block 2 -->
+                <div class="feature-card">
+                    <h3 class="feature-card__title">Не «времянка», а капитальное строение весом 5 тонн</h3>
+                    <p class="feature-card__text">Надежнее бани-бочки. Профилированный брус служит десятилетиями. Стены держат тепло: в -30°C внутри жарко через 45 минут.</p>
+                </div>
+
+                <!-- Block 3 -->
+                <div class="feature-card">
+                    <h3 class="feature-card__title">Двойной контроль качества</h3>
+                    <p class="feature-card__text">Мы проверяем материалы до строительства бани. Если бригада накосячила, заставляем переделывать до доставки. Вы получаете баню, за которую нам не стыдно.</p>
+                </div>
+
+                <!-- Block 4 -->
+                <div class="feature-card">
+                    <h3 class="feature-card__title">Честная цена «под ключ» без сюрпризов</h3>
+                    <p class="feature-card__text">В стоимость уже включено то, за что другие просят доплату: заводская печь, электрика, мебель и блочный фундамент. Никаких «доплатите за разгрузку».</p>
+                </div>
+
+                <!-- Block 5: Video -->
+                <div class="feature-card feature-card--video">
+                    <div class="feature-card__content">
+                        <h3 class="feature-card__title">Публичная репутация с 2014 года</h3>
+                        <p class="feature-card__text">100+ видео-отчетов и честных обзоров. Мы не прячем лица — всегда на связи. Для нас имя важнее прибыли.</p>
+                    </div>
+                    <div class="feature-card__videos">
+                        <button class="video-thumb" data-video="https://vk.com/video_ext.php?oid=-50174471&id=456239285&hd=2" aria-label="Смотреть обзор">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <button class="video-thumb" data-video="https://vk.com/video_ext.php?oid=-50174471&id=456239268&hd=2" aria-label="Смотреть обзор">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <button class="video-thumb" data-video="https://vk.com/video_ext.php?oid=-50174471&id=456239265&hd=2" aria-label="Смотреть обзор">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <span class="video-thumb__label">смотреть</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Modal -->
+    <div class="video-modal" id="videoModal">
+        <div class="video-modal__overlay"></div>
+        <div class="video-modal__content">
+            <button class="video-modal__close" aria-label="Закрыть">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+            </button>
+            <div class="video-modal__frame">
+                <iframe id="videoFrame" src="" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="cta">
+        <div class="cta-section__bg"></div>
+        <div class="container">
+            <div class="cta-section__content">
+                <h2 class="cta-section__title">
+                    Готовы к своей бане?
+                </h2>
+                <p class="cta-section__text">
+                    Ответьте на 6 вопросов — подберём идеальный вариант
+                </p>
+                <button class="btn btn--primary btn--large" id="finalCta">
+                    <span>Подобрать баню</span>
+                    <span class="btn__arrow">→</span>
+                </button>
+                <p class="cta-section__note">Это бесплатно и займёт 2 минуты</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__content">
+                <div class="footer__brand">
+                    <a href="/" class="logo logo--footer">
+                        <span class="logo__icon">♨</span>
+                        <span class="logo__main">С лёгким паром</span>
+                    </a>
+                </div>
+
+                <div class="footer__legal">
+                    <p>ИП Дзамуков Георгий Михайлович</p>
+                    <p>ОГРНИП 319532100003969</p>
+                </div>
+
+                <div class="footer__links">
+                    <a href="/privacy" class="footer__link" target="_blank">Политика конфиденциальности</a>
+                </div>
+            </div>
+
+            <div class="footer__bottom">
+                <p>© 2014–2025 sparom.ru</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Quiz Modal -->
+    <div class="quiz-modal" id="quizModal">
+        <div class="quiz-modal__overlay"></div>
+        <div class="quiz-modal__container">
+            <button class="quiz-modal__close" id="quizClose" aria-label="Закрыть">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+            </button>
+
+            <div class="quiz">
+                <!-- Progress -->
+                <div class="quiz__progress">
+                    <div class="quiz__progress-bar" id="quizProgress"></div>
+                </div>
+                <div class="quiz__step-info">
+                    <span id="quizStepNum">1</span> из 6
+                </div>
+
+                <!-- Steps Container -->
+                <div class="quiz__steps" id="quizSteps">
+
+                    <!-- Step 1: Design -->
+                    <div class="quiz__step quiz__step--active" data-step="1">
+                        <h3 class="quiz__question">Какая баня вам больше нравится?</h3>
+                        <div class="quiz__options quiz__options--cards">
+                            <label class="quiz__card">
+                                <input type="radio" name="design" value="solid" required>
+                                <div class="quiz__card-img">
+                                    <img src="/images/banya-winter-1.png" alt="Целиковая баня">
+                                </div>
+                                <div class="quiz__card-text">
+                                    <strong>Целиковая</strong>
+                                    <span>Больше пространства для семьи и друзей</span>
+                                </div>
+                            </label>
+                            <label class="quiz__card">
+                                <input type="radio" name="design" value="porch">
+                                <div class="quiz__card-img">
+                                    <img src="/images/banya-winter-3.png" alt="Баня с крылечком">
+                                </div>
+                                <div class="quiz__card-text">
+                                    <strong>С крылечком</strong>
+                                    <span>Уютный уголок для отдыха на воздухе</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Color -->
+                    <div class="quiz__step" data-step="2">
+                        <h3 class="quiz__question">Какой цвет лучше впишется в ваш участок?</h3>
+                        <div class="quiz__options quiz__options--colors">
+                            <label class="quiz__color">
+                                <input type="radio" name="color" value="palisander" required>
+                                <div class="quiz__color-img">
+                                    <img src="/images/banya-winter-1.png" alt="Палисандр">
+                                </div>
+                                <span>Палисандр</span>
+                            </label>
+                            <label class="quiz__color">
+                                <input type="radio" name="color" value="dark-brown">
+                                <div class="quiz__color-img">
+                                    <img src="/images/banya-winter-2.png" alt="Тёмно-коричневый">
+                                </div>
+                                <span>Тёмно-коричневый</span>
+                            </label>
+                            <label class="quiz__color">
+                                <input type="radio" name="color" value="light-brown">
+                                <div class="quiz__color-img">
+                                    <img src="/images/banya-winter-3.png" alt="Светло-коричневый">
+                                </div>
+                                <span>Светло-коричневый</span>
+                            </label>
+                            <label class="quiz__color">
+                                <input type="radio" name="color" value="custom">
+                                <div class="quiz__color-img quiz__color-img--custom">
+                                    <span>?</span>
+                                </div>
+                                <span>Индивидуальный</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Budget -->
+                    <div class="quiz__step" data-step="3">
+                        <h3 class="quiz__question">На какую сумму рассчитываете?</h3>
+                        <div class="quiz__options quiz__options--list">
+                            <label class="quiz__radio">
+                                <input type="radio" name="budget" value="400-500" required>
+                                <span>400 — 500 тыс. ₽</span>
+                            </label>
+                            <label class="quiz__radio">
+                                <input type="radio" name="budget" value="500-600">
+                                <span>500 — 600 тыс. ₽</span>
+                            </label>
+                            <label class="quiz__radio">
+                                <input type="radio" name="budget" value="600-800">
+                                <span>600 — 800 тыс. ₽</span>
+                            </label>
+                            <label class="quiz__radio">
+                                <input type="radio" name="budget" value="800+">
+                                <span>Более 800 тыс. ₽</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: When -->
+                    <div class="quiz__step" data-step="4">
+                        <h3 class="quiz__question">Когда планируете начать пользоваться баней?</h3>
+                        <div class="quiz__options quiz__options--list">
+                            <label class="quiz__radio">
+                                <input type="radio" name="when" value="asap" required>
+                                <span>Как можно скорее</span>
+                            </label>
+                            <label class="quiz__radio">
+                                <input type="radio" name="when" value="month">
+                                <span>В течение месяца</span>
+                            </label>
+                            <label class="quiz__radio">
+                                <input type="radio" name="when" value="2-3months">
+                                <span>В течение 2-3 месяцев</span>
+                            </label>
+                            <label class="quiz__radio">
+                                <input type="radio" name="when" value="looking">
+                                <span>Пока изучаю варианты</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Location -->
+                    <div class="quiz__step" data-step="5">
+                        <h3 class="quiz__question">Куда доставить баню?</h3>
+                        <div class="quiz__form">
+                            <div class="quiz__field">
+                                <input type="text" id="quizLocation" name="location" placeholder="Например: Московская область, Чехов" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 6: Contact -->
+                    <div class="quiz__step" data-step="6">
+                        <h3 class="quiz__question">Оставьте номер — отправим подборку в WhatsApp</h3>
+                        <div class="quiz__form">
+                            <div class="quiz__field">
+                                <input type="tel" id="quizPhone" name="phone" placeholder="+7" value="+7 " required>
+                            </div>
+                            <p class="quiz__privacy">
+                                Нажимая кнопку, вы соглашаетесь с
+                                <a href="/privacy" target="_blank">политикой конфиденциальности</a>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Success -->
+                    <div class="quiz__step quiz__step--success" data-step="success">
+                        <div class="quiz__success">
+                            <div class="quiz__success-icon">✓</div>
+                            <h3 class="quiz__success-title">Заявка принята!</h3>
+                            <p class="quiz__success-text">Пришлём подборку в течение 5 минут!</p>
+                            <div class="quiz__success-telegram">
+                                <p class="quiz__success-bonus">Получите 35 вариантов планировок бань и 50+ фото</p>
+                                <a href="https://t.me/sparom_bani_bot" target="_blank" class="btn btn--telegram">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161l-1.97 9.284c-.146.658-.537.818-1.084.508l-3-2.211-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.332-.373-.119l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.538-.194 1.006.128.833.937z"/>
+                                    </svg>
+                                    <span>Получить в Telegram-боте</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div class="quiz__nav" id="quizNav">
+                    <button class="quiz__btn quiz__btn--back" id="quizBack" style="visibility: hidden;">
+                        ← Назад
+                    </button>
+                    <button class="quiz__btn quiz__btn--next" id="quizNext">
+                        Далее →
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/ab-config.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

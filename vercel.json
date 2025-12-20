@@ -2,7 +2,8 @@
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/privacy", "destination": "/privacy.html" },
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/lp/bani-01", "destination": "/lp/bani-01/index.html" },
+    { "source": "/proekty/:slug", "destination": "/proekty/:slug.html" }
   ],
   "headers": [
     {
@@ -27,6 +28,18 @@
     },
     {
       "source": "/js/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/lp/(.*)/css/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/lp/(.*)/js/(.*)",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
       ]
