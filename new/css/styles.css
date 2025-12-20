@@ -642,7 +642,7 @@ a {
 
 .why-us {
     padding: var(--space-2xl) 0;
-    background: var(--color-bg);
+    background: var(--color-bg-alt);
 }
 
 .why-us__title {
@@ -655,7 +655,7 @@ a {
 
 .why-us__grid {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: var(--space-md);
 }
 
@@ -666,7 +666,7 @@ a {
     text-align: center;
     padding: var(--space-lg);
     background: var(--color-white);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
     transition: all var(--transition);
 }
@@ -676,55 +676,45 @@ a {
     box-shadow: var(--shadow-md);
 }
 
-.benefit-card__icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 64px;
-    height: 64px;
-    margin-bottom: var(--space-md);
-    background: var(--color-accent-light);
-    border-radius: var(--radius-md);
+.benefit-card__number {
+    font-size: clamp(3rem, 10vw, 4.5rem);
+    font-weight: 700;
+    line-height: 1;
     color: var(--color-accent);
+    letter-spacing: -0.03em;
 }
 
-.benefit-card__title {
-    font-size: 1.125rem;
-    font-weight: 700;
-    margin-bottom: var(--space-xs);
+.benefit-card__label {
+    font-size: clamp(1rem, 3vw, 1.25rem);
+    font-weight: 600;
     color: var(--color-text);
+    margin-bottom: var(--space-sm);
+    text-transform: lowercase;
 }
 
 .benefit-card__text {
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
     color: var(--color-text-light);
     line-height: 1.5;
 }
 
 /* Why Us Responsive */
-@media (min-width: 480px) {
-    .why-us__grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
 @media (min-width: 768px) {
     .why-us {
         padding: var(--space-3xl) 0;
     }
 
     .why-us__grid {
+        grid-template-columns: repeat(4, 1fr);
         gap: var(--space-lg);
     }
 
     .benefit-card {
         padding: var(--space-xl);
     }
-}
 
-@media (min-width: 1024px) {
-    .why-us__grid {
-        grid-template-columns: repeat(4, 1fr);
+    .benefit-card__text {
+        font-size: 0.9375rem;
     }
 }
 
