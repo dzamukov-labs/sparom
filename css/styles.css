@@ -1231,62 +1231,37 @@ a {
     position: absolute;
     top: var(--space-md);
     left: var(--space-md);
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: var(--space-xs);
-    padding: var(--space-xs) var(--space-sm);
+    gap: 6px;
+    padding: 8px 14px;
     font-family: var(--font-main);
     font-size: 0.8125rem;
     font-weight: 600;
     color: var(--color-white);
     background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
     border: none;
     border-radius: var(--radius-sm);
     cursor: pointer;
     transition: all var(--transition);
+    text-decoration: none;
+}
+
+.gallery__video-btn svg {
+    color: #0077FF;
+    flex-shrink: 0;
 }
 
 .gallery__video-btn:hover {
-    background: rgba(0, 0, 0, 0.9);
+    background: rgba(0, 0, 0, 0.85);
+    transform: translateY(-2px);
 }
 
 .gallery__thumbs {
     display: flex;
     gap: var(--space-xs);
-    margin-bottom: var(--space-md);
-}
-
-/* ==========================================================================
-   VK Video Button
-   ========================================================================== */
-
-.vk-video-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-sm);
-    padding: var(--space-sm) var(--space-md);
-    background: #0077FF;
-    color: var(--color-white);
-    border-radius: var(--radius-md);
-    font-size: 0.9375rem;
-    font-weight: 600;
-    transition: all var(--transition);
-}
-
-.vk-video-btn:hover {
-    background: #0066DD;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 119, 255, 0.3);
-}
-
-.vk-video-btn__icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.vk-video-btn__text {
-    white-space: nowrap;
+    margin-bottom: var(--space-sm);
 }
 
 .gallery__thumb {
@@ -1423,6 +1398,153 @@ a {
 
 .pricing-compare-btn--open svg {
     transform: rotate(180deg);
+}
+
+/* Pricing Panel CTA */
+.pricing-panel__cta {
+    margin-top: var(--space-md);
+}
+
+/* ==========================================================================
+   Comparison Table
+   ========================================================================== */
+
+.compare-table {
+    display: none;
+    margin-top: var(--space-md);
+    background: var(--color-white);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+}
+
+.compare-table--open {
+    display: block;
+}
+
+.compare-table__header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    background: var(--color-text);
+    color: var(--color-white);
+    font-weight: 600;
+    font-size: 0.8125rem;
+}
+
+.compare-table__header .compare-table__col {
+    padding: var(--space-sm);
+    text-align: center;
+}
+
+.compare-table__header .compare-table__col--feature {
+    text-align: left;
+}
+
+.compare-table__section {
+    padding: var(--space-xs) var(--space-sm);
+    background: var(--color-accent-light);
+    font-weight: 600;
+    font-size: 0.8125rem;
+    color: var(--color-text);
+    border-top: 1px solid var(--color-border);
+}
+
+.compare-table__row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    border-top: 1px solid var(--color-border);
+}
+
+.compare-table__row:hover {
+    background: var(--color-bg);
+}
+
+.compare-table__col {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.compare-table__col--feature {
+    justify-content: flex-start;
+    color: var(--color-text);
+    line-height: 1.4;
+}
+
+.compare-table__col--text {
+    color: var(--color-text-light);
+    text-align: center;
+    font-size: 0.6875rem;
+}
+
+.compare-table__col--best {
+    color: var(--color-accent);
+    font-weight: 500;
+}
+
+/* Check and Cross icons */
+.compare-check,
+.compare-cross {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+}
+
+.compare-check {
+    background: var(--color-success);
+    position: relative;
+}
+
+.compare-check::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 10px;
+    height: 5px;
+    border: 2px solid var(--color-white);
+    border-top: none;
+    border-right: none;
+    transform: translate(-50%, -60%) rotate(-45deg);
+}
+
+.compare-cross {
+    background: var(--color-border);
+    position: relative;
+}
+
+.compare-cross::before,
+.compare-cross::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8px;
+    height: 2px;
+    background: var(--color-text-light);
+}
+
+.compare-cross::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.compare-cross::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+/* Compare Table Responsive */
+@media (max-width: 767px) {
+    .compare-table {
+        overflow-x: auto;
+    }
+
+    .compare-table__header,
+    .compare-table__row {
+        min-width: 600px;
+    }
 }
 
 /* ==========================================================================

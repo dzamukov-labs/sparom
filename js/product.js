@@ -89,10 +89,43 @@
         });
     }
 
+    // Compare table toggle
+    function initCompareTable() {
+        const toggleBtn = document.getElementById('toggle-compare');
+        const compareTable = document.getElementById('compare-table');
+
+        if (!toggleBtn || !compareTable) return;
+
+        toggleBtn.addEventListener('click', () => {
+            const isOpen = compareTable.classList.contains('compare-table--open');
+
+            if (isOpen) {
+                compareTable.classList.remove('compare-table--open');
+                toggleBtn.classList.remove('pricing-compare-btn--open');
+                toggleBtn.innerHTML = `
+                    Показать полное сравнение
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                `;
+            } else {
+                compareTable.classList.add('compare-table--open');
+                toggleBtn.classList.add('pricing-compare-btn--open');
+                toggleBtn.innerHTML = `
+                    Скрыть сравнение
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                `;
+            }
+        });
+    }
+
     // Initialize
     document.addEventListener('DOMContentLoaded', () => {
         initGallery();
         initPricingTabs();
         initModal();
+        initCompareTable();
     });
 })();

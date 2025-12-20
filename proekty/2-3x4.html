@@ -17,12 +17,12 @@
     <!-- Header -->
     <header class="header">
         <div class="container header__container">
-            <a href="/new" class="header__logo">
+            <a href="/" class="header__logo">
                 С лёгким паром
             </a>
 
             <nav class="header__nav">
-                <a href="/new#projects" class="header__link">Проекты</a>
+                <a href="/#projects" class="header__link">Проекты</a>
                 <a href="/dostavka" class="header__link">Доставка</a>
                 <a href="/about" class="header__link">О компании</a>
             </nav>
@@ -50,9 +50,9 @@
     <!-- Breadcrumbs -->
     <nav class="breadcrumbs">
         <div class="container">
-            <a href="/new" class="breadcrumbs__link">Главная</a>
+            <a href="/" class="breadcrumbs__link">Главная</a>
             <span class="breadcrumbs__sep">/</span>
-            <a href="/new#projects" class="breadcrumbs__link">Проекты</a>
+            <a href="/#projects" class="breadcrumbs__link">Проекты</a>
             <span class="breadcrumbs__sep">/</span>
             <span class="breadcrumbs__current">Баня 2,3×4 м</span>
         </div>
@@ -66,6 +66,13 @@
                 <div class="gallery">
                     <div class="gallery__main">
                         <img src="/images/banya-winter-2.png" alt="Баня 2,3×4 м — вид снаружи" id="gallery-main">
+                        <!-- Video button overlay -->
+                        <a href="https://vk.com/video" target="_blank" class="gallery__video-btn">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M15.684 0H8.316C1.592 0 0 1.592 0 8.316v7.368C0 22.408 1.592 24 8.316 24h7.368C22.408 24 24 22.408 24 15.684V8.316C24 1.592 22.408 0 15.684 0zm3.692 17.123h-1.744c-.66 0-.862-.523-2.049-1.713-1.033-1.01-1.49-1.135-1.744-1.135-.356 0-.458.102-.458.593v1.563c0 .424-.135.678-1.253.678-1.846 0-3.896-1.118-5.335-3.202C4.624 10.857 4 8.684 4 8.245c0-.254.102-.491.593-.491h1.744c.44 0 .61.203.78.678.847 2.49 2.27 4.675 2.853 4.675.22 0 .322-.102.322-.66V9.721c-.068-1.186-.695-1.287-.695-1.71 0-.203.17-.407.44-.407h2.744c.373 0 .508.203.508.643v3.473c0 .372.17.508.271.508.22 0 .407-.136.814-.542 1.27-1.422 2.168-3.608 2.168-3.608.119-.254.322-.491.763-.491h1.744c.525 0 .644.27.525.643-.22 1.017-2.354 4.031-2.354 4.031-.186.305-.254.44 0 .78.186.254.796.78 1.202 1.253.745.864 1.32 1.59 1.473 2.096.17.508-.085.763-.576.763z"/>
+                            </svg>
+                            Смотреть видеообзор
+                        </a>
                     </div>
                     <div class="gallery__thumbs">
                         <button class="gallery__thumb gallery__thumb--active" data-src="/images/banya-winter-2.png">
@@ -78,15 +85,18 @@
                             <img src="/images/banya-winter-3.png" alt="Фото 3">
                         </button>
                     </div>
+                    <div class="gallery__thumbs">
+                        <button class="gallery__thumb" data-src="/images/banya-winter-1.png">
+                            <img src="/images/banya-winter-1.png" alt="Фото 4">
+                        </button>
+                        <button class="gallery__thumb" data-src="/images/banya-winter-2.png">
+                            <img src="/images/banya-winter-2.png" alt="Фото 5">
+                        </button>
+                        <button class="gallery__thumb" data-src="/images/banya-winter-3.png">
+                            <img src="/images/banya-winter-3.png" alt="Фото 6">
+                        </button>
+                    </div>
                 </div>
-
-                <!-- VK Video Button -->
-                <a href="https://vk.com/video" target="_blank" class="vk-video-btn">
-                    <svg class="vk-video-btn__icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M15.684 0H8.316C1.592 0 0 1.592 0 8.316v7.368C0 22.408 1.592 24 8.316 24h7.368C22.408 24 24 22.408 24 15.684V8.316C24 1.592 22.408 0 15.684 0zm3.692 17.123h-1.744c-.66 0-.862-.523-2.049-1.713-1.033-1.01-1.49-1.135-1.744-1.135-.356 0-.458.102-.458.593v1.563c0 .424-.135.678-1.253.678-1.846 0-3.896-1.118-5.335-3.202C4.624 10.857 4 8.684 4 8.245c0-.254.102-.491.593-.491h1.744c.44 0 .61.203.78.678.847 2.49 2.27 4.675 2.853 4.675.22 0 .322-.102.322-.66V9.721c-.068-1.186-.695-1.287-.695-1.71 0-.203.17-.407.44-.407h2.744c.373 0 .508.203.508.643v3.473c0 .372.17.508.271.508.22 0 .407-.136.814-.542 1.27-1.422 2.168-3.608 2.168-3.608.119-.254.322-.491.763-.491h1.744c.525 0 .644.27.525.643-.22 1.017-2.354 4.031-2.354 4.031-.186.305-.254.44 0 .78.186.254.796.78 1.202 1.253.745.864 1.32 1.59 1.473 2.096.17.508-.085.763-.576.763z"/>
-                    </svg>
-                    <span class="vk-video-btn__text">Смотреть видеообзор</span>
-                </a>
             </div>
 
             <!-- Info -->
@@ -133,6 +143,9 @@
                                 <li>Электрика в цвет дерева</li>
                                 <li>Слив в центре пола или душевой поддон</li>
                             </ul>
+                            <a href="tel:88003500393" class="btn btn--primary btn--wide pricing-panel__cta">
+                                Обсудить заказ
+                            </a>
                         </div>
 
                         <!-- Comfort -->
@@ -149,6 +162,9 @@
                                 <li>Широкие двухъярусные полки</li>
                                 <li>Слив по авторской технологии «Жёлоб»</li>
                             </ul>
+                            <a href="tel:88003500393" class="btn btn--primary btn--wide pricing-panel__cta">
+                                Обсудить заказ
+                            </a>
                         </div>
 
                         <!-- Max -->
@@ -169,6 +185,9 @@
                                 <li>Светильник под полками</li>
                                 <li>Банные принадлежности, табличка «БАНЯ», термометр, ступеньки</li>
                             </ul>
+                            <a href="tel:88003500393" class="btn btn--primary btn--wide pricing-panel__cta">
+                                Обсудить заказ
+                            </a>
                         </div>
                     </div>
 
@@ -178,13 +197,271 @@
                             <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
                     </button>
-                </div>
 
-                <!-- CTA -->
-                <div class="product__actions">
-                    <a href="#" class="btn btn--primary btn--large btn--wide">
-                        Обсудить заказ
-                    </a>
+                    <!-- Comparison Table -->
+                    <div class="compare-table" id="compare-table">
+                        <div class="compare-table__header">
+                            <div class="compare-table__col compare-table__col--feature">Характеристика</div>
+                            <div class="compare-table__col">Базовая</div>
+                            <div class="compare-table__col">Комфорт</div>
+                            <div class="compare-table__col">Максимум</div>
+                        </div>
+
+                        <div class="compare-table__section">Фундамент и основание</div>
+
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Опорно-столбчатый фундамент из бетонных блоков 200×200×400</div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                        </div>
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Обвязка из бруса 100×150</div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                        </div>
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Лаги</div>
+                            <div class="compare-table__col compare-table__col--text">40×100, шаг 0,7 м</div>
+                            <div class="compare-table__col compare-table__col--text">40×100, шаг 0,5 м</div>
+                            <div class="compare-table__col compare-table__col--text compare-table__col--best">100×150, шаг 0,5 м</div>
+                        </div>
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Обработка обвязки и лаг</div>
+                            <div class="compare-table__col compare-table__col--text">маслом</div>
+                            <div class="compare-table__col compare-table__col--text">маслом</div>
+                            <div class="compare-table__col compare-table__col--text compare-table__col--best">огнебиозащитой</div>
+                        </div>
+
+                        <div class="compare-table__section">Стены и конструкция</div>
+
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Стены из бруса или каркасные на выбор</div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                        </div>
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Профилированный брус 90×140 камерной сушки</div>
+                            <div class="compare-table__col"><span class="compare-cross"></span></div>
+                            <div class="compare-table__col"><span class="compare-cross"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                        </div>
+
+                        <div class="compare-table__section">Полы</div>
+
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Раздельный пол в каждом помещении</div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                        </div>
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Черновой пол из обрезной доски 20 мм</div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                        </div>
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Обработка чернового пола</div>
+                            <div class="compare-table__col compare-table__col--text">антисептиком</div>
+                            <div class="compare-table__col compare-table__col--text">антисептиком</div>
+                            <div class="compare-table__col compare-table__col--text compare-table__col--best">огнебиозащитой</div>
+                        </div>
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Чистовой пол из шпунтованной доски</div>
+                            <div class="compare-table__col compare-table__col--text">27 мм</div>
+                            <div class="compare-table__col compare-table__col--text">27 мм</div>
+                            <div class="compare-table__col compare-table__col--text compare-table__col--best">36 мм</div>
+                        </div>
+
+                        <div class="compare-table__section">Крыша и потолок</div>
+
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Двускатная крыша</div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                        </div>
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Высота конька</div>
+                            <div class="compare-table__col compare-table__col--text">30 см</div>
+                            <div class="compare-table__col compare-table__col--text compare-table__col--best">45 см</div>
+                            <div class="compare-table__col compare-table__col--text compare-table__col--best">45 см</div>
+                        </div>
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Арочный потолок</div>
+                            <div class="compare-table__col"><span class="compare-cross"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                        </div>
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Высота потолка</div>
+                            <div class="compare-table__col compare-table__col--text">2 м</div>
+                            <div class="compare-table__col compare-table__col--text">1,8–2 м (арка)</div>
+                            <div class="compare-table__col compare-table__col--text">1,8–2 м (арка)</div>
+                        </div>
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Кровля</div>
+                            <div class="compare-table__col compare-table__col--text">оцинкованный профнастил</div>
+                            <div class="compare-table__col compare-table__col--text">цветной профнастил</div>
+                            <div class="compare-table__col compare-table__col--text compare-table__col--best">цветная металлочерепица</div>
+                        </div>
+
+                        <div class="compare-table__section">Окна и двери</div>
+
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Окна деревянные с двойным остеклением</div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                        </div>
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Вентиляционный клапан в комнате отдыха</div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                        </div>
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Каркасные двери с шариковыми фиксаторами</div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-cross"></span></div>
+                            <div class="compare-table__col"><span class="compare-cross"></span></div>
+                        </div>
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Клиновые двери c шариковыми фиксаторами</div>
+                            <div class="compare-table__col"><span class="compare-cross"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                        </div>
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Заводские резные наличники окон и двери</div>
+                            <div class="compare-table__col"><span class="compare-cross"></span></div>
+                            <div class="compare-table__col"><span class="compare-cross"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                        </div>
+
+                        <div class="compare-table__section">Утепление</div>
+
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Утеплитель Knauf + пароизоляция Наноизол</div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                        </div>
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Утепление пола и потолка</div>
+                            <div class="compare-table__col compare-table__col--text">50 мм</div>
+                            <div class="compare-table__col compare-table__col--text">50 мм</div>
+                            <div class="compare-table__col compare-table__col--text compare-table__col--best">100 мм</div>
+                        </div>
+
+                        <div class="compare-table__section">Печь и дымоход</div>
+
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Печь</div>
+                            <div class="compare-table__col compare-table__col--text">Ермак 12-Т, бак 55 л</div>
+                            <div class="compare-table__col compare-table__col--text">Ермак 12-Т + экраны, бак 55 л</div>
+                            <div class="compare-table__col compare-table__col--text compare-table__col--best">Grill'd Cometa Vega Long + экраны, бак 55 л</div>
+                        </div>
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Вывод дымохода</div>
+                            <div class="compare-table__col compare-table__col--text">через стену</div>
+                            <div class="compare-table__col compare-table__col--text">через стену</div>
+                            <div class="compare-table__col compare-table__col--text compare-table__col--best">через крышу</div>
+                        </div>
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Камни для печи</div>
+                            <div class="compare-table__col compare-table__col--text">40 кг</div>
+                            <div class="compare-table__col compare-table__col--text">40 кг</div>
+                            <div class="compare-table__col compare-table__col--text compare-table__col--best">100 кг</div>
+                        </div>
+
+                        <div class="compare-table__section">Интерьер</div>
+
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Наружная и внутренняя отделка</div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                        </div>
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Двухъярусные осиновые полки</div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                        </div>
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Полки из древесины без сучков + спинка</div>
+                            <div class="compare-table__col"><span class="compare-cross"></span></div>
+                            <div class="compare-table__col"><span class="compare-cross"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                        </div>
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Столик и лавки на брусовых ножках</div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                        </div>
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Вывод воды по технологии «Жёлоб»</div>
+                            <div class="compare-table__col"><span class="compare-cross"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                        </div>
+
+                        <div class="compare-table__section">Электрика и освещение</div>
+
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Электрика и освещение</div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                        </div>
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Дополнительный светильник под полками</div>
+                            <div class="compare-table__col"><span class="compare-cross"></span></div>
+                            <div class="compare-table__col"><span class="compare-cross"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                        </div>
+
+                        <div class="compare-table__section">Внешний вид</div>
+
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Обработка бани снаружи</div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                        </div>
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Цвет бани</div>
+                            <div class="compare-table__col compare-table__col--text">светло-коричневый</div>
+                            <div class="compare-table__col compare-table__col--text">светло-коричневый</div>
+                            <div class="compare-table__col compare-table__col--text compare-table__col--best">на выбор</div>
+                        </div>
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Цвет углов и наличников</div>
+                            <div class="compare-table__col compare-table__col--text">коричневый</div>
+                            <div class="compare-table__col compare-table__col--text">коричневый</div>
+                            <div class="compare-table__col compare-table__col--text compare-table__col--best">на выбор</div>
+                        </div>
+
+                        <div class="compare-table__section">Бонусы</div>
+
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Ступенька, термометр, табличка «Баня», принадлежности</div>
+                            <div class="compare-table__col"><span class="compare-cross"></span></div>
+                            <div class="compare-table__col"><span class="compare-cross"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                        </div>
+                        <div class="compare-table__row">
+                            <div class="compare-table__col compare-table__col--feature">Упаковка бани и документация</div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
