@@ -64,7 +64,7 @@
             <!-- Gallery -->
             <div class="product__gallery">
                 <div class="gallery">
-                    <div class="gallery__main">
+                    <div class="gallery__main" id="gallery-main-wrapper">
                         <img src="/images/proekty/2-3x4/main.webp" alt="Баня 2,3×4 м — вид снаружи" id="gallery-main">
                         <!-- Video button overlay -->
                         <a href="https://vk.com/video" target="_blank" class="gallery__video-btn">
@@ -73,48 +73,59 @@
                             </svg>
                             Смотреть видеообзор
                         </a>
-                    </div>
-                    <p class="gallery__production-label">Фото этой бани с производства</p>
-                    <div class="gallery__thumbs">
-                        <button class="gallery__thumb gallery__thumb--active" data-src="/images/proekty/2-3x4/main.webp">
-                            <img src="/images/proekty/2-3x4/main.webp" alt="Главное фото">
-                        </button>
-                        <button class="gallery__thumb" data-src="/images/proekty/2-3x4/01.webp">
-                            <img src="/images/proekty/2-3x4/01.webp" alt="Фото 1">
-                        </button>
-                        <button class="gallery__thumb" data-src="/images/proekty/2-3x4/02.webp">
-                            <img src="/images/proekty/2-3x4/02.webp" alt="Фото 2">
+                        <!-- Zoom icon -->
+                        <button class="gallery__zoom-btn" aria-label="Увеличить">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.35-4.35"></path>
+                                <path d="M11 8v6"></path>
+                                <path d="M8 11h6"></path>
+                            </svg>
                         </button>
                     </div>
-                    <div class="gallery__thumbs">
-                        <button class="gallery__thumb" data-src="/images/proekty/2-3x4/03.webp">
-                            <img src="/images/proekty/2-3x4/03.webp" alt="Фото 3">
-                        </button>
-                        <button class="gallery__thumb" data-src="/images/proekty/2-3x4/04.webp">
-                            <img src="/images/proekty/2-3x4/04.webp" alt="Фото 4">
-                        </button>
-                        <button class="gallery__thumb" data-src="/images/proekty/2-3x4/05.webp">
-                            <img src="/images/proekty/2-3x4/05.webp" alt="Фото 5">
-                        </button>
-                    </div>
-                    <div class="gallery__thumbs">
-                        <button class="gallery__thumb" data-src="/images/proekty/2-3x4/06.webp">
-                            <img src="/images/proekty/2-3x4/06.webp" alt="Фото 6">
-                        </button>
-                        <button class="gallery__thumb" data-src="/images/proekty/2-3x4/07.webp">
-                            <img src="/images/proekty/2-3x4/07.webp" alt="Фото 7">
-                        </button>
-                        <button class="gallery__thumb" data-src="/images/proekty/2-3x4/08.webp">
-                            <img src="/images/proekty/2-3x4/08.webp" alt="Фото 8">
-                        </button>
-                    </div>
-                    <div class="gallery__thumbs">
-                        <button class="gallery__thumb" data-src="/images/proekty/2-3x4/09.webp">
-                            <img src="/images/proekty/2-3x4/09.webp" alt="Фото 9">
-                        </button>
-                        <button class="gallery__thumb" data-src="/images/proekty/2-3x4/10.webp">
-                            <img src="/images/proekty/2-3x4/10.webp" alt="Фото 10">
-                        </button>
+                    <p class="gallery__caption">Фото готовых бань с производства</p>
+                    <div class="gallery__thumbs-container">
+                        <div class="gallery__thumbs">
+                            <button class="gallery__thumb gallery__thumb--active" data-src="/images/proekty/2-3x4/main.webp" data-index="0">
+                                <img src="/images/proekty/2-3x4/main.webp" alt="Главное фото">
+                            </button>
+                            <button class="gallery__thumb" data-src="/images/proekty/2-3x4/01.webp" data-index="1">
+                                <img src="/images/proekty/2-3x4/01.webp" alt="Фото 1">
+                            </button>
+                            <button class="gallery__thumb" data-src="/images/proekty/2-3x4/02.webp" data-index="2">
+                                <img src="/images/proekty/2-3x4/02.webp" alt="Фото 2">
+                            </button>
+                        </div>
+                        <div class="gallery__thumbs">
+                            <button class="gallery__thumb" data-src="/images/proekty/2-3x4/03.webp" data-index="3">
+                                <img src="/images/proekty/2-3x4/03.webp" alt="Фото 3">
+                            </button>
+                            <button class="gallery__thumb" data-src="/images/proekty/2-3x4/04.webp" data-index="4">
+                                <img src="/images/proekty/2-3x4/04.webp" alt="Фото 4">
+                            </button>
+                            <button class="gallery__thumb" data-src="/images/proekty/2-3x4/05.webp" data-index="5">
+                                <img src="/images/proekty/2-3x4/05.webp" alt="Фото 5">
+                            </button>
+                        </div>
+                        <div class="gallery__thumbs">
+                            <button class="gallery__thumb" data-src="/images/proekty/2-3x4/06.webp" data-index="6">
+                                <img src="/images/proekty/2-3x4/06.webp" alt="Фото 6">
+                            </button>
+                            <button class="gallery__thumb" data-src="/images/proekty/2-3x4/07.webp" data-index="7">
+                                <img src="/images/proekty/2-3x4/07.webp" alt="Фото 7">
+                            </button>
+                            <button class="gallery__thumb" data-src="/images/proekty/2-3x4/08.webp" data-index="8">
+                                <img src="/images/proekty/2-3x4/08.webp" alt="Фото 8">
+                            </button>
+                        </div>
+                        <div class="gallery__thumbs">
+                            <button class="gallery__thumb" data-src="/images/proekty/2-3x4/09.webp" data-index="9">
+                                <img src="/images/proekty/2-3x4/09.webp" alt="Фото 9">
+                            </button>
+                            <button class="gallery__thumb" data-src="/images/proekty/2-3x4/10.webp" data-index="10">
+                                <img src="/images/proekty/2-3x4/10.webp" alt="Фото 10">
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -143,16 +154,26 @@
 
                 <!-- Pricing -->
                 <div class="product__pricing">
-                    <div class="pricing-tabs">
-                        <button class="pricing-tab pricing-tab--active" data-tab="base">Базовая</button>
-                        <button class="pricing-tab" data-tab="comfort">Комфорт</button>
-                        <button class="pricing-tab" data-tab="max">Максимум</button>
+                    <!-- Price overview -->
+                    <div class="pricing-overview">
+                        <button class="pricing-overview__item pricing-overview__item--active" data-tab="base">
+                            <span class="pricing-overview__label">Базовая</span>
+                            <span class="pricing-overview__price">397 900 ₽</span>
+                        </button>
+                        <button class="pricing-overview__item" data-tab="comfort">
+                            <span class="pricing-overview__badge">Выбирают чаще</span>
+                            <span class="pricing-overview__label">Комфорт</span>
+                            <span class="pricing-overview__price">469 900 ₽</span>
+                        </button>
+                        <button class="pricing-overview__item" data-tab="max">
+                            <span class="pricing-overview__label">Максимум</span>
+                            <span class="pricing-overview__price">612 000 ₽</span>
+                        </button>
                     </div>
 
                     <div class="pricing-content">
                         <!-- Base -->
                         <div class="pricing-panel pricing-panel--active" data-panel="base">
-                            <div class="pricing-panel__price">397 900 ₽</div>
                             <ul class="pricing-panel__list">
                                 <li>Парилка зашита осиновой вагонкой без сучков через фольгу</li>
                                 <li>Тёплый угол</li>
@@ -163,13 +184,18 @@
                                 <li>Слив в центре пола или душевой поддон</li>
                             </ul>
                             <a href="tel:88003500393" class="btn btn--primary btn--wide pricing-panel__cta">
-                                Обсудить заказ
+                                Заказать баню
                             </a>
+                            <p class="pricing-panel__warranty">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                </svg>
+                                Гарантия 1 год
+                            </p>
                         </div>
 
                         <!-- Comfort -->
                         <div class="pricing-panel" data-panel="comfort">
-                            <div class="pricing-panel__price">469 900 ₽</div>
                             <ul class="pricing-panel__list">
                                 <li>Всё из «Базовой» +</li>
                                 <li>Клиновые двери</li>
@@ -182,13 +208,18 @@
                                 <li>Слив по авторской технологии «Жёлоб»</li>
                             </ul>
                             <a href="tel:88003500393" class="btn btn--primary btn--wide pricing-panel__cta">
-                                Обсудить заказ
+                                Заказать баню
                             </a>
+                            <p class="pricing-panel__warranty">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                </svg>
+                                Гарантия 1 год
+                            </p>
                         </div>
 
                         <!-- Max -->
                         <div class="pricing-panel" data-panel="max">
-                            <div class="pricing-panel__price">612 000 ₽</div>
                             <ul class="pricing-panel__list">
                                 <li>Всё из «Комфорта» +</li>
                                 <li>Брус камерной сушки</li>
@@ -205,8 +236,14 @@
                                 <li>Банные принадлежности, табличка «БАНЯ», термометр, ступеньки</li>
                             </ul>
                             <a href="tel:88003500393" class="btn btn--primary btn--wide pricing-panel__cta">
-                                Обсудить заказ
+                                Заказать баню
                             </a>
+                            <p class="pricing-panel__warranty">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                </svg>
+                                Гарантия 1 год
+                            </p>
                         </div>
                     </div>
 
@@ -578,6 +615,31 @@
             </div>
         </div>
     </section>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox__overlay"></div>
+        <div class="lightbox__content">
+            <button class="lightbox__close" aria-label="Закрыть">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <button class="lightbox__nav lightbox__nav--prev" aria-label="Предыдущее фото">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+            <img src="" alt="" class="lightbox__image" id="lightbox-image">
+            <button class="lightbox__nav lightbox__nav--next" aria-label="Следующее фото">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+            <div class="lightbox__counter" id="lightbox-counter">1 / 6</div>
+        </div>
+    </div>
 
     <script src="../js/main.js"></script>
     <script src="../js/product.js"></script>

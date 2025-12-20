@@ -5,6 +5,10 @@
 (function() {
     'use strict';
 
+    // Gallery images array for lightbox
+    let galleryImages = [];
+    let currentImageIndex = 0;
+
     // Gallery functionality
     function initGallery() {
         const mainImage = document.getElementById('gallery-main');
@@ -12,11 +16,21 @@
 
         if (!mainImage || !thumbs.length) return;
 
+        // Collect all gallery images
+        thumbs.forEach((thumb, index) => {
+            const src = thumb.dataset.src;
+            if (src && !galleryImages.includes(src)) {
+                galleryImages.push(src);
+            }
+        });
+
         thumbs.forEach(thumb => {
             thumb.addEventListener('click', () => {
                 const src = thumb.dataset.src;
+                const index = thumb.dataset.index;
                 if (src) {
                     mainImage.src = src;
+                    currentImageIndex = parseInt(index) || 0;
                     thumbs.forEach(t => t.classList.remove('gallery__thumb--active'));
                     thumb.classList.add('gallery__thumb--active');
                 }
@@ -24,20 +38,122 @@
         });
     }
 
-    // Pricing tabs
+    // Lightbox functionality
+    function initLightbox() {
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImage = document.getElementById('lightbox-image');
+        const lightboxCounter = document.getElementById('lightbox-counter');
+        const mainImageWrapper = document.getElementById('gallery-main-wrapper');
+        const zoomBtn = document.querySelector('.gallery__zoom-btn');
+        const thumbs = document.querySelectorAll('.gallery__thumb');
+
+        if (!lightbox || !mainImageWrapper) return;
+
+        // Collect unique images for lightbox
+        const uniqueImages = [];
+        thumbs.forEach(thumb => {
+            const src = thumb.dataset.src;
+            if (src && !uniqueImages.includes(src)) {
+                uniqueImages.push(src);
+            }
+        });
+
+        function openLightbox(index) {
+            if (uniqueImages.length === 0) return;
+
+            currentImageIndex = index;
+            updateLightboxImage();
+            lightbox.classList.add('lightbox--open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('lightbox--open');
+            document.body.style.overflow = '';
+        }
+
+        function updateLightboxImage() {
+            if (lightboxImage && uniqueImages[currentImageIndex]) {
+                lightboxImage.src = uniqueImages[currentImageIndex];
+                if (lightboxCounter) {
+                    lightboxCounter.textContent = `${currentImageIndex + 1} / ${uniqueImages.length}`;
+                }
+            }
+        }
+
+        function nextImage() {
+            currentImageIndex = (currentImageIndex + 1) % uniqueImages.length;
+            updateLightboxImage();
+        }
+
+        function prevImage() {
+            currentImageIndex = (currentImageIndex - 1 + uniqueImages.length) % uniqueImages.length;
+            updateLightboxImage();
+        }
+
+        // Open lightbox on main image click
+        mainImageWrapper.addEventListener('click', (e) => {
+            if (e.target.closest('.gallery__video-btn')) return;
+            const mainImg = document.getElementById('gallery-main');
+            const currentSrc = mainImg ? mainImg.src : '';
+            const index = uniqueImages.findIndex(src => currentSrc.includes(src.replace(/^\//, '')));
+            openLightbox(index >= 0 ? index : 0);
+        });
+
+        // Open lightbox on zoom button click
+        if (zoomBtn) {
+            zoomBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const mainImg = document.getElementById('gallery-main');
+                const currentSrc = mainImg ? mainImg.src : '';
+                const index = uniqueImages.findIndex(src => currentSrc.includes(src.replace(/^\//, '')));
+                openLightbox(index >= 0 ? index : 0);
+            });
+        }
+
+        // Close button
+        const closeBtn = lightbox.querySelector('.lightbox__close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', closeLightbox);
+        }
+
+        // Overlay click
+        const overlay = lightbox.querySelector('.lightbox__overlay');
+        if (overlay) {
+            overlay.addEventListener('click', closeLightbox);
+        }
+
+        // Navigation buttons
+        const prevBtn = lightbox.querySelector('.lightbox__nav--prev');
+        const nextBtn = lightbox.querySelector('.lightbox__nav--next');
+
+        if (prevBtn) prevBtn.addEventListener('click', prevImage);
+        if (nextBtn) nextBtn.addEventListener('click', nextImage);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (!lightbox.classList.contains('lightbox--open')) return;
+
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') prevImage();
+            if (e.key === 'ArrowRight') nextImage();
+        });
+    }
+
+    // Pricing tabs with new overview
     function initPricingTabs() {
-        const tabs = document.querySelectorAll('.pricing-tab');
+        const overviewItems = document.querySelectorAll('.pricing-overview__item');
         const panels = document.querySelectorAll('.pricing-panel');
 
-        if (!tabs.length || !panels.length) return;
+        if (!overviewItems.length || !panels.length) return;
 
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const targetPanel = tab.dataset.tab;
+        overviewItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const targetPanel = item.dataset.tab;
 
-                // Update tabs
-                tabs.forEach(t => t.classList.remove('pricing-tab--active'));
-                tab.classList.add('pricing-tab--active');
+                // Update overview items
+                overviewItems.forEach(i => i.classList.remove('pricing-overview__item--active'));
+                item.classList.add('pricing-overview__item--active');
 
                 // Update panels
                 panels.forEach(panel => {
@@ -124,6 +240,7 @@
     // Initialize
     document.addEventListener('DOMContentLoaded', () => {
         initGallery();
+        initLightbox();
         initPricingTabs();
         initModal();
         initCompareTable();

@@ -1917,3 +1917,291 @@ a {
         font-size: 2.5rem;
     }
 }
+
+/* ==========================================================================
+   Gallery Enhancements
+   ========================================================================== */
+
+.gallery__caption {
+    font-size: 0.8125rem;
+    color: var(--color-text-light);
+    margin-bottom: var(--space-sm);
+}
+
+.gallery__thumbs-container {
+    max-height: 180px;
+    overflow: hidden;
+}
+
+.gallery__zoom-btn {
+    position: absolute;
+    bottom: var(--space-md);
+    right: var(--space-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 50%;
+    color: var(--color-text);
+    cursor: pointer;
+    opacity: 0;
+    transform: scale(0.9);
+    transition: all var(--transition);
+    box-shadow: var(--shadow-md);
+}
+
+.gallery__main:hover .gallery__zoom-btn {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.gallery__zoom-btn:hover {
+    background: var(--color-accent);
+    color: var(--color-white);
+}
+
+.gallery__main {
+    cursor: pointer;
+}
+
+/* ==========================================================================
+   Pricing Overview (All prices visible)
+   ========================================================================== */
+
+.pricing-overview {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: var(--space-md);
+}
+
+.pricing-overview__item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: var(--space-sm) var(--space-xs);
+    background: var(--color-white);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition);
+    font-family: var(--font-main);
+}
+
+.pricing-overview__item:hover {
+    border-color: var(--color-accent-light);
+}
+
+.pricing-overview__item--active {
+    border-color: var(--color-accent);
+    background: var(--color-white);
+}
+
+.pricing-overview__badge {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 2px 8px;
+    font-size: 0.625rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--color-white);
+    background: var(--color-accent);
+    border-radius: 10px;
+    white-space: nowrap;
+}
+
+.pricing-overview__label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-text-light);
+}
+
+.pricing-overview__price {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.pricing-overview__item--active .pricing-overview__label {
+    color: var(--color-accent);
+}
+
+.pricing-overview__item--active .pricing-overview__price {
+    color: var(--color-text);
+}
+
+/* Pricing panel warranty */
+.pricing-panel__warranty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: var(--space-sm);
+    font-size: 0.8125rem;
+    color: var(--color-success);
+    font-weight: 500;
+}
+
+.pricing-panel__warranty svg {
+    flex-shrink: 0;
+}
+
+/* ==========================================================================
+   Lightbox
+   ========================================================================== */
+
+.lightbox {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 3000;
+}
+
+.lightbox--open {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lightbox__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.92);
+}
+
+.lightbox__content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: var(--space-xl);
+}
+
+.lightbox__image {
+    max-width: 90%;
+    max-height: 85vh;
+    object-fit: contain;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+}
+
+.lightbox__close {
+    position: absolute;
+    top: var(--space-md);
+    right: var(--space-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    color: var(--color-white);
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.lightbox__close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.lightbox__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    color: var(--color-white);
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.lightbox__nav:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.lightbox__nav--prev {
+    left: var(--space-md);
+}
+
+.lightbox__nav--next {
+    right: var(--space-md);
+}
+
+.lightbox__counter {
+    position: absolute;
+    bottom: var(--space-lg);
+    left: 50%;
+    transform: translateX(-50%);
+    padding: var(--space-xs) var(--space-md);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-white);
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: var(--radius-sm);
+}
+
+/* Lightbox Responsive */
+@media (min-width: 768px) {
+    .lightbox__nav {
+        width: 56px;
+        height: 56px;
+    }
+
+    .lightbox__nav--prev {
+        left: var(--space-xl);
+    }
+
+    .lightbox__nav--next {
+        right: var(--space-xl);
+    }
+}
+
+/* ==========================================================================
+   Pricing Overview Responsive
+   ========================================================================== */
+
+@media (min-width: 768px) {
+    .pricing-overview__label {
+        font-size: 0.8125rem;
+    }
+
+    .pricing-overview__price {
+        font-size: 1.125rem;
+    }
+
+    .pricing-overview__badge {
+        font-size: 0.6875rem;
+        padding: 3px 10px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .gallery__thumbs-container {
+        max-height: none;
+    }
+}
