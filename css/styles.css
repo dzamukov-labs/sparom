@@ -719,6 +719,394 @@ a {
 }
 
 /* ==========================================================================
+   Reviews Section
+   ========================================================================== */
+
+.reviews {
+    padding: var(--space-2xl) 0;
+    background: var(--color-bg);
+}
+
+.reviews__title {
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: var(--space-sm);
+    color: var(--color-text);
+}
+
+.reviews__subtitle {
+    font-size: clamp(0.9rem, 2vw, 1.125rem);
+    color: var(--color-text-light);
+    text-align: center;
+    margin-bottom: var(--space-xl);
+}
+
+.reviews__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+}
+
+.review-card {
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition);
+}
+
+.review-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.review-card__header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+}
+
+.review-card__avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+    flex-shrink: 0;
+}
+
+.review-card__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.review-card__name {
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--color-text);
+}
+
+.review-card__location {
+    font-size: 0.8125rem;
+    color: var(--color-text-light);
+}
+
+.review-card__rating {
+    display: flex;
+    gap: 2px;
+    color: #F5A623;
+}
+
+.review-card__text {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--color-text);
+    margin-bottom: var(--space-sm);
+}
+
+.review-card__date {
+    font-size: 0.8125rem;
+    color: var(--color-text-light);
+}
+
+.reviews__footer {
+    display: flex;
+    justify-content: center;
+}
+
+/* Reviews Responsive */
+@media (min-width: 768px) {
+    .reviews {
+        padding: var(--space-3xl) 0;
+    }
+
+    .reviews__grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-lg);
+    }
+}
+
+/* ==========================================================================
+   Geography Section
+   ========================================================================== */
+
+.geography {
+    padding: var(--space-2xl) 0;
+    background: var(--color-bg-alt);
+}
+
+.geography__content {
+    text-align: center;
+}
+
+.geography__title {
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    font-weight: 700;
+    margin-bottom: var(--space-sm);
+    color: var(--color-text);
+}
+
+.geography__subtitle {
+    font-size: clamp(0.9rem, 2vw, 1.125rem);
+    color: var(--color-text-light);
+    margin-bottom: var(--space-xl);
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.geography__stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+}
+
+.geography__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.geography__stat-number {
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+    font-weight: 700;
+    color: var(--color-accent);
+    line-height: 1;
+}
+
+.geography__stat-label {
+    font-size: 0.75rem;
+    color: var(--color-text-light);
+    text-align: center;
+}
+
+.geography__regions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-xl);
+}
+
+.geography__region {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: 0.8125rem;
+    color: var(--color-text);
+    background: var(--color-white);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
+}
+
+.geography__region:last-child {
+    color: var(--color-accent);
+    font-weight: 500;
+}
+
+/* Geography Responsive */
+@media (min-width: 768px) {
+    .geography {
+        padding: var(--space-3xl) 0;
+    }
+
+    .geography__stat-label {
+        font-size: 0.875rem;
+    }
+
+    .geography__region {
+        font-size: 0.9375rem;
+        padding: var(--space-sm) var(--space-md);
+    }
+}
+
+/* ==========================================================================
+   Final CTA Section
+   ========================================================================== */
+
+.final-cta {
+    padding: var(--space-2xl) 0;
+    background: var(--color-bg);
+}
+
+.final-cta__box {
+    background: var(--color-accent);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    text-align: center;
+}
+
+.final-cta__title {
+    font-size: clamp(1.25rem, 4vw, 2rem);
+    font-weight: 700;
+    color: var(--color-white);
+    margin-bottom: var(--space-sm);
+}
+
+.final-cta__text {
+    font-size: clamp(0.9rem, 2vw, 1.125rem);
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: var(--space-lg);
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.final-cta__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.final-cta .btn--primary {
+    background: var(--color-white);
+    color: var(--color-accent);
+    border-color: var(--color-white);
+}
+
+.final-cta .btn--primary:hover {
+    background: var(--color-bg);
+    border-color: var(--color-bg);
+    transform: translateY(-2px);
+}
+
+.final-cta__hint {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Final CTA Responsive */
+@media (min-width: 768px) {
+    .final-cta {
+        padding: var(--space-3xl) 0;
+    }
+
+    .final-cta__box {
+        padding: var(--space-2xl) var(--space-3xl);
+    }
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+.footer {
+    padding: var(--space-2xl) 0 var(--space-lg);
+    background: var(--color-text);
+    color: var(--color-bg);
+}
+
+.footer__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+    margin-bottom: var(--space-xl);
+}
+
+.footer__logo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-white);
+    display: block;
+    margin-bottom: var(--space-sm);
+}
+
+.footer__logo:hover {
+    color: var(--color-accent);
+}
+
+.footer__desc {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.6;
+}
+
+.footer__nav-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-white);
+    margin-bottom: var(--space-sm);
+}
+
+.footer__nav-list {
+    list-style: none;
+}
+
+.footer__nav-list li {
+    margin-bottom: var(--space-xs);
+}
+
+.footer__nav-list a {
+    font-size: 0.9375rem;
+    color: rgba(255, 255, 255, 0.7);
+    transition: color var(--transition);
+}
+
+.footer__nav-list a:hover {
+    color: var(--color-accent);
+}
+
+.footer__phone {
+    display: block;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-white);
+    margin-bottom: 4px;
+}
+
+.footer__phone:hover {
+    color: var(--color-accent);
+}
+
+.footer__phone-hint {
+    display: block;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: var(--space-sm);
+}
+
+.footer__address {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.footer__bottom {
+    padding-top: var(--space-lg);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer__copy {
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+}
+
+/* Footer Responsive */
+@media (min-width: 768px) {
+    .footer__grid {
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        gap: var(--space-2xl);
+    }
+
+    .footer__copy {
+        text-align: left;
+    }
+}
+
+/* ==========================================================================
    Breadcrumbs
    ========================================================================== */
 
