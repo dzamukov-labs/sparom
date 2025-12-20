@@ -134,6 +134,8 @@
             <div class="product__info">
                 <h1 class="product__title">Баня 2,3 × 4 м</h1>
 
+                <p class="product__tagline">Представьте: морозный вечер, за окном −20°C, а вы в жаркой парилке своей бани. Берёзовый веник, аромат хвои, раскалённые камни. Выходите — и сразу в сугроб. Эти ощущения не купишь ни за какие деньги, но можно создать за 4 дня.</p>
+
                 <div class="product__meta">
                     <div class="product__meta-item">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -253,6 +255,45 @@
                             <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
                     </button>
+
+                    <!-- Delivery Calculator -->
+                    <div class="delivery-calc">
+                        <div class="delivery-calc__header">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="1" y="3" width="15" height="13"></rect>
+                                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                                <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                                <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                            </svg>
+                            <span>Рассчитать доставку</span>
+                        </div>
+                        <div class="delivery-calc__form">
+                            <input type="text" class="delivery-calc__input" id="delivery-city" placeholder="Введите город или адрес" autocomplete="off">
+                            <button type="button" class="delivery-calc__btn" id="calc-delivery-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="delivery-calc__result" id="delivery-result" style="display: none;">
+                            <div class="delivery-calc__route">
+                                <span class="delivery-calc__from">Киров</span>
+                                <span class="delivery-calc__arrow">→</span>
+                                <span class="delivery-calc__to" id="delivery-to">—</span>
+                            </div>
+                            <div class="delivery-calc__info">
+                                <div class="delivery-calc__distance">
+                                    <span class="delivery-calc__label">Расстояние</span>
+                                    <span class="delivery-calc__value" id="delivery-distance">— км</span>
+                                </div>
+                                <div class="delivery-calc__price">
+                                    <span class="delivery-calc__label">Стоимость</span>
+                                    <span class="delivery-calc__value delivery-calc__value--accent" id="delivery-price">— ₽</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="delivery-calc__hint">Производство находится в Кирове. Доставляем по всей России.</p>
+                    </div>
                 </div>
             </div>
         </div>

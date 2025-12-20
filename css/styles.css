@@ -2205,3 +2205,195 @@ a {
         max-height: none;
     }
 }
+
+/* ==========================================================================
+   Product Tagline (Emotional text)
+   ========================================================================== */
+
+.product__tagline {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--color-text-light);
+    font-style: italic;
+    margin-bottom: var(--space-md);
+    padding-left: var(--space-md);
+    border-left: 3px solid var(--color-accent-light);
+}
+
+/* ==========================================================================
+   Gallery Height Sync
+   ========================================================================== */
+
+@media (min-width: 768px) {
+    .product__container {
+        align-items: start;
+    }
+
+    .product__gallery {
+        position: sticky;
+        top: var(--space-lg);
+    }
+
+    .gallery__thumbs-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-xs);
+        max-height: 200px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        scrollbar-width: thin;
+        scrollbar-color: var(--color-accent-light) transparent;
+    }
+
+    .gallery__thumbs-container::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .gallery__thumbs-container::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .gallery__thumbs-container::-webkit-scrollbar-thumb {
+        background: var(--color-accent-light);
+        border-radius: 2px;
+    }
+
+    .gallery__thumbs {
+        display: contents;
+    }
+
+    .gallery__thumb {
+        aspect-ratio: 4/3;
+        margin: 0;
+    }
+}
+
+/* ==========================================================================
+   Delivery Calculator
+   ========================================================================== */
+
+.delivery-calc {
+    margin-top: var(--space-lg);
+    padding: var(--space-md);
+    background: var(--color-bg);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+}
+
+.delivery-calc__header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: var(--space-sm);
+}
+
+.delivery-calc__header svg {
+    color: var(--color-accent);
+}
+
+.delivery-calc__form {
+    display: flex;
+    gap: var(--space-xs);
+}
+
+.delivery-calc__input {
+    flex: 1;
+    padding: var(--space-sm) var(--space-md);
+    font-size: 0.875rem;
+    font-family: var(--font-main);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-white);
+    transition: border-color var(--transition);
+}
+
+.delivery-calc__input:focus {
+    outline: none;
+    border-color: var(--color-accent);
+}
+
+.delivery-calc__input::placeholder {
+    color: var(--color-text-light);
+}
+
+.delivery-calc__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: var(--color-accent);
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--color-white);
+    cursor: pointer;
+    transition: all var(--transition);
+    flex-shrink: 0;
+}
+
+.delivery-calc__btn:hover {
+    background: var(--color-accent-dark);
+    transform: translateX(2px);
+}
+
+.delivery-calc__result {
+    margin-top: var(--space-md);
+    padding: var(--space-sm) var(--space-md);
+    background: var(--color-white);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+}
+
+.delivery-calc__route {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: 0.8125rem;
+    color: var(--color-text-light);
+    margin-bottom: var(--space-sm);
+}
+
+.delivery-calc__arrow {
+    color: var(--color-accent);
+}
+
+.delivery-calc__to {
+    font-weight: 500;
+    color: var(--color-text);
+}
+
+.delivery-calc__info {
+    display: flex;
+    gap: var(--space-lg);
+}
+
+.delivery-calc__distance,
+.delivery-calc__price {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.delivery-calc__label {
+    font-size: 0.75rem;
+    color: var(--color-text-light);
+}
+
+.delivery-calc__value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.delivery-calc__value--accent {
+    color: var(--color-accent);
+}
+
+.delivery-calc__hint {
+    margin-top: var(--space-sm);
+    font-size: 0.75rem;
+    color: var(--color-text-light);
+}
