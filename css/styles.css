@@ -1258,6 +1258,13 @@ a {
     transform: translateY(-2px);
 }
 
+.gallery__production-label {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+    margin: var(--space-sm) 0 var(--space-xs);
+    padding-left: 2px;
+}
+
 .gallery__thumbs {
     display: flex;
     gap: var(--space-xs);
