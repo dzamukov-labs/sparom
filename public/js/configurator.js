@@ -95,6 +95,9 @@
         deliveryPrice: 0
     };
 
+    // Prices from Google Sheets (will be loaded on init)
+    let pricesFromSheet = null;
+
     // DOM Elements
     let elements = {};
 
@@ -102,7 +105,116 @@
     function init() {
         cacheElements();
         bindEvents();
+        loadPricesFromAPI(); // Load prices from Google Sheets
         updateUI();
+    }
+
+    /**
+     * Load prices from Google Sheets API
+     */
+    async function loadPricesFromAPI() {
+        try {
+            const response = await fetch('/api/prices');
+            const result = await response.json();
+
+            if (result.success && result.data) {
+                pricesFromSheet = result.data;
+                console.log('Prices loaded from Google Sheets:', result.cached ? '(cached)' : '(fresh)');
+
+                // Update current prices based on selection
+                updatePricesFromSheet();
+            } else {
+                console.warn('Failed to load prices from API:', result.error);
+            }
+        } catch (error) {
+            console.error('Error loading prices from API:', error);
+            // Fallback to hardcoded prices (already set in state)
+        }
+    }
+
+    /**
+     * Update prices from loaded sheet data
+     */
+    function updatePricesFromSheet() {
+        if (!pricesFromSheet || !pricesFromSheet.sizes) return;
+
+        // Update size cards with new prices
+        elements.sizeCards.forEach(card => {
+            const sizeKey = card.dataset.size;
+            const sheetData = pricesFromSheet.sizes[sizeKey];
+
+            if (sheetData) {
+                // Update card price display
+                const priceElement = card.querySelector('.config-size-card__price');
+                if (priceElement) {
+                    // Get package price for this size
+                    const packagePrice = getPackagePrice(sizeKey, state.selectedPackage);
+                    priceElement.textContent = formatPrice(packagePrice);
+                }
+
+                // Update data attribute
+                const basePrice = sheetData.base || 0;
+                card.dataset.price = basePrice;
+
+                // Update current selection if this is selected
+                if (card.classList.contains('config-size-card--selected')) {
+                    state.sizePrice = basePrice;
+                }
+            }
+        });
+
+        // Update package cards with new prices
+        updatePackageCards();
+
+        // Recalculate total
+        updatePrice();
+    }
+
+    /**
+     * Get package price for a size from sheet data
+     */
+    function getPackagePrice(sizeKey, packageType) {
+        if (!pricesFromSheet || !pricesFromSheet.sizes || !pricesFromSheet.sizes[sizeKey]) {
+            return 0;
+        }
+
+        const sizeData = pricesFromSheet.sizes[sizeKey];
+
+        switch (packageType) {
+            case 'base':
+                return sizeData.base || 0;
+            case 'comfort':
+                return sizeData.comfort || 0;
+            case 'max':
+                return sizeData.max || 0;
+            default:
+                return sizeData.base || 0;
+        }
+    }
+
+    /**
+     * Update package cards with prices for current size
+     */
+    function updatePackageCards() {
+        if (!pricesFromSheet) return;
+
+        const currentSize = state.selectedSize;
+        const basePrice = getPackagePrice(currentSize, 'base');
+
+        elements.packageCards.forEach(card => {
+            const packageType = card.dataset.package;
+            const packagePrice = getPackagePrice(currentSize, packageType);
+            const priceDiff = packagePrice - basePrice;
+
+            // Update price display (absolute price, not difference)
+            const priceElement = card.querySelector('.config-package__price-value');
+            if (priceElement) {
+                priceElement.textContent = formatPrice(packagePrice);
+            }
+
+            // Update data attribute (keep difference for calculations)
+            card.dataset.price = priceDiff;
+        });
     }
 
     // Cache DOM elements
@@ -178,7 +290,24 @@
         card.classList.add('config-size-card--selected');
 
         state.selectedSize = card.dataset.size;
-        state.sizePrice = parseInt(card.dataset.price);
+
+        // Get price from sheet if available, otherwise use data attribute
+        if (pricesFromSheet && pricesFromSheet.sizes && pricesFromSheet.sizes[state.selectedSize]) {
+            state.sizePrice = pricesFromSheet.sizes[state.selectedSize].base;
+        } else {
+            state.sizePrice = parseInt(card.dataset.price);
+        }
+
+        // Update package cards for new size
+        updatePackageCards();
+
+        // Recalculate package price for current selection
+        const currentPackage = state.selectedPackage;
+        if (pricesFromSheet) {
+            const basePrice = getPackagePrice(state.selectedSize, 'base');
+            const selectedPackagePrice = getPackagePrice(state.selectedSize, currentPackage);
+            state.packagePrice = selectedPackagePrice - basePrice;
+        }
 
         updatePrice();
     }
@@ -189,7 +318,15 @@
         card.classList.add('config-package--selected');
 
         state.selectedPackage = card.dataset.package;
-        state.packagePrice = parseInt(card.dataset.price);
+
+        // Get price difference from sheet if available
+        if (pricesFromSheet) {
+            const basePrice = getPackagePrice(state.selectedSize, 'base');
+            const selectedPackagePrice = getPackagePrice(state.selectedSize, state.selectedPackage);
+            state.packagePrice = selectedPackagePrice - basePrice;
+        } else {
+            state.packagePrice = parseInt(card.dataset.price);
+        }
 
         updatePrice();
     }

@@ -1,9 +1,9 @@
 {
+  "buildCommand": "npm run build && cp index.html dist/ && cp -r proekty dist/",
+  "outputDirectory": "dist",
+  "framework": "astro",
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/$1" },
-    { "source": "/privacy", "destination": "/privacy.html" },
-    { "source": "/lp/bani-01", "destination": "/lp/bani-01/index.html" },
-    { "source": "/proekty/:slug", "destination": "/proekty/:slug.html" }
+    { "source": "/lp/bani-01", "destination": "/lp/bani-01/index.html" }
   ],
   "headers": [
     {
