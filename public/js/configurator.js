@@ -13,6 +13,25 @@
         pestovoCoords: { lat: 58.5981, lng: 35.8153 } // Пестово, Новгородская область
     };
 
+    // Fallback prices - used when API fails or returns incomplete data
+    const FALLBACK_PRICES = {
+        '2-3x3': { base: 364900, comfort: 436900, max: 579000 },
+        '2-3x4': { base: 397900, comfort: 469900, max: 612000 },
+        '2-3x5': { base: 436900, comfort: 508900, max: 651000 },
+        '2-3x6-krylco': { base: 455900, comfort: 527900, max: 670000 },
+        '2-3x6': { base: 467900, comfort: 539900, max: 682000 },
+        '2-3x7-krylco': { base: 494900, comfort: 566900, max: 709000 },
+        '2-3x7': { base: 494900, comfort: 566900, max: 709000 },
+        '2-3x8': { base: 567900, comfort: 639900, max: 782000 }
+    };
+
+    // Emotional descriptions for packages
+    const PACKAGE_DESCRIPTIONS = {
+        base: 'Всё необходимое для настоящей русской бани',
+        comfort: 'Выбор 70% покупателей — оптимальное соотношение',
+        max: 'Премиальные материалы и максимум удобства'
+    };
+
     // City database with distances from Пестово (Новгородская область)
     const CITIES = [
         { name: 'Москва', region: 'Московская область', distance: 430 },
@@ -105,8 +124,32 @@
     function init() {
         cacheElements();
         bindEvents();
-        loadPricesFromAPI(); // Load prices from Google Sheets
+
+        // Initialize with fallback prices immediately
+        initializePrices();
+
+        // Then try to load from API (will update if successful)
+        loadPricesFromAPI();
+
         updateUI();
+    }
+
+    /**
+     * Initialize prices with fallback values
+     */
+    function initializePrices() {
+        const currentSize = state.selectedSize;
+        const fallback = FALLBACK_PRICES[currentSize];
+
+        if (fallback) {
+            state.sizePrice = fallback.base;
+            const selectedPackagePrice = fallback[state.selectedPackage] || fallback.base;
+            state.packagePrice = selectedPackagePrice - fallback.base;
+        }
+
+        // Update package cards with fallback prices
+        updatePackageCards();
+        updatePrice();
     }
 
     /**
@@ -171,25 +214,35 @@
     }
 
     /**
-     * Get package price for a size from sheet data
+     * Get package price for a size from sheet data with fallback
      */
     function getPackagePrice(sizeKey, packageType) {
-        if (!pricesFromSheet || !pricesFromSheet.sizes || !pricesFromSheet.sizes[sizeKey]) {
-            return 0;
+        // Try sheet data first
+        let sizeData = null;
+
+        if (pricesFromSheet && pricesFromSheet.sizes && pricesFromSheet.sizes[sizeKey]) {
+            sizeData = pricesFromSheet.sizes[sizeKey];
         }
 
-        const sizeData = pricesFromSheet.sizes[sizeKey];
+        // Use fallback if sheet data is missing or incomplete
+        const fallback = FALLBACK_PRICES[sizeKey];
 
+        let price = 0;
         switch (packageType) {
             case 'base':
-                return sizeData.base || 0;
+                price = (sizeData && sizeData.base) || (fallback && fallback.base) || 0;
+                break;
             case 'comfort':
-                return sizeData.comfort || 0;
+                price = (sizeData && sizeData.comfort) || (fallback && fallback.comfort) || 0;
+                break;
             case 'max':
-                return sizeData.max || 0;
+                price = (sizeData && sizeData.max) || (fallback && fallback.max) || 0;
+                break;
             default:
-                return sizeData.base || 0;
+                price = (sizeData && sizeData.base) || (fallback && fallback.base) || 0;
         }
+
+        return price;
     }
 
     /**

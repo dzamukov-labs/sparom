@@ -28,12 +28,12 @@ const projectSize = '2-3x4';
                     <div class="gallery__main" id="gallery-main-wrapper">
                         <img src="/images/proekty/2-3x4/main.webp" alt="Баня 2,3×4 м — вид снаружи" id="gallery-main">
                         <!-- Video button overlay -->
-                        <a href="https://vk.com/video" target="_blank" class="gallery__video-btn">
+                        <button type="button" class="gallery__video-btn" id="open-video-modal">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M15.684 0H8.316C1.592 0 0 1.592 0 8.316v7.368C0 22.408 1.592 24 8.316 24h7.368C22.408 24 24 22.408 24 15.684V8.316C24 1.592 22.408 0 15.684 0zm3.692 17.123h-1.744c-.66 0-.862-.523-2.049-1.713-1.033-1.01-1.49-1.135-1.744-1.135-.356 0-.458.102-.458.593v1.563c0 .424-.135.678-1.253.678-1.846 0-3.896-1.118-5.335-3.202C4.624 10.857 4 8.684 4 8.245c0-.254.102-.491.593-.491h1.744c.44 0 .61.203.78.678.847 2.49 2.27 4.675 2.853 4.675.22 0 .322-.102.322-.66V9.721c-.068-1.186-.695-1.287-.695-1.71 0-.203.17-.407.44-.407h2.744c.373 0 .508.203.508.643v3.473c0 .372.17.508.271.508.22 0 .407-.136.814-.542 1.27-1.422 2.168-3.608 2.168-3.608.119-.254.322-.491.763-.491h1.744c.525 0 .644.27.525.643-.22 1.017-2.354 4.031-2.354 4.031-.186.305-.254.44 0 .78.186.254.796.78 1.202 1.253.745.864 1.32 1.59 1.473 2.096.17.508-.085.763-.576.763z"/>
                             </svg>
                             Смотреть видеообзор
-                        </a>
+                        </button>
                         <!-- Zoom icon -->
                         <button class="gallery__zoom-btn" aria-label="Увеличить">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -45,48 +45,25 @@ const projectSize = '2-3x4';
                         </button>
                     </div>
                     <p class="gallery__caption">Фото готовых бань с производства</p>
-                    <div class="gallery__thumbs-container">
-                        <div class="gallery__thumbs">
-                            <button class="gallery__thumb gallery__thumb--active" data-src="/images/proekty/2-3x4/main.webp" data-index="0">
-                                <img src="/images/proekty/2-3x4/main.webp" alt="Главное фото">
-                            </button>
-                            <button class="gallery__thumb" data-src="/images/proekty/2-3x4/01.webp" data-index="1">
-                                <img src="/images/proekty/2-3x4/01.webp" alt="Фото 1">
-                            </button>
-                            <button class="gallery__thumb" data-src="/images/proekty/2-3x4/02.webp" data-index="2">
-                                <img src="/images/proekty/2-3x4/02.webp" alt="Фото 2">
-                            </button>
-                        </div>
-                        <div class="gallery__thumbs">
-                            <button class="gallery__thumb" data-src="/images/proekty/2-3x4/03.webp" data-index="3">
-                                <img src="/images/proekty/2-3x4/03.webp" alt="Фото 3">
-                            </button>
-                            <button class="gallery__thumb" data-src="/images/proekty/2-3x4/04.webp" data-index="4">
-                                <img src="/images/proekty/2-3x4/04.webp" alt="Фото 4">
-                            </button>
-                            <button class="gallery__thumb" data-src="/images/proekty/2-3x4/05.webp" data-index="5">
-                                <img src="/images/proekty/2-3x4/05.webp" alt="Фото 5">
-                            </button>
-                        </div>
-                        <div class="gallery__thumbs">
-                            <button class="gallery__thumb" data-src="/images/proekty/2-3x4/06.webp" data-index="6">
-                                <img src="/images/proekty/2-3x4/06.webp" alt="Фото 6">
-                            </button>
-                            <button class="gallery__thumb" data-src="/images/proekty/2-3x4/07.webp" data-index="7">
-                                <img src="/images/proekty/2-3x4/07.webp" alt="Фото 7">
-                            </button>
-                            <button class="gallery__thumb" data-src="/images/proekty/2-3x4/08.webp" data-index="8">
-                                <img src="/images/proekty/2-3x4/08.webp" alt="Фото 8">
-                            </button>
-                        </div>
-                        <div class="gallery__thumbs">
-                            <button class="gallery__thumb" data-src="/images/proekty/2-3x4/09.webp" data-index="9">
-                                <img src="/images/proekty/2-3x4/09.webp" alt="Фото 9">
-                            </button>
-                            <button class="gallery__thumb" data-src="/images/proekty/2-3x4/10.webp" data-index="10">
-                                <img src="/images/proekty/2-3x4/10.webp" alt="Фото 10">
-                            </button>
-                        </div>
+                    <div class="gallery__thumbs-grid">
+                        <button class="gallery__thumb gallery__thumb--active" data-src="/images/proekty/2-3x4/main.webp" data-index="0">
+                            <img src="/images/proekty/2-3x4/main.webp" alt="Главное фото">
+                        </button>
+                        <button class="gallery__thumb" data-src="/images/proekty/2-3x4/01.webp" data-index="1">
+                            <img src="/images/proekty/2-3x4/01.webp" alt="Фото 1">
+                        </button>
+                        <button class="gallery__thumb" data-src="/images/proekty/2-3x4/02.webp" data-index="2">
+                            <img src="/images/proekty/2-3x4/02.webp" alt="Фото 2">
+                        </button>
+                        <button class="gallery__thumb" data-src="/images/proekty/2-3x4/03.webp" data-index="3">
+                            <img src="/images/proekty/2-3x4/03.webp" alt="Фото 3">
+                        </button>
+                        <button class="gallery__thumb" data-src="/images/proekty/2-3x4/04.webp" data-index="4">
+                            <img src="/images/proekty/2-3x4/04.webp" alt="Фото 4">
+                        </button>
+                        <button class="gallery__thumb" data-src="/images/proekty/2-3x4/05.webp" data-index="5">
+                            <img src="/images/proekty/2-3x4/05.webp" alt="Фото 5">
+                        </button>
                     </div>
                 </div>
             </div>
@@ -618,54 +595,33 @@ const projectSize = '2-3x4';
                     <h3 class="config-step__title">Выберите комплектацию</h3>
                     <div class="config-packages">
                         <div class="config-package" data-package="base" data-price="0">
-                            <span class="config-package__radio"></span>
                             <div class="config-package__header">
                                 <div class="config-package__name">Базовая</div>
                                 <div class="config-package__price">
-                                    <div class="config-package__price-value">397 900 ₽</div>
+                                    <div class="config-package__price-value" data-price-type="base">397 900 ₽</div>
                                 </div>
                             </div>
-                            <ul class="config-package__features">
-                                <li>Парилка зашита осиновой вагонкой</li>
-                                <li>Печь Ермак 12-Т + 40 кг камней</li>
-                                <li>Высокий конёк 30 см</li>
-                                <li>Электрика в цвет дерева</li>
-                                <li>Слив в центре пола</li>
-                            </ul>
+                            <p class="config-package__desc">Всё необходимое для настоящей русской бани</p>
                         </div>
                         <div class="config-package config-package--recommended config-package--selected" data-package="comfort" data-price="72000">
                             <span class="config-package__badge">Рекомендуем</span>
                             <span class="config-package__popular">Выбор 70%</span>
-                            <span class="config-package__radio"></span>
                             <div class="config-package__header">
                                 <div class="config-package__name">Комфорт</div>
                                 <div class="config-package__price">
-                                    <div class="config-package__price-value">469 900 ₽</div>
+                                    <div class="config-package__price-value" data-price-type="comfort">469 900 ₽</div>
                                 </div>
                             </div>
-                            <ul class="config-package__features">
-                                <li>Всё из «Базовой» +</li>
-                                <li>Клиновые двери с фиксаторами</li>
-                                <li>Арочный потолок, конёк 45 см</li>
-                                <li>Цветная кровля на выбор</li>
-                                <li>Широкие полки + технология «Жёлоб»</li>
-                            </ul>
+                            <p class="config-package__desc">Оптимальное соотношение цены и удобства</p>
                         </div>
                         <div class="config-package" data-package="max" data-price="214100">
-                            <span class="config-package__radio"></span>
                             <div class="config-package__header">
                                 <div class="config-package__name">Максимум</div>
                                 <div class="config-package__price">
-                                    <div class="config-package__price-value">612 000 ₽</div>
+                                    <div class="config-package__price-value" data-price-type="max">612 000 ₽</div>
                                 </div>
                             </div>
-                            <ul class="config-package__features">
-                                <li>Всё из «Комфорта» +</li>
-                                <li>Брус камерной сушки</li>
-                                <li>Печь Grill'd Cometa Vega Long</li>
-                                <li>Двойное утепление</li>
-                                <li>Полки без сучков + спинка + бонусы</li>
-                            </ul>
+                            <p class="config-package__desc">Премиальные материалы и максимум комфорта</p>
                         </div>
                     </div>
                 </div>
@@ -982,8 +938,63 @@ const projectSize = '2-3x4';
             <div class="lightbox__counter" id="lightbox-counter">1 / 6</div>
         </div>
     </div>
+
+    <!-- VK Video Modal -->
+    <div class="video-modal" id="video-modal">
+        <div class="video-modal__overlay"></div>
+        <div class="video-modal__content">
+            <button class="video-modal__close" aria-label="Закрыть">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <div class="video-modal__player">
+                <iframe id="vk-video-iframe" src="" width="100%" height="100%" allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
 </BaseLayout>
 
 <script is:inline src="/js/product.js"></script>
 <script is:inline src="/js/configurator.js"></script>
 <script is:inline src="/js/project-page.js"></script>
+
+<script is:inline>
+    // VK Video Modal
+    (function() {
+        const videoModal = document.getElementById('video-modal');
+        const videoIframe = document.getElementById('vk-video-iframe');
+        const openBtn = document.getElementById('open-video-modal');
+        const closeBtn = videoModal?.querySelector('.video-modal__close');
+        const overlay = videoModal?.querySelector('.video-modal__overlay');
+
+        const VK_VIDEO_URL = 'https://vk.com/video_ext.php?oid=-50174471&id=456239252&hd=2&autoplay=1';
+
+        function openModal() {
+            if (videoModal && videoIframe) {
+                videoIframe.src = VK_VIDEO_URL;
+                videoModal.classList.add('video-modal--open');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeModal() {
+            if (videoModal && videoIframe) {
+                videoModal.classList.remove('video-modal--open');
+                videoIframe.src = '';
+                document.body.style.overflow = '';
+            }
+        }
+
+        openBtn?.addEventListener('click', openModal);
+        closeBtn?.addEventListener('click', closeModal);
+        overlay?.addEventListener('click', closeModal);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && videoModal?.classList.contains('video-modal--open')) {
+                closeModal();
+            }
+        });
+    })();
+</script>
