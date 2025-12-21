@@ -206,17 +206,13 @@
             const packagePrice = getPackagePrice(currentSize, packageType);
             const priceDiff = packagePrice - basePrice;
 
-            // Update price display
-            const priceElement = card.querySelector('.config-package__price');
+            // Update price display (absolute price, not difference)
+            const priceElement = card.querySelector('.config-package__price-value');
             if (priceElement) {
-                if (priceDiff === 0) {
-                    priceElement.textContent = 'Включено';
-                } else {
-                    priceElement.textContent = '+' + formatPrice(priceDiff);
-                }
+                priceElement.textContent = formatPrice(packagePrice);
             }
 
-            // Update data attribute
+            // Update data attribute (keep difference for calculations)
             card.dataset.price = priceDiff;
         });
     }
