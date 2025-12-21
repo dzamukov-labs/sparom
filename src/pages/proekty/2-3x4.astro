@@ -45,7 +45,7 @@ const projectSize = '2-3x4';
                         </button>
                     </div>
                     <p class="gallery__caption">Фото готовых бань с производства</p>
-                    <div class="gallery__thumbs-grid">
+                    <div class="gallery__thumbs-scroll">
                         <button class="gallery__thumb gallery__thumb--active" data-src="/images/proekty/2-3x4/main.webp" data-index="0">
                             <img src="/images/proekty/2-3x4/main.webp" alt="Главное фото">
                         </button>
@@ -63,6 +63,21 @@ const projectSize = '2-3x4';
                         </button>
                         <button class="gallery__thumb" data-src="/images/proekty/2-3x4/05.webp" data-index="5">
                             <img src="/images/proekty/2-3x4/05.webp" alt="Фото 5">
+                        </button>
+                        <button class="gallery__thumb" data-src="/images/proekty/2-3x4/06.webp" data-index="6">
+                            <img src="/images/proekty/2-3x4/06.webp" alt="Фото 6">
+                        </button>
+                        <button class="gallery__thumb" data-src="/images/proekty/2-3x4/07.webp" data-index="7">
+                            <img src="/images/proekty/2-3x4/07.webp" alt="Фото 7">
+                        </button>
+                        <button class="gallery__thumb" data-src="/images/proekty/2-3x4/08.webp" data-index="8">
+                            <img src="/images/proekty/2-3x4/08.webp" alt="Фото 8">
+                        </button>
+                        <button class="gallery__thumb" data-src="/images/proekty/2-3x4/09.webp" data-index="9">
+                            <img src="/images/proekty/2-3x4/09.webp" alt="Фото 9">
+                        </button>
+                        <button class="gallery__thumb" data-src="/images/proekty/2-3x4/10.webp" data-index="10">
+                            <img src="/images/proekty/2-3x4/10.webp" alt="Фото 10">
                         </button>
                     </div>
                 </div>
@@ -935,7 +950,7 @@ const projectSize = '2-3x4';
                     <polyline points="9 18 15 12 9 6"></polyline>
                 </svg>
             </button>
-            <div class="lightbox__counter" id="lightbox-counter">1 / 6</div>
+            <div class="lightbox__counter" id="lightbox-counter">1 / 11</div>
         </div>
     </div>
 
@@ -954,47 +969,47 @@ const projectSize = '2-3x4';
             </div>
         </div>
     </div>
+
+    <script is:inline src="/js/product.js"></script>
+    <script is:inline src="/js/configurator.js"></script>
+    <script is:inline src="/js/project-page.js"></script>
+
+    <script is:inline>
+        // VK Video Modal
+        (function() {
+            const videoModal = document.getElementById('video-modal');
+            const videoIframe = document.getElementById('vk-video-iframe');
+            const openBtn = document.getElementById('open-video-modal');
+            const closeBtn = videoModal?.querySelector('.video-modal__close');
+            const overlay = videoModal?.querySelector('.video-modal__overlay');
+
+            const VK_VIDEO_URL = 'https://vk.com/video_ext.php?oid=-50174471&id=456239252&hd=2&autoplay=1';
+
+            function openModal() {
+                if (videoModal && videoIframe) {
+                    videoIframe.src = VK_VIDEO_URL;
+                    videoModal.classList.add('video-modal--open');
+                    document.body.style.overflow = 'hidden';
+                }
+            }
+
+            function closeModal() {
+                if (videoModal && videoIframe) {
+                    videoModal.classList.remove('video-modal--open');
+                    videoIframe.src = '';
+                    document.body.style.overflow = '';
+                }
+            }
+
+            openBtn?.addEventListener('click', openModal);
+            closeBtn?.addEventListener('click', closeModal);
+            overlay?.addEventListener('click', closeModal);
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && videoModal?.classList.contains('video-modal--open')) {
+                    closeModal();
+                }
+            });
+        })();
+    </script>
 </BaseLayout>
-
-<script is:inline src="/js/product.js"></script>
-<script is:inline src="/js/configurator.js"></script>
-<script is:inline src="/js/project-page.js"></script>
-
-<script is:inline>
-    // VK Video Modal
-    (function() {
-        const videoModal = document.getElementById('video-modal');
-        const videoIframe = document.getElementById('vk-video-iframe');
-        const openBtn = document.getElementById('open-video-modal');
-        const closeBtn = videoModal?.querySelector('.video-modal__close');
-        const overlay = videoModal?.querySelector('.video-modal__overlay');
-
-        const VK_VIDEO_URL = 'https://vk.com/video_ext.php?oid=-50174471&id=456239252&hd=2&autoplay=1';
-
-        function openModal() {
-            if (videoModal && videoIframe) {
-                videoIframe.src = VK_VIDEO_URL;
-                videoModal.classList.add('video-modal--open');
-                document.body.style.overflow = 'hidden';
-            }
-        }
-
-        function closeModal() {
-            if (videoModal && videoIframe) {
-                videoModal.classList.remove('video-modal--open');
-                videoIframe.src = '';
-                document.body.style.overflow = '';
-            }
-        }
-
-        openBtn?.addEventListener('click', openModal);
-        closeBtn?.addEventListener('click', closeModal);
-        overlay?.addEventListener('click', closeModal);
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && videoModal?.classList.contains('video-modal--open')) {
-                closeModal();
-            }
-        });
-    })();
-</script>

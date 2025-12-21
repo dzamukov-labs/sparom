@@ -249,8 +249,7 @@
      * Update package cards with prices for current size
      */
     function updatePackageCards() {
-        if (!pricesFromSheet) return;
-
+        // Don't return early - use fallback prices if API not loaded
         const currentSize = state.selectedSize;
         const basePrice = getPackagePrice(currentSize, 'base');
 
