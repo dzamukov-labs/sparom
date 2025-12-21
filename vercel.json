@@ -2,11 +2,13 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "framework": "astro",
+  "functions": {
+    "api/**/*.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/$1" },
-    { "source": "/privacy", "destination": "/privacy.html" },
-    { "source": "/lp/bani-01", "destination": "/lp/bani-01/index.html" },
-    { "source": "/proekty/:slug", "destination": "/proekty/:slug.html" }
+    { "source": "/lp/bani-01", "destination": "/lp/bani-01/index.html" }
   ],
   "headers": [
     {
