@@ -1,6 +1,7 @@
 {
-  "buildCommand": null,
-  "outputDirectory": ".",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": "astro",
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/privacy", "destination": "/privacy.html" },
