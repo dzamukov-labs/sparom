@@ -24,62 +24,51 @@ const projectSize = '2-3x4';
         <div class="container product__container">
             <!-- Gallery -->
             <div class="product__gallery">
-                <div class="gallery">
-                    <div class="gallery__main" id="gallery-main-wrapper">
+                <div class="gallery-compact">
+                    <!-- Main image -->
+                    <div class="gallery-compact__main" id="gallery-main-wrapper">
                         <img src="/images/proekty/2-3x4/main.webp" alt="Баня 2,3×4 м — вид снаружи" id="gallery-main">
-                        <!-- Video button overlay -->
-                        <button type="button" class="gallery__video-btn" id="open-video-modal">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M15.684 0H8.316C1.592 0 0 1.592 0 8.316v7.368C0 22.408 1.592 24 8.316 24h7.368C22.408 24 24 22.408 24 15.684V8.316C24 1.592 22.408 0 15.684 0zm3.692 17.123h-1.744c-.66 0-.862-.523-2.049-1.713-1.033-1.01-1.49-1.135-1.744-1.135-.356 0-.458.102-.458.593v1.563c0 .424-.135.678-1.253.678-1.846 0-3.896-1.118-5.335-3.202C4.624 10.857 4 8.684 4 8.245c0-.254.102-.491.593-.491h1.744c.44 0 .61.203.78.678.847 2.49 2.27 4.675 2.853 4.675.22 0 .322-.102.322-.66V9.721c-.068-1.186-.695-1.287-.695-1.71 0-.203.17-.407.44-.407h2.744c.373 0 .508.203.508.643v3.473c0 .372.17.508.271.508.22 0 .407-.136.814-.542 1.27-1.422 2.168-3.608 2.168-3.608.119-.254.322-.491.763-.491h1.744c.525 0 .644.27.525.643-.22 1.017-2.354 4.031-2.354 4.031-.186.305-.254.44 0 .78.186.254.796.78 1.202 1.253.745.864 1.32 1.59 1.473 2.096.17.508-.085.763-.576.763z"/>
+                        <!-- Video button -->
+                        <button type="button" class="gallery-compact__video-btn" id="open-video-modal">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M8 5v14l11-7z"/>
                             </svg>
-                            Смотреть видеообзор
-                        </button>
-                        <!-- Zoom icon -->
-                        <button class="gallery__zoom-btn" aria-label="Увеличить">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="11" cy="11" r="8"></circle>
-                                <path d="m21 21-4.35-4.35"></path>
-                                <path d="M11 8v6"></path>
-                                <path d="M8 11h6"></path>
-                            </svg>
+                            Видеообзор
                         </button>
                     </div>
-                    <p class="gallery__caption">Фото готовых бань с производства</p>
-                    <div class="gallery__thumbs-scroll">
-                        <button class="gallery__thumb gallery__thumb--active" data-src="/images/proekty/2-3x4/main.webp" data-index="0">
-                            <img src="/images/proekty/2-3x4/main.webp" alt="Главное фото">
-                        </button>
-                        <button class="gallery__thumb" data-src="/images/proekty/2-3x4/01.webp" data-index="1">
+                    <!-- Thumbnails 2x2 grid -->
+                    <div class="gallery-compact__grid">
+                        <button class="gallery-compact__thumb" data-src="/images/proekty/2-3x4/01.webp" data-index="1">
                             <img src="/images/proekty/2-3x4/01.webp" alt="Фото 1">
                         </button>
-                        <button class="gallery__thumb" data-src="/images/proekty/2-3x4/02.webp" data-index="2">
+                        <button class="gallery-compact__thumb" data-src="/images/proekty/2-3x4/02.webp" data-index="2">
                             <img src="/images/proekty/2-3x4/02.webp" alt="Фото 2">
                         </button>
-                        <button class="gallery__thumb" data-src="/images/proekty/2-3x4/03.webp" data-index="3">
+                        <button class="gallery-compact__thumb" data-src="/images/proekty/2-3x4/03.webp" data-index="3">
                             <img src="/images/proekty/2-3x4/03.webp" alt="Фото 3">
                         </button>
-                        <button class="gallery__thumb" data-src="/images/proekty/2-3x4/04.webp" data-index="4">
+                        <button class="gallery-compact__thumb gallery-compact__thumb--more" data-src="/images/proekty/2-3x4/04.webp" data-index="4" id="gallery-view-all">
                             <img src="/images/proekty/2-3x4/04.webp" alt="Фото 4">
-                        </button>
-                        <button class="gallery__thumb" data-src="/images/proekty/2-3x4/05.webp" data-index="5">
-                            <img src="/images/proekty/2-3x4/05.webp" alt="Фото 5">
-                        </button>
-                        <button class="gallery__thumb" data-src="/images/proekty/2-3x4/06.webp" data-index="6">
-                            <img src="/images/proekty/2-3x4/06.webp" alt="Фото 6">
-                        </button>
-                        <button class="gallery__thumb" data-src="/images/proekty/2-3x4/07.webp" data-index="7">
-                            <img src="/images/proekty/2-3x4/07.webp" alt="Фото 7">
-                        </button>
-                        <button class="gallery__thumb" data-src="/images/proekty/2-3x4/08.webp" data-index="8">
-                            <img src="/images/proekty/2-3x4/08.webp" alt="Фото 8">
-                        </button>
-                        <button class="gallery__thumb" data-src="/images/proekty/2-3x4/09.webp" data-index="9">
-                            <img src="/images/proekty/2-3x4/09.webp" alt="Фото 9">
-                        </button>
-                        <button class="gallery__thumb" data-src="/images/proekty/2-3x4/10.webp" data-index="10">
-                            <img src="/images/proekty/2-3x4/10.webp" alt="Фото 10">
+                            <span class="gallery-compact__more-overlay">
+                                <span class="gallery-compact__more-count">+7</span>
+                                <span class="gallery-compact__more-text">фото</span>
+                            </span>
                         </button>
                     </div>
+                </div>
+                <!-- Hidden thumbs for lightbox -->
+                <div class="gallery-compact__hidden" style="display:none;">
+                    <button class="gallery__thumb" data-src="/images/proekty/2-3x4/main.webp" data-index="0"></button>
+                    <button class="gallery__thumb" data-src="/images/proekty/2-3x4/01.webp" data-index="1"></button>
+                    <button class="gallery__thumb" data-src="/images/proekty/2-3x4/02.webp" data-index="2"></button>
+                    <button class="gallery__thumb" data-src="/images/proekty/2-3x4/03.webp" data-index="3"></button>
+                    <button class="gallery__thumb" data-src="/images/proekty/2-3x4/04.webp" data-index="4"></button>
+                    <button class="gallery__thumb" data-src="/images/proekty/2-3x4/05.webp" data-index="5"></button>
+                    <button class="gallery__thumb" data-src="/images/proekty/2-3x4/06.webp" data-index="6"></button>
+                    <button class="gallery__thumb" data-src="/images/proekty/2-3x4/07.webp" data-index="7"></button>
+                    <button class="gallery__thumb" data-src="/images/proekty/2-3x4/08.webp" data-index="8"></button>
+                    <button class="gallery__thumb" data-src="/images/proekty/2-3x4/09.webp" data-index="9"></button>
+                    <button class="gallery__thumb" data-src="/images/proekty/2-3x4/10.webp" data-index="10"></button>
                 </div>
             </div>
 

@@ -44,10 +44,12 @@
         const lightboxImage = document.getElementById('lightbox-image');
         const lightboxCounter = document.getElementById('lightbox-counter');
         const mainImageWrapper = document.getElementById('gallery-main-wrapper');
-        const zoomBtn = document.querySelector('.gallery__zoom-btn');
-        const thumbs = document.querySelectorAll('.gallery__thumb');
 
-        if (!lightbox || !mainImageWrapper) return;
+        // Get thumbs from hidden container (for full gallery) or visible thumbs
+        const hiddenThumbs = document.querySelectorAll('.gallery-compact__hidden .gallery__thumb');
+        const thumbs = hiddenThumbs.length > 0 ? hiddenThumbs : document.querySelectorAll('.gallery__thumb');
+
+        if (!lightbox) return;
 
         // Collect unique images for lightbox
         const uniqueImages = [];
@@ -91,25 +93,23 @@
             updateLightboxImage();
         }
 
-        // Open lightbox on main image click
-        mainImageWrapper.addEventListener('click', (e) => {
-            if (e.target.closest('.gallery__video-btn')) return;
-            const mainImg = document.getElementById('gallery-main');
-            const currentSrc = mainImg ? mainImg.src : '';
-            const index = uniqueImages.findIndex(src => currentSrc.includes(src.replace(/^\//, '')));
-            openLightbox(index >= 0 ? index : 0);
-        });
-
-        // Open lightbox on zoom button click
-        if (zoomBtn) {
-            zoomBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const mainImg = document.getElementById('gallery-main');
-                const currentSrc = mainImg ? mainImg.src : '';
-                const index = uniqueImages.findIndex(src => currentSrc.includes(src.replace(/^\//, '')));
-                openLightbox(index >= 0 ? index : 0);
+        // Open lightbox on main image click (compact gallery)
+        if (mainImageWrapper) {
+            mainImageWrapper.addEventListener('click', (e) => {
+                // Don't open lightbox if clicking video button
+                if (e.target.closest('.gallery-compact__video-btn') || e.target.closest('.gallery__video-btn')) return;
+                openLightbox(0);
             });
         }
+
+        // Open lightbox on compact gallery thumbs
+        const compactThumbs = document.querySelectorAll('.gallery-compact__thumb');
+        compactThumbs.forEach(thumb => {
+            thumb.addEventListener('click', () => {
+                const index = parseInt(thumb.dataset.index) || 0;
+                openLightbox(index);
+            });
+        });
 
         // Close button
         const closeBtn = lightbox.querySelector('.lightbox__close');
