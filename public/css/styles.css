@@ -3463,32 +3463,32 @@ a {
 
 .gallery-compact__video-btn {
     position: absolute;
-    top: var(--space-sm);
-    left: var(--space-sm);
-    display: flex;
+    top: var(--space-md);
+    left: var(--space-md);
+    display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 10px 16px;
-    background: rgba(0, 119, 255, 0.9);
+    gap: 6px;
+    padding: 8px 14px;
+    font-family: var(--font-main);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-white);
+    background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(4px);
     border: none;
-    border-radius: var(--radius-md);
-    color: var(--color-white);
-    font-size: 0.875rem;
-    font-weight: 600;
+    border-radius: var(--radius-sm);
     cursor: pointer;
     transition: all var(--transition);
-    box-shadow: 0 4px 12px rgba(0, 119, 255, 0.3);
-}
-
-.gallery-compact__video-btn:hover {
-    background: rgba(0, 100, 220, 1);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 119, 255, 0.4);
 }
 
 .gallery-compact__video-btn svg {
+    color: #0077FF;
     flex-shrink: 0;
+}
+
+.gallery-compact__video-btn:hover {
+    background: rgba(0, 0, 0, 0.85);
+    transform: translateY(-2px);
 }
 
 .gallery-compact__grid {
@@ -3552,18 +3552,24 @@ a {
     opacity: 0.9;
 }
 
-/* Desktop: Main image larger, grid beside it - heights must match */
+/* Desktop: Main image larger, grid beside it - fixed height container */
 @media (min-width: 768px) {
     .gallery-compact {
+        display: grid;
         grid-template-columns: 2fr 1fr;
-        grid-template-rows: 1fr;
-        align-items: stretch;
         gap: var(--space-sm);
+        height: 420px;
     }
 
     .gallery-compact__main {
-        aspect-ratio: 4 / 3;
-        height: auto;
+        height: 100%;
+        aspect-ratio: unset;
+    }
+
+    .gallery-compact__main img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 
     .gallery-compact__grid {
@@ -3575,7 +3581,7 @@ a {
     }
 
     .gallery-compact__thumb {
-        aspect-ratio: auto;
+        aspect-ratio: unset;
         height: 100%;
         min-height: 0;
     }
@@ -3592,6 +3598,12 @@ a {
 
     .gallery-compact__more-text {
         font-size: 0.8125rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .gallery-compact {
+        height: 480px;
     }
 }
 
