@@ -501,11 +501,17 @@
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">Расходы по кампаниям</span>
-                    <div class="filters" style="margin:0">
+                    <div class="filters" style="margin:0;gap:8px">
                         <select id="filter-year" onchange="loadAnalytics()">
                             <option value="">Все годы</option>
                             <option value="2024">2024</option>
                             <option value="2025">2025</option>
+                        </select>
+                        <select id="filter-month-from" onchange="loadAnalytics()">
+                            <option value="">С начала</option>
+                        </select>
+                        <select id="filter-month-to" onchange="loadAnalytics()">
+                            <option value="">До конца</option>
                         </select>
                     </div>
                 </div>
@@ -522,10 +528,6 @@
             <h1>Сделки из AmoCRM</h1>
             <p class="subtitle">Все сделки со статусом «заявка оформлена»</p>
 
-            <div class="alert alert-info">
-                В аналитику попадают заказы где utm_source содержит «yandex» и есть ID кампании
-            </div>
-
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">Фильтры</span>
@@ -537,18 +539,21 @@
                             <label>UTM Source</label>
                             <select id="filter-source" onchange="filterLeads()">
                                 <option value="">Все</option>
+                                <option value="__empty__">Без метки</option>
                             </select>
                         </div>
                         <div class="filter-group">
                             <label>UTM Medium</label>
                             <select id="filter-medium" onchange="filterLeads()">
                                 <option value="">Все</option>
+                                <option value="__empty__">Без метки</option>
                             </select>
                         </div>
                         <div class="filter-group">
                             <label>UTM Campaign</label>
                             <select id="filter-campaign" onchange="filterLeads()">
                                 <option value="">Все</option>
+                                <option value="__empty__">Без метки</option>
                             </select>
                         </div>
                         <div class="filter-group">
@@ -697,7 +702,18 @@
         <!-- Logs -->
         <section id="logs" class="section">
             <h1>Логи</h1>
-            <p class="subtitle">История синхронизаций</p>
+            <p class="subtitle">История синхронизаций данных</p>
+
+            <div class="card" style="margin-bottom:16px">
+                <div class="card-body" style="padding:16px 20px">
+                    <p style="font-size:13px;color:#86868b;line-height:1.6;margin:0">
+                        Здесь отображаются операции загрузки данных из внешних систем.
+                        <b>yandex_expenses</b> — расходы на рекламу из Яндекс.Директ.
+                        <b>crm_leads</b> — сделки из AmoCRM.
+                        Статус «OK» означает успешную загрузку, число — количество обработанных записей.
+                    </p>
+                </div>
+            </div>
 
             <div class="card">
                 <div class="card-header">
@@ -837,7 +853,15 @@
         // Analytics
         async function loadAnalytics() {
             const year = document.getElementById('filter-year').value;
-            const data = await api('/api/analytics' + (year ? '?year=' + year : ''));
+            const monthFrom = document.getElementById('filter-month-from').value;
+            const monthTo = document.getElementById('filter-month-to').value;
+
+            let params = [];
+            if (year) params.push('year=' + year);
+            if (monthFrom) params.push('month_from=' + monthFrom);
+            if (monthTo) params.push('month_to=' + monthTo);
+
+            const data = await api('/api/analytics' + (params.length ? '?' + params.join('&') : ''));
 
             if (!data.success) {
                 document.getElementById('analytics-table').innerHTML = `<div class="alert alert-error">${data.error}</div>`;
@@ -913,21 +937,27 @@
         function fillSelect(id, values) {
             const sel = document.getElementById(id);
             const cur = sel.value;
-            sel.innerHTML = '<option value="">Все</option>';
+            sel.innerHTML = '<option value="">Все</option><option value="__empty__">Без метки</option>';
             [...values].sort().forEach(v => sel.innerHTML += `<option value="${v}">${v}</option>`);
             sel.value = cur;
         }
 
         function filterLeads() {
-            const source = document.getElementById('filter-source').value.toLowerCase();
-            const medium = document.getElementById('filter-medium').value.toLowerCase();
-            const campaign = document.getElementById('filter-campaign').value.toLowerCase();
+            const source = document.getElementById('filter-source').value;
+            const medium = document.getElementById('filter-medium').value;
+            const campaign = document.getElementById('filter-campaign').value;
             const yandex = document.getElementById('filter-yandex').value;
 
             const filtered = allLeads.filter(l => {
-                if (source && (l.utm_source || '').toLowerCase() !== source) return false;
-                if (medium && (l.utm_medium || '').toLowerCase() !== medium) return false;
-                if (campaign && (l.utm_campaign || '').toLowerCase() !== campaign) return false;
+                // Фильтр "Без метки"
+                if (source === '__empty__' && l.utm_source) return false;
+                if (medium === '__empty__' && l.utm_medium) return false;
+                if (campaign === '__empty__' && l.utm_campaign) return false;
+
+                // Обычные фильтры
+                if (source && source !== '__empty__' && (l.utm_source || '').toLowerCase() !== source.toLowerCase()) return false;
+                if (medium && medium !== '__empty__' && (l.utm_medium || '').toLowerCase() !== medium.toLowerCase()) return false;
+                if (campaign && campaign !== '__empty__' && (l.utm_campaign || '').toLowerCase() !== campaign.toLowerCase()) return false;
 
                 const isY = (l.utm_source || '').toLowerCase().includes('yandex') && l.extracted_campaign_id;
                 if (yandex === 'yes' && !isY) return false;
@@ -1043,32 +1073,42 @@
             }
 
             if (!data.logs?.length) {
-                document.getElementById('logs-container').innerHTML = '<div class="empty">Нет логов</div>';
+                document.getElementById('logs-container').innerHTML = '<div class="empty">Нет логов синхронизации</div>';
                 return;
             }
 
-            let html = '';
+            let html = '<table style="width:100%"><thead><tr><th>Дата и время</th><th>Тип</th><th>Статус</th><th>Записей</th></tr></thead><tbody>';
             data.logs.forEach(l => {
-                html += `<div class="log">
-                    <span class="log-time">${date(l.created_at)}</span>
-                    <span class="log-type"><span class="tag">${l.sync_type}</span></span>
-                    <span>${l.status === 'success' ? 'OK' : l.status === 'error' ? 'Ошибка' : 'В процессе'} — ${l.records_count} записей${l.error_message ? ` — ${l.error_message}` : ''}</span>
-                </div>`;
+                const statusClass = l.status === 'success' ? 'tag-green' : l.status === 'error' ? 'tag-orange' : 'tag-blue';
+                const statusText = l.status === 'success' ? 'OK' : l.status === 'error' ? 'Ошибка' : 'В процессе';
+                const records = l.records_count != null ? l.records_count : '—';
+                html += `<tr>
+                    <td>${date(l.created_at)}</td>
+                    <td><span class="tag">${l.sync_type}</span></td>
+                    <td><span class="tag ${statusClass}">${statusText}</span></td>
+                    <td>${records}${l.error_message ? ` <span style="color:#c62828">${l.error_message}</span>` : ''}</td>
+                </tr>`;
             });
+            html += '</tbody></table>';
             document.getElementById('logs-container').innerHTML = html;
         }
 
         // Broadcasts
         async function loadBroadcastChats() {
             const data = await api('/api/chats');
-            if (!data.success) return;
+            if (!data.success) {
+                document.getElementById('broadcast-list').innerHTML = `<div class="alert alert-error">${data.error}</div>`;
+                return;
+            }
 
             let html = '';
             (data.chats || []).forEach(c => {
-                const sel = selectedChats.has(c.chat_id);
-                html += `<div class="chat-item ${sel ? 'selected' : ''}" onclick="toggleChat('${c.chat_id}')">
-                    <div class="chat-avatar">${(c.first_name || c.username || '?')[0].toUpperCase()}</div>
-                    <div><div class="chat-name">${c.first_name || ''} ${c.last_name || ''}</div><div class="chat-sub">@${c.username || '—'}</div></div>
+                const sel = selectedChats.has(String(c.chat_id));
+                const checkmark = sel ? '<span style="margin-left:auto;color:#34c759;font-size:18px">✓</span>' : '';
+                html += `<div class="chat-item ${sel ? 'selected' : ''}" onclick="toggleChat('${c.chat_id}')" style="display:flex;align-items:center">
+                    <div class="chat-avatar" style="${sel ? 'background:#34c759' : ''}">${(c.first_name || c.username || '?')[0].toUpperCase()}</div>
+                    <div style="flex:1"><div class="chat-name">${c.first_name || ''} ${c.last_name || ''}</div><div class="chat-sub">@${c.username || '—'}</div></div>
+                    ${checkmark}
                 </div>`;
             });
             document.getElementById('broadcast-list').innerHTML = html || '<div class="empty">Нет чатов</div>';
@@ -1076,14 +1116,15 @@
         }
 
         function toggleChat(id) {
+            id = String(id);
             selectedChats.has(id) ? selectedChats.delete(id) : selectedChats.add(id);
             loadBroadcastChats();
         }
 
         function selectAll() {
             document.querySelectorAll('#broadcast-list .chat-item').forEach(el => {
-                const id = el.getAttribute('onclick').match(/'(.+)'/)[1];
-                selectedChats.add(id);
+                const match = el.getAttribute('onclick')?.match(/'(.+)'/);
+                if (match) selectedChats.add(String(match[1]));
             });
             loadBroadcastChats();
         }
@@ -1102,13 +1143,17 @@
         // Chats
         async function loadChats() {
             const data = await api('/api/chats');
-            if (!data.success) return;
+            if (!data.success) {
+                document.getElementById('chats-list').innerHTML = `<div class="alert alert-error">${data.error}</div>`;
+                return;
+            }
 
             let html = '';
             (data.chats || []).forEach(c => {
-                html += `<div class="chat-item" onclick="openChat('${c.chat_id}', '${c.first_name || ''} ${c.last_name || ''}')">
+                const name = `${c.first_name || ''} ${c.last_name || ''}`.trim();
+                html += `<div class="chat-item" onclick="openChat('${c.chat_id}', '${name.replace(/'/g, "\\'")}')">
                     <div class="chat-avatar">${(c.first_name || c.username || '?')[0].toUpperCase()}</div>
-                    <div><div class="chat-name">${c.first_name || ''} ${c.last_name || ''}</div><div class="chat-sub">@${c.username || '—'}</div></div>
+                    <div><div class="chat-name">${name || 'Без имени'}</div><div class="chat-sub">@${c.username || '—'}</div></div>
                 </div>`;
             });
             document.getElementById('chats-list').innerHTML = html || '<div class="empty">Нет чатов</div>';
@@ -1120,7 +1165,13 @@
 
             const data = await api(`/api/chats/${id}/messages`);
             if (!data.success) {
-                document.getElementById('chat-messages').innerHTML = `<div class="alert alert-error">${data.error}</div>`;
+                // Показываем понятное сообщение если таблица не создана
+                const isTableMissing = data.error?.includes('messages') || data.error?.includes('schema');
+                if (isTableMissing) {
+                    document.getElementById('chat-messages').innerHTML = '<div class="empty" style="padding:20px"><p style="margin-bottom:8px">История сообщений пока недоступна</p><p style="font-size:12px;color:#86868b">Для работы чатов требуется таблица messages в базе данных</p></div>';
+                } else {
+                    document.getElementById('chat-messages').innerHTML = `<div class="alert alert-error">${data.error}</div>`;
+                }
                 return;
             }
 
@@ -1133,11 +1184,22 @@
 
         // Init
         const months = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+        const monthsShort = ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'];
         const now = new Date();
+
+        // Sync month selectors
         ['yandex-month', 'amo-month', 'full-month'].forEach(id => {
             const sel = document.getElementById(id);
             months.forEach((m, i) => sel.innerHTML += `<option value="${i + 1}">${m}</option>`);
             sel.value = now.getMonth() + 1;
+        });
+
+        // Analytics period filters
+        ['filter-month-from', 'filter-month-to'].forEach(id => {
+            const sel = document.getElementById(id);
+            const isFrom = id.includes('from');
+            sel.innerHTML = `<option value="">${isFrom ? 'С начала' : 'До конца'}</option>`;
+            monthsShort.forEach((m, i) => sel.innerHTML += `<option value="${i + 1}">${m}</option>`);
         });
 
         // Check auth on page load

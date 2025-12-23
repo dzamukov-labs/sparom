@@ -2349,7 +2349,7 @@ app.get('/api/analytics', async (req, res) => {
     if (!checkYandexAuth(req, res)) return;
     if (!supabase) return res.json({ success: false, error: 'Supabase not configured' });
 
-    const { year, campaign_ids } = req.query;
+    const { year, campaign_ids, month_from, month_to } = req.query;
 
     try {
         // Получаем расходы
@@ -2361,6 +2361,14 @@ app.get('/api/analytics', async (req, res) => {
 
         if (year) {
             expensesQuery = expensesQuery.eq('year', parseInt(year, 10));
+        }
+
+        if (month_from) {
+            expensesQuery = expensesQuery.gte('month', parseInt(month_from, 10));
+        }
+
+        if (month_to) {
+            expensesQuery = expensesQuery.lte('month', parseInt(month_to, 10));
         }
 
         if (campaign_ids) {
@@ -2380,11 +2388,24 @@ app.get('/api/analytics', async (req, res) => {
         if (leadsError) throw leadsError;
 
         // Фильтруем лиды: utm_source должен содержать 'yandex' (case-insensitive)
-        // и статус должен быть 'заявка оформлена'
+        // и статус должен быть 'заявка оформлена', и по периоду если указан
         const leads = (allLeads || []).filter(lead => {
             const source = (lead.utm_source || '').toLowerCase();
             const status = (lead.status_name || '').toLowerCase();
-            return source.includes('yandex') && status === 'заявка оформлена';
+            if (!source.includes('yandex') || status !== 'заявка оформлена') return false;
+
+            // Фильтр по периоду
+            if (year || month_from || month_to) {
+                const date = new Date(lead.lead_created_at);
+                const leadYear = date.getFullYear();
+                const leadMonth = date.getMonth() + 1;
+
+                if (year && leadYear !== parseInt(year, 10)) return false;
+                if (month_from && leadMonth < parseInt(month_from, 10)) return false;
+                if (month_to && leadMonth > parseInt(month_to, 10)) return false;
+            }
+
+            return true;
         });
 
         // Агрегируем лиды (заказы) по кампаниям и месяцам
