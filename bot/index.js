@@ -261,6 +261,46 @@ bot.on('text', async (ctx) => {
     );
 });
 
+// Обработка голосовых сообщений
+bot.on('voice', async (ctx) => {
+    await saveUser(ctx);
+    const duration = ctx.message.voice.duration;
+    await saveMessage(ctx.from.id, 'in', `[Голосовое сообщение, ${duration} сек]`);
+    await logAction(ctx, 'voice', { duration });
+
+    await ctx.reply(
+        '🎤 Получили ваше голосовое сообщение! Мы прослушаем и ответим в ближайшее время.',
+        mainMenu()
+    );
+});
+
+// Обработка фото
+bot.on('photo', async (ctx) => {
+    await saveUser(ctx);
+    const caption = ctx.message.caption || '';
+    await saveMessage(ctx.from.id, 'in', `[Фото]${caption ? ' ' + caption : ''}`);
+    await logAction(ctx, 'photo', { caption });
+
+    await ctx.reply('📷 Фото получено! Спасибо.', mainMenu());
+});
+
+// Обработка видео
+bot.on('video', async (ctx) => {
+    await saveUser(ctx);
+    await saveMessage(ctx.from.id, 'in', '[Видео]');
+    await logAction(ctx, 'video', {});
+    await ctx.reply('🎬 Видео получено! Спасибо.', mainMenu());
+});
+
+// Обработка документов
+bot.on('document', async (ctx) => {
+    await saveUser(ctx);
+    const fileName = ctx.message.document.file_name || 'файл';
+    await saveMessage(ctx.from.id, 'in', `[Документ: ${fileName}]`);
+    await logAction(ctx, 'document', { file_name: fileName });
+    await ctx.reply('📎 Документ получен! Спасибо.', mainMenu());
+});
+
 // Express для админки и webhook
 const app = express();
 app.use(cors());
@@ -2474,15 +2514,31 @@ app.get('/api/analytics', async (req, res) => {
                 : null;
         }
 
+        // Собираем уникальные месяцы для заголовков
+        const monthsSet = new Set();
+        for (const expense of expenses || []) {
+            monthsSet.add(`${expense.month}/${expense.year % 100}`);
+        }
+        const months = [...monthsSet].sort((a, b) => {
+            const [am, ay] = a.split('/').map(Number);
+            const [bm, by] = b.split('/').map(Number);
+            return (ay - by) || (am - bm);
+        });
+
+        const totalCost = analytics.reduce((sum, r) => sum + r.cost, 0);
+        const totalLeads = analytics.reduce((sum, r) => sum + r.leads, 0);
+
         res.json({
             success: true,
             campaigns: Array.from(campaignsMap.values()),
+            months,
             details: analytics,
             totals,
             summary: {
-                total_cost: analytics.reduce((sum, r) => sum + r.cost, 0),
-                total_leads: analytics.reduce((sum, r) => sum + r.leads, 0),
-                periods: [...new Set(analytics.map(r => `${r.month}/${r.year}`))].length
+                total_cost: totalCost,
+                total_leads: totalLeads,
+                avg_cpl: totalLeads > 0 ? Math.round(totalCost / totalLeads) : null,
+                periods: months.length
             }
         });
 

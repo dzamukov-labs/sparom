@@ -452,7 +452,10 @@
 <body>
     <!-- Login Form -->
     <div id="login-overlay" class="login-overlay">
-        <div class="login-box">
+        <div id="login-loading" class="login-box" style="padding:60px">
+            <div class="loading"><div class="spinner"></div></div>
+        </div>
+        <div id="login-form" class="login-box" style="display:none">
             <h2>СтройГлобал</h2>
             <p>Введите ключ доступа</p>
             <div id="login-error" class="login-error">Неверный ключ доступа</div>
@@ -585,10 +588,12 @@
             <h1>Синхронизация</h1>
             <p class="subtitle">Загрузка данных из внешних систем</p>
 
+            <div id="sync-result" style="margin-bottom:16px"></div>
+
             <div class="sync-grid">
                 <div class="sync-card">
                     <h3>Яндекс.Директ</h3>
-                    <p>Загружает расходы по рекламным кампаниям за выбранный месяц из API Яндекс.Директ</p>
+                    <p>Загружает расходы по рекламным кампаниям за выбранный месяц</p>
                     <div class="sync-options">
                         <select id="yandex-year">
                             <option value="2024">2024</option>
@@ -601,7 +606,7 @@
 
                 <div class="sync-card">
                     <h3>AmoCRM</h3>
-                    <p>Загружает сделки со статусом «заявка оформлена» за выбранный месяц из API AmoCRM</p>
+                    <p>Загружает сделки со статусом «заявка оформлена» за выбранный месяц</p>
                     <div class="sync-options">
                         <select id="amo-year">
                             <option value="2024">2024</option>
@@ -614,7 +619,7 @@
 
                 <div class="sync-card">
                     <h3>Полная синхронизация</h3>
-                    <p>Загружает все данные за период: сначала расходы из Яндекс, затем сделки из AmoCRM</p>
+                    <p>Загружает все данные: расходы из Яндекс + сделки из AmoCRM</p>
                     <div class="sync-options">
                         <select id="full-year">
                             <option value="2024">С 2024</option>
@@ -790,14 +795,25 @@
             AUTH = null;
             document.getElementById('admin-content').classList.remove('visible');
             document.getElementById('login-overlay').classList.remove('hidden');
+            document.getElementById('login-loading').style.display = 'none';
+            document.getElementById('login-form').style.display = 'block';
             document.getElementById('login-error').style.display = 'none';
             document.getElementById('login-input').value = '';
+        }
+
+        // Show login form (after loading check)
+        function showLoginForm() {
+            document.getElementById('login-loading').style.display = 'none';
+            document.getElementById('login-form').style.display = 'block';
         }
 
         // Check saved auth on load
         async function checkAuth() {
             const saved = localStorage.getItem('admin_key');
-            if (!saved) return;
+            if (!saved) {
+                showLoginForm();
+                return;
+            }
 
             try {
                 const res = await fetch('/api/analytics', {
@@ -809,9 +825,11 @@
                     showAdmin();
                 } else {
                     localStorage.removeItem('admin_key');
+                    showLoginForm();
                 }
             } catch (e) {
                 localStorage.removeItem('admin_key');
+                showLoginForm();
             }
         }
 
@@ -981,6 +999,11 @@
             renderLeads(filtered);
         }
 
+        function shortDate(d) {
+            if (!d) return '—';
+            return new Date(d).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: '2-digit' });
+        }
+
         function renderLeads(leads) {
             if (!leads.length) {
                 document.getElementById('leads-table').innerHTML = '<div class="empty">Нет сделок</div>';
@@ -990,8 +1013,9 @@
             let html = `<table><thead><tr>
                 <th class="sortable" onclick="sortLeads('lead_id')">ID</th>
                 <th class="sortable" onclick="sortLeads('lead_name')">Название</th>
-                <th class="sortable" onclick="sortLeads('lead_created_at')">Дата</th>
-                <th>Source</th><th>Medium</th><th>Campaign</th><th>ID кампании</th><th>В Яндекс</th>
+                <th class="sortable" onclick="sortLeads('lead_created_at')">Создан</th>
+                <th class="sortable" onclick="sortLeads('lead_closed_at')">Закрыт</th>
+                <th>Source</th><th>Campaign</th><th>ID</th><th>В Яндекс</th>
             </tr></thead><tbody>`;
 
             leads.forEach(l => {
@@ -999,9 +1023,9 @@
                 html += `<tr>
                     <td><code>${l.lead_id}</code></td>
                     <td>${l.lead_name || '—'}</td>
-                    <td>${date(l.lead_created_at)}</td>
+                    <td>${shortDate(l.lead_created_at)}</td>
+                    <td>${shortDate(l.lead_closed_at)}</td>
                     <td>${l.utm_source ? `<span class="tag">${l.utm_source}</span>` : '—'}</td>
-                    <td>${l.utm_medium ? `<span class="tag">${l.utm_medium}</span>` : '—'}</td>
                     <td>${l.utm_campaign ? `<span class="tag">${l.utm_campaign}</span>` : '—'}</td>
                     <td>${l.extracted_campaign_id ? `<code>${l.extracted_campaign_id}</code>` : '—'}</td>
                     <td>${isY ? '<span class="tag tag-green">Да</span>' : '<span class="tag tag-orange">Нет</span>'}</td>
@@ -1026,35 +1050,42 @@
         }
 
         // Sync
+        function showSyncResult(msg, type) {
+            document.getElementById('sync-result').innerHTML = `<div class="alert alert-${type}">${msg}</div>`;
+        }
+
         async function syncYandex() {
-            showResult('Синхронизация Яндекс...', 'info');
+            showSyncResult('Синхронизация Яндекс...', 'info');
             const data = await api('/api/sync/yandex-expenses', {
                 method: 'POST',
                 body: JSON.stringify({ year: +document.getElementById('yandex-year').value, month: +document.getElementById('yandex-month').value })
             });
-            showResult(data.success ? `Загружено ${data.records} записей` : `Ошибка: ${data.error}`, data.success ? 'success' : 'error');
+            showSyncResult(data.success ? `Яндекс: загружено ${data.records || 0} записей` : `Ошибка: ${data.error}`, data.success ? 'success' : 'error');
+            if (data.success) loadSyncStatus();
         }
 
         async function syncAmo() {
-            showResult('Синхронизация AmoCRM...', 'info');
+            showSyncResult('Синхронизация AmoCRM...', 'info');
             const data = await api('/api/sync/crm-leads', {
                 method: 'POST',
                 body: JSON.stringify({ year: +document.getElementById('amo-year').value, month: +document.getElementById('amo-month').value })
             });
-            showResult(data.success ? `Загружено ${data.records} сделок` : `Ошибка: ${data.error}`, data.success ? 'success' : 'error');
+            showSyncResult(data.success ? `AmoCRM: загружено ${data.records || 0} сделок` : `Ошибка: ${data.error}`, data.success ? 'success' : 'error');
+            if (data.success) loadSyncStatus();
         }
 
         async function syncFull() {
-            showResult('Полная синхронизация... Это займёт несколько минут', 'info');
+            showSyncResult('Полная синхронизация... Это займёт несколько минут', 'info');
             const data = await api('/api/sync/full', {
                 method: 'POST',
                 body: JSON.stringify({ year_from: +document.getElementById('full-year').value, month_from: +document.getElementById('full-month').value })
             });
             if (data.success) {
-                showResult(`Готово! Яндекс: ${data.yandex_total}, AmoCRM: ${data.amo_total}`, 'success');
+                showSyncResult(`Готово! Яндекс: ${data.yandex_total || 0} записей, AmoCRM: ${data.amo_total || 0} сделок`, 'success');
+                loadSyncStatus();
                 loadAnalytics();
             } else {
-                showResult(`Ошибка: ${data.error}`, 'error');
+                showSyncResult(`Ошибка: ${data.error}`, 'error');
             }
         }
 
@@ -1122,7 +1153,7 @@
                 const statusText = l.status === 'success' ? 'OK' : l.status === 'error' ? 'Ошибка' : 'В процессе';
                 const records = l.records_count != null ? l.records_count : '—';
                 html += `<tr>
-                    <td>${date(l.created_at)}</td>
+                    <td>${date(l.started_at || l.finished_at)}</td>
                     <td><span class="tag">${l.sync_type}</span></td>
                     <td><span class="tag ${statusClass}">${statusText}</span></td>
                     <td>${records}${l.error_message ? ` <span style="color:#c62828">${l.error_message}</span>` : ''}</td>
