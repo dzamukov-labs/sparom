@@ -404,22 +404,35 @@ app.get('/api/messages/:telegram_id', async (req, res) => {
 
 // API: Рассылка всем
 app.post('/api/broadcast', async (req, res) => {
-    const { password, message } = req.body;
+    const { password, message, chat_ids } = req.body;
+    const headerKey = req.headers['x-yandex-key'];
+    const decodedHeaderKey = headerKey ? decodeBase64(headerKey) : null;
 
-    if (password !== ADMIN_PASSWORD) {
+    if (decodedHeaderKey !== ADMIN_PASSWORD && headerKey !== ADMIN_PASSWORD && password !== ADMIN_PASSWORD) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    if (!supabase) {
-        return res.status(400).json({ error: 'Supabase not configured' });
+    if (!message) {
+        return res.status(400).json({ error: 'Message is required' });
     }
 
-    const { data: users } = await supabase.from('bot_users').select('telegram_id');
+    let recipients;
+
+    if (chat_ids && chat_ids.length > 0) {
+        // Рассылка выбранным пользователям
+        recipients = chat_ids.map(id => ({ telegram_id: id }));
+    } else if (supabase) {
+        // Рассылка всем пользователям из базы
+        const { data } = await supabase.from('bot_users').select('telegram_id');
+        recipients = data || [];
+    } else {
+        return res.status(400).json({ error: 'No recipients specified and Supabase not configured' });
+    }
 
     let sent = 0;
     let failed = 0;
 
-    for (const user of users || []) {
+    for (const user of recipients) {
         try {
             await bot.telegram.sendMessage(user.telegram_id, message);
             sent++;
@@ -430,7 +443,7 @@ app.post('/api/broadcast', async (req, res) => {
         await new Promise(r => setTimeout(r, 50));
     }
 
-    res.json({ sent, failed, total: users?.length || 0 });
+    res.json({ success: true, sent, failed, total: recipients.length });
 });
 
 // Health check
@@ -681,13 +694,25 @@ app.get('/api/yandex-test', async (req, res) => {
 // ПОЛНЫЙ API ЯНДЕКС.ДИРЕКТ - ВСЕ ВОЗМОЖНОСТИ
 // ============================================
 
+// Декодирование Base64 (для поддержки кириллицы в паролях)
+function decodeBase64(str) {
+    try {
+        return decodeURIComponent(escape(Buffer.from(str, 'base64').toString('binary')));
+    } catch (e) {
+        return str; // Если не Base64, возвращаем как есть
+    }
+}
+
 // Проверка авторизации для Яндекс API
 function checkYandexAuth(req, res) {
     const headerKey = req.headers['x-yandex-key'];
     const queryKey = req.query.password;
     const bodyKey = req.body?.password;
 
-    if (headerKey !== ADMIN_PASSWORD && queryKey !== ADMIN_PASSWORD && bodyKey !== ADMIN_PASSWORD) {
+    // Декодируем headerKey если он в Base64
+    const decodedHeaderKey = headerKey ? decodeBase64(headerKey) : null;
+
+    if (decodedHeaderKey !== ADMIN_PASSWORD && headerKey !== ADMIN_PASSWORD && queryKey !== ADMIN_PASSWORD && bodyKey !== ADMIN_PASSWORD) {
         res.status(401).json({ error: 'Unauthorized' });
         return false;
     }
@@ -2494,13 +2519,23 @@ app.get('/api/chats', async (req, res) => {
 
     try {
         const { data, error } = await supabase
-            .from('users')
-            .select('chat_id, telegram_id, username, first_name, last_name, created_at')
-            .order('created_at', { ascending: false });
+            .from('bot_users')
+            .select('telegram_id, username, first_name, last_name, updated_at')
+            .order('updated_at', { ascending: false });
 
         if (error) throw error;
 
-        res.json({ success: true, chats: data || [] });
+        // Маппим telegram_id в chat_id для совместимости с фронтом
+        const chats = (data || []).map(u => ({
+            chat_id: u.telegram_id,
+            telegram_id: u.telegram_id,
+            username: u.username,
+            first_name: u.first_name,
+            last_name: u.last_name,
+            created_at: u.updated_at
+        }));
+
+        res.json({ success: true, chats });
     } catch (err) {
         res.json({ success: false, error: err.message });
     }

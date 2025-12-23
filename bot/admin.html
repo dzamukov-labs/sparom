@@ -380,9 +380,88 @@
             .chat-layout { grid-template-columns: 1fr; }
             .stats { grid-template-columns: 1fr 1fr; }
         }
+
+        /* Login */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #f5f5f7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .login-box {
+            background: #fff;
+            border-radius: 16px;
+            padding: 40px;
+            width: 100%;
+            max-width: 360px;
+            text-align: center;
+        }
+
+        .login-box h2 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .login-box p {
+            color: #86868b;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d2d2d7;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            margin-bottom: 16px;
+        }
+
+        .login-box input:focus {
+            outline: none;
+            border-color: #0071e3;
+        }
+
+        .login-box .btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 15px;
+        }
+
+        .login-error {
+            color: #c62828;
+            font-size: 13px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .admin-content { display: none; }
+        .admin-content.visible { display: block; }
+        .login-overlay.hidden { display: none; }
     </style>
 </head>
 <body>
+    <!-- Login Form -->
+    <div id="login-overlay" class="login-overlay">
+        <div class="login-box">
+            <h2>СтройГлобал</h2>
+            <p>Введите ключ доступа</p>
+            <div id="login-error" class="login-error">Неверный ключ доступа</div>
+            <input type="password" id="login-input" placeholder="Ключ доступа" autocomplete="current-password">
+            <button class="btn btn-primary" onclick="tryLogin()">Войти</button>
+        </div>
+    </div>
+
+    <div id="admin-content" class="admin-content">
     <div class="container">
         <nav class="nav">
             <div class="nav-item active" data-section="analytics">Аналитика</div>
@@ -391,6 +470,8 @@
             <div class="nav-item" data-section="broadcasts">Рассылки</div>
             <div class="nav-item" data-section="chats">Чаты</div>
             <div class="nav-item" data-section="logs">Логи</div>
+            <div style="flex:1"></div>
+            <div class="nav-item" onclick="logout()" style="color:#c62828">Выйти</div>
         </nav>
 
         <!-- Analytics -->
@@ -629,13 +710,89 @@
             </div>
         </section>
     </div>
+    </div>
 
     <script>
-        const AUTH = localStorage.getItem('admin_key') || prompt('Ключ доступа:');
-        if (AUTH) localStorage.setItem('admin_key', AUTH);
-
+        let AUTH = null;
         let allLeads = [];
         let selectedChats = new Set();
+
+        // Base64 encode for HTTP headers (supports Cyrillic)
+        function encodeKey(str) {
+            return btoa(unescape(encodeURIComponent(str)));
+        }
+
+        // Login functions
+        async function tryLogin() {
+            const input = document.getElementById('login-input');
+            const key = input.value.trim();
+            if (!key) return;
+
+            const encoded = encodeKey(key);
+
+            try {
+                const res = await fetch('/api/analytics', {
+                    headers: { 'Content-Type': 'application/json', 'X-Yandex-Key': encoded }
+                });
+
+                if (res.ok) {
+                    AUTH = encoded;
+                    localStorage.setItem('admin_key', encoded);
+                    showAdmin();
+                } else {
+                    showLoginError();
+                }
+            } catch (e) {
+                showLoginError();
+            }
+        }
+
+        function showLoginError() {
+            document.getElementById('login-error').style.display = 'block';
+            document.getElementById('login-input').value = '';
+            document.getElementById('login-input').focus();
+        }
+
+        function showAdmin() {
+            document.getElementById('login-overlay').classList.add('hidden');
+            document.getElementById('admin-content').classList.add('visible');
+            loadAnalytics();
+        }
+
+        function logout() {
+            localStorage.removeItem('admin_key');
+            AUTH = null;
+            document.getElementById('admin-content').classList.remove('visible');
+            document.getElementById('login-overlay').classList.remove('hidden');
+            document.getElementById('login-error').style.display = 'none';
+            document.getElementById('login-input').value = '';
+        }
+
+        // Check saved auth on load
+        async function checkAuth() {
+            const saved = localStorage.getItem('admin_key');
+            if (!saved) return;
+
+            try {
+                const res = await fetch('/api/analytics', {
+                    headers: { 'Content-Type': 'application/json', 'X-Yandex-Key': saved }
+                });
+
+                if (res.ok) {
+                    AUTH = saved;
+                    showAdmin();
+                } else {
+                    localStorage.removeItem('admin_key');
+                }
+            } catch (e) {
+                localStorage.removeItem('admin_key');
+            }
+        }
+
+        // Enter key for login
+        document.getElementById('login-input').addEventListener('keypress', e => {
+            if (e.key === 'Enter') tryLogin();
+        });
 
         // Navigation
         document.querySelectorAll('.nav-item').forEach(item => {
@@ -983,7 +1140,8 @@
             sel.value = now.getMonth() + 1;
         });
 
-        loadAnalytics();
+        // Check auth on page load
+        checkAuth();
     </script>
 </body>
 </html>
