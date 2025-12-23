@@ -55,6 +55,7 @@ html {
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
 }
 
 body {
@@ -63,6 +64,7 @@ body {
     line-height: 1.6;
     color: var(--color-text);
     background-color: var(--color-bg);
+    overflow-x: hidden;
 }
 
 img {
@@ -3499,16 +3501,19 @@ a {
     line-height: 1.6;
 }
 
-/* About Stats - Bento Grid (merged with Hero) */
+/* About Stats - Unified Seamless Grid */
 .about-stats {
-    padding: 0 0 var(--space-3xl);
+    padding: 0 0 var(--space-2xl);
     background: transparent;
 }
 
 .bento-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-md);
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
 }
 
 .bento-card {
@@ -3517,13 +3522,22 @@ a {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    min-height: 120px;
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--color-border);
+    min-height: 100px;
+    border-right: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.bento-card:nth-child(2n) {
+    border-right: none;
+}
+
+.bento-card:nth-last-child(-n+2) {
+    border-bottom: none;
 }
 
 .bento-card--wide {
     grid-column: span 2;
+    border-right: none;
 }
 
 .bento-card__number {
@@ -3553,32 +3567,43 @@ a {
         grid-template-columns: repeat(4, 1fr);
     }
 
+    .bento-card {
+        min-height: 120px;
+        border-right: 1px solid var(--color-border);
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .bento-card:nth-child(2n) {
+        border-right: 1px solid var(--color-border);
+    }
+
+    .bento-card:nth-child(4n) {
+        border-right: none;
+    }
+
     .bento-card--wide {
         grid-column: span 2;
         grid-row: span 2;
         padding: var(--space-xl);
+        border-right: 1px solid var(--color-border);
     }
 
     .bento-card--wide .bento-card__number {
-        font-size: 4rem;
-    }
-
-    .bento-card {
-        min-height: 140px;
+        font-size: 3.5rem;
     }
 }
 
 @media (min-width: 1024px) {
     .bento-card {
-        padding: var(--space-xl);
+        padding: var(--space-lg);
     }
 
     .bento-card--wide {
-        padding: var(--space-2xl);
+        padding: var(--space-xl);
     }
 
     .bento-card--wide .bento-card__number {
-        font-size: 5rem;
+        font-size: 4rem;
     }
 }
 
@@ -3692,9 +3717,9 @@ a {
     }
 }
 
-/* About Timeline - Bento Style */
+/* About Timeline - Unified Seamless Grid */
 .about-timeline {
-    padding: var(--space-3xl) 0;
+    padding: var(--space-2xl) 0;
     background: var(--color-bg-alt);
 }
 
@@ -3703,60 +3728,44 @@ a {
     font-weight: 800;
     text-align: center;
     color: var(--color-text);
-    margin-bottom: var(--space-2xl);
+    margin-bottom: var(--space-xl);
     letter-spacing: -0.02em;
 }
 
-/* Timeline Bento Grid */
+/* Timeline Seamless Grid */
 .timeline-bento {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-md);
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
     max-width: 1000px;
     margin: 0 auto;
 }
 
 .timeline-bento__card {
     background: var(--color-white);
-    border-radius: var(--radius-lg);
-    padding: var(--space-xl);
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.3s ease;
+    padding: var(--space-lg);
+    border-bottom: 1px solid var(--color-border);
 }
 
-.timeline-bento__card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 4px;
-    height: 100%;
-    background: var(--color-accent);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.timeline-bento__card:hover {
-    transform: translateY(-4px);
-}
-
-.timeline-bento__card:hover::before {
-    opacity: 1;
+.timeline-bento__card:last-child {
+    border-bottom: none;
 }
 
 .timeline-bento__year {
     display: inline-block;
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 800;
     color: var(--color-accent);
-    margin-bottom: var(--space-sm);
+    margin-bottom: var(--space-xs);
     line-height: 1;
 }
 
 .timeline-bento__text {
-    font-size: 1rem;
-    line-height: 1.65;
+    font-size: 0.9375rem;
+    line-height: 1.6;
     color: var(--color-text);
     margin: 0;
 }
@@ -3774,10 +3783,6 @@ a {
     color: var(--color-white);
 }
 
-.timeline-bento__card--start::before {
-    display: none;
-}
-
 .timeline-bento__card--end {
     background: var(--color-text);
 }
@@ -3790,36 +3795,44 @@ a {
     color: rgba(255, 255, 255, 0.9);
 }
 
-.timeline-bento__card--end::before {
-    display: none;
-}
-
 @media (min-width: 768px) {
     .timeline-bento {
-        grid-template-columns: repeat(3, 1fr);
-        gap: var(--space-lg);
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .timeline-bento__card {
+        padding: var(--space-xl);
+        border-right: 1px solid var(--color-border);
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .timeline-bento__card:nth-child(2n) {
+        border-right: none;
     }
 
     .timeline-bento__card--start {
         grid-column: span 2;
+        border-right: none;
     }
 
     .timeline-bento__card--end {
         grid-column: span 2;
+        border-right: none;
+        border-bottom: none;
     }
 
     .timeline-bento__year {
-        font-size: 2.5rem;
+        font-size: 2rem;
     }
 
     .timeline-bento__text {
-        font-size: 1.0625rem;
+        font-size: 1rem;
     }
 }
 
-/* About Team - Flat Design */
+/* About Team - Unified Seamless Grid */
 .about-team {
-    padding: var(--space-3xl) 0;
+    padding: var(--space-2xl) 0;
     background: var(--color-bg);
 }
 
@@ -3828,45 +3841,43 @@ a {
     font-weight: 800;
     text-align: center;
     color: var(--color-text);
-    margin-bottom: var(--space-2xl);
+    margin-bottom: var(--space-xl);
     letter-spacing: -0.02em;
 }
 
 .about-team__grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-lg);
-    max-width: 700px;
+    grid-template-columns: 1fr 1fr;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    max-width: 600px;
     margin: 0 auto;
 }
 
 .team-card {
-    background: var(--color-bg-alt);
-    border-radius: var(--radius-lg);
-    padding: var(--space-xl);
+    padding: var(--space-lg);
     text-align: center;
-    transition: background 0.3s ease;
+    background: var(--color-white);
 }
 
-/* Flat design - no shadows, no borders */
+.team-card:first-child {
+    border-right: 1px solid var(--color-border);
+}
+
 .team-card--flat {
     box-shadow: none;
-    border: none;
-}
-
-.team-card--flat:hover {
-    background: var(--color-white);
-    transform: none;
-    box-shadow: none;
+    border-radius: 0;
 }
 
 .team-card__photo {
-    width: 100px;
-    height: 100px;
-    margin: 0 auto var(--space-lg);
+    width: 80px;
+    height: 80px;
+    margin: 0 auto var(--space-md);
     border-radius: 50%;
     overflow: hidden;
-    background: var(--color-white);
+    background: var(--color-bg-alt);
 }
 
 .team-card__photo img {
@@ -3876,22 +3887,22 @@ a {
 }
 
 .team-card__name {
-    font-size: 1.25rem;
+    font-size: 1.125rem;
     font-weight: 700;
     color: var(--color-text);
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
 
 .team-card__role {
     display: block;
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     color: var(--color-text-light);
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--space-sm);
 }
 
 .team-card__phone {
     display: inline-block;
-    font-size: 1rem;
+    font-size: 0.9375rem;
     font-weight: 600;
     color: var(--color-accent);
     transition: color 0.3s ease;
@@ -3903,12 +3914,12 @@ a {
 
 @media (min-width: 768px) {
     .team-card__photo {
-        width: 140px;
-        height: 140px;
+        width: 100px;
+        height: 100px;
     }
 
     .team-card {
-        padding: var(--space-2xl);
+        padding: var(--space-xl);
     }
 }
 
@@ -4089,9 +4100,9 @@ a {
     }
 }
 
-/* About Contacts - Bento Style */
+/* About Contacts - Unified Seamless Grid */
 .about-contacts {
-    padding: var(--space-3xl) 0;
+    padding: var(--space-2xl) 0;
     background: var(--color-bg-alt);
 }
 
@@ -4100,42 +4111,48 @@ a {
     font-weight: 800;
     text-align: center;
     color: var(--color-text);
-    margin-bottom: var(--space-2xl);
+    margin-bottom: var(--space-xl);
     letter-spacing: -0.02em;
 }
 
-/* Contacts Bento Grid */
+/* Contacts Seamless Grid */
 .contacts-bento {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-md);
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
 }
 
 .contacts-bento__card {
     background: var(--color-white);
-    border-radius: var(--radius-lg);
-    padding: var(--space-xl);
-    border: 1px solid var(--color-border);
+    padding: var(--space-lg);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.contacts-bento__card:last-child {
+    border-bottom: none;
 }
 
 .contacts-bento__icon {
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: var(--color-bg-alt);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
     color: var(--color-accent);
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--space-sm);
 }
 
 .contacts-bento__phone {
     display: block;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 700;
     color: var(--color-text);
-    margin-bottom: var(--space-xs);
+    margin-bottom: 4px;
     transition: color 0.3s ease;
 }
 
@@ -4144,41 +4161,41 @@ a {
 }
 
 .contacts-bento__hint {
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     color: var(--color-text-light);
 }
 
 .contacts-bento__label {
     display: block;
-    font-size: 0.75rem;
+    font-size: 0.6875rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--color-text-light);
-    margin-bottom: var(--space-sm);
+    margin-bottom: var(--space-xs);
 }
 
 .contacts-bento__address {
-    font-size: 1rem;
+    font-size: 0.9375rem;
     font-style: normal;
     color: var(--color-text);
-    line-height: 1.6;
+    line-height: 1.5;
 }
 
 .contacts-bento__social-links {
     display: flex;
-    gap: var(--space-sm);
-    margin-top: var(--space-sm);
+    gap: var(--space-xs);
+    margin-top: var(--space-xs);
 }
 
 .contacts-bento__social-link {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
     background: var(--color-bg-alt);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
     color: var(--color-text);
     transition: all 0.3s ease;
 }
@@ -4194,33 +4211,26 @@ a {
 }
 
 .contacts-bento__card-title {
-    font-size: 1.125rem;
+    font-size: 1rem;
     font-weight: 700;
     color: var(--color-text);
-    margin-bottom: var(--space-lg);
+    margin-bottom: var(--space-md);
 }
 
 .contacts-bento__requisites-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-sm);
+    gap: var(--space-xs);
 }
 
 .contacts-bento__req {
     display: flex;
     flex-direction: column;
     gap: 2px;
-    padding-bottom: var(--space-sm);
-    border-bottom: 1px solid var(--color-border);
-}
-
-.contacts-bento__req:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
 }
 
 .contacts-bento__req-label {
-    font-size: 0.6875rem;
+    font-size: 0.625rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -4228,7 +4238,7 @@ a {
 }
 
 .contacts-bento__req-value {
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
     color: var(--color-text);
     font-weight: 500;
     word-break: break-all;
@@ -4236,33 +4246,79 @@ a {
 
 @media (min-width: 768px) {
     .contacts-bento {
-        grid-template-columns: repeat(3, 1fr);
-        gap: var(--space-lg);
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .contacts-bento__card {
+        padding: var(--space-lg);
+        border-right: 1px solid var(--color-border);
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .contacts-bento__card:nth-child(2n) {
+        border-right: none;
+    }
+
+    /* Phone + Address in first row */
+    .contacts-bento__card--phone {
+        border-right: 1px solid var(--color-border);
+    }
+
+    /* Social merged into address or separate small cell */
+    .contacts-bento__card--social {
+        grid-column: span 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: var(--space-md);
+    }
+
+    .contacts-bento__card--social .contacts-bento__label {
+        display: none;
+    }
+
+    .contacts-bento__card--social .contacts-bento__social-links {
+        margin-top: 0;
     }
 
     .contacts-bento__card--requisites {
-        grid-column: span 3;
+        grid-column: span 2;
+        border-bottom: none;
+        border-right: none;
     }
 
     .contacts-bento__requisites-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: var(--space-md) var(--space-xl);
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-sm) var(--space-lg);
     }
 
     .contacts-bento__req {
         flex-direction: row;
         justify-content: space-between;
-        align-items: center;
+        align-items: baseline;
+        gap: var(--space-sm);
     }
 
     .contacts-bento__req-value {
         text-align: right;
     }
+
+    .contacts-bento__requisites-grid .contacts-bento__req:first-child {
+        grid-column: span 3;
+    }
+
+    .contacts-bento__phone {
+        font-size: 1.375rem;
+    }
 }
 
 @media (min-width: 1024px) {
+    .contacts-bento__card {
+        padding: var(--space-xl);
+    }
+
     .contacts-bento__phone {
-        font-size: 1.75rem;
+        font-size: 1.5rem;
     }
 
     .contacts-bento__requisites-grid {
