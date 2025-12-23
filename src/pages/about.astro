@@ -6,8 +6,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   title="О компании — С лёгким паром"
   description="С 2014 года создаём бани, которые служат долгие годы. Производство в Пестово, Новгородская область. Доставка по всей России."
 >
-    <!-- Hero Section -->
-    <section class="about-hero">
+    <!-- Hero Section with Gradient Mesh -->
+    <section class="about-hero about-hero--mesh">
+        <div class="about-hero__mesh-bg"></div>
         <div class="container">
             <div class="about-hero__content">
                 <h1 class="about-hero__title">С 2014 года создаём бани, которые служат долгие годы</h1>
@@ -45,81 +46,69 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
     </section>
 
-    <!-- Founder Section -->
-    <section class="about-founder">
-        <div class="container">
-            <div class="about-founder__container">
-                <div class="about-founder__photo">
-                    <img src="/images/about/founder.webp" alt="Георгий Дзамуков — основатель компании С лёгким паром" loading="lazy" width="640" height="480">
+    <!-- Founder Section - 50/50 Full Width -->
+    <section class="about-founder about-founder--fullwidth">
+        <div class="about-founder__photo">
+            <img src="/images/about/founder.webp" alt="Георгий Дзамуков — основатель компании С лёгким паром" loading="eager" width="640" height="480">
+        </div>
+        <div class="about-founder__content">
+            <div class="about-founder__inner">
+                <div class="about-founder__header">
+                    <span class="about-founder__label">Основатель</span>
+                    <h2 class="about-founder__name">Георгий Дзамуков</h2>
                 </div>
-                <div class="about-founder__content">
-                    <div class="about-founder__header">
-                        <h2 class="about-founder__name">Георгий Дзамуков</h2>
-                        <span class="about-founder__role">Основатель</span>
-                    </div>
-                    <div class="about-founder__text">
-                        <p>Привет! Меня зовут Георгий, и я основал «С лёгким паром» в 2014 году.</p>
-                        <p>Я вырос в Пестово — небольшом городе в Новгородской области, где каждый второй умеет работать с деревом. После учёбы в Петербурге на инженера-строителя вернулся домой и открыл производство бань.</p>
-                        <p>Моя философия простая: <strong>делать так, чтобы клиент был доволен через 5 лет, а не только в день покупки.</strong> Большинство производителей гонятся за быстрой прибылью. Мы выбрали другой путь — качество на долгие годы.</p>
-                        <p>У нас открытый YouTube-канал с 150+ видео. Комментарии не удаляем — там много отзывов от клиентов спустя годы эксплуатации. Посмотрите сами и примите взвешенное решение.</p>
-                        <p class="about-founder__signature">Пусть наши бани радуют вас! С лёгким паром!</p>
-                    </div>
-                    <button type="button" class="btn btn--secondary about-founder__btn" id="contactFounderBtn">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                        </svg>
-                        Написать Георгию лично
-                    </button>
+                <div class="about-founder__text">
+                    <p>Привет! Меня зовут Георгий, и я основал «С лёгким паром» в 2014 году.</p>
+                    <p>Я вырос в Пестово — небольшом городе в Новгородской области, где каждый второй умеет работать с деревом. После учёбы в Петербурге на инженера-строителя вернулся домой и открыл производство бань.</p>
+                    <p>Моя философия простая: <strong>делать так, чтобы клиент был доволен через 5 лет, а не только в день покупки.</strong> Большинство производителей гонятся за быстрой прибылью. Мы выбрали другой путь — качество на долгие годы.</p>
+                    <p>У нас открытый YouTube-канал с 150+ видео. Комментарии не удаляем — там много отзывов от клиентов спустя годы эксплуатации. Посмотрите сами и примите взвешенное решение.</p>
+                    <p class="about-founder__signature">Пусть наши бани радуют вас! С лёгким паром!</p>
                 </div>
+                <button type="button" class="btn btn--primary about-founder__btn" id="contactFounderBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    Написать Георгию лично
+                </button>
             </div>
         </div>
     </section>
 
-    <!-- Timeline Section -->
-    <section class="about-timeline">
+    <!-- Timeline Section - Bento Style -->
+    <section class="about-timeline about-timeline--bento">
         <div class="container">
             <h2 class="about-timeline__title">Наш путь</h2>
-            <div class="about-timeline__list">
-                <div class="timeline-item">
-                    <div class="timeline-item__year">2014</div>
-                    <div class="timeline-item__content">
-                        <p>Георгий Дзамуков основал компанию «С лёгким паром» в родном Пестово. Первые бани собирали вручную небольшой командой.</p>
-                    </div>
+            <div class="timeline-bento">
+                <div class="timeline-bento__card timeline-bento__card--start">
+                    <span class="timeline-bento__year">2014</span>
+                    <p class="timeline-bento__text">Георгий Дзамуков основал компанию «С лёгким паром» в родном Пестово. Первые бани собирали вручную небольшой командой.</p>
                 </div>
-                <div class="timeline-item">
-                    <div class="timeline-item__year">2016</div>
-                    <div class="timeline-item__content">
-                        <p>Вышли на стабильное производство и одинаковое качество. Установили регламенты работы и чек-лист проверки бань — чтобы каждая баня отвечала нашим стандартам.</p>
-                    </div>
+                <div class="timeline-bento__card">
+                    <span class="timeline-bento__year">2016</span>
+                    <p class="timeline-bento__text">Вышли на стабильное производство. Установили регламенты и чек-лист проверки бань.</p>
                 </div>
-                <div class="timeline-item">
-                    <div class="timeline-item__year">2018</div>
-                    <div class="timeline-item__content">
-                        <p>Открыли YouTube-канал, чтобы показывать процесс изнутри. Уже опубликовано более 150 видео обзоров и отзывов.</p>
-                    </div>
+                <div class="timeline-bento__card">
+                    <span class="timeline-bento__year">2018</span>
+                    <p class="timeline-bento__text">Открыли YouTube-канал. Более 150 видео обзоров и отзывов.</p>
                 </div>
-                <div class="timeline-item">
-                    <div class="timeline-item__year">2020</div>
-                    <div class="timeline-item__content">
-                        <p>Получили сертификат ГОСТ Р. Сделали это добровольно, потому что безопасность наших бань превыше всего. Баня — это про расслабление. В бане должно быть тепло, уютно и спокойно.</p>
-                    </div>
+                <div class="timeline-bento__card">
+                    <span class="timeline-bento__year">2020</span>
+                    <p class="timeline-bento__text">Получили сертификат ГОСТ Р добровольно — безопасность превыше всего.</p>
                 </div>
-                <div class="timeline-item">
-                    <div class="timeline-item__year">2024</div>
-                    <div class="timeline-item__content">
-                        <p>10 лет на рынке. Более 5000 бань построено и доставлено. 34 сотрудника в штате. Продолжаем расти.</p>
-                    </div>
+                <div class="timeline-bento__card timeline-bento__card--end">
+                    <span class="timeline-bento__year">2024</span>
+                    <p class="timeline-bento__text">10 лет на рынке. 5000+ бань. 34 сотрудника. Продолжаем расти.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Team Section -->
-    <section class="about-team">
+    <!-- Team Section - Flat Design -->
+    <section class="about-team about-team--flat">
         <div class="container">
             <h2 class="about-team__title">Люди, которые помогут вам</h2>
             <div class="about-team__grid">
-                <div class="team-card">
+                <div class="team-card team-card--flat">
                     <div class="team-card__photo">
                         <img src="/images/about/team-tatiana.webp" alt="Татьяна — руководитель логистики" loading="lazy" width="300" height="300">
                     </div>
@@ -129,7 +118,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                         <a href="tel:89319813301" class="team-card__phone">8 931 981-33-01</a>
                     </div>
                 </div>
-                <div class="team-card">
+                <div class="team-card team-card--flat">
                     <div class="team-card__photo">
                         <img src="/images/about/team-ivan.webp" alt="Иван — менеджер по продажам" loading="lazy" width="300" height="224">
                     </div>
@@ -143,18 +132,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
     </section>
 
-    <!-- Production Section -->
-    <section class="about-production">
+    <!-- Production Section - Masonry Grid -->
+    <section class="about-production about-production--masonry">
         <div class="container">
             <div class="about-production__content">
                 <h2 class="about-production__title">Наше производство в Пестово</h2>
                 <p class="about-production__text">Все бани собираются на собственном производстве в городе Пестово, Новгородская область. Здесь работают 34 человека — плотники, сборщики, контролёры качества.</p>
-                <p class="about-production__text">Каждая баня проходит через наши руки — от первой доски до финальной проверки.</p>
             </div>
-            <div class="about-production__gallery">
-                <img src="/images/about/production-1.webp" alt="Производство бань зимой в Пестово" loading="lazy" class="about-production__image" width="800" height="447">
-                <img src="/images/about/production-2.webp" alt="Готовые бани на производстве" loading="lazy" class="about-production__image" width="800" height="447">
-                <img src="/images/about/production-3.webp" alt="Директор с командой строителей" loading="lazy" class="about-production__image" width="800" height="600">
+            <div class="masonry-grid">
+                <div class="masonry-grid__item masonry-grid__item--tall masonry-grid__item--director">
+                    <img src="/images/about/production-3.webp" alt="Директор с командой строителей" loading="lazy" width="800" height="600">
+                </div>
+                <div class="masonry-grid__item">
+                    <img src="/images/about/production-1.webp" alt="Производство бань зимой в Пестово" loading="lazy" width="800" height="447">
+                </div>
+                <div class="masonry-grid__item">
+                    <img src="/images/about/production-2.webp" alt="Готовые бани на производстве" loading="lazy" width="800" height="447">
+                </div>
             </div>
         </div>
     </section>
@@ -191,7 +185,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <!-- Contacts Section -->
     <section class="about-contacts">
         <div class="container">
-            <h2 class="about-contacts__title">Свяжитесь с нами</h2>
+            <h2 class="about-contacts__title">Контакты и реквизиты</h2>
             <div class="about-contacts__grid">
                 <div class="about-contacts__info">
                     <div class="about-contacts__phone-block">
@@ -276,11 +270,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
             <div class="contact-modal__content">
                 <h3 class="contact-modal__title">Написать Георгию</h3>
-                <p class="contact-modal__text">Оставьте номер телефона — Георгий свяжется с вами лично</p>
+                <p class="contact-modal__text">Оставьте сообщение — Георгий ответит лично</p>
 
                 <form class="contact-modal__form" id="contactForm">
                     <div class="contact-modal__field">
                         <input type="tel" id="contactPhone" name="phone" placeholder="+7" value="+7 " required>
+                    </div>
+                    <div class="contact-modal__field">
+                        <textarea id="contactMessage" name="message" placeholder="Ваше сообщение..." rows="4"></textarea>
                     </div>
                     <button type="submit" class="btn btn--primary contact-modal__submit">
                         Отправить
@@ -310,6 +307,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeBtn = modal?.querySelector('.contact-modal__close');
     const form = document.getElementById('contactForm');
     const phoneInput = document.getElementById('contactPhone');
+    const messageInput = document.getElementById('contactMessage');
     const successBlock = document.getElementById('contactSuccess');
 
     function openModal() {
@@ -403,11 +401,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             try {
+                const message = messageInput?.value.trim() || '';
+
                 await fetch('/api/contact', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         phone: phone,
+                        message: message,
                         source: 'about-founder',
                         page_url: window.location.href
                     })
