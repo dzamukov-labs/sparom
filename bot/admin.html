@@ -3,1354 +3,1816 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Админ-панель | С лёгким паром</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>СтройГлобал | Панель управления</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --wood-dark: #2C1810;
-            --wood: #5D3A1A;
-            --wood-light: #8B5E3C;
-            --amber: #D4A04A;
-            --amber-light: #E8C078;
-            --amber-glow: rgba(212, 160, 74, 0.3);
-            --cream: #FAF6F1;
-            --white: #FFFFFF;
-            --gray-100: #F5F1EC;
-            --gray-200: #E8E2DA;
-            --gray-500: #8A8279;
-            --gray-800: #3D3730;
-            --shadow-sm: 0 2px 8px rgba(44, 24, 16, 0.08);
-            --shadow-md: 0 8px 30px rgba(44, 24, 16, 0.12);
-            --shadow-lg: 0 20px 60px rgba(44, 24, 16, 0.15);
-            --radius-sm: 8px;
-            --radius-md: 16px;
-            --radius-lg: 24px;
-            --radius-full: 100px;
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-hover: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border: #334155;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.3);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
-            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, var(--cream) 0%, var(--gray-100) 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
             min-height: 100vh;
-            color: var(--gray-800);
             line-height: 1.6;
         }
 
-        /* Login Screen */
-        .login-wrapper {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            background:
-                radial-gradient(circle at 20% 80%, var(--amber-glow) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(93, 58, 26, 0.1) 0%, transparent 50%),
-                linear-gradient(135deg, var(--cream) 0%, var(--gray-100) 100%);
-        }
-
-        .login-card {
-            background: var(--white);
-            border-radius: var(--radius-lg);
-            padding: 48px 40px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: var(--shadow-lg);
-            text-align: center;
-            animation: fadeInUp 0.6s ease-out;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .login-logo {
-            font-size: 2.5rem;
-            margin-bottom: 8px;
-        }
-
-        .login-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--wood-dark);
-            margin-bottom: 8px;
-        }
-
-        .login-subtitle {
-            font-size: 0.9rem;
-            color: var(--gray-500);
-            margin-bottom: 32px;
-        }
-
-        .input-group {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 16px 20px;
-            font-family: inherit;
-            font-size: 1rem;
-            border: 2px solid var(--gray-200);
-            border-radius: var(--radius-md);
-            background: var(--gray-100);
-            transition: all 0.3s ease;
-            outline: none;
-        }
-
-        .input-group input:focus {
-            border-color: var(--amber);
-            background: var(--white);
-            box-shadow: 0 0 0 4px var(--amber-glow);
-        }
-
-        .input-group input::placeholder {
-            color: var(--gray-500);
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
-            padding: 16px 32px;
-            font-family: inherit;
-            font-size: 1rem;
-            font-weight: 600;
-            border: none;
-            border-radius: var(--radius-full);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--amber) 0%, var(--amber-light) 100%);
-            color: var(--wood-dark);
-            box-shadow: var(--shadow-md);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg), 0 0 30px var(--amber-glow);
-        }
-
-        .btn-secondary {
-            background: var(--gray-100);
-            color: var(--gray-800);
-        }
-
-        .btn-secondary:hover {
-            background: var(--gray-200);
-        }
-
-        /* Dashboard */
-        .dashboard {
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 280px;
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            border-right: 1px solid var(--border);
             padding: 24px;
-            max-width: 1200px;
-            margin: 0 auto;
-            animation: fadeInUp 0.6s ease-out;
-        }
-
-        .header {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 32px;
-            padding-bottom: 24px;
-            border-bottom: 1px solid var(--gray-200);
+            flex-direction: column;
+            z-index: 100;
         }
 
-        .header-left {
+        .logo {
             display: flex;
             align-items: center;
             gap: 12px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 32px;
         }
 
-        .header-logo {
-            font-size: 1.5rem;
-        }
-
-        .header-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--wood-dark);
-        }
-
-        .header-badge {
-            display: inline-flex;
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
             align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            background: linear-gradient(135deg, var(--amber) 0%, var(--amber-light) 100%);
-            border-radius: var(--radius-full);
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--wood-dark);
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: var(--shadow-glow);
         }
 
-        .header-badge::before {
-            content: '';
-            width: 6px;
-            height: 6px;
-            background: var(--wood-dark);
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-subtitle {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-section {
+            margin-bottom: 24px;
+        }
+
+        .nav-section-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            padding-left: 12px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 4px;
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-card-hover);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .nav-item-icon {
+            font-size: 20px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .nav-item-text {
+            font-weight: 500;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .sync-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px;
+            background: var(--bg-card);
+            border-radius: 10px;
+            font-size: 13px;
+        }
+
+        .sync-dot {
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
-            animation: pulse 2s ease-in-out infinite;
+            background: var(--success);
+            animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
+            50% { opacity: 0.5; }
         }
 
-        .logout-btn {
-            padding: 8px 16px;
-            font-size: 0.85rem;
-            font-family: inherit;
-            background: transparent;
-            border: 1px solid var(--gray-200);
-            border-radius: var(--radius-sm);
-            color: var(--gray-500);
-            cursor: pointer;
-            transition: all 0.2s;
+        /* Main Content */
+        .main {
+            margin-left: 280px;
+            padding: 32px;
+            min-height: 100vh;
         }
 
-        .logout-btn:hover {
-            border-color: var(--wood-light);
-            color: var(--wood);
+        .page-header {
+            margin-bottom: 32px;
         }
 
-        /* Stats Grid */
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        /* Stats Cards */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
             margin-bottom: 32px;
         }
 
         .stat-card {
-            background: var(--white);
-            border-radius: var(--radius-md);
+            background: var(--bg-card);
+            border-radius: 20px;
             padding: 24px;
-            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border);
             transition: all 0.3s ease;
         }
 
         .stat-card:hover {
             transform: translateY(-4px);
-            box-shadow: var(--shadow-md);
+            box-shadow: var(--shadow-lg);
         }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .stat-card.gradient-1::before { background: var(--gradient-1); }
+        .stat-card.gradient-2::before { background: var(--gradient-2); }
+        .stat-card.gradient-3::before { background: var(--gradient-3); }
+        .stat-card.gradient-4::before { background: var(--gradient-4); }
 
         .stat-icon {
             width: 48px;
             height: 48px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, var(--amber-glow) 0%, rgba(212, 160, 74, 0.1) 100%);
-            border-radius: var(--radius-sm);
-            font-size: 1.5rem;
+            font-size: 24px;
             margin-bottom: 16px;
         }
 
+        .stat-card.gradient-1 .stat-icon { background: rgba(102, 126, 234, 0.2); }
+        .stat-card.gradient-2 .stat-icon { background: rgba(245, 87, 108, 0.2); }
+        .stat-card.gradient-3 .stat-icon { background: rgba(79, 172, 254, 0.2); }
+        .stat-card.gradient-4 .stat-icon { background: rgba(67, 233, 123, 0.2); }
+
         .stat-value {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--wood-dark);
-            line-height: 1;
+            font-size: 28px;
+            font-weight: 700;
             margin-bottom: 4px;
         }
 
         .stat-label {
-            font-size: 0.85rem;
-            color: var(--gray-500);
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Sections */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
         }
 
         /* Cards */
         .card {
-            background: var(--white);
-            border-radius: var(--radius-md);
-            padding: 24px;
+            background: var(--bg-card);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            overflow: hidden;
             margin-bottom: 24px;
-            box-shadow: var(--shadow-sm);
         }
 
         .card-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 20px;
         }
 
         .card-title {
+            font-size: 18px;
+            font-weight: 600;
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--wood-dark);
         }
 
-        .card-title-icon {
-            font-size: 1.25rem;
+        .card-body {
+            padding: 24px;
         }
 
-        /* Textarea */
-        textarea {
-            width: 100%;
-            padding: 16px;
-            font-family: inherit;
-            font-size: 0.95rem;
-            border: 2px solid var(--gray-200);
-            border-radius: var(--radius-md);
-            background: var(--gray-100);
-            resize: vertical;
-            min-height: 100px;
-            transition: all 0.3s ease;
-            outline: none;
-            margin-bottom: 16px;
-        }
-
-        textarea:focus {
-            border-color: var(--amber);
-            background: var(--white);
-            box-shadow: 0 0 0 4px var(--amber-glow);
-        }
-
-        /* Users List */
-        .users-list {
-            max-height: 500px;
-            overflow-y: auto;
-            margin: 0 -24px;
-            padding: 0 24px;
-        }
-
-        .users-list::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .users-list::-webkit-scrollbar-track {
-            background: var(--gray-100);
-            border-radius: 3px;
-        }
-
-        .users-list::-webkit-scrollbar-thumb {
-            background: var(--gray-200);
-            border-radius: 3px;
-        }
-
-        .user-item {
-            display: flex;
+        /* Buttons */
+        .btn {
+            display: inline-flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 16px;
-            margin: 0 -24px;
-            padding-left: 24px;
-            padding-right: 24px;
-            border-bottom: 1px solid var(--gray-100);
-            transition: background 0.2s;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            font-family: inherit;
         }
 
-        .user-item:hover {
-            background: var(--gray-100);
+        .btn-primary {
+            background: var(--primary);
+            color: white;
         }
 
-        .user-item:last-child {
-            border-bottom: none;
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
         }
 
-        .user-info {
+        .btn-secondary {
+            background: var(--bg-card-hover);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            filter: brightness(1.1);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--bg-dark);
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        th.sortable {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        th.sortable:hover {
+            color: var(--primary-light);
+        }
+
+        th.sortable::after {
+            content: ' ↕';
+            opacity: 0.3;
+        }
+
+        th.sort-asc::after {
+            content: ' ↑';
+            opacity: 1;
+        }
+
+        th.sort-desc::after {
+            content: ' ↓';
+            opacity: 1;
+        }
+
+        tr:hover {
+            background: var(--bg-card-hover);
+        }
+
+        td {
+            font-size: 14px;
+        }
+
+        /* UTM Tags */
+        .utm-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            margin: 2px;
+        }
+
+        .utm-source { background: rgba(99, 102, 241, 0.2); color: #a5b4fc; }
+        .utm-medium { background: rgba(245, 87, 108, 0.2); color: #fda4af; }
+        .utm-campaign { background: rgba(79, 172, 254, 0.2); color: #7dd3fc; }
+        .utm-content { background: rgba(67, 233, 123, 0.2); color: #86efac; }
+        .utm-term { background: rgba(251, 191, 36, 0.2); color: #fcd34d; }
+        .utm-empty { background: var(--bg-dark); color: var(--text-muted); }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .filter-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        select, input[type="text"], input[type="number"] {
+            padding: 10px 16px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: inherit;
+            min-width: 180px;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        /* Sync Panel */
+        .sync-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .sync-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid var(--border);
+        }
+
+        .sync-card-header {
             display: flex;
             align-items: center;
             gap: 12px;
+            margin-bottom: 16px;
         }
 
-        .user-avatar {
-            width: 44px;
-            height: 44px;
-            min-width: 44px;
+        .sync-card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, var(--wood-light) 0%, var(--wood) 100%);
-            border-radius: 50%;
-            color: var(--white);
-            font-weight: 600;
-            font-size: 1rem;
-            overflow: hidden;
+            font-size: 24px;
         }
 
-        .user-avatar-img {
+        .sync-card.yandex .sync-card-icon {
+            background: rgba(255, 204, 0, 0.2);
+        }
+
+        .sync-card.amo .sync-card-icon {
+            background: rgba(79, 172, 254, 0.2);
+        }
+
+        .sync-card.full .sync-card-icon {
+            background: rgba(67, 233, 123, 0.2);
+        }
+
+        .sync-card-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .sync-card-desc {
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .sync-options {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .sync-options select {
+            flex: 1;
+        }
+
+        /* Analytics Table */
+        .analytics-table th:not(:first-child):not(:nth-child(2)),
+        .analytics-table td:not(:first-child):not(:nth-child(2)) {
+            text-align: center;
+        }
+
+        .cell-cost {
+            color: var(--warning);
+            font-weight: 500;
+        }
+
+        .cell-leads {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .cell-cpl {
+            color: var(--primary-light);
+            font-size: 12px;
+        }
+
+        .cell-empty {
+            color: var(--text-muted);
+        }
+
+        /* Logs */
+        .log-entry {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            background: var(--bg-dark);
+        }
+
+        .log-entry.success { border-left: 3px solid var(--success); }
+        .log-entry.error { border-left: 3px solid var(--danger); }
+        .log-entry.started { border-left: 3px solid var(--warning); }
+
+        .log-time {
+            font-size: 12px;
+            color: var(--text-muted);
+            min-width: 150px;
+        }
+
+        .log-type {
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: var(--bg-card-hover);
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .log-message {
+            flex: 1;
+            font-size: 13px;
+        }
+
+        /* Broadcasts Section */
+        .chat-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .chat-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .chat-item:hover {
+            background: var(--bg-card-hover);
+        }
+
+        .chat-item.selected {
+            background: var(--primary);
+        }
+
+        .chat-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--gradient-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .chat-avatar img {
             width: 100%;
             height: 100%;
+            border-radius: 12px;
             object-fit: cover;
         }
 
-        .user-details {
-            display: flex;
-            flex-direction: column;
+        .chat-info {
             flex: 1;
             min-width: 0;
         }
 
-        .user-name {
+        .chat-name {
             font-weight: 600;
-            color: var(--wood-dark);
-        }
-
-        .user-id {
-            font-size: 0.8rem;
-            color: var(--gray-500);
-        }
-
-        .user-last-msg {
-            font-size: 0.85rem;
-            color: var(--gray-500);
+            margin-bottom: 4px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            max-width: 300px;
-            margin-top: 4px;
         }
 
-        .user-last-msg.incoming::before {
-            content: '← ';
-            color: var(--amber);
+        .chat-preview {
+            font-size: 13px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        .user-last-msg.outgoing::before {
-            content: '→ ';
-            color: var(--wood-light);
+        .chat-time {
+            font-size: 12px;
+            color: var(--text-muted);
         }
 
-        .user-last-time {
-            font-size: 0.75rem;
-            color: var(--gray-500);
-            margin-left: 8px;
-        }
-
-        .user-actions .btn {
-            width: auto;
-            padding: 8px 16px;
-            font-size: 0.85rem;
-        }
-
-        /* Status Messages */
-        .status {
-            padding: 12px 16px;
-            border-radius: var(--radius-sm);
-            font-size: 0.9rem;
-            margin-top: 16px;
+        /* Broadcast Form */
+        .broadcast-form {
             display: flex;
-            align-items: center;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
             gap: 8px;
         }
 
-        .status.success {
-            background: #d1fae5;
-            color: #065f46;
+        .form-label {
+            font-weight: 500;
+            font-size: 14px;
         }
 
-        .status.error {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .status.info {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-
-        /* Message Modal */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(44, 24, 16, 0.6);
-            backdrop-filter: blur(4px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            z-index: 1000;
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .modal {
-            background: var(--white);
-            border-radius: var(--radius-lg);
-            padding: 32px;
-            width: 100%;
-            max-width: 500px;
-            transform: translateY(20px) scale(0.95);
-            transition: all 0.3s ease;
-        }
-
-        .modal-overlay.active .modal {
-            transform: translateY(0) scale(1);
-        }
-
-        .modal-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .modal-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--wood-dark);
-        }
-
-        .modal-close {
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--gray-100);
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 1.25rem;
-            color: var(--gray-500);
+        textarea {
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            font-size: 14px;
             font-family: inherit;
+            resize: vertical;
+            min-height: 120px;
         }
 
-        .modal-close:hover {
-            background: var(--gray-200);
-            color: var(--wood-dark);
-        }
-
-        .modal-recipient {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            background: var(--gray-100);
-            border-radius: var(--radius-sm);
-            margin-bottom: 16px;
-        }
-
-        .modal-recipient-avatar {
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, var(--wood-light) 0%, var(--wood) 100%);
-            border-radius: 50%;
-            color: var(--white);
-            font-weight: 600;
-            font-size: 0.85rem;
-        }
-
-        .modal-recipient-name {
-            font-weight: 600;
-            color: var(--wood-dark);
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 8px;
-        }
-
-        .modal-actions .btn {
-            flex: 1;
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
         }
 
         /* Empty State */
         .empty-state {
             text-align: center;
-            padding: 48px 24px;
-            color: var(--gray-500);
+            padding: 60px 20px;
+            color: var(--text-muted);
         }
 
         .empty-state-icon {
-            font-size: 3rem;
+            font-size: 64px;
             margin-bottom: 16px;
             opacity: 0.5;
         }
 
         .empty-state-text {
-            font-size: 0.95rem;
-        }
-
-        /* Chat History */
-        .chat-container {
-            max-height: 400px;
-            overflow-y: auto;
-            padding: 16px;
-            background: var(--gray-100);
-            border-radius: var(--radius-md);
-            margin-bottom: 16px;
-        }
-
-        .chat-message {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 12px;
-            max-width: 80%;
-        }
-
-        .chat-message.incoming {
-            align-items: flex-start;
-        }
-
-        .chat-message.outgoing {
-            align-items: flex-end;
-            margin-left: auto;
-        }
-
-        .chat-bubble {
-            padding: 10px 14px;
-            border-radius: 16px;
-            font-size: 0.9rem;
-            line-height: 1.4;
-            word-break: break-word;
-        }
-
-        .chat-message.incoming .chat-bubble {
-            background: var(--white);
-            border-bottom-left-radius: 4px;
-        }
-
-        .chat-message.outgoing .chat-bubble {
-            background: linear-gradient(135deg, var(--amber) 0%, var(--amber-light) 100%);
-            color: var(--wood-dark);
-            border-bottom-right-radius: 4px;
-        }
-
-        .chat-time {
-            font-size: 0.7rem;
-            color: var(--gray-500);
-            margin-top: 4px;
-            padding: 0 4px;
-        }
-
-        .chat-empty {
-            text-align: center;
-            color: var(--gray-500);
-            padding: 32px;
-        }
-
-        .chat-filter {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-
-        .chat-filter button {
-            padding: 6px 12px;
-            font-size: 0.8rem;
-            border-radius: var(--radius-full);
-            border: 1px solid var(--gray-200);
-            background: var(--white);
-            color: var(--gray-800);
-            cursor: pointer;
-            font-family: inherit;
-            transition: all 0.2s;
-        }
-
-        .chat-filter button.active {
-            background: var(--amber);
-            border-color: var(--amber);
-            color: var(--wood-dark);
-        }
-
-        .chat-filter button:hover:not(.active) {
-            border-color: var(--amber);
-        }
-
-        /* Formatting Toolbar */
-        .format-toolbar {
-            display: flex;
-            gap: 4px;
+            font-size: 18px;
             margin-bottom: 8px;
-            padding: 8px;
-            background: var(--gray-100);
-            border-radius: var(--radius-sm);
         }
 
-        .format-btn {
-            width: 32px;
-            height: 32px;
+        /* Loading */
+        .loading {
             display: flex;
             align-items: center;
             justify-content: center;
-            border: none;
-            background: transparent;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            color: var(--gray-800);
-            transition: all 0.2s;
-            font-family: inherit;
+            padding: 40px;
         }
 
-        .format-btn:hover {
-            background: var(--white);
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
 
-        .format-btn[data-format="bold"] { font-weight: bold; }
-        .format-btn[data-format="italic"] { font-style: italic; }
-        .format-btn[data-format="code"] { font-family: monospace; }
-
-        /* Hidden */
-        .hidden {
-            display: none !important;
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
-        /* Initial loading state - prevents flash */
-        .login-wrapper,
-        .dashboard {
-            opacity: 0;
-            transition: opacity 0.2s ease;
+        /* Alerts */
+        .alert {
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
-        .login-wrapper.ready,
-        .dashboard.ready {
-            opacity: 1;
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid var(--success);
+            color: var(--success);
         }
+
+        .alert-error {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+
+        .alert-info {
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid var(--primary);
+            color: var(--primary-light);
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-success { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+        .badge-warning { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+        .badge-danger { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
 
         /* Responsive */
-        @media (max-width: 640px) {
-            .dashboard {
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 80px;
                 padding: 16px;
             }
 
-            .header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 16px;
+            .logo-text, .logo-subtitle, .nav-item-text, .nav-section-title {
+                display: none;
             }
 
-            .stats-grid {
-                grid-template-columns: 1fr;
+            .logo-icon {
+                width: 40px;
+                height: 40px;
             }
 
-            .user-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 12px;
+            .nav-item {
+                justify-content: center;
+                padding: 14px;
             }
 
-            .user-actions {
-                width: 100%;
+            .main {
+                margin-left: 80px;
             }
 
-            .user-actions .btn {
-                width: 100%;
+            .sync-status span {
+                display: none;
             }
+        }
 
-            .login-card {
-                padding: 32px 24px;
-            }
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
         }
     </style>
 </head>
 <body>
-    <!-- Login Screen -->
-    <div class="login-wrapper" id="loginSection">
-        <div class="login-card">
-            <div class="login-logo">
-                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-                    <rect width="48" height="48" rx="12" fill="url(#logo-gradient)"/>
-                    <path d="M14 32C14 32 16 28 24 28C32 28 34 32 34 32" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-                    <path d="M18 24C18 24 19 20 24 20C29 20 30 24 30 24" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
-                    <path d="M21 18C21 18 22 15 24 15C26 15 27 18 27 18" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
-                    <defs>
-                        <linearGradient id="logo-gradient" x1="0" y1="0" x2="48" y2="48">
-                            <stop stop-color="#D4A04A"/>
-                            <stop offset="1" stop-color="#8B5E3C"/>
-                        </linearGradient>
-                    </defs>
-                </svg>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">
+            <div class="logo-icon">🏗️</div>
+            <div>
+                <div class="logo-text">СтройГлобал</div>
+                <div class="logo-subtitle">Панель управления</div>
             </div>
-            <h1 class="login-title">С лёгким паром</h1>
-            <p class="login-subtitle">Админ-панель</p>
-
-            <div class="input-group">
-                <input type="password" id="password" placeholder="Введите пароль">
-            </div>
-
-            <button class="btn btn-primary" onclick="login()">
-                <span>Войти</span>
-                <span>→</span>
-            </button>
         </div>
-    </div>
 
-    <!-- Dashboard -->
-    <div class="dashboard hidden" id="dashboard">
-        <header class="header">
-            <div class="header-left">
-                <span class="header-title">Админ-панель</span>
-                <span class="header-badge">Online</span>
+        <nav>
+            <div class="nav-section">
+                <div class="nav-section-title">Аналитика</div>
+                <a class="nav-item active" data-section="analytics">
+                    <span class="nav-item-icon">📊</span>
+                    <span class="nav-item-text">Сводка расходов</span>
+                </a>
+                <a class="nav-item" data-section="leads">
+                    <span class="nav-item-icon">👥</span>
+                    <span class="nav-item-text">Сделки CRM</span>
+                </a>
+                <a class="nav-item" data-section="sync">
+                    <span class="nav-item-icon">🔄</span>
+                    <span class="nav-item-text">Синхронизация</span>
+                </a>
             </div>
-            <button class="logout-btn" onclick="logout()">Выйти</button>
-        </header>
 
-        <!-- Stats -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                        <circle cx="9" cy="7" r="4"/>
-                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                    </svg>
+            <div class="nav-section">
+                <div class="nav-section-title">Коммуникации</div>
+                <a class="nav-item" data-section="broadcasts">
+                    <span class="nav-item-icon">📨</span>
+                    <span class="nav-item-text">Рассылки</span>
+                </a>
+                <a class="nav-item" data-section="chats">
+                    <span class="nav-item-icon">💬</span>
+                    <span class="nav-item-text">Чаты</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Система</div>
+                <a class="nav-item" data-section="logs">
+                    <span class="nav-item-icon">📋</span>
+                    <span class="nav-item-text">Логи</span>
+                </a>
+            </div>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="sync-status">
+                <div class="sync-dot"></div>
+                <span>Система активна</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Analytics Section -->
+        <section id="analytics" class="section active">
+            <div class="page-header">
+                <h1 class="page-title">📊 Аналитика рекламы</h1>
+                <p class="page-subtitle">Расходы Яндекс.Директ и заказы из AmoCRM</p>
+            </div>
+
+            <div class="stats-grid" id="stats-cards">
+                <div class="stat-card gradient-1">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-value" id="stat-total-cost">—</div>
+                    <div class="stat-label">Общий расход</div>
                 </div>
-                <div class="stat-value" id="totalUsers">—</div>
-                <div class="stat-label">Пользователей</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/>
-                    </svg>
+                <div class="stat-card gradient-2">
+                    <div class="stat-icon">📝</div>
+                    <div class="stat-value" id="stat-total-leads">—</div>
+                    <div class="stat-label">Всего заказов</div>
                 </div>
-                <div class="stat-value" id="actions24h">—</div>
-                <div class="stat-label">Действий за 24ч</div>
-            </div>
-        </div>
-
-        <!-- Broadcast -->
-        <div class="card">
-            <div class="card-header">
-                <h2 class="card-title">Рассылка</h2>
-            </div>
-            <textarea id="broadcastMessage" placeholder="Напишите сообщение для всех пользователей..."></textarea>
-            <button class="btn btn-primary" onclick="broadcast()" style="width: auto;">
-                Отправить всем
-            </button>
-            <div id="broadcastStatus" class="status hidden"></div>
-        </div>
-
-        <!-- Users -->
-        <div class="card">
-            <div class="card-header">
-                <h2 class="card-title">Пользователи</h2>
-                <button class="btn btn-secondary" onclick="loadUsers()" style="width: auto; padding: 8px 16px; font-size: 0.85rem;">
-                    Обновить
-                </button>
-            </div>
-            <div class="users-list" id="usersList">
-                <div class="empty-state">
-                    <p class="empty-state-text">Загрузка...</p>
+                <div class="stat-card gradient-3">
+                    <div class="stat-icon">📈</div>
+                    <div class="stat-value" id="stat-avg-cpl">—</div>
+                    <div class="stat-label">Средняя цена заказа</div>
+                </div>
+                <div class="stat-card gradient-4">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-value" id="stat-months">—</div>
+                    <div class="stat-label">Месяцев данных</div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Chat History Modal -->
-    <div class="modal-overlay" id="chatModal">
-        <div class="modal" style="max-width: 600px;">
-            <div class="modal-header">
-                <h3 class="modal-title">История чата</h3>
-                <button class="modal-close" onclick="closeChatModal()">×</button>
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">📋 Расходы по кампаниям и месяцам</h3>
+                    <button class="btn btn-sm btn-secondary" onclick="exportAnalytics()">📥 Экспорт CSV</button>
+                </div>
+                <div class="card-body">
+                    <div class="filters">
+                        <div class="filter-group">
+                            <label class="filter-label">Год</label>
+                            <select id="filter-year" onchange="loadAnalytics()">
+                                <option value="">Все годы</option>
+                                <option value="2024">2024</option>
+                                <option value="2025">2025</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-container" id="analytics-table">
+                        <div class="loading"><div class="spinner"></div></div>
+                    </div>
+                </div>
             </div>
-            <div class="modal-recipient" id="chatRecipient">
-                <div class="modal-recipient-avatar" id="chatAvatar">?</div>
-                <span class="modal-recipient-name" id="chatName">Пользователь</span>
-            </div>
-            <div class="chat-filter">
-                <button class="active" onclick="filterChat('all')">Все</button>
-                <button onclick="filterChat('in')">Входящие</button>
-                <button onclick="filterChat('out')">Исходящие</button>
-            </div>
-            <div class="chat-container" id="chatContainer">
-                <div class="chat-empty">Загрузка...</div>
-            </div>
-            <div class="format-toolbar">
-                <button class="format-btn" data-format="bold" onclick="insertFormat('b')" title="Жирный">B</button>
-                <button class="format-btn" data-format="italic" onclick="insertFormat('i')" title="Курсив">I</button>
-                <button class="format-btn" data-format="code" onclick="insertFormat('code')" title="Код">&lt;/&gt;</button>
-            </div>
-            <textarea id="chatMessage" placeholder="Напишите сообщение..."></textarea>
-            <div class="modal-actions">
-                <button class="btn btn-secondary" onclick="closeChatModal()">Закрыть</button>
-                <button class="btn btn-primary" onclick="sendFromChat()">Отправить</button>
-            </div>
-            <div id="chatStatus" class="status hidden"></div>
-        </div>
-    </div>
+        </section>
 
-    <!-- Message Modal (quick send) -->
-    <div class="modal-overlay" id="messageModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3 class="modal-title">Отправить сообщение</h3>
-                <button class="modal-close" onclick="closeMessageModal()">×</button>
+        <!-- Leads Section -->
+        <section id="leads" class="section">
+            <div class="page-header">
+                <h1 class="page-title">👥 Сделки из AmoCRM</h1>
+                <p class="page-subtitle">Все сделки со статусом "заявка оформлена" — фильтруйте по UTM-меткам</p>
             </div>
-            <div class="modal-recipient" id="modalRecipient">
-                <div class="modal-recipient-avatar" id="modalAvatar">?</div>
-                <span class="modal-recipient-name" id="modalName">Пользователь</span>
+
+            <div class="alert alert-info">
+                <span>💡</span>
+                <span>В аналитику Яндекс попадают только заказы где <strong>utm_source содержит "yandex"</strong> и есть <strong>ID кампании</strong> в utm_campaign</span>
             </div>
-            <div class="format-toolbar">
-                <button class="format-btn" data-format="bold" onclick="insertFormat('b', 'userMessage')" title="Жирный">B</button>
-                <button class="format-btn" data-format="italic" onclick="insertFormat('i', 'userMessage')" title="Курсив">I</button>
-                <button class="format-btn" data-format="code" onclick="insertFormat('code', 'userMessage')" title="Код">&lt;/&gt;</button>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">🔍 Фильтры</h3>
+                    <button class="btn btn-sm btn-primary" onclick="loadLeads()">🔄 Обновить</button>
+                </div>
+                <div class="card-body">
+                    <div class="filters">
+                        <div class="filter-group">
+                            <label class="filter-label">UTM Source</label>
+                            <select id="filter-utm-source" onchange="filterLeads()">
+                                <option value="">Все источники</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">UTM Medium</label>
+                            <select id="filter-utm-medium" onchange="filterLeads()">
+                                <option value="">Все medium</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">UTM Campaign</label>
+                            <select id="filter-utm-campaign" onchange="filterLeads()">
+                                <option value="">Все кампании</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Статус</label>
+                            <select id="filter-status" onchange="filterLeads()">
+                                <option value="">Все статусы</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Только для Яндекс</label>
+                            <select id="filter-yandex-only" onchange="filterLeads()">
+                                <option value="">Все сделки</option>
+                                <option value="yes">✅ Учитываются в Яндекс</option>
+                                <option value="no">❌ НЕ учитываются</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <textarea id="userMessage" placeholder="Напишите личное сообщение..."></textarea>
-            <div class="modal-actions">
-                <button class="btn btn-secondary" onclick="closeMessageModal()">Отмена</button>
-                <button class="btn btn-primary" onclick="sendToUser()">Отправить</button>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">📋 Список сделок <span id="leads-count" class="badge badge-success">0</span></h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-container" id="leads-table">
+                        <div class="loading"><div class="spinner"></div></div>
+                    </div>
+                </div>
             </div>
-            <div id="messageStatus" class="status hidden"></div>
-        </div>
-    </div>
+        </section>
+
+        <!-- Sync Section -->
+        <section id="sync" class="section">
+            <div class="page-header">
+                <h1 class="page-title">🔄 Синхронизация данных</h1>
+                <p class="page-subtitle">Загрузка данных из Яндекс.Директ и AmoCRM</p>
+            </div>
+
+            <div class="sync-panel">
+                <div class="sync-card yandex">
+                    <div class="sync-card-header">
+                        <div class="sync-card-icon">🟡</div>
+                        <div>
+                            <div class="sync-card-title">Яндекс.Директ</div>
+                        </div>
+                    </div>
+                    <div class="sync-card-desc">
+                        <strong>Что делает:</strong> Загружает расходы по рекламным кампаниям за выбранный месяц.<br><br>
+                        <strong>Откуда:</strong> API Яндекс.Директ Reports<br>
+                        <strong>Куда:</strong> Таблица yandex_expenses в Supabase
+                    </div>
+                    <div class="sync-options">
+                        <select id="yandex-year">
+                            <option value="2024">2024</option>
+                            <option value="2025" selected>2025</option>
+                        </select>
+                        <select id="yandex-month">
+                            <option value="1">Январь</option>
+                            <option value="2">Февраль</option>
+                            <option value="3">Март</option>
+                            <option value="4">Апрель</option>
+                            <option value="5">Май</option>
+                            <option value="6">Июнь</option>
+                            <option value="7">Июль</option>
+                            <option value="8">Август</option>
+                            <option value="9">Сентябрь</option>
+                            <option value="10">Октябрь</option>
+                            <option value="11">Ноябрь</option>
+                            <option value="12">Декабрь</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="syncYandex()">🟡 Синхронизировать Яндекс</button>
+                </div>
+
+                <div class="sync-card amo">
+                    <div class="sync-card-header">
+                        <div class="sync-card-icon">🔵</div>
+                        <div>
+                            <div class="sync-card-title">AmoCRM</div>
+                        </div>
+                    </div>
+                    <div class="sync-card-desc">
+                        <strong>Что делает:</strong> Загружает сделки со статусом "заявка оформлена" (заказы), созданные в выбранном месяце.<br><br>
+                        <strong>Откуда:</strong> API AmoCRM v4<br>
+                        <strong>Куда:</strong> Таблица crm_leads в Supabase
+                    </div>
+                    <div class="sync-options">
+                        <select id="amo-year">
+                            <option value="2024">2024</option>
+                            <option value="2025" selected>2025</option>
+                        </select>
+                        <select id="amo-month">
+                            <option value="1">Январь</option>
+                            <option value="2">Февраль</option>
+                            <option value="3">Март</option>
+                            <option value="4">Апрель</option>
+                            <option value="5">Май</option>
+                            <option value="6">Июнь</option>
+                            <option value="7">Июль</option>
+                            <option value="8">Август</option>
+                            <option value="9">Сентябрь</option>
+                            <option value="10">Октябрь</option>
+                            <option value="11">Ноябрь</option>
+                            <option value="12">Декабрь</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="syncAmo()">🔵 Синхронизировать AmoCRM</button>
+                </div>
+
+                <div class="sync-card full">
+                    <div class="sync-card-header">
+                        <div class="sync-card-icon">🟢</div>
+                        <div>
+                            <div class="sync-card-title">Полная синхронизация</div>
+                        </div>
+                    </div>
+                    <div class="sync-card-desc">
+                        <strong>Что делает:</strong> Загружает ВСЕ данные за указанный период:<br>
+                        1. Сначала расходы из Яндекс.Директ<br>
+                        2. Затем заказы из AmoCRM<br><br>
+                        <strong>Рекомендация:</strong> Используйте для первоначальной загрузки исторических данных
+                    </div>
+                    <div class="sync-options">
+                        <select id="full-year-from">
+                            <option value="2024">С 2024</option>
+                            <option value="2025">С 2025</option>
+                        </select>
+                        <select id="full-month-from">
+                            <option value="1">Январь</option>
+                            <option value="2">Февраль</option>
+                            <option value="3">Март</option>
+                            <option value="4">Апрель</option>
+                            <option value="5">Май</option>
+                            <option value="6">Июнь</option>
+                            <option value="7">Июль</option>
+                            <option value="8">Август</option>
+                            <option value="9">Сентябрь</option>
+                            <option value="10">Октябрь</option>
+                            <option value="11">Ноябрь</option>
+                            <option value="12">Декабрь</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-success" onclick="syncFull()">🟢 Полная синхронизация</button>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 24px;">
+                <div class="card-header">
+                    <h3 class="card-title">🧪 Тестирование подключений</h3>
+                </div>
+                <div class="card-body">
+                    <div class="btn-group">
+                        <button class="btn btn-secondary" onclick="testYandex()">🟡 Тест Яндекс.Директ</button>
+                        <button class="btn btn-secondary" onclick="testAmo()">🔵 Тест AmoCRM</button>
+                    </div>
+                    <div id="test-result" style="margin-top: 16px;"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Broadcasts Section -->
+        <section id="broadcasts" class="section">
+            <div class="page-header">
+                <h1 class="page-title">📨 Рассылки</h1>
+                <p class="page-subtitle">Отправка сообщений клиентам через Telegram</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 24px;">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">👥 Получатели</h3>
+                        <button class="btn btn-sm btn-secondary" onclick="loadChats()">🔄</button>
+                    </div>
+                    <div class="card-body" style="padding: 0; max-height: 500px; overflow-y: auto;">
+                        <div id="broadcast-recipients" class="chat-list">
+                            <div class="loading"><div class="spinner"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">✉️ Сообщение</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="broadcast-form">
+                            <div class="form-group">
+                                <label class="form-label">Текст сообщения</label>
+                                <textarea id="broadcast-message" placeholder="Введите текст рассылки..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Выбрано получателей: <span id="selected-count">0</span></label>
+                            </div>
+                            <div class="btn-group">
+                                <button class="btn btn-primary" onclick="sendBroadcast()">📤 Отправить рассылку</button>
+                                <button class="btn btn-secondary" onclick="selectAllChats()">Выбрать всех</button>
+                                <button class="btn btn-secondary" onclick="deselectAllChats()">Снять выбор</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chats Section -->
+        <section id="chats" class="section">
+            <div class="page-header">
+                <h1 class="page-title">💬 Чаты с клиентами</h1>
+                <p class="page-subtitle">История переписки из Telegram бота</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 350px 1fr; gap: 24px;">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Диалоги</h3>
+                        <button class="btn btn-sm btn-secondary" onclick="loadChatsForView()">🔄</button>
+                    </div>
+                    <div class="card-body" style="padding: 0; max-height: 600px; overflow-y: auto;">
+                        <div id="chats-list" class="chat-list">
+                            <div class="loading"><div class="spinner"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title" id="chat-header">Выберите чат</h3>
+                    </div>
+                    <div class="card-body" id="chat-messages" style="max-height: 500px; overflow-y: auto;">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">💬</div>
+                            <div class="empty-state-text">Выберите диалог слева</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Logs Section -->
+        <section id="logs" class="section">
+            <div class="page-header">
+                <h1 class="page-title">📋 Логи синхронизации</h1>
+                <p class="page-subtitle">История операций синхронизации данных</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Последние операции</h3>
+                    <button class="btn btn-sm btn-secondary" onclick="loadLogs()">🔄 Обновить</button>
+                </div>
+                <div class="card-body" id="logs-container">
+                    <div class="loading"><div class="spinner"></div></div>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <script>
-        const API_URL = 'https://sparom.onrender.com';
+        // Config
+        const API_BASE = '';
+        const AUTH_KEY = localStorage.getItem('yandex_admin_key') || prompt('Введите ключ доступа:');
+        if (AUTH_KEY) localStorage.setItem('yandex_admin_key', AUTH_KEY);
 
-        let password = sessionStorage.getItem('sparom_admin_pwd') || '';
-        let selectedUserId = null;
-        let selectedUserName = '';
+        // State
+        let allLeads = [];
+        let selectedChats = new Set();
 
-        // Auto-login if password saved
-        document.addEventListener('DOMContentLoaded', async () => {
-            const loginEl = document.getElementById('loginSection');
-            const dashEl = document.getElementById('dashboard');
+        // Navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const section = item.dataset.section;
+                if (!section) return;
 
-            if (password) {
-                const success = await loadStats();
-                if (success) {
-                    loginEl.classList.add('hidden');
-                    dashEl.classList.remove('hidden');
-                    dashEl.classList.add('ready');
-                    loadUsers();
-                } else {
-                    sessionStorage.removeItem('sparom_admin_pwd');
-                    password = '';
-                    loginEl.classList.add('ready');
-                }
-            } else {
-                loginEl.classList.add('ready');
-            }
-        });
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
 
-        // Login
-        async function login() {
-            password = document.getElementById('password').value;
-            if (!password) return;
+                item.classList.add('active');
+                document.getElementById(section).classList.add('active');
 
-            const success = await loadStats();
-            if (success) {
-                sessionStorage.setItem('sparom_admin_pwd', password);
-                document.getElementById('loginSection').classList.add('hidden');
-                document.getElementById('loginSection').classList.remove('ready');
-                document.getElementById('dashboard').classList.remove('hidden');
-                document.getElementById('dashboard').classList.add('ready');
-                loadUsers();
-            } else {
-                alert('Неверный пароль');
-            }
-        }
-
-        function logout() {
-            sessionStorage.removeItem('sparom_admin_pwd');
-            password = '';
-            document.getElementById('dashboard').classList.add('hidden');
-            document.getElementById('dashboard').classList.remove('ready');
-            document.getElementById('loginSection').classList.remove('hidden');
-            document.getElementById('loginSection').classList.add('ready');
-            document.getElementById('password').value = '';
-        }
-
-        // Stats
-        async function loadStats() {
-            try {
-                const res = await fetch(`${API_URL}/api/stats?password=${encodeURIComponent(password)}`);
-                if (res.status === 401) return false;
-                const data = await res.json();
-                document.getElementById('totalUsers').textContent = data.total_users || 0;
-                document.getElementById('actions24h').textContent = data.actions_24h || 0;
-                return true;
-            } catch (e) {
-                console.error('Stats error:', e);
-                return false;
-            }
-        }
-
-        // Users
-        async function loadUsers() {
-            const list = document.getElementById('usersList');
-            list.innerHTML = `
-                <div class="empty-state">
-                    <p class="empty-state-text">Загрузка...</p>
-                </div>
-            `;
-
-            try {
-                const res = await fetch(`${API_URL}/api/users?password=${encodeURIComponent(password)}`);
-                const data = await res.json();
-
-                if (!data.users || data.users.length === 0) {
-                    list.innerHTML = `
-                        <div class="empty-state">
-                            <p class="empty-state-text">Пользователей пока нет</p>
-                        </div>
-                    `;
-                    return;
-                }
-
-                list.innerHTML = data.users.map(u => {
-                    const name = u.first_name || u.username || 'Пользователь';
-                    const fullName = [u.first_name, u.last_name].filter(Boolean).join(' ') || u.username || 'Без имени';
-                    const initial = name.charAt(0).toUpperCase();
-                    const avatarUrl = u.avatar_url;
-
-                    // Последнее сообщение
-                    let lastMsgHtml = '';
-                    if (u.last_message) {
-                        const msgDir = u.last_message.direction === 'in' ? 'incoming' : 'outgoing';
-                        const msgText = u.last_message.message.length > 40
-                            ? u.last_message.message.substring(0, 40) + '...'
-                            : u.last_message.message;
-                        const msgTime = formatTime(u.last_message.created_at);
-                        lastMsgHtml = `
-                            <div class="user-last-msg ${msgDir}">
-                                ${escapeHtml(msgText)}
-                                <span class="user-last-time">${msgTime}</span>
-                            </div>
-                        `;
-                    }
-
-                    // Аватар: изображение или инициал
-                    const avatarHtml = avatarUrl
-                        ? `<img src="${avatarUrl}" alt="${initial}" class="user-avatar-img">`
-                        : initial;
-
-                    return `
-                        <div class="user-item">
-                            <div class="user-info">
-                                <div class="user-avatar">${avatarHtml}</div>
-                                <div class="user-details">
-                                    <span class="user-name">${fullName}${u.username ? ' @' + u.username : ''}</span>
-                                    <span class="user-id">ID: ${u.telegram_id}</span>
-                                    ${lastMsgHtml}
-                                </div>
-                            </div>
-                            <div class="user-actions">
-                                <button class="btn btn-secondary" onclick="openChatModal(${u.telegram_id}, '${name.replace(/'/g, "\\'")}')">
-                                    Чат
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            } catch (e) {
-                console.error('Users error:', e);
-                list.innerHTML = `
-                    <div class="empty-state">
-                        <p class="empty-state-text">Ошибка загрузки</p>
-                    </div>
-                `;
-            }
-        }
-
-        // Message Modal
-        function openMessageModal(userId, name) {
-            selectedUserId = userId;
-            selectedUserName = name;
-            document.getElementById('modalAvatar').textContent = name.charAt(0).toUpperCase();
-            document.getElementById('modalName').textContent = name;
-            document.getElementById('userMessage').value = '';
-            document.getElementById('messageStatus').classList.add('hidden');
-            document.getElementById('messageModal').classList.add('active');
-        }
-
-        function closeMessageModal() {
-            document.getElementById('messageModal').classList.remove('active');
-            selectedUserId = null;
-        }
-
-        async function sendToUser() {
-            if (!selectedUserId) return;
-
-            const message = document.getElementById('userMessage').value;
-            if (!message.trim()) return;
-
-            const statusEl = document.getElementById('messageStatus');
-            statusEl.textContent = 'Отправка...';
-            statusEl.className = 'status info';
-            statusEl.classList.remove('hidden');
-
-            try {
-                const res = await fetch(`${API_URL}/api/send`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        password,
-                        telegram_id: selectedUserId,
-                        message,
-                        parse_mode: 'HTML'
-                    })
-                });
-
-                const data = await res.json();
-
-                if (data.success) {
-                    statusEl.textContent = 'Сообщение отправлено';
-                    statusEl.className = 'status success';
-                    setTimeout(() => {
-                        closeMessageModal();
-                        loadUsers(); // Обновить список с последними сообщениями
-                    }, 1500);
-                } else {
-                    statusEl.textContent = data.error || 'Ошибка отправки';
-                    statusEl.className = 'status error';
-                }
-            } catch (e) {
-                statusEl.textContent = 'Ошибка сети';
-                statusEl.className = 'status error';
-            }
-        }
-
-        // Broadcast
-        async function broadcast() {
-            const message = document.getElementById('broadcastMessage').value;
-            if (!message.trim()) return;
-
-            if (!confirm('Отправить это сообщение ВСЕМ пользователям?')) return;
-
-            const statusEl = document.getElementById('broadcastStatus');
-            statusEl.textContent = 'Отправка...';
-            statusEl.className = 'status info';
-            statusEl.classList.remove('hidden');
-
-            try {
-                const res = await fetch(`${API_URL}/api/broadcast`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ password, message })
-                });
-
-                const data = await res.json();
-
-                if (data.sent !== undefined) {
-                    statusEl.textContent = `Отправлено: ${data.sent}, ошибок: ${data.failed}`;
-                    statusEl.className = 'status success';
-                    document.getElementById('broadcastMessage').value = '';
-                } else {
-                    statusEl.textContent = data.error || 'Ошибка рассылки';
-                    statusEl.className = 'status error';
-                }
-            } catch (e) {
-                statusEl.textContent = 'Ошибка сети';
-                statusEl.className = 'status error';
-            }
-        }
-
-        // Enter для логина
-        document.getElementById('password').addEventListener('keypress', e => {
-            if (e.key === 'Enter') login();
-        });
-
-        // Закрытие модалки по клику на оверлей
-        document.getElementById('messageModal').addEventListener('click', e => {
-            if (e.target.id === 'messageModal') closeMessageModal();
-        });
-        document.getElementById('chatModal').addEventListener('click', e => {
-            if (e.target.id === 'chatModal') closeChatModal();
-        });
-
-        // ==================== CHAT HISTORY ====================
-
-        let chatMessages = [];
-        let currentFilter = 'all';
-
-        async function openChatModal(userId, name) {
-            selectedUserId = userId;
-            selectedUserName = name;
-            currentFilter = 'all';
-
-            document.getElementById('chatAvatar').textContent = name.charAt(0).toUpperCase();
-            document.getElementById('chatName').textContent = name;
-            document.getElementById('chatMessage').value = '';
-            document.getElementById('chatStatus').classList.add('hidden');
-
-            // Сбросить фильтры
-            document.querySelectorAll('.chat-filter button').forEach(btn => btn.classList.remove('active'));
-            document.querySelector('.chat-filter button').classList.add('active');
-
-            document.getElementById('chatModal').classList.add('active');
-            await loadChatHistory();
-        }
-
-        function closeChatModal() {
-            document.getElementById('chatModal').classList.remove('active');
-            selectedUserId = null;
-        }
-
-        async function loadChatHistory() {
-            const container = document.getElementById('chatContainer');
-            container.innerHTML = '<div class="chat-empty">Загрузка...</div>';
-
-            try {
-                const dirParam = currentFilter !== 'all' ? `&direction=${currentFilter}` : '';
-                const res = await fetch(`${API_URL}/api/messages/${selectedUserId}?password=${encodeURIComponent(password)}${dirParam}`);
-                const data = await res.json();
-
-                chatMessages = data.messages || [];
-                renderChat();
-            } catch (e) {
-                console.error('Chat error:', e);
-                container.innerHTML = '<div class="chat-empty">Ошибка загрузки</div>';
-            }
-        }
-
-        function renderChat() {
-            const container = document.getElementById('chatContainer');
-
-            if (chatMessages.length === 0) {
-                container.innerHTML = '<div class="chat-empty">Сообщений пока нет</div>';
-                return;
-            }
-
-            container.innerHTML = chatMessages.map(msg => {
-                const dir = msg.direction === 'in' ? 'incoming' : 'outgoing';
-                const time = formatDateTime(msg.created_at);
-                return `
-                    <div class="chat-message ${dir}">
-                        <div class="chat-bubble">${escapeHtml(msg.message)}</div>
-                        <div class="chat-time">${time}</div>
-                    </div>
-                `;
-            }).join('');
-
-            // Прокрутить вниз
-            container.scrollTop = container.scrollHeight;
-        }
-
-        function filterChat(filter) {
-            currentFilter = filter;
-
-            // Обновить активную кнопку
-            document.querySelectorAll('.chat-filter button').forEach((btn, i) => {
-                btn.classList.toggle('active',
-                    (filter === 'all' && i === 0) ||
-                    (filter === 'in' && i === 1) ||
-                    (filter === 'out' && i === 2)
-                );
+                // Load data for section
+                if (section === 'analytics') loadAnalytics();
+                if (section === 'leads') loadLeads();
+                if (section === 'logs') loadLogs();
+                if (section === 'broadcasts') loadChats();
+                if (section === 'chats') loadChatsForView();
             });
+        });
 
-            loadChatHistory();
-        }
-
-        async function sendFromChat() {
-            if (!selectedUserId) return;
-
-            const messageEl = document.getElementById('chatMessage');
-            const message = messageEl.value;
-            if (!message.trim()) return;
-
-            const statusEl = document.getElementById('chatStatus');
-            statusEl.textContent = 'Отправка...';
-            statusEl.className = 'status info';
-            statusEl.classList.remove('hidden');
+        // API Helper
+        async function api(endpoint, options = {}) {
+            const url = API_BASE + endpoint;
+            const headers = {
+                'Content-Type': 'application/json',
+                'X-Yandex-Key': AUTH_KEY
+            };
 
             try {
-                const res = await fetch(`${API_URL}/api/send`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        password,
-                        telegram_id: selectedUserId,
-                        message,
-                        parse_mode: 'HTML'
-                    })
-                });
-
-                const data = await res.json();
-
-                if (data.success) {
-                    statusEl.textContent = 'Отправлено';
-                    statusEl.className = 'status success';
-                    messageEl.value = '';
-
-                    // Обновить историю
-                    await loadChatHistory();
-                    setTimeout(() => statusEl.classList.add('hidden'), 2000);
-                } else {
-                    statusEl.textContent = data.error || 'Ошибка';
-                    statusEl.className = 'status error';
-                }
-            } catch (e) {
-                statusEl.textContent = 'Ошибка сети';
-                statusEl.className = 'status error';
+                const response = await fetch(url, { ...options, headers });
+                return await response.json();
+            } catch (err) {
+                console.error('API Error:', err);
+                return { success: false, error: err.message };
             }
         }
 
-        // ==================== FORMATTING ====================
-
-        function insertFormat(tag, textareaId = 'chatMessage') {
-            const textarea = document.getElementById(textareaId);
-            const start = textarea.selectionStart;
-            const end = textarea.selectionEnd;
-            const text = textarea.value;
-            const selected = text.substring(start, end);
-
-            const formatted = `<${tag}>${selected}</${tag}>`;
-            textarea.value = text.substring(0, start) + formatted + text.substring(end);
-
-            // Установить курсор
-            const cursorPos = start + tag.length + 2 + selected.length;
-            textarea.focus();
-            textarea.setSelectionRange(cursorPos, cursorPos);
+        // Format helpers
+        function formatMoney(value) {
+            if (!value && value !== 0) return '—';
+            return new Intl.NumberFormat('ru-RU').format(Math.round(value)) + ' ₽';
         }
 
-        // ==================== HELPERS ====================
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        function formatTime(isoString) {
-            if (!isoString) return '';
-            const date = new Date(isoString);
-            const now = new Date();
-            const diffDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
-
-            if (diffDays === 0) {
-                return date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-            } else if (diffDays === 1) {
-                return 'вчера';
-            } else if (diffDays < 7) {
-                return date.toLocaleDateString('ru-RU', { weekday: 'short' });
-            } else {
-                return date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
-            }
-        }
-
-        function formatDateTime(isoString) {
-            if (!isoString) return '';
-            const date = new Date(isoString);
-            return date.toLocaleDateString('ru-RU', {
-                day: 'numeric',
-                month: 'short',
+        function formatDate(dateStr) {
+            if (!dateStr) return '—';
+            return new Date(dateStr).toLocaleDateString('ru-RU', {
+                day: '2-digit',
+                month: '2-digit',
+                year: '2-digit',
                 hour: '2-digit',
                 minute: '2-digit'
             });
         }
+
+        // Analytics
+        async function loadAnalytics() {
+            const year = document.getElementById('filter-year').value;
+            const params = new URLSearchParams();
+            if (year) params.append('year', year);
+
+            const data = await api('/api/analytics?' + params.toString());
+
+            if (data.success) {
+                renderAnalytics(data);
+            } else {
+                document.getElementById('analytics-table').innerHTML =
+                    `<div class="alert alert-error">Ошибка: ${data.error}</div>`;
+            }
+        }
+
+        function renderAnalytics(data) {
+            const { campaigns, months, summary } = data;
+
+            // Stats
+            document.getElementById('stat-total-cost').textContent = formatMoney(summary.total_cost);
+            document.getElementById('stat-total-leads').textContent = summary.total_leads || 0;
+            document.getElementById('stat-avg-cpl').textContent = formatMoney(summary.avg_cpl);
+            document.getElementById('stat-months').textContent = months?.length || 0;
+
+            if (!campaigns || campaigns.length === 0) {
+                document.getElementById('analytics-table').innerHTML =
+                    '<div class="empty-state"><div class="empty-state-icon">📊</div><div class="empty-state-text">Нет данных</div><div>Запустите синхронизацию в разделе "Синхронизация"</div></div>';
+                return;
+            }
+
+            // Table
+            let html = '<table class="analytics-table"><thead><tr><th>ID кампании</th><th>Название</th>';
+            months.forEach(m => {
+                html += `<th>${m}</th>`;
+            });
+            html += '<th>Итого</th></tr></thead><tbody>';
+
+            campaigns.forEach(campaign => {
+                let totalCost = 0, totalLeads = 0;
+
+                html += `<tr><td><code>${campaign.campaign_id}</code></td><td>${campaign.campaign_name || '—'}</td>`;
+
+                months.forEach(m => {
+                    const monthData = campaign.months[m];
+                    if (monthData) {
+                        totalCost += monthData.cost || 0;
+                        totalLeads += monthData.leads || 0;
+
+                        html += '<td>';
+                        html += `<div class="cell-cost">${formatMoney(monthData.cost)}</div>`;
+                        html += `<div class="cell-leads">${monthData.leads || 0} заказов</div>`;
+                        if (monthData.cost_per_lead) {
+                            html += `<div class="cell-cpl">${formatMoney(monthData.cost_per_lead)}/заказ</div>`;
+                        }
+                        html += '</td>';
+                    } else {
+                        html += '<td class="cell-empty">—</td>';
+                    }
+                });
+
+                const avgCpl = totalLeads > 0 ? Math.round(totalCost / totalLeads) : null;
+                html += '<td>';
+                html += `<div class="cell-cost">${formatMoney(totalCost)}</div>`;
+                html += `<div class="cell-leads">${totalLeads} заказов</div>`;
+                if (avgCpl) html += `<div class="cell-cpl">${formatMoney(avgCpl)}/заказ</div>`;
+                html += '</td></tr>';
+            });
+
+            html += '</tbody></table>';
+            document.getElementById('analytics-table').innerHTML = html;
+        }
+
+        // Leads
+        async function loadLeads() {
+            document.getElementById('leads-table').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+
+            const data = await api('/api/crm-leads/all');
+
+            if (data.success) {
+                allLeads = data.leads || [];
+                populateFilters();
+                filterLeads();
+            } else {
+                document.getElementById('leads-table').innerHTML =
+                    `<div class="alert alert-error">Ошибка: ${data.error}</div>`;
+            }
+        }
+
+        function populateFilters() {
+            const sources = new Set();
+            const mediums = new Set();
+            const campaigns = new Set();
+            const statuses = new Set();
+
+            allLeads.forEach(lead => {
+                if (lead.utm_source) sources.add(lead.utm_source);
+                if (lead.utm_medium) mediums.add(lead.utm_medium);
+                if (lead.utm_campaign) campaigns.add(lead.utm_campaign);
+                if (lead.status_name) statuses.add(lead.status_name);
+            });
+
+            fillSelect('filter-utm-source', sources, 'Все источники');
+            fillSelect('filter-utm-medium', mediums, 'Все medium');
+            fillSelect('filter-utm-campaign', campaigns, 'Все кампании');
+            fillSelect('filter-status', statuses, 'Все статусы');
+        }
+
+        function fillSelect(id, values, defaultText) {
+            const select = document.getElementById(id);
+            const currentValue = select.value;
+            select.innerHTML = `<option value="">${defaultText}</option>`;
+            Array.from(values).sort().forEach(v => {
+                select.innerHTML += `<option value="${v}">${v}</option>`;
+            });
+            select.value = currentValue;
+        }
+
+        function filterLeads() {
+            const sourceFilter = document.getElementById('filter-utm-source').value.toLowerCase();
+            const mediumFilter = document.getElementById('filter-utm-medium').value.toLowerCase();
+            const campaignFilter = document.getElementById('filter-utm-campaign').value.toLowerCase();
+            const statusFilter = document.getElementById('filter-status').value.toLowerCase();
+            const yandexOnly = document.getElementById('filter-yandex-only').value;
+
+            let filtered = allLeads.filter(lead => {
+                if (sourceFilter && (lead.utm_source || '').toLowerCase() !== sourceFilter) return false;
+                if (mediumFilter && (lead.utm_medium || '').toLowerCase() !== mediumFilter) return false;
+                if (campaignFilter && (lead.utm_campaign || '').toLowerCase() !== campaignFilter) return false;
+                if (statusFilter && (lead.status_name || '').toLowerCase() !== statusFilter) return false;
+
+                if (yandexOnly === 'yes') {
+                    // Учитывается в Яндекс аналитике
+                    const isYandex = (lead.utm_source || '').toLowerCase() === 'yandex';
+                    const hasCampaignId = lead.extracted_campaign_id != null;
+                    if (!isYandex || !hasCampaignId) return false;
+                } else if (yandexOnly === 'no') {
+                    const isYandex = (lead.utm_source || '').toLowerCase() === 'yandex';
+                    const hasCampaignId = lead.extracted_campaign_id != null;
+                    if (isYandex && hasCampaignId) return false;
+                }
+
+                return true;
+            });
+
+            document.getElementById('leads-count').textContent = filtered.length;
+            renderLeadsTable(filtered);
+        }
+
+        function renderLeadsTable(leads) {
+            if (leads.length === 0) {
+                document.getElementById('leads-table').innerHTML =
+                    '<div class="empty-state"><div class="empty-state-icon">👥</div><div class="empty-state-text">Нет сделок</div></div>';
+                return;
+            }
+
+            let html = `<table>
+                <thead>
+                    <tr>
+                        <th class="sortable" onclick="sortLeads('lead_id')">ID</th>
+                        <th class="sortable" onclick="sortLeads('lead_name')">Название</th>
+                        <th class="sortable" onclick="sortLeads('lead_created_at')">Дата создания</th>
+                        <th>UTM Source</th>
+                        <th>UTM Medium</th>
+                        <th>UTM Campaign</th>
+                        <th>ID кампании</th>
+                        <th>Статус</th>
+                        <th>В Яндекс?</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+
+            leads.forEach(lead => {
+                const isYandex = (lead.utm_source || '').toLowerCase() === 'yandex';
+                const hasCampaignId = lead.extracted_campaign_id != null;
+                const inYandexAnalytics = isYandex && hasCampaignId;
+
+                html += `<tr>
+                    <td><code>${lead.lead_id}</code></td>
+                    <td>${lead.lead_name || '—'}</td>
+                    <td>${formatDate(lead.lead_created_at)}</td>
+                    <td>${lead.utm_source ? `<span class="utm-tag utm-source">${lead.utm_source}</span>` : '<span class="utm-tag utm-empty">—</span>'}</td>
+                    <td>${lead.utm_medium ? `<span class="utm-tag utm-medium">${lead.utm_medium}</span>` : '<span class="utm-tag utm-empty">—</span>'}</td>
+                    <td>${lead.utm_campaign ? `<span class="utm-tag utm-campaign">${lead.utm_campaign}</span>` : '<span class="utm-tag utm-empty">—</span>'}</td>
+                    <td>${lead.extracted_campaign_id ? `<code>${lead.extracted_campaign_id}</code>` : '<span class="utm-tag utm-empty">—</span>'}</td>
+                    <td>${lead.status_name || '—'}</td>
+                    <td>${inYandexAnalytics ? '<span class="badge badge-success">✅ Да</span>' : '<span class="badge badge-warning">❌ Нет</span>'}</td>
+                </tr>`;
+            });
+
+            html += '</tbody></table>';
+            document.getElementById('leads-table').innerHTML = html;
+        }
+
+        let sortField = 'lead_created_at';
+        let sortDir = 'desc';
+
+        function sortLeads(field) {
+            if (sortField === field) {
+                sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortField = field;
+                sortDir = 'asc';
+            }
+
+            allLeads.sort((a, b) => {
+                let aVal = a[field] || '';
+                let bVal = b[field] || '';
+
+                if (field === 'lead_created_at') {
+                    aVal = new Date(aVal).getTime();
+                    bVal = new Date(bVal).getTime();
+                }
+
+                if (aVal < bVal) return sortDir === 'asc' ? -1 : 1;
+                if (aVal > bVal) return sortDir === 'asc' ? 1 : -1;
+                return 0;
+            });
+
+            filterLeads();
+        }
+
+        // Sync functions
+        async function syncYandex() {
+            const year = document.getElementById('yandex-year').value;
+            const month = document.getElementById('yandex-month').value;
+
+            showTestResult('⏳ Синхронизация Яндекс.Директ...', 'info');
+
+            const data = await api('/api/sync/yandex-expenses', {
+                method: 'POST',
+                body: JSON.stringify({ year: parseInt(year), month: parseInt(month) })
+            });
+
+            if (data.success) {
+                showTestResult(`✅ Яндекс: загружено ${data.records} записей`, 'success');
+            } else {
+                showTestResult(`❌ Ошибка: ${data.error}`, 'error');
+            }
+        }
+
+        async function syncAmo() {
+            const year = document.getElementById('amo-year').value;
+            const month = document.getElementById('amo-month').value;
+
+            showTestResult('⏳ Синхронизация AmoCRM...', 'info');
+
+            const data = await api('/api/sync/crm-leads', {
+                method: 'POST',
+                body: JSON.stringify({ year: parseInt(year), month: parseInt(month) })
+            });
+
+            if (data.success) {
+                showTestResult(`✅ AmoCRM: загружено ${data.records} сделок`, 'success');
+            } else {
+                showTestResult(`❌ Ошибка: ${data.error}`, 'error');
+            }
+        }
+
+        async function syncFull() {
+            const yearFrom = parseInt(document.getElementById('full-year-from').value);
+            const monthFrom = parseInt(document.getElementById('full-month-from').value);
+
+            showTestResult('⏳ Полная синхронизация... Это может занять несколько минут', 'info');
+
+            const data = await api('/api/sync/full', {
+                method: 'POST',
+                body: JSON.stringify({ year_from: yearFrom, month_from: monthFrom })
+            });
+
+            if (data.success) {
+                showTestResult(`✅ Готово! Яндекс: ${data.yandex_total} записей, AmoCRM: ${data.amo_total} сделок`, 'success');
+                loadAnalytics();
+            } else {
+                showTestResult(`❌ Ошибка: ${data.error}`, 'error');
+            }
+        }
+
+        async function testYandex() {
+            showTestResult('⏳ Проверка подключения к Яндекс.Директ...', 'info');
+            const data = await api('/api/yandex/campaigns');
+
+            if (data.success || data.result) {
+                const count = data.result?.Campaigns?.length || data.campaigns?.length || 0;
+                showTestResult(`✅ Яндекс.Директ: найдено ${count} кампаний`, 'success');
+            } else {
+                showTestResult(`❌ Ошибка: ${data.error}`, 'error');
+            }
+        }
+
+        async function testAmo() {
+            showTestResult('⏳ Проверка подключения к AmoCRM...', 'info');
+            const data = await api('/api/amocrm/test');
+
+            if (data.success) {
+                showTestResult(`✅ AmoCRM: подключен к аккаунту "${data.account}"`, 'success');
+            } else {
+                showTestResult(`❌ Ошибка: ${data.error}`, 'error');
+            }
+        }
+
+        function showTestResult(message, type) {
+            const el = document.getElementById('test-result');
+            el.innerHTML = `<div class="alert alert-${type === 'info' ? 'info' : type}">${message}</div>`;
+        }
+
+        // Logs
+        async function loadLogs() {
+            const data = await api('/api/sync/logs');
+
+            if (data.success) {
+                renderLogs(data.logs);
+            } else {
+                document.getElementById('logs-container').innerHTML =
+                    `<div class="alert alert-error">Ошибка: ${data.error}</div>`;
+            }
+        }
+
+        function renderLogs(logs) {
+            if (!logs || logs.length === 0) {
+                document.getElementById('logs-container').innerHTML =
+                    '<div class="empty-state"><div class="empty-state-icon">📋</div><div class="empty-state-text">Нет логов</div></div>';
+                return;
+            }
+
+            let html = '';
+            logs.forEach(log => {
+                html += `<div class="log-entry ${log.status}">
+                    <span class="log-time">${formatDate(log.created_at)}</span>
+                    <span class="log-type">${log.sync_type}</span>
+                    <span class="log-message">
+                        ${log.status === 'success' ? '✅' : log.status === 'error' ? '❌' : '⏳'}
+                        ${log.status} - ${log.records_count} записей
+                        ${log.error_message ? `<br><small style="color: var(--danger)">${log.error_message}</small>` : ''}
+                    </span>
+                </div>`;
+            });
+
+            document.getElementById('logs-container').innerHTML = html;
+        }
+
+        // Chats for broadcasts
+        async function loadChats() {
+            const data = await api('/api/chats');
+
+            if (data.success) {
+                renderBroadcastRecipients(data.chats);
+            }
+        }
+
+        function renderBroadcastRecipients(chats) {
+            if (!chats || chats.length === 0) {
+                document.getElementById('broadcast-recipients').innerHTML =
+                    '<div class="empty-state"><div class="empty-state-icon">👥</div><div class="empty-state-text">Нет чатов</div></div>';
+                return;
+            }
+
+            let html = '';
+            chats.forEach(chat => {
+                const isSelected = selectedChats.has(chat.chat_id);
+                const initial = (chat.first_name || chat.username || '?')[0].toUpperCase();
+
+                html += `<div class="chat-item ${isSelected ? 'selected' : ''}" onclick="toggleChatSelection('${chat.chat_id}')">
+                    <div class="chat-avatar">${initial}</div>
+                    <div class="chat-info">
+                        <div class="chat-name">${chat.first_name || ''} ${chat.last_name || ''}</div>
+                        <div class="chat-preview">@${chat.username || 'без username'}</div>
+                    </div>
+                </div>`;
+            });
+
+            document.getElementById('broadcast-recipients').innerHTML = html;
+            updateSelectedCount();
+        }
+
+        function toggleChatSelection(chatId) {
+            if (selectedChats.has(chatId)) {
+                selectedChats.delete(chatId);
+            } else {
+                selectedChats.add(chatId);
+            }
+            loadChats();
+        }
+
+        function selectAllChats() {
+            document.querySelectorAll('#broadcast-recipients .chat-item').forEach(item => {
+                const chatId = item.getAttribute('onclick').match(/'([^']+)'/)[1];
+                selectedChats.add(chatId);
+            });
+            loadChats();
+        }
+
+        function deselectAllChats() {
+            selectedChats.clear();
+            loadChats();
+        }
+
+        function updateSelectedCount() {
+            document.getElementById('selected-count').textContent = selectedChats.size;
+        }
+
+        async function sendBroadcast() {
+            const message = document.getElementById('broadcast-message').value.trim();
+            if (!message) {
+                alert('Введите текст сообщения');
+                return;
+            }
+            if (selectedChats.size === 0) {
+                alert('Выберите получателей');
+                return;
+            }
+
+            if (!confirm(`Отправить сообщение ${selectedChats.size} получателям?`)) return;
+
+            const data = await api('/api/broadcast', {
+                method: 'POST',
+                body: JSON.stringify({
+                    chat_ids: Array.from(selectedChats),
+                    message: message
+                })
+            });
+
+            if (data.success) {
+                alert(`Успешно отправлено: ${data.sent} из ${data.total}`);
+                document.getElementById('broadcast-message').value = '';
+                selectedChats.clear();
+                loadChats();
+            } else {
+                alert('Ошибка: ' + data.error);
+            }
+        }
+
+        // Chats for viewing
+        async function loadChatsForView() {
+            const data = await api('/api/chats');
+
+            if (data.success) {
+                renderChatsList(data.chats);
+            }
+        }
+
+        function renderChatsList(chats) {
+            if (!chats || chats.length === 0) {
+                document.getElementById('chats-list').innerHTML =
+                    '<div class="empty-state"><div class="empty-state-icon">💬</div><div class="empty-state-text">Нет чатов</div></div>';
+                return;
+            }
+
+            let html = '';
+            chats.forEach(chat => {
+                const initial = (chat.first_name || chat.username || '?')[0].toUpperCase();
+
+                html += `<div class="chat-item" onclick="loadChatHistory('${chat.chat_id}', '${chat.first_name || ''} ${chat.last_name || ''}')">
+                    <div class="chat-avatar">${initial}</div>
+                    <div class="chat-info">
+                        <div class="chat-name">${chat.first_name || ''} ${chat.last_name || ''}</div>
+                        <div class="chat-preview">@${chat.username || 'без username'}</div>
+                    </div>
+                </div>`;
+            });
+
+            document.getElementById('chats-list').innerHTML = html;
+        }
+
+        async function loadChatHistory(chatId, name) {
+            document.getElementById('chat-header').textContent = name || 'Чат';
+            document.getElementById('chat-messages').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+
+            const data = await api(`/api/chats/${chatId}/messages`);
+
+            if (data.success) {
+                renderChatMessages(data.messages);
+            } else {
+                document.getElementById('chat-messages').innerHTML =
+                    `<div class="alert alert-error">${data.error}</div>`;
+            }
+        }
+
+        function renderChatMessages(messages) {
+            if (!messages || messages.length === 0) {
+                document.getElementById('chat-messages').innerHTML =
+                    '<div class="empty-state"><div class="empty-state-icon">💬</div><div class="empty-state-text">Нет сообщений</div></div>';
+                return;
+            }
+
+            let html = '';
+            messages.forEach(msg => {
+                const isBot = msg.is_bot;
+                html += `<div style="margin-bottom: 12px; ${isBot ? 'text-align: right;' : ''}">
+                    <div style="display: inline-block; max-width: 70%; padding: 12px 16px; border-radius: 16px; ${isBot ? 'background: var(--primary); border-bottom-right-radius: 4px;' : 'background: var(--bg-card-hover); border-bottom-left-radius: 4px;'}">
+                        <div style="font-size: 14px;">${msg.text || ''}</div>
+                        <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">${formatDate(msg.created_at)}</div>
+                    </div>
+                </div>`;
+            });
+
+            document.getElementById('chat-messages').innerHTML = html;
+        }
+
+        // Export
+        function exportAnalytics() {
+            // TODO: implement CSV export
+            alert('Функция экспорта в разработке');
+        }
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAnalytics();
+
+            // Set current month in selects
+            const now = new Date();
+            document.querySelectorAll('select[id$="-month"]').forEach(sel => {
+                sel.value = now.getMonth() + 1;
+            });
+        });
     </script>
 </body>
 </html>

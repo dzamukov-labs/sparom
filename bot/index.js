@@ -441,9 +441,9 @@ app.get('/admin', (req, res) => {
     res.sendFile(__dirname + '/admin.html');
 });
 
-// Админ панель - аналитика
+// Редирект старого URL аналитики на единую админку
 app.get('/admin/analytics', (req, res) => {
-    res.sendFile(__dirname + '/admin-analytics.html');
+    res.redirect('/admin');
 });
 
 // Хелпер для запросов к Яндекс.Директ API
@@ -2341,20 +2341,26 @@ app.get('/api/analytics', async (req, res) => {
         const { data: expenses, error: expensesError } = await expensesQuery;
         if (expensesError) throw expensesError;
 
-        // Получаем лиды
+        // Получаем лиды (заказы со статусом "заявка оформлена")
         let leadsQuery = supabase
             .from('crm_leads')
             .select('*')
-            .eq('utm_source', 'yandex')
-            .eq('status_name', 'заявка оформлена')
             .not('extracted_campaign_id', 'is', null);
 
-        const { data: leads, error: leadsError } = await leadsQuery;
+        const { data: allLeads, error: leadsError } = await leadsQuery;
         if (leadsError) throw leadsError;
 
-        // Агрегируем лиды по кампаниям и месяцам
+        // Фильтруем лиды: utm_source должен содержать 'yandex' (case-insensitive)
+        // и статус должен быть 'заявка оформлена'
+        const leads = (allLeads || []).filter(lead => {
+            const source = (lead.utm_source || '').toLowerCase();
+            const status = (lead.status_name || '').toLowerCase();
+            return source.includes('yandex') && status === 'заявка оформлена';
+        });
+
+        // Агрегируем лиды (заказы) по кампаниям и месяцам
         const leadsMap = {};
-        for (const lead of leads || []) {
+        for (const lead of leads) {
             const date = new Date(lead.lead_created_at);
             const leadYear = date.getFullYear();
             const leadMonth = date.getMonth() + 1;
@@ -2452,6 +2458,68 @@ app.get('/api/sync/logs', async (req, res) => {
         if (error) throw error;
 
         res.json({ success: true, logs: data || [] });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// API: Получить все заявки/заказы из CRM
+app.get('/api/crm-leads/all', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+    if (!supabase) return res.json({ success: false, error: 'Supabase not configured' });
+
+    try {
+        const { data, error } = await supabase
+            .from('crm_leads')
+            .select('lead_id, lead_name, status_id, status_name, pipeline_id, price, utm_source, utm_medium, utm_campaign, utm_content, utm_term, extracted_campaign_id, lead_created_at, lead_closed_at, updated_at')
+            .order('lead_created_at', { ascending: false })
+            .limit(1000);
+
+        if (error) throw error;
+
+        res.json({ success: true, leads: data || [] });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// API: Получить чаты для рассылок
+app.get('/api/chats', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+    if (!supabase) return res.json({ success: false, error: 'Supabase not configured' });
+
+    try {
+        const { data, error } = await supabase
+            .from('users')
+            .select('chat_id, telegram_id, username, first_name, last_name, created_at')
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        res.json({ success: true, chats: data || [] });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// API: Получить историю сообщений чата
+app.get('/api/chats/:chatId/messages', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+    if (!supabase) return res.json({ success: false, error: 'Supabase not configured' });
+
+    const { chatId } = req.params;
+
+    try {
+        const { data, error } = await supabase
+            .from('messages')
+            .select('*')
+            .eq('chat_id', chatId)
+            .order('created_at', { ascending: true })
+            .limit(200);
+
+        if (error) throw error;
+
+        res.json({ success: true, messages: data || [] });
     } catch (err) {
         res.json({ success: false, error: err.message });
     }
