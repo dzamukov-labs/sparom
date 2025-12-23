@@ -683,7 +683,11 @@ app.get('/api/yandex-test', async (req, res) => {
 
 // Проверка авторизации для Яндекс API
 function checkYandexAuth(req, res) {
-    if (req.query.password !== ADMIN_PASSWORD && req.body?.password !== ADMIN_PASSWORD) {
+    const headerKey = req.headers['x-yandex-key'];
+    const queryKey = req.query.password;
+    const bodyKey = req.body?.password;
+
+    if (headerKey !== ADMIN_PASSWORD && queryKey !== ADMIN_PASSWORD && bodyKey !== ADMIN_PASSWORD) {
         res.status(401).json({ error: 'Unauthorized' });
         return false;
     }

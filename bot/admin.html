@@ -3,992 +3,479 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>СтройГлобал | Панель управления</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>СтройГлобал — Админ</title>
     <style>
-        :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --primary-light: #818cf8;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --bg-dark: #0f172a;
-            --bg-card: #1e293b;
-            --bg-card-hover: #334155;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --text-muted: #64748b;
-            --border: #334155;
-            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.3);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-dark);
-            color: var(--text-primary);
-            min-height: 100vh;
-            line-height: 1.6;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;
+            background: #f5f5f7;
+            color: #1d1d1f;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* Sidebar */
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 280px;
-            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-            border-right: 1px solid var(--border);
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            z-index: 100;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
         }
 
-        .logo {
+        /* Navigation */
+        .nav {
             display: flex;
-            align-items: center;
-            gap: 12px;
-            padding-bottom: 32px;
-            border-bottom: 1px solid var(--border);
+            gap: 8px;
             margin-bottom: 32px;
-        }
-
-        .logo-icon {
-            width: 48px;
-            height: 48px;
-            background: var(--gradient-1);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            box-shadow: var(--shadow-glow);
-        }
-
-        .logo-text {
-            font-size: 20px;
-            font-weight: 700;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .logo-subtitle {
-            font-size: 11px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .nav-section {
-            margin-bottom: 24px;
-        }
-
-        .nav-section-title {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--text-muted);
-            margin-bottom: 12px;
-            padding-left: 12px;
+            border-bottom: 1px solid #d2d2d7;
+            padding-bottom: 16px;
         }
 
         .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 16px;
-            border-radius: 12px;
+            padding: 8px 16px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            margin-bottom: 4px;
-            color: var(--text-secondary);
-            text-decoration: none;
-        }
-
-        .nav-item:hover {
-            background: var(--bg-card-hover);
-            color: var(--text-primary);
-        }
-
-        .nav-item.active {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
-        }
-
-        .nav-item-icon {
-            font-size: 20px;
-            width: 24px;
-            text-align: center;
-        }
-
-        .nav-item-text {
+            font-size: 14px;
             font-weight: 500;
+            color: #86868b;
+            transition: all 0.2s;
         }
 
-        .sidebar-footer {
-            margin-top: auto;
-            padding-top: 24px;
-            border-top: 1px solid var(--border);
-        }
+        .nav-item:hover { color: #1d1d1f; }
+        .nav-item.active { background: #1d1d1f; color: #fff; }
 
-        .sync-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px;
-            background: var(--bg-card);
-            border-radius: 10px;
-            font-size: 13px;
-        }
+        /* Sections */
+        .section { display: none; }
+        .section.active { display: block; }
 
-        .sync-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--success);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        /* Main Content */
-        .main {
-            margin-left: 280px;
-            padding: 32px;
-            min-height: 100vh;
-        }
-
-        .page-header {
-            margin-bottom: 32px;
-        }
-
-        .page-title {
+        h1 {
             font-size: 32px;
-            font-weight: 700;
+            font-weight: 600;
+            letter-spacing: -0.5px;
             margin-bottom: 8px;
         }
 
-        .page-subtitle {
-            color: var(--text-secondary);
-            font-size: 16px;
-        }
-
-        /* Stats Cards */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 24px;
+        .subtitle {
+            color: #86868b;
+            font-size: 15px;
             margin-bottom: 32px;
         }
 
-        .stat-card {
-            background: var(--bg-card);
-            border-radius: 20px;
-            padding: 24px;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            transition: all 0.3s ease;
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
         }
 
-        .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-        }
-
-        .stat-card.gradient-1::before { background: var(--gradient-1); }
-        .stat-card.gradient-2::before { background: var(--gradient-2); }
-        .stat-card.gradient-3::before { background: var(--gradient-3); }
-        .stat-card.gradient-4::before { background: var(--gradient-4); }
-
-        .stat-icon {
-            width: 48px;
-            height: 48px;
+        .stat {
+            background: #fff;
             border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            margin-bottom: 16px;
+            padding: 20px;
         }
-
-        .stat-card.gradient-1 .stat-icon { background: rgba(102, 126, 234, 0.2); }
-        .stat-card.gradient-2 .stat-icon { background: rgba(245, 87, 108, 0.2); }
-        .stat-card.gradient-3 .stat-icon { background: rgba(79, 172, 254, 0.2); }
-        .stat-card.gradient-4 .stat-icon { background: rgba(67, 233, 123, 0.2); }
 
         .stat-value {
             font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 4px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
         }
 
         .stat-label {
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-
-        /* Sections */
-        .section {
-            display: none;
-        }
-
-        .section.active {
-            display: block;
+            color: #86868b;
+            font-size: 13px;
+            margin-top: 4px;
         }
 
         /* Cards */
         .card {
-            background: var(--bg-card);
-            border-radius: 20px;
-            border: 1px solid var(--border);
-            overflow: hidden;
-            margin-bottom: 24px;
+            background: #fff;
+            border-radius: 12px;
+            margin-bottom: 20px;
         }
 
         .card-header {
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--border);
+            padding: 16px 20px;
+            border-bottom: 1px solid #f5f5f7;
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
         }
 
         .card-title {
-            font-size: 18px;
+            font-size: 15px;
             font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
-        .card-body {
-            padding: 24px;
-        }
+        .card-body { padding: 20px; }
 
         /* Buttons */
         .btn {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            padding: 12px 24px;
-            border-radius: 12px;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 8px;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s ease;
             border: none;
+            transition: all 0.2s;
             font-family: inherit;
         }
 
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
+        .btn-primary { background: #0071e3; color: #fff; }
+        .btn-primary:hover { background: #0077ed; }
+        .btn-secondary { background: #f5f5f7; color: #1d1d1f; }
+        .btn-secondary:hover { background: #e8e8ed; }
+        .btn-success { background: #34c759; color: #fff; }
 
-        .btn-primary:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
-        }
-
-        .btn-secondary {
-            background: var(--bg-card-hover);
-            color: var(--text-primary);
-        }
-
-        .btn-secondary:hover {
-            background: var(--border);
-        }
-
-        .btn-success {
-            background: var(--success);
-            color: white;
-        }
-
-        .btn-success:hover {
-            filter: brightness(1.1);
-        }
-
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
-
-        .btn-sm {
-            padding: 8px 16px;
-            font-size: 13px;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
+        .btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
 
         /* Tables */
-        .table-container {
-            overflow-x: auto;
-        }
+        .table-wrap { overflow-x: auto; }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+        table { width: 100%; border-collapse: collapse; }
 
         th, td {
-            padding: 14px 16px;
+            padding: 12px 16px;
             text-align: left;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid #f5f5f7;
+            font-size: 14px;
         }
 
         th {
-            background: var(--bg-dark);
-            font-weight: 600;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--text-secondary);
-            white-space: nowrap;
-        }
-
-        th.sortable {
-            cursor: pointer;
-            user-select: none;
-        }
-
-        th.sortable:hover {
-            color: var(--primary-light);
-        }
-
-        th.sortable::after {
-            content: ' ↕';
-            opacity: 0.3;
-        }
-
-        th.sort-asc::after {
-            content: ' ↑';
-            opacity: 1;
-        }
-
-        th.sort-desc::after {
-            content: ' ↓';
-            opacity: 1;
-        }
-
-        tr:hover {
-            background: var(--bg-card-hover);
-        }
-
-        td {
-            font-size: 14px;
-        }
-
-        /* UTM Tags */
-        .utm-tag {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 12px;
             font-weight: 500;
-            margin: 2px;
-        }
-
-        .utm-source { background: rgba(99, 102, 241, 0.2); color: #a5b4fc; }
-        .utm-medium { background: rgba(245, 87, 108, 0.2); color: #fda4af; }
-        .utm-campaign { background: rgba(79, 172, 254, 0.2); color: #7dd3fc; }
-        .utm-content { background: rgba(67, 233, 123, 0.2); color: #86efac; }
-        .utm-term { background: rgba(251, 191, 36, 0.2); color: #fcd34d; }
-        .utm-empty { background: var(--bg-dark); color: var(--text-muted); }
-
-        /* Filters */
-        .filters {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .filter-label {
+            color: #86868b;
             font-size: 12px;
-            color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        select, input[type="text"], input[type="number"] {
-            padding: 10px 16px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            background: var(--bg-dark);
-            color: var(--text-primary);
+        th.sortable { cursor: pointer; }
+        th.sortable:hover { color: #1d1d1f; }
+
+        tr:hover { background: #fafafa; }
+
+        /* Forms */
+        select, input[type="text"] {
+            padding: 8px 12px;
+            border: 1px solid #d2d2d7;
+            border-radius: 8px;
             font-size: 14px;
             font-family: inherit;
-            min-width: 180px;
+            background: #fff;
+            min-width: 150px;
         }
 
         select:focus, input:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+            border-color: #0071e3;
         }
 
-        /* Sync Panel */
-        .sync-panel {
+        .filters {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .filter-group label {
+            display: block;
+            font-size: 11px;
+            color: #86868b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        /* Tags */
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            background: #f5f5f7;
+        }
+
+        .tag-blue { background: #e3f2fd; color: #1976d2; }
+        .tag-green { background: #e8f5e9; color: #388e3c; }
+        .tag-orange { background: #fff3e0; color: #f57c00; }
+
+        /* Sync Cards */
+        .sync-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 24px;
+            gap: 16px;
         }
 
         .sync-card {
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 24px;
-            border: 1px solid var(--border);
-        }
-
-        .sync-card-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .sync-card-icon {
-            width: 48px;
-            height: 48px;
+            background: #fff;
             border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
+            padding: 20px;
         }
 
-        .sync-card.yandex .sync-card-icon {
-            background: rgba(255, 204, 0, 0.2);
-        }
-
-        .sync-card.amo .sync-card-icon {
-            background: rgba(79, 172, 254, 0.2);
-        }
-
-        .sync-card.full .sync-card-icon {
-            background: rgba(67, 233, 123, 0.2);
-        }
-
-        .sync-card-title {
-            font-size: 18px;
+        .sync-card h3 {
+            font-size: 16px;
             font-weight: 600;
+            margin-bottom: 8px;
         }
 
-        .sync-card-desc {
-            color: var(--text-secondary);
+        .sync-card p {
+            color: #86868b;
             font-size: 13px;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             line-height: 1.6;
         }
 
         .sync-options {
             display: flex;
-            gap: 12px;
-            margin-bottom: 16px;
+            gap: 8px;
+            margin-bottom: 12px;
         }
 
-        .sync-options select {
-            flex: 1;
+        .sync-options select { flex: 1; }
+
+        /* Chat */
+        .chat-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
         }
 
-        /* Analytics Table */
-        .analytics-table th:not(:first-child):not(:nth-child(2)),
-        .analytics-table td:not(:first-child):not(:nth-child(2)) {
-            text-align: center;
-        }
-
-        .cell-cost {
-            color: var(--warning);
-            font-weight: 500;
-        }
-
-        .cell-leads {
-            color: var(--success);
-            font-weight: 600;
-        }
-
-        .cell-cpl {
-            color: var(--primary-light);
-            font-size: 12px;
-        }
-
-        .cell-empty {
-            color: var(--text-muted);
-        }
-
-        /* Logs */
-        .log-entry {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 8px;
-            background: var(--bg-dark);
-        }
-
-        .log-entry.success { border-left: 3px solid var(--success); }
-        .log-entry.error { border-left: 3px solid var(--danger); }
-        .log-entry.started { border-left: 3px solid var(--warning); }
-
-        .log-time {
-            font-size: 12px;
-            color: var(--text-muted);
-            min-width: 150px;
-        }
-
-        .log-type {
-            font-size: 12px;
-            padding: 4px 8px;
-            border-radius: 4px;
-            background: var(--bg-card-hover);
-            min-width: 100px;
-            text-align: center;
-        }
-
-        .log-message {
-            flex: 1;
-            font-size: 13px;
-        }
-
-        /* Broadcasts Section */
-        .chat-list {
-            max-height: 600px;
-            overflow-y: auto;
-        }
+        .chat-list { max-height: 500px; overflow-y: auto; }
 
         .chat-item {
             display: flex;
             align-items: center;
-            gap: 16px;
-            padding: 16px;
-            border-radius: 12px;
+            gap: 12px;
+            padding: 12px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            border-bottom: 1px solid var(--border);
+            border-radius: 8px;
+            transition: background 0.2s;
         }
 
-        .chat-item:hover {
-            background: var(--bg-card-hover);
-        }
-
-        .chat-item.selected {
-            background: var(--primary);
-        }
+        .chat-item:hover { background: #f5f5f7; }
+        .chat-item.selected { background: #e3f2fd; }
 
         .chat-avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            background: var(--gradient-1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #0071e3;
+            color: #fff;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
             font-weight: 600;
-            flex-shrink: 0;
-        }
-
-        .chat-avatar img {
-            width: 100%;
-            height: 100%;
-            border-radius: 12px;
-            object-fit: cover;
-        }
-
-        .chat-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .chat-name {
-            font-weight: 600;
-            margin-bottom: 4px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .chat-preview {
-            font-size: 13px;
-            color: var(--text-secondary);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .chat-time {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        /* Broadcast Form */
-        .broadcast-form {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .form-label {
-            font-weight: 500;
             font-size: 14px;
         }
 
+        .chat-name { font-weight: 500; font-size: 14px; }
+        .chat-sub { font-size: 12px; color: #86868b; }
+
+        .messages {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .message {
+            max-width: 70%;
+            padding: 10px 14px;
+            border-radius: 16px;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .message.incoming {
+            background: #f5f5f7;
+            border-bottom-left-radius: 4px;
+        }
+
+        .message.outgoing {
+            background: #0071e3;
+            color: #fff;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+
+        /* Broadcast */
         textarea {
-            padding: 16px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            background: var(--bg-dark);
-            color: var(--text-primary);
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d2d2d7;
+            border-radius: 8px;
             font-size: 14px;
             font-family: inherit;
             resize: vertical;
-            min-height: 120px;
+            min-height: 100px;
         }
 
         textarea:focus {
             outline: none;
-            border-color: var(--primary);
+            border-color: #0071e3;
         }
 
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--text-muted);
-        }
-
-        .empty-state-icon {
-            font-size: 64px;
+        /* Alerts */
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
             margin-bottom: 16px;
-            opacity: 0.5;
+            font-size: 14px;
         }
 
-        .empty-state-text {
-            font-size: 18px;
-            margin-bottom: 8px;
+        .alert-info { background: #e3f2fd; color: #1976d2; }
+        .alert-success { background: #e8f5e9; color: #388e3c; }
+        .alert-error { background: #ffebee; color: #c62828; }
+
+        /* Empty & Loading */
+        .empty {
+            text-align: center;
+            padding: 40px;
+            color: #86868b;
         }
 
-        /* Loading */
         .loading {
             display: flex;
-            align-items: center;
             justify-content: center;
             padding: 40px;
         }
 
         .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid var(--border);
-            border-top-color: var(--primary);
+            width: 24px;
+            height: 24px;
+            border: 2px solid #d2d2d7;
+            border-top-color: #0071e3;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 0.8s linear infinite;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Alerts */
-        .alert {
-            padding: 16px 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
+        /* Analytics table */
+        .cell-cost { color: #1d1d1f; font-weight: 500; }
+        .cell-leads { color: #34c759; font-size: 13px; }
+        .cell-cpl { color: #86868b; font-size: 12px; }
+
+        /* Logs */
+        .log {
             display: flex;
-            align-items: center;
             gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f5f5f7;
+            font-size: 13px;
         }
 
-        .alert-success {
-            background: rgba(16, 185, 129, 0.15);
-            border: 1px solid var(--success);
-            color: var(--success);
-        }
+        .log-time { color: #86868b; min-width: 140px; }
+        .log-type { min-width: 100px; }
 
-        .alert-error {
-            background: rgba(239, 68, 68, 0.15);
-            border: 1px solid var(--danger);
-            color: var(--danger);
-        }
-
-        .alert-info {
-            background: rgba(99, 102, 241, 0.15);
-            border: 1px solid var(--primary);
-            color: var(--primary-light);
-        }
-
-        /* Badge */
-        .badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .badge-success { background: rgba(16, 185, 129, 0.2); color: var(--success); }
-        .badge-warning { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
-        .badge-danger { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .sidebar {
-                width: 80px;
-                padding: 16px;
-            }
-
-            .logo-text, .logo-subtitle, .nav-item-text, .nav-section-title {
-                display: none;
-            }
-
-            .logo-icon {
-                width: 40px;
-                height: 40px;
-            }
-
-            .nav-item {
-                justify-content: center;
-                padding: 14px;
-            }
-
-            .main {
-                margin-left: 80px;
-            }
-
-            .sync-status span {
-                display: none;
-            }
-        }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--bg-dark);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--border);
+        code {
+            background: #f5f5f7;
+            padding: 2px 6px;
             border-radius: 4px;
+            font-size: 12px;
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-muted);
+        @media (max-width: 768px) {
+            .chat-layout { grid-template-columns: 1fr; }
+            .stats { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
 <body>
-    <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="logo">
-            <div class="logo-icon">🏗️</div>
-            <div>
-                <div class="logo-text">СтройГлобал</div>
-                <div class="logo-subtitle">Панель управления</div>
-            </div>
-        </div>
-
-        <nav>
-            <div class="nav-section">
-                <div class="nav-section-title">Аналитика</div>
-                <a class="nav-item active" data-section="analytics">
-                    <span class="nav-item-icon">📊</span>
-                    <span class="nav-item-text">Сводка расходов</span>
-                </a>
-                <a class="nav-item" data-section="leads">
-                    <span class="nav-item-icon">👥</span>
-                    <span class="nav-item-text">Сделки CRM</span>
-                </a>
-                <a class="nav-item" data-section="sync">
-                    <span class="nav-item-icon">🔄</span>
-                    <span class="nav-item-text">Синхронизация</span>
-                </a>
-            </div>
-
-            <div class="nav-section">
-                <div class="nav-section-title">Коммуникации</div>
-                <a class="nav-item" data-section="broadcasts">
-                    <span class="nav-item-icon">📨</span>
-                    <span class="nav-item-text">Рассылки</span>
-                </a>
-                <a class="nav-item" data-section="chats">
-                    <span class="nav-item-icon">💬</span>
-                    <span class="nav-item-text">Чаты</span>
-                </a>
-            </div>
-
-            <div class="nav-section">
-                <div class="nav-section-title">Система</div>
-                <a class="nav-item" data-section="logs">
-                    <span class="nav-item-icon">📋</span>
-                    <span class="nav-item-text">Логи</span>
-                </a>
-            </div>
+    <div class="container">
+        <nav class="nav">
+            <div class="nav-item active" data-section="analytics">Аналитика</div>
+            <div class="nav-item" data-section="leads">Сделки CRM</div>
+            <div class="nav-item" data-section="sync">Синхронизация</div>
+            <div class="nav-item" data-section="broadcasts">Рассылки</div>
+            <div class="nav-item" data-section="chats">Чаты</div>
+            <div class="nav-item" data-section="logs">Логи</div>
         </nav>
 
-        <div class="sidebar-footer">
-            <div class="sync-status">
-                <div class="sync-dot"></div>
-                <span>Система активна</span>
-            </div>
-        </div>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="main">
-        <!-- Analytics Section -->
+        <!-- Analytics -->
         <section id="analytics" class="section active">
-            <div class="page-header">
-                <h1 class="page-title">📊 Аналитика рекламы</h1>
-                <p class="page-subtitle">Расходы Яндекс.Директ и заказы из AmoCRM</p>
-            </div>
+            <h1>Аналитика рекламы</h1>
+            <p class="subtitle">Расходы Яндекс.Директ и заказы из AmoCRM</p>
 
-            <div class="stats-grid" id="stats-cards">
-                <div class="stat-card gradient-1">
-                    <div class="stat-icon">💰</div>
-                    <div class="stat-value" id="stat-total-cost">—</div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value" id="stat-cost">—</div>
                     <div class="stat-label">Общий расход</div>
                 </div>
-                <div class="stat-card gradient-2">
-                    <div class="stat-icon">📝</div>
-                    <div class="stat-value" id="stat-total-leads">—</div>
+                <div class="stat">
+                    <div class="stat-value" id="stat-leads">—</div>
                     <div class="stat-label">Всего заказов</div>
                 </div>
-                <div class="stat-card gradient-3">
-                    <div class="stat-icon">📈</div>
-                    <div class="stat-value" id="stat-avg-cpl">—</div>
-                    <div class="stat-label">Средняя цена заказа</div>
+                <div class="stat">
+                    <div class="stat-value" id="stat-cpl">—</div>
+                    <div class="stat-label">Цена заказа</div>
                 </div>
-                <div class="stat-card gradient-4">
-                    <div class="stat-icon">📅</div>
+                <div class="stat">
                     <div class="stat-value" id="stat-months">—</div>
-                    <div class="stat-label">Месяцев данных</div>
+                    <div class="stat-label">Месяцев</div>
                 </div>
             </div>
 
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">📋 Расходы по кампаниям и месяцам</h3>
-                    <button class="btn btn-sm btn-secondary" onclick="exportAnalytics()">📥 Экспорт CSV</button>
+                    <span class="card-title">Расходы по кампаниям</span>
+                    <div class="filters" style="margin:0">
+                        <select id="filter-year" onchange="loadAnalytics()">
+                            <option value="">Все годы</option>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="card-body">
-                    <div class="filters">
-                        <div class="filter-group">
-                            <label class="filter-label">Год</label>
-                            <select id="filter-year" onchange="loadAnalytics()">
-                                <option value="">Все годы</option>
-                                <option value="2024">2024</option>
-                                <option value="2025">2025</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="table-container" id="analytics-table">
+                    <div class="table-wrap" id="analytics-table">
                         <div class="loading"><div class="spinner"></div></div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Leads Section -->
+        <!-- Leads -->
         <section id="leads" class="section">
-            <div class="page-header">
-                <h1 class="page-title">👥 Сделки из AmoCRM</h1>
-                <p class="page-subtitle">Все сделки со статусом "заявка оформлена" — фильтруйте по UTM-меткам</p>
-            </div>
+            <h1>Сделки из AmoCRM</h1>
+            <p class="subtitle">Все сделки со статусом «заявка оформлена»</p>
 
             <div class="alert alert-info">
-                <span>💡</span>
-                <span>В аналитику Яндекс попадают только заказы где <strong>utm_source содержит "yandex"</strong> и есть <strong>ID кампании</strong> в utm_campaign</span>
+                В аналитику попадают заказы где utm_source содержит «yandex» и есть ID кампании
             </div>
 
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">🔍 Фильтры</h3>
-                    <button class="btn btn-sm btn-primary" onclick="loadLeads()">🔄 Обновить</button>
+                    <span class="card-title">Фильтры</span>
+                    <button class="btn btn-secondary" onclick="loadLeads()">Обновить</button>
                 </div>
                 <div class="card-body">
                     <div class="filters">
                         <div class="filter-group">
-                            <label class="filter-label">UTM Source</label>
-                            <select id="filter-utm-source" onchange="filterLeads()">
-                                <option value="">Все источники</option>
+                            <label>UTM Source</label>
+                            <select id="filter-source" onchange="filterLeads()">
+                                <option value="">Все</option>
                             </select>
                         </div>
                         <div class="filter-group">
-                            <label class="filter-label">UTM Medium</label>
-                            <select id="filter-utm-medium" onchange="filterLeads()">
-                                <option value="">Все medium</option>
+                            <label>UTM Medium</label>
+                            <select id="filter-medium" onchange="filterLeads()">
+                                <option value="">Все</option>
                             </select>
                         </div>
                         <div class="filter-group">
-                            <label class="filter-label">UTM Campaign</label>
-                            <select id="filter-utm-campaign" onchange="filterLeads()">
-                                <option value="">Все кампании</option>
+                            <label>UTM Campaign</label>
+                            <select id="filter-campaign" onchange="filterLeads()">
+                                <option value="">Все</option>
                             </select>
                         </div>
                         <div class="filter-group">
-                            <label class="filter-label">Статус</label>
-                            <select id="filter-status" onchange="filterLeads()">
-                                <option value="">Все статусы</option>
-                            </select>
-                        </div>
-                        <div class="filter-group">
-                            <label class="filter-label">Только для Яндекс</label>
-                            <select id="filter-yandex-only" onchange="filterLeads()">
-                                <option value="">Все сделки</option>
-                                <option value="yes">✅ Учитываются в Яндекс</option>
-                                <option value="no">❌ НЕ учитываются</option>
+                            <label>В аналитике Яндекс</label>
+                            <select id="filter-yandex" onchange="filterLeads()">
+                                <option value="">Все</option>
+                                <option value="yes">Да</option>
+                                <option value="no">Нет</option>
                             </select>
                         </div>
                     </div>
@@ -997,160 +484,88 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">📋 Список сделок <span id="leads-count" class="badge badge-success">0</span></h3>
+                    <span class="card-title">Сделки <span id="leads-count" class="tag tag-blue">0</span></span>
                 </div>
                 <div class="card-body">
-                    <div class="table-container" id="leads-table">
+                    <div class="table-wrap" id="leads-table">
                         <div class="loading"><div class="spinner"></div></div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Sync Section -->
+        <!-- Sync -->
         <section id="sync" class="section">
-            <div class="page-header">
-                <h1 class="page-title">🔄 Синхронизация данных</h1>
-                <p class="page-subtitle">Загрузка данных из Яндекс.Директ и AmoCRM</p>
-            </div>
+            <h1>Синхронизация</h1>
+            <p class="subtitle">Загрузка данных из внешних систем</p>
 
-            <div class="sync-panel">
-                <div class="sync-card yandex">
-                    <div class="sync-card-header">
-                        <div class="sync-card-icon">🟡</div>
-                        <div>
-                            <div class="sync-card-title">Яндекс.Директ</div>
-                        </div>
-                    </div>
-                    <div class="sync-card-desc">
-                        <strong>Что делает:</strong> Загружает расходы по рекламным кампаниям за выбранный месяц.<br><br>
-                        <strong>Откуда:</strong> API Яндекс.Директ Reports<br>
-                        <strong>Куда:</strong> Таблица yandex_expenses в Supabase
-                    </div>
+            <div class="sync-grid">
+                <div class="sync-card">
+                    <h3>Яндекс.Директ</h3>
+                    <p>Загружает расходы по рекламным кампаниям за выбранный месяц из API Яндекс.Директ</p>
                     <div class="sync-options">
                         <select id="yandex-year">
                             <option value="2024">2024</option>
                             <option value="2025" selected>2025</option>
                         </select>
-                        <select id="yandex-month">
-                            <option value="1">Январь</option>
-                            <option value="2">Февраль</option>
-                            <option value="3">Март</option>
-                            <option value="4">Апрель</option>
-                            <option value="5">Май</option>
-                            <option value="6">Июнь</option>
-                            <option value="7">Июль</option>
-                            <option value="8">Август</option>
-                            <option value="9">Сентябрь</option>
-                            <option value="10">Октябрь</option>
-                            <option value="11">Ноябрь</option>
-                            <option value="12">Декабрь</option>
-                        </select>
+                        <select id="yandex-month"></select>
                     </div>
-                    <button class="btn btn-primary" onclick="syncYandex()">🟡 Синхронизировать Яндекс</button>
+                    <button class="btn btn-primary" onclick="syncYandex()">Синхронизировать</button>
                 </div>
 
-                <div class="sync-card amo">
-                    <div class="sync-card-header">
-                        <div class="sync-card-icon">🔵</div>
-                        <div>
-                            <div class="sync-card-title">AmoCRM</div>
-                        </div>
-                    </div>
-                    <div class="sync-card-desc">
-                        <strong>Что делает:</strong> Загружает сделки со статусом "заявка оформлена" (заказы), созданные в выбранном месяце.<br><br>
-                        <strong>Откуда:</strong> API AmoCRM v4<br>
-                        <strong>Куда:</strong> Таблица crm_leads в Supabase
-                    </div>
+                <div class="sync-card">
+                    <h3>AmoCRM</h3>
+                    <p>Загружает сделки со статусом «заявка оформлена» за выбранный месяц из API AmoCRM</p>
                     <div class="sync-options">
                         <select id="amo-year">
                             <option value="2024">2024</option>
                             <option value="2025" selected>2025</option>
                         </select>
-                        <select id="amo-month">
-                            <option value="1">Январь</option>
-                            <option value="2">Февраль</option>
-                            <option value="3">Март</option>
-                            <option value="4">Апрель</option>
-                            <option value="5">Май</option>
-                            <option value="6">Июнь</option>
-                            <option value="7">Июль</option>
-                            <option value="8">Август</option>
-                            <option value="9">Сентябрь</option>
-                            <option value="10">Октябрь</option>
-                            <option value="11">Ноябрь</option>
-                            <option value="12">Декабрь</option>
-                        </select>
+                        <select id="amo-month"></select>
                     </div>
-                    <button class="btn btn-primary" onclick="syncAmo()">🔵 Синхронизировать AmoCRM</button>
+                    <button class="btn btn-primary" onclick="syncAmo()">Синхронизировать</button>
                 </div>
 
-                <div class="sync-card full">
-                    <div class="sync-card-header">
-                        <div class="sync-card-icon">🟢</div>
-                        <div>
-                            <div class="sync-card-title">Полная синхронизация</div>
-                        </div>
-                    </div>
-                    <div class="sync-card-desc">
-                        <strong>Что делает:</strong> Загружает ВСЕ данные за указанный период:<br>
-                        1. Сначала расходы из Яндекс.Директ<br>
-                        2. Затем заказы из AmoCRM<br><br>
-                        <strong>Рекомендация:</strong> Используйте для первоначальной загрузки исторических данных
-                    </div>
+                <div class="sync-card">
+                    <h3>Полная синхронизация</h3>
+                    <p>Загружает все данные за период: сначала расходы из Яндекс, затем сделки из AmoCRM</p>
                     <div class="sync-options">
-                        <select id="full-year-from">
+                        <select id="full-year">
                             <option value="2024">С 2024</option>
                             <option value="2025">С 2025</option>
                         </select>
-                        <select id="full-month-from">
-                            <option value="1">Январь</option>
-                            <option value="2">Февраль</option>
-                            <option value="3">Март</option>
-                            <option value="4">Апрель</option>
-                            <option value="5">Май</option>
-                            <option value="6">Июнь</option>
-                            <option value="7">Июль</option>
-                            <option value="8">Август</option>
-                            <option value="9">Сентябрь</option>
-                            <option value="10">Октябрь</option>
-                            <option value="11">Ноябрь</option>
-                            <option value="12">Декабрь</option>
-                        </select>
+                        <select id="full-month"></select>
                     </div>
-                    <button class="btn btn-success" onclick="syncFull()">🟢 Полная синхронизация</button>
+                    <button class="btn btn-success" onclick="syncFull()">Запустить</button>
                 </div>
             </div>
 
-            <div class="card" style="margin-top: 24px;">
+            <div class="card" style="margin-top:20px">
                 <div class="card-header">
-                    <h3 class="card-title">🧪 Тестирование подключений</h3>
+                    <span class="card-title">Тестирование</span>
                 </div>
                 <div class="card-body">
                     <div class="btn-group">
-                        <button class="btn btn-secondary" onclick="testYandex()">🟡 Тест Яндекс.Директ</button>
-                        <button class="btn btn-secondary" onclick="testAmo()">🔵 Тест AmoCRM</button>
+                        <button class="btn btn-secondary" onclick="testYandex()">Тест Яндекс</button>
+                        <button class="btn btn-secondary" onclick="testAmo()">Тест AmoCRM</button>
                     </div>
-                    <div id="test-result" style="margin-top: 16px;"></div>
+                    <div id="test-result" style="margin-top:12px"></div>
                 </div>
             </div>
         </section>
 
-        <!-- Broadcasts Section -->
+        <!-- Broadcasts -->
         <section id="broadcasts" class="section">
-            <div class="page-header">
-                <h1 class="page-title">📨 Рассылки</h1>
-                <p class="page-subtitle">Отправка сообщений клиентам через Telegram</p>
-            </div>
+            <h1>Рассылки</h1>
+            <p class="subtitle">Отправка сообщений в Telegram</p>
 
-            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 24px;">
+            <div class="chat-layout">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">👥 Получатели</h3>
-                        <button class="btn btn-sm btn-secondary" onclick="loadChats()">🔄</button>
+                        <span class="card-title">Получатели</span>
                     </div>
-                    <div class="card-body" style="padding: 0; max-height: 500px; overflow-y: auto;">
-                        <div id="broadcast-recipients" class="chat-list">
+                    <div class="card-body" style="padding:0">
+                        <div id="broadcast-list" class="chat-list">
                             <div class="loading"><div class="spinner"></div></div>
                         </div>
                     </div>
@@ -1158,21 +573,15 @@
 
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">✉️ Сообщение</h3>
+                        <span class="card-title">Сообщение</span>
                     </div>
                     <div class="card-body">
-                        <div class="broadcast-form">
-                            <div class="form-group">
-                                <label class="form-label">Текст сообщения</label>
-                                <textarea id="broadcast-message" placeholder="Введите текст рассылки..."></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Выбрано получателей: <span id="selected-count">0</span></label>
-                            </div>
+                        <textarea id="broadcast-text" placeholder="Текст сообщения..."></textarea>
+                        <div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center">
+                            <span style="color:#86868b;font-size:13px">Выбрано: <span id="selected-count">0</span></span>
                             <div class="btn-group">
-                                <button class="btn btn-primary" onclick="sendBroadcast()">📤 Отправить рассылку</button>
-                                <button class="btn btn-secondary" onclick="selectAllChats()">Выбрать всех</button>
-                                <button class="btn btn-secondary" onclick="deselectAllChats()">Снять выбор</button>
+                                <button class="btn btn-secondary" onclick="selectAll()">Выбрать всех</button>
+                                <button class="btn btn-primary" onclick="sendBroadcast()">Отправить</button>
                             </div>
                         </div>
                     </div>
@@ -1180,20 +589,15 @@
             </div>
         </section>
 
-        <!-- Chats Section -->
+        <!-- Chats -->
         <section id="chats" class="section">
-            <div class="page-header">
-                <h1 class="page-title">💬 Чаты с клиентами</h1>
-                <p class="page-subtitle">История переписки из Telegram бота</p>
-            </div>
+            <h1>Чаты</h1>
+            <p class="subtitle">История переписки с клиентами</p>
 
-            <div style="display: grid; grid-template-columns: 350px 1fr; gap: 24px;">
+            <div class="chat-layout">
                 <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Диалоги</h3>
-                        <button class="btn btn-sm btn-secondary" onclick="loadChatsForView()">🔄</button>
-                    </div>
-                    <div class="card-body" style="padding: 0; max-height: 600px; overflow-y: auto;">
+                    <div class="card-header"><span class="card-title">Диалоги</span></div>
+                    <div class="card-body" style="padding:0">
                         <div id="chats-list" class="chat-list">
                             <div class="loading"><div class="spinner"></div></div>
                         </div>
@@ -1201,170 +605,120 @@
                 </div>
 
                 <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title" id="chat-header">Выберите чат</h3>
-                    </div>
-                    <div class="card-body" id="chat-messages" style="max-height: 500px; overflow-y: auto;">
-                        <div class="empty-state">
-                            <div class="empty-state-icon">💬</div>
-                            <div class="empty-state-text">Выберите диалог слева</div>
-                        </div>
+                    <div class="card-header"><span class="card-title" id="chat-title">Выберите чат</span></div>
+                    <div id="chat-messages" class="messages">
+                        <div class="empty">Выберите диалог слева</div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Logs Section -->
+        <!-- Logs -->
         <section id="logs" class="section">
-            <div class="page-header">
-                <h1 class="page-title">📋 Логи синхронизации</h1>
-                <p class="page-subtitle">История операций синхронизации данных</p>
-            </div>
+            <h1>Логи</h1>
+            <p class="subtitle">История синхронизаций</p>
 
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Последние операции</h3>
-                    <button class="btn btn-sm btn-secondary" onclick="loadLogs()">🔄 Обновить</button>
+                    <span class="card-title">Последние операции</span>
+                    <button class="btn btn-secondary" onclick="loadLogs()">Обновить</button>
                 </div>
                 <div class="card-body" id="logs-container">
                     <div class="loading"><div class="spinner"></div></div>
                 </div>
             </div>
         </section>
-    </main>
+    </div>
 
     <script>
-        // Config
-        const API_BASE = '';
-        const AUTH_KEY = localStorage.getItem('yandex_admin_key') || prompt('Введите ключ доступа:');
-        if (AUTH_KEY) localStorage.setItem('yandex_admin_key', AUTH_KEY);
+        const AUTH = localStorage.getItem('admin_key') || prompt('Ключ доступа:');
+        if (AUTH) localStorage.setItem('admin_key', AUTH);
 
-        // State
         let allLeads = [];
         let selectedChats = new Set();
 
         // Navigation
         document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', () => {
-                const section = item.dataset.section;
-                if (!section) return;
-
+            item.onclick = () => {
                 document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
                 document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-
                 item.classList.add('active');
-                document.getElementById(section).classList.add('active');
+                document.getElementById(item.dataset.section).classList.add('active');
 
-                // Load data for section
-                if (section === 'analytics') loadAnalytics();
-                if (section === 'leads') loadLeads();
-                if (section === 'logs') loadLogs();
-                if (section === 'broadcasts') loadChats();
-                if (section === 'chats') loadChatsForView();
-            });
+                const s = item.dataset.section;
+                if (s === 'analytics') loadAnalytics();
+                if (s === 'leads') loadLeads();
+                if (s === 'logs') loadLogs();
+                if (s === 'broadcasts') loadBroadcastChats();
+                if (s === 'chats') loadChats();
+            };
         });
 
-        // API Helper
-        async function api(endpoint, options = {}) {
-            const url = API_BASE + endpoint;
-            const headers = {
-                'Content-Type': 'application/json',
-                'X-Yandex-Key': AUTH_KEY
-            };
-
+        // API
+        async function api(url, opts = {}) {
             try {
-                const response = await fetch(url, { ...options, headers });
-                return await response.json();
-            } catch (err) {
-                console.error('API Error:', err);
-                return { success: false, error: err.message };
+                const res = await fetch(url, {
+                    ...opts,
+                    headers: { 'Content-Type': 'application/json', 'X-Yandex-Key': AUTH }
+                });
+                return await res.json();
+            } catch (e) {
+                return { success: false, error: e.message };
             }
         }
 
-        // Format helpers
-        function formatMoney(value) {
-            if (!value && value !== 0) return '—';
-            return new Intl.NumberFormat('ru-RU').format(Math.round(value)) + ' ₽';
+        function money(v) {
+            if (!v && v !== 0) return '—';
+            return new Intl.NumberFormat('ru-RU').format(Math.round(v)) + ' ₽';
         }
 
-        function formatDate(dateStr) {
-            if (!dateStr) return '—';
-            return new Date(dateStr).toLocaleDateString('ru-RU', {
-                day: '2-digit',
-                month: '2-digit',
-                year: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
+        function date(d) {
+            if (!d) return '—';
+            return new Date(d).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' });
         }
 
         // Analytics
         async function loadAnalytics() {
             const year = document.getElementById('filter-year').value;
-            const params = new URLSearchParams();
-            if (year) params.append('year', year);
+            const data = await api('/api/analytics' + (year ? '?year=' + year : ''));
 
-            const data = await api('/api/analytics?' + params.toString());
-
-            if (data.success) {
-                renderAnalytics(data);
-            } else {
-                document.getElementById('analytics-table').innerHTML =
-                    `<div class="alert alert-error">Ошибка: ${data.error}</div>`;
-            }
-        }
-
-        function renderAnalytics(data) {
-            const { campaigns, months, summary } = data;
-
-            // Stats
-            document.getElementById('stat-total-cost').textContent = formatMoney(summary.total_cost);
-            document.getElementById('stat-total-leads').textContent = summary.total_leads || 0;
-            document.getElementById('stat-avg-cpl').textContent = formatMoney(summary.avg_cpl);
-            document.getElementById('stat-months').textContent = months?.length || 0;
-
-            if (!campaigns || campaigns.length === 0) {
-                document.getElementById('analytics-table').innerHTML =
-                    '<div class="empty-state"><div class="empty-state-icon">📊</div><div class="empty-state-text">Нет данных</div><div>Запустите синхронизацию в разделе "Синхронизация"</div></div>';
+            if (!data.success) {
+                document.getElementById('analytics-table').innerHTML = `<div class="alert alert-error">${data.error}</div>`;
                 return;
             }
 
-            // Table
-            let html = '<table class="analytics-table"><thead><tr><th>ID кампании</th><th>Название</th>';
-            months.forEach(m => {
-                html += `<th>${m}</th>`;
-            });
+            const { campaigns, months, summary } = data;
+            document.getElementById('stat-cost').textContent = money(summary.total_cost);
+            document.getElementById('stat-leads').textContent = summary.total_leads || 0;
+            document.getElementById('stat-cpl').textContent = money(summary.avg_cpl);
+            document.getElementById('stat-months').textContent = months?.length || 0;
+
+            if (!campaigns?.length) {
+                document.getElementById('analytics-table').innerHTML = '<div class="empty">Нет данных. Запустите синхронизацию.</div>';
+                return;
+            }
+
+            let html = '<table><thead><tr><th>ID</th><th>Кампания</th>';
+            months.forEach(m => html += `<th>${m}</th>`);
             html += '<th>Итого</th></tr></thead><tbody>';
 
-            campaigns.forEach(campaign => {
+            campaigns.forEach(c => {
                 let totalCost = 0, totalLeads = 0;
-
-                html += `<tr><td><code>${campaign.campaign_id}</code></td><td>${campaign.campaign_name || '—'}</td>`;
+                html += `<tr><td><code>${c.campaign_id}</code></td><td>${c.campaign_name || '—'}</td>`;
 
                 months.forEach(m => {
-                    const monthData = campaign.months[m];
-                    if (monthData) {
-                        totalCost += monthData.cost || 0;
-                        totalLeads += monthData.leads || 0;
-
-                        html += '<td>';
-                        html += `<div class="cell-cost">${formatMoney(monthData.cost)}</div>`;
-                        html += `<div class="cell-leads">${monthData.leads || 0} заказов</div>`;
-                        if (monthData.cost_per_lead) {
-                            html += `<div class="cell-cpl">${formatMoney(monthData.cost_per_lead)}/заказ</div>`;
-                        }
-                        html += '</td>';
+                    const d = c.months[m];
+                    if (d) {
+                        totalCost += d.cost || 0;
+                        totalLeads += d.leads || 0;
+                        html += `<td><div class="cell-cost">${money(d.cost)}</div><div class="cell-leads">${d.leads || 0}</div>${d.cost_per_lead ? `<div class="cell-cpl">${money(d.cost_per_lead)}</div>` : ''}</td>`;
                     } else {
-                        html += '<td class="cell-empty">—</td>';
+                        html += '<td>—</td>';
                     }
                 });
 
-                const avgCpl = totalLeads > 0 ? Math.round(totalCost / totalLeads) : null;
-                html += '<td>';
-                html += `<div class="cell-cost">${formatMoney(totalCost)}</div>`;
-                html += `<div class="cell-leads">${totalLeads} заказов</div>`;
-                if (avgCpl) html += `<div class="cell-cpl">${formatMoney(avgCpl)}/заказ</div>`;
-                html += '</td></tr>';
+                const cpl = totalLeads > 0 ? Math.round(totalCost / totalLeads) : null;
+                html += `<td><div class="cell-cost">${money(totalCost)}</div><div class="cell-leads">${totalLeads}</div>${cpl ? `<div class="cell-cpl">${money(cpl)}</div>` : ''}</td></tr>`;
             });
 
             html += '</tbody></table>';
@@ -1374,117 +728,85 @@
         // Leads
         async function loadLeads() {
             document.getElementById('leads-table').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
-
             const data = await api('/api/crm-leads/all');
 
-            if (data.success) {
-                allLeads = data.leads || [];
-                populateFilters();
-                filterLeads();
-            } else {
-                document.getElementById('leads-table').innerHTML =
-                    `<div class="alert alert-error">Ошибка: ${data.error}</div>`;
+            if (!data.success) {
+                document.getElementById('leads-table').innerHTML = `<div class="alert alert-error">${data.error}</div>`;
+                return;
             }
+
+            allLeads = data.leads || [];
+            populateFilters();
+            filterLeads();
         }
 
         function populateFilters() {
-            const sources = new Set();
-            const mediums = new Set();
-            const campaigns = new Set();
-            const statuses = new Set();
-
-            allLeads.forEach(lead => {
-                if (lead.utm_source) sources.add(lead.utm_source);
-                if (lead.utm_medium) mediums.add(lead.utm_medium);
-                if (lead.utm_campaign) campaigns.add(lead.utm_campaign);
-                if (lead.status_name) statuses.add(lead.status_name);
+            const sources = new Set(), mediums = new Set(), campaigns = new Set();
+            allLeads.forEach(l => {
+                if (l.utm_source) sources.add(l.utm_source);
+                if (l.utm_medium) mediums.add(l.utm_medium);
+                if (l.utm_campaign) campaigns.add(l.utm_campaign);
             });
 
-            fillSelect('filter-utm-source', sources, 'Все источники');
-            fillSelect('filter-utm-medium', mediums, 'Все medium');
-            fillSelect('filter-utm-campaign', campaigns, 'Все кампании');
-            fillSelect('filter-status', statuses, 'Все статусы');
+            fillSelect('filter-source', sources);
+            fillSelect('filter-medium', mediums);
+            fillSelect('filter-campaign', campaigns);
         }
 
-        function fillSelect(id, values, defaultText) {
-            const select = document.getElementById(id);
-            const currentValue = select.value;
-            select.innerHTML = `<option value="">${defaultText}</option>`;
-            Array.from(values).sort().forEach(v => {
-                select.innerHTML += `<option value="${v}">${v}</option>`;
-            });
-            select.value = currentValue;
+        function fillSelect(id, values) {
+            const sel = document.getElementById(id);
+            const cur = sel.value;
+            sel.innerHTML = '<option value="">Все</option>';
+            [...values].sort().forEach(v => sel.innerHTML += `<option value="${v}">${v}</option>`);
+            sel.value = cur;
         }
 
         function filterLeads() {
-            const sourceFilter = document.getElementById('filter-utm-source').value.toLowerCase();
-            const mediumFilter = document.getElementById('filter-utm-medium').value.toLowerCase();
-            const campaignFilter = document.getElementById('filter-utm-campaign').value.toLowerCase();
-            const statusFilter = document.getElementById('filter-status').value.toLowerCase();
-            const yandexOnly = document.getElementById('filter-yandex-only').value;
+            const source = document.getElementById('filter-source').value.toLowerCase();
+            const medium = document.getElementById('filter-medium').value.toLowerCase();
+            const campaign = document.getElementById('filter-campaign').value.toLowerCase();
+            const yandex = document.getElementById('filter-yandex').value;
 
-            let filtered = allLeads.filter(lead => {
-                if (sourceFilter && (lead.utm_source || '').toLowerCase() !== sourceFilter) return false;
-                if (mediumFilter && (lead.utm_medium || '').toLowerCase() !== mediumFilter) return false;
-                if (campaignFilter && (lead.utm_campaign || '').toLowerCase() !== campaignFilter) return false;
-                if (statusFilter && (lead.status_name || '').toLowerCase() !== statusFilter) return false;
+            const filtered = allLeads.filter(l => {
+                if (source && (l.utm_source || '').toLowerCase() !== source) return false;
+                if (medium && (l.utm_medium || '').toLowerCase() !== medium) return false;
+                if (campaign && (l.utm_campaign || '').toLowerCase() !== campaign) return false;
 
-                if (yandexOnly === 'yes') {
-                    // Учитывается в Яндекс аналитике
-                    const isYandex = (lead.utm_source || '').toLowerCase() === 'yandex';
-                    const hasCampaignId = lead.extracted_campaign_id != null;
-                    if (!isYandex || !hasCampaignId) return false;
-                } else if (yandexOnly === 'no') {
-                    const isYandex = (lead.utm_source || '').toLowerCase() === 'yandex';
-                    const hasCampaignId = lead.extracted_campaign_id != null;
-                    if (isYandex && hasCampaignId) return false;
-                }
+                const isY = (l.utm_source || '').toLowerCase().includes('yandex') && l.extracted_campaign_id;
+                if (yandex === 'yes' && !isY) return false;
+                if (yandex === 'no' && isY) return false;
 
                 return true;
             });
 
             document.getElementById('leads-count').textContent = filtered.length;
-            renderLeadsTable(filtered);
+            renderLeads(filtered);
         }
 
-        function renderLeadsTable(leads) {
-            if (leads.length === 0) {
-                document.getElementById('leads-table').innerHTML =
-                    '<div class="empty-state"><div class="empty-state-icon">👥</div><div class="empty-state-text">Нет сделок</div></div>';
+        function renderLeads(leads) {
+            if (!leads.length) {
+                document.getElementById('leads-table').innerHTML = '<div class="empty">Нет сделок</div>';
                 return;
             }
 
-            let html = `<table>
-                <thead>
-                    <tr>
-                        <th class="sortable" onclick="sortLeads('lead_id')">ID</th>
-                        <th class="sortable" onclick="sortLeads('lead_name')">Название</th>
-                        <th class="sortable" onclick="sortLeads('lead_created_at')">Дата создания</th>
-                        <th>UTM Source</th>
-                        <th>UTM Medium</th>
-                        <th>UTM Campaign</th>
-                        <th>ID кампании</th>
-                        <th>Статус</th>
-                        <th>В Яндекс?</th>
-                    </tr>
-                </thead>
-                <tbody>`;
+            let html = `<table><thead><tr>
+                <th class="sortable" onclick="sortLeads('lead_id')">ID</th>
+                <th class="sortable" onclick="sortLeads('lead_name')">Название</th>
+                <th class="sortable" onclick="sortLeads('lead_created_at')">Дата</th>
+                <th>Source</th><th>Medium</th><th>Campaign</th><th>ID кампании</th><th>В Яндекс</th>
+            </tr></thead><tbody>`;
 
-            leads.forEach(lead => {
-                const isYandex = (lead.utm_source || '').toLowerCase() === 'yandex';
-                const hasCampaignId = lead.extracted_campaign_id != null;
-                const inYandexAnalytics = isYandex && hasCampaignId;
-
+            leads.forEach(l => {
+                const isY = (l.utm_source || '').toLowerCase().includes('yandex') && l.extracted_campaign_id;
                 html += `<tr>
-                    <td><code>${lead.lead_id}</code></td>
-                    <td>${lead.lead_name || '—'}</td>
-                    <td>${formatDate(lead.lead_created_at)}</td>
-                    <td>${lead.utm_source ? `<span class="utm-tag utm-source">${lead.utm_source}</span>` : '<span class="utm-tag utm-empty">—</span>'}</td>
-                    <td>${lead.utm_medium ? `<span class="utm-tag utm-medium">${lead.utm_medium}</span>` : '<span class="utm-tag utm-empty">—</span>'}</td>
-                    <td>${lead.utm_campaign ? `<span class="utm-tag utm-campaign">${lead.utm_campaign}</span>` : '<span class="utm-tag utm-empty">—</span>'}</td>
-                    <td>${lead.extracted_campaign_id ? `<code>${lead.extracted_campaign_id}</code>` : '<span class="utm-tag utm-empty">—</span>'}</td>
-                    <td>${lead.status_name || '—'}</td>
-                    <td>${inYandexAnalytics ? '<span class="badge badge-success">✅ Да</span>' : '<span class="badge badge-warning">❌ Нет</span>'}</td>
+                    <td><code>${l.lead_id}</code></td>
+                    <td>${l.lead_name || '—'}</td>
+                    <td>${date(l.lead_created_at)}</td>
+                    <td>${l.utm_source ? `<span class="tag">${l.utm_source}</span>` : '—'}</td>
+                    <td>${l.utm_medium ? `<span class="tag">${l.utm_medium}</span>` : '—'}</td>
+                    <td>${l.utm_campaign ? `<span class="tag">${l.utm_campaign}</span>` : '—'}</td>
+                    <td>${l.extracted_campaign_id ? `<code>${l.extracted_campaign_id}</code>` : '—'}</td>
+                    <td>${isY ? '<span class="tag tag-green">Да</span>' : '<span class="tag tag-orange">Нет</span>'}</td>
                 </tr>`;
             });
 
@@ -1492,327 +814,176 @@
             document.getElementById('leads-table').innerHTML = html;
         }
 
-        let sortField = 'lead_created_at';
-        let sortDir = 'desc';
-
+        let sortField = 'lead_created_at', sortDir = 'desc';
         function sortLeads(field) {
-            if (sortField === field) {
-                sortDir = sortDir === 'asc' ? 'desc' : 'asc';
-            } else {
-                sortField = field;
-                sortDir = 'asc';
-            }
+            if (sortField === field) sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+            else { sortField = field; sortDir = 'asc'; }
 
             allLeads.sort((a, b) => {
-                let aVal = a[field] || '';
-                let bVal = b[field] || '';
-
-                if (field === 'lead_created_at') {
-                    aVal = new Date(aVal).getTime();
-                    bVal = new Date(bVal).getTime();
-                }
-
-                if (aVal < bVal) return sortDir === 'asc' ? -1 : 1;
-                if (aVal > bVal) return sortDir === 'asc' ? 1 : -1;
-                return 0;
+                let av = a[field] || '', bv = b[field] || '';
+                if (field === 'lead_created_at') { av = new Date(av).getTime(); bv = new Date(bv).getTime(); }
+                return sortDir === 'asc' ? (av > bv ? 1 : -1) : (av < bv ? 1 : -1);
             });
-
             filterLeads();
         }
 
-        // Sync functions
+        // Sync
         async function syncYandex() {
-            const year = document.getElementById('yandex-year').value;
-            const month = document.getElementById('yandex-month').value;
-
-            showTestResult('⏳ Синхронизация Яндекс.Директ...', 'info');
-
+            showResult('Синхронизация Яндекс...', 'info');
             const data = await api('/api/sync/yandex-expenses', {
                 method: 'POST',
-                body: JSON.stringify({ year: parseInt(year), month: parseInt(month) })
+                body: JSON.stringify({ year: +document.getElementById('yandex-year').value, month: +document.getElementById('yandex-month').value })
             });
-
-            if (data.success) {
-                showTestResult(`✅ Яндекс: загружено ${data.records} записей`, 'success');
-            } else {
-                showTestResult(`❌ Ошибка: ${data.error}`, 'error');
-            }
+            showResult(data.success ? `Загружено ${data.records} записей` : `Ошибка: ${data.error}`, data.success ? 'success' : 'error');
         }
 
         async function syncAmo() {
-            const year = document.getElementById('amo-year').value;
-            const month = document.getElementById('amo-month').value;
-
-            showTestResult('⏳ Синхронизация AmoCRM...', 'info');
-
+            showResult('Синхронизация AmoCRM...', 'info');
             const data = await api('/api/sync/crm-leads', {
                 method: 'POST',
-                body: JSON.stringify({ year: parseInt(year), month: parseInt(month) })
+                body: JSON.stringify({ year: +document.getElementById('amo-year').value, month: +document.getElementById('amo-month').value })
             });
-
-            if (data.success) {
-                showTestResult(`✅ AmoCRM: загружено ${data.records} сделок`, 'success');
-            } else {
-                showTestResult(`❌ Ошибка: ${data.error}`, 'error');
-            }
+            showResult(data.success ? `Загружено ${data.records} сделок` : `Ошибка: ${data.error}`, data.success ? 'success' : 'error');
         }
 
         async function syncFull() {
-            const yearFrom = parseInt(document.getElementById('full-year-from').value);
-            const monthFrom = parseInt(document.getElementById('full-month-from').value);
-
-            showTestResult('⏳ Полная синхронизация... Это может занять несколько минут', 'info');
-
+            showResult('Полная синхронизация... Это займёт несколько минут', 'info');
             const data = await api('/api/sync/full', {
                 method: 'POST',
-                body: JSON.stringify({ year_from: yearFrom, month_from: monthFrom })
+                body: JSON.stringify({ year_from: +document.getElementById('full-year').value, month_from: +document.getElementById('full-month').value })
             });
-
             if (data.success) {
-                showTestResult(`✅ Готово! Яндекс: ${data.yandex_total} записей, AmoCRM: ${data.amo_total} сделок`, 'success');
+                showResult(`Готово! Яндекс: ${data.yandex_total}, AmoCRM: ${data.amo_total}`, 'success');
                 loadAnalytics();
             } else {
-                showTestResult(`❌ Ошибка: ${data.error}`, 'error');
+                showResult(`Ошибка: ${data.error}`, 'error');
             }
         }
 
         async function testYandex() {
-            showTestResult('⏳ Проверка подключения к Яндекс.Директ...', 'info');
+            showResult('Проверка Яндекс...', 'info');
             const data = await api('/api/yandex/campaigns');
-
-            if (data.success || data.result) {
-                const count = data.result?.Campaigns?.length || data.campaigns?.length || 0;
-                showTestResult(`✅ Яндекс.Директ: найдено ${count} кампаний`, 'success');
-            } else {
-                showTestResult(`❌ Ошибка: ${data.error}`, 'error');
-            }
+            const count = data.result?.Campaigns?.length || data.campaigns?.length || 0;
+            showResult(data.success || data.result ? `Яндекс OK: ${count} кампаний` : `Ошибка: ${data.error}`, data.success || data.result ? 'success' : 'error');
         }
 
         async function testAmo() {
-            showTestResult('⏳ Проверка подключения к AmoCRM...', 'info');
+            showResult('Проверка AmoCRM...', 'info');
             const data = await api('/api/amocrm/test');
-
-            if (data.success) {
-                showTestResult(`✅ AmoCRM: подключен к аккаунту "${data.account}"`, 'success');
-            } else {
-                showTestResult(`❌ Ошибка: ${data.error}`, 'error');
-            }
+            showResult(data.success ? `AmoCRM OK: ${data.account?.name || data.account}` : `Ошибка: ${data.error}`, data.success ? 'success' : 'error');
         }
 
-        function showTestResult(message, type) {
-            const el = document.getElementById('test-result');
-            el.innerHTML = `<div class="alert alert-${type === 'info' ? 'info' : type}">${message}</div>`;
+        function showResult(msg, type) {
+            document.getElementById('test-result').innerHTML = `<div class="alert alert-${type}">${msg}</div>`;
         }
 
         // Logs
         async function loadLogs() {
             const data = await api('/api/sync/logs');
-
-            if (data.success) {
-                renderLogs(data.logs);
-            } else {
-                document.getElementById('logs-container').innerHTML =
-                    `<div class="alert alert-error">Ошибка: ${data.error}</div>`;
+            if (!data.success) {
+                document.getElementById('logs-container').innerHTML = `<div class="alert alert-error">${data.error}</div>`;
+                return;
             }
-        }
 
-        function renderLogs(logs) {
-            if (!logs || logs.length === 0) {
-                document.getElementById('logs-container').innerHTML =
-                    '<div class="empty-state"><div class="empty-state-icon">📋</div><div class="empty-state-text">Нет логов</div></div>';
+            if (!data.logs?.length) {
+                document.getElementById('logs-container').innerHTML = '<div class="empty">Нет логов</div>';
                 return;
             }
 
             let html = '';
-            logs.forEach(log => {
-                html += `<div class="log-entry ${log.status}">
-                    <span class="log-time">${formatDate(log.created_at)}</span>
-                    <span class="log-type">${log.sync_type}</span>
-                    <span class="log-message">
-                        ${log.status === 'success' ? '✅' : log.status === 'error' ? '❌' : '⏳'}
-                        ${log.status} - ${log.records_count} записей
-                        ${log.error_message ? `<br><small style="color: var(--danger)">${log.error_message}</small>` : ''}
-                    </span>
+            data.logs.forEach(l => {
+                html += `<div class="log">
+                    <span class="log-time">${date(l.created_at)}</span>
+                    <span class="log-type"><span class="tag">${l.sync_type}</span></span>
+                    <span>${l.status === 'success' ? 'OK' : l.status === 'error' ? 'Ошибка' : 'В процессе'} — ${l.records_count} записей${l.error_message ? ` — ${l.error_message}` : ''}</span>
                 </div>`;
             });
-
             document.getElementById('logs-container').innerHTML = html;
         }
 
-        // Chats for broadcasts
-        async function loadChats() {
+        // Broadcasts
+        async function loadBroadcastChats() {
             const data = await api('/api/chats');
-
-            if (data.success) {
-                renderBroadcastRecipients(data.chats);
-            }
-        }
-
-        function renderBroadcastRecipients(chats) {
-            if (!chats || chats.length === 0) {
-                document.getElementById('broadcast-recipients').innerHTML =
-                    '<div class="empty-state"><div class="empty-state-icon">👥</div><div class="empty-state-text">Нет чатов</div></div>';
-                return;
-            }
+            if (!data.success) return;
 
             let html = '';
-            chats.forEach(chat => {
-                const isSelected = selectedChats.has(chat.chat_id);
-                const initial = (chat.first_name || chat.username || '?')[0].toUpperCase();
-
-                html += `<div class="chat-item ${isSelected ? 'selected' : ''}" onclick="toggleChatSelection('${chat.chat_id}')">
-                    <div class="chat-avatar">${initial}</div>
-                    <div class="chat-info">
-                        <div class="chat-name">${chat.first_name || ''} ${chat.last_name || ''}</div>
-                        <div class="chat-preview">@${chat.username || 'без username'}</div>
-                    </div>
+            (data.chats || []).forEach(c => {
+                const sel = selectedChats.has(c.chat_id);
+                html += `<div class="chat-item ${sel ? 'selected' : ''}" onclick="toggleChat('${c.chat_id}')">
+                    <div class="chat-avatar">${(c.first_name || c.username || '?')[0].toUpperCase()}</div>
+                    <div><div class="chat-name">${c.first_name || ''} ${c.last_name || ''}</div><div class="chat-sub">@${c.username || '—'}</div></div>
                 </div>`;
             });
-
-            document.getElementById('broadcast-recipients').innerHTML = html;
-            updateSelectedCount();
-        }
-
-        function toggleChatSelection(chatId) {
-            if (selectedChats.has(chatId)) {
-                selectedChats.delete(chatId);
-            } else {
-                selectedChats.add(chatId);
-            }
-            loadChats();
-        }
-
-        function selectAllChats() {
-            document.querySelectorAll('#broadcast-recipients .chat-item').forEach(item => {
-                const chatId = item.getAttribute('onclick').match(/'([^']+)'/)[1];
-                selectedChats.add(chatId);
-            });
-            loadChats();
-        }
-
-        function deselectAllChats() {
-            selectedChats.clear();
-            loadChats();
-        }
-
-        function updateSelectedCount() {
+            document.getElementById('broadcast-list').innerHTML = html || '<div class="empty">Нет чатов</div>';
             document.getElementById('selected-count').textContent = selectedChats.size;
         }
 
-        async function sendBroadcast() {
-            const message = document.getElementById('broadcast-message').value.trim();
-            if (!message) {
-                alert('Введите текст сообщения');
-                return;
-            }
-            if (selectedChats.size === 0) {
-                alert('Выберите получателей');
-                return;
-            }
+        function toggleChat(id) {
+            selectedChats.has(id) ? selectedChats.delete(id) : selectedChats.add(id);
+            loadBroadcastChats();
+        }
 
-            if (!confirm(`Отправить сообщение ${selectedChats.size} получателям?`)) return;
-
-            const data = await api('/api/broadcast', {
-                method: 'POST',
-                body: JSON.stringify({
-                    chat_ids: Array.from(selectedChats),
-                    message: message
-                })
+        function selectAll() {
+            document.querySelectorAll('#broadcast-list .chat-item').forEach(el => {
+                const id = el.getAttribute('onclick').match(/'(.+)'/)[1];
+                selectedChats.add(id);
             });
-
-            if (data.success) {
-                alert(`Успешно отправлено: ${data.sent} из ${data.total}`);
-                document.getElementById('broadcast-message').value = '';
-                selectedChats.clear();
-                loadChats();
-            } else {
-                alert('Ошибка: ' + data.error);
-            }
+            loadBroadcastChats();
         }
 
-        // Chats for viewing
-        async function loadChatsForView() {
+        async function sendBroadcast() {
+            const text = document.getElementById('broadcast-text').value.trim();
+            if (!text) return alert('Введите текст');
+            if (!selectedChats.size) return alert('Выберите получателей');
+            if (!confirm(`Отправить ${selectedChats.size} получателям?`)) return;
+
+            const data = await api('/api/broadcast', { method: 'POST', body: JSON.stringify({ chat_ids: [...selectedChats], message: text }) });
+            alert(data.success ? `Отправлено: ${data.sent}/${data.total}` : `Ошибка: ${data.error}`);
+            if (data.success) { selectedChats.clear(); document.getElementById('broadcast-text').value = ''; loadBroadcastChats(); }
+        }
+
+        // Chats
+        async function loadChats() {
             const data = await api('/api/chats');
-
-            if (data.success) {
-                renderChatsList(data.chats);
-            }
-        }
-
-        function renderChatsList(chats) {
-            if (!chats || chats.length === 0) {
-                document.getElementById('chats-list').innerHTML =
-                    '<div class="empty-state"><div class="empty-state-icon">💬</div><div class="empty-state-text">Нет чатов</div></div>';
-                return;
-            }
+            if (!data.success) return;
 
             let html = '';
-            chats.forEach(chat => {
-                const initial = (chat.first_name || chat.username || '?')[0].toUpperCase();
-
-                html += `<div class="chat-item" onclick="loadChatHistory('${chat.chat_id}', '${chat.first_name || ''} ${chat.last_name || ''}')">
-                    <div class="chat-avatar">${initial}</div>
-                    <div class="chat-info">
-                        <div class="chat-name">${chat.first_name || ''} ${chat.last_name || ''}</div>
-                        <div class="chat-preview">@${chat.username || 'без username'}</div>
-                    </div>
+            (data.chats || []).forEach(c => {
+                html += `<div class="chat-item" onclick="openChat('${c.chat_id}', '${c.first_name || ''} ${c.last_name || ''}')">
+                    <div class="chat-avatar">${(c.first_name || c.username || '?')[0].toUpperCase()}</div>
+                    <div><div class="chat-name">${c.first_name || ''} ${c.last_name || ''}</div><div class="chat-sub">@${c.username || '—'}</div></div>
                 </div>`;
             });
-
-            document.getElementById('chats-list').innerHTML = html;
+            document.getElementById('chats-list').innerHTML = html || '<div class="empty">Нет чатов</div>';
         }
 
-        async function loadChatHistory(chatId, name) {
-            document.getElementById('chat-header').textContent = name || 'Чат';
+        async function openChat(id, name) {
+            document.getElementById('chat-title').textContent = name || 'Чат';
             document.getElementById('chat-messages').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
 
-            const data = await api(`/api/chats/${chatId}/messages`);
-
-            if (data.success) {
-                renderChatMessages(data.messages);
-            } else {
-                document.getElementById('chat-messages').innerHTML =
-                    `<div class="alert alert-error">${data.error}</div>`;
-            }
-        }
-
-        function renderChatMessages(messages) {
-            if (!messages || messages.length === 0) {
-                document.getElementById('chat-messages').innerHTML =
-                    '<div class="empty-state"><div class="empty-state-icon">💬</div><div class="empty-state-text">Нет сообщений</div></div>';
+            const data = await api(`/api/chats/${id}/messages`);
+            if (!data.success) {
+                document.getElementById('chat-messages').innerHTML = `<div class="alert alert-error">${data.error}</div>`;
                 return;
             }
 
             let html = '';
-            messages.forEach(msg => {
-                const isBot = msg.is_bot;
-                html += `<div style="margin-bottom: 12px; ${isBot ? 'text-align: right;' : ''}">
-                    <div style="display: inline-block; max-width: 70%; padding: 12px 16px; border-radius: 16px; ${isBot ? 'background: var(--primary); border-bottom-right-radius: 4px;' : 'background: var(--bg-card-hover); border-bottom-left-radius: 4px;'}">
-                        <div style="font-size: 14px;">${msg.text || ''}</div>
-                        <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">${formatDate(msg.created_at)}</div>
-                    </div>
-                </div>`;
+            (data.messages || []).forEach(m => {
+                html += `<div class="message ${m.is_bot ? 'outgoing' : 'incoming'}">${m.text || ''}</div>`;
             });
-
-            document.getElementById('chat-messages').innerHTML = html;
-        }
-
-        // Export
-        function exportAnalytics() {
-            // TODO: implement CSV export
-            alert('Функция экспорта в разработке');
+            document.getElementById('chat-messages').innerHTML = html || '<div class="empty">Нет сообщений</div>';
         }
 
         // Init
-        document.addEventListener('DOMContentLoaded', () => {
-            loadAnalytics();
-
-            // Set current month in selects
-            const now = new Date();
-            document.querySelectorAll('select[id$="-month"]').forEach(sel => {
-                sel.value = now.getMonth() + 1;
-            });
+        const months = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+        const now = new Date();
+        ['yandex-month', 'amo-month', 'full-month'].forEach(id => {
+            const sel = document.getElementById(id);
+            months.forEach((m, i) => sel.innerHTML += `<option value="${i + 1}">${m}</option>`);
+            sel.value = now.getMonth() + 1;
         });
+
+        loadAnalytics();
     </script>
 </body>
 </html>
