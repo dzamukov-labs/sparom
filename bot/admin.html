@@ -352,10 +352,223 @@
 
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Analytics table */
-        .cell-cost { color: #1d1d1f; font-weight: 500; }
-        .cell-leads { color: #34c759; font-size: 13px; }
-        .cell-cpl { color: #86868b; font-size: 12px; }
+        /* Analytics table - improved visibility */
+        .cell-data {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .cell-cost {
+            color: #1d1d1f;
+            font-weight: 600;
+            font-size: 15px;
+        }
+        .cell-leads {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .cell-leads::before {
+            content: '📦';
+            font-size: 12px;
+        }
+        .cell-cpl {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #fff3e0;
+            color: #e65100;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .cell-cpl::before {
+            content: 'CPL';
+            font-size: 10px;
+            font-weight: 700;
+            opacity: 0.7;
+        }
+        .cell-empty {
+            color: #d2d2d7;
+            font-size: 13px;
+        }
+
+        /* Deals Chart */
+        .chart-container {
+            padding: 0 20px 20px;
+        }
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            height: 200px;
+            padding: 20px 0;
+            border-bottom: 1px solid #e8e8ed;
+        }
+        .chart-bar-wrap {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            min-width: 40px;
+        }
+        .chart-bar {
+            width: 100%;
+            max-width: 50px;
+            background: linear-gradient(180deg, #34c759 0%, #2e7d32 100%);
+            border-radius: 6px 6px 0 0;
+            min-height: 4px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .chart-bar:hover {
+            opacity: 0.8;
+            transform: translateY(-2px);
+        }
+        .chart-bar-value {
+            position: absolute;
+            top: -24px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 13px;
+            font-weight: 600;
+            color: #1d1d1f;
+            white-space: nowrap;
+        }
+        .chart-bar-label {
+            font-size: 11px;
+            color: #86868b;
+            text-align: center;
+            white-space: nowrap;
+        }
+        .chart-summary {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            padding-top: 16px;
+        }
+        .chart-stat {
+            text-align: center;
+        }
+        .chart-stat-value {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1d1d1f;
+        }
+        .chart-stat-label {
+            font-size: 12px;
+            color: #86868b;
+        }
+        .year-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .year-tab {
+            padding: 6px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            background: #f5f5f7;
+            color: #86868b;
+            transition: all 0.2s;
+        }
+        .year-tab:hover {
+            background: #e8e8ed;
+        }
+        .year-tab.active {
+            background: #1d1d1f;
+            color: #fff;
+        }
+
+        /* Markdown Editor */
+        .editor-wrap {
+            border: 1px solid #d2d2d7;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .editor-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            padding: 8px;
+            background: #f5f5f7;
+            border-bottom: 1px solid #d2d2d7;
+        }
+        .editor-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: #fff;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            color: #1d1d1f;
+        }
+        .editor-btn:hover {
+            background: #e8e8ed;
+        }
+        .editor-btn.wide {
+            width: auto;
+            padding: 0 12px;
+            font-size: 12px;
+        }
+        .editor-divider {
+            width: 1px;
+            background: #d2d2d7;
+            margin: 0 4px;
+        }
+        .editor-textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 12px;
+            border: none;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+        }
+        .editor-textarea:focus {
+            outline: none;
+        }
+        .editor-hint {
+            padding: 8px 12px;
+            background: #f5f5f7;
+            border-top: 1px solid #d2d2d7;
+            font-size: 11px;
+            color: #86868b;
+        }
+        .editor-preview {
+            padding: 12px;
+            background: #fff;
+            border-top: 1px solid #d2d2d7;
+            font-size: 14px;
+            min-height: 60px;
+        }
+        .editor-preview b { font-weight: 600; }
+        .editor-preview i { font-style: italic; }
+        .editor-preview u { text-decoration: underline; }
+        .editor-preview s { text-decoration: line-through; }
+        .editor-preview code {
+            background: #f5f5f7;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        .editor-preview a { color: #0071e3; text-decoration: underline; }
 
         /* Logs */
         .log {
@@ -531,6 +744,16 @@
             <h1>Сделки из AmoCRM</h1>
             <p class="subtitle">Все сделки со статусом «заявка оформлена»</p>
 
+            <div class="card" style="margin-bottom:20px">
+                <div class="card-header">
+                    <span class="card-title">Динамика сделок</span>
+                    <div class="year-tabs" id="chart-year-tabs"></div>
+                </div>
+                <div class="chart-container" id="leads-chart">
+                    <div class="loading"><div class="spinner"></div></div>
+                </div>
+            </div>
+
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">Фильтры</span>
@@ -675,9 +898,30 @@
                 <div class="card">
                     <div class="card-header">
                         <span class="card-title">Сообщение</span>
+                        <label style="font-size:12px;color:#86868b;display:flex;align-items:center;gap:6px">
+                            <input type="checkbox" id="show-preview" onchange="togglePreview()"> Превью
+                        </label>
                     </div>
                     <div class="card-body">
-                        <textarea id="broadcast-text" placeholder="Текст сообщения..."></textarea>
+                        <div class="editor-wrap">
+                            <div class="editor-toolbar">
+                                <button class="editor-btn" onclick="insertFormat('*', '*')" title="Жирный"><b>B</b></button>
+                                <button class="editor-btn" onclick="insertFormat('_', '_')" title="Курсив"><i>I</i></button>
+                                <button class="editor-btn" onclick="insertFormat('__', '__')" title="Подчёркнутый"><u>U</u></button>
+                                <button class="editor-btn" onclick="insertFormat('~', '~')" title="Зачёркнутый"><s>S</s></button>
+                                <button class="editor-btn" onclick="insertFormat('||', '||')" title="Спойлер">◐</button>
+                                <div class="editor-divider"></div>
+                                <button class="editor-btn" onclick="insertFormat('\`', '\`')" title="Код"><code>&lt;&gt;</code></button>
+                                <button class="editor-btn" onclick="insertFormat('\`\`\`\\n', '\\n\`\`\`')" title="Блок кода">{ }</button>
+                                <div class="editor-divider"></div>
+                                <button class="editor-btn wide" onclick="insertLink()" title="Ссылка">🔗 Ссылка</button>
+                            </div>
+                            <textarea id="broadcast-text" class="editor-textarea" placeholder="Текст сообщения..." oninput="updatePreview()"></textarea>
+                            <div id="editor-preview" class="editor-preview" style="display:none"></div>
+                            <div class="editor-hint">
+                                Telegram markdown: *жирный* _курсив_ __подчёркнутый__ ~зачёркнутый~ `код` ||спойлер|| [текст](ссылка)
+                            </div>
+                        </div>
                         <div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center">
                             <span style="color:#86868b;font-size:13px">Выбрано: <span id="selected-count">0</span></span>
                             <div class="btn-group">
@@ -921,14 +1165,24 @@
                     if (d) {
                         totalCost += d.cost || 0;
                         totalLeads += d.leads || 0;
-                        html += `<td><div class="cell-cost">${money(d.cost)}</div><div class="cell-leads">${d.leads || 0}</div>${d.cost_per_lead ? `<div class="cell-cpl">${money(d.cost_per_lead)}</div>` : ''}</td>`;
+                        const leadsText = d.leads === 1 ? 'заказ' : (d.leads < 5 ? 'заказа' : 'заказов');
+                        html += `<td><div class="cell-data">
+                            <div class="cell-cost">${money(d.cost)}</div>
+                            ${d.leads ? `<div class="cell-leads">${d.leads} ${leadsText}</div>` : ''}
+                            ${d.cost_per_lead ? `<div class="cell-cpl">${money(d.cost_per_lead)}</div>` : ''}
+                        </div></td>`;
                     } else {
-                        html += '<td>—</td>';
+                        html += '<td><span class="cell-empty">—</span></td>';
                     }
                 });
 
                 const cpl = totalLeads > 0 ? Math.round(totalCost / totalLeads) : null;
-                html += `<td><div class="cell-cost">${money(totalCost)}</div><div class="cell-leads">${totalLeads}</div>${cpl ? `<div class="cell-cpl">${money(cpl)}</div>` : ''}</td></tr>`;
+                const totalLeadsText = totalLeads === 1 ? 'заказ' : (totalLeads < 5 ? 'заказа' : 'заказов');
+                html += `<td><div class="cell-data">
+                    <div class="cell-cost">${money(totalCost)}</div>
+                    ${totalLeads ? `<div class="cell-leads">${totalLeads} ${totalLeadsText}</div>` : ''}
+                    ${cpl ? `<div class="cell-cpl">${money(cpl)}</div>` : ''}
+                </div></td></tr>`;
             });
 
             html += '</tbody></table>';
@@ -936,18 +1190,93 @@
         }
 
         // Leads
+        let chartYear = new Date().getFullYear();
+
         async function loadLeads() {
             document.getElementById('leads-table').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
             const data = await api('/api/crm-leads/all');
 
             if (!data.success) {
                 document.getElementById('leads-table').innerHTML = `<div class="alert alert-error">${data.error}</div>`;
+                document.getElementById('leads-chart').innerHTML = `<div class="alert alert-error">${data.error}</div>`;
                 return;
             }
 
             allLeads = data.leads || [];
             populateFilters();
             filterLeads();
+            renderLeadsChart();
+        }
+
+        function renderLeadsChart() {
+            // Группируем лиды по месяцам и годам
+            const byMonth = {};
+            const years = new Set();
+
+            allLeads.forEach(l => {
+                if (!l.lead_created_at) return;
+                const d = new Date(l.lead_created_at);
+                const y = d.getFullYear();
+                const m = d.getMonth() + 1;
+                years.add(y);
+                const key = `${y}-${m}`;
+                byMonth[key] = (byMonth[key] || 0) + 1;
+            });
+
+            // Рендерим вкладки годов
+            const yearsArr = [...years].sort((a, b) => b - a);
+            if (!yearsArr.includes(chartYear)) chartYear = yearsArr[0] || new Date().getFullYear();
+
+            let tabsHtml = '';
+            yearsArr.forEach(y => {
+                tabsHtml += `<div class="year-tab ${y === chartYear ? 'active' : ''}" onclick="setChartYear(${y})">${y}</div>`;
+            });
+            document.getElementById('chart-year-tabs').innerHTML = tabsHtml;
+
+            // Рендерим график для выбранного года
+            const monthNames = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
+            const monthData = [];
+            let maxVal = 0, totalYear = 0;
+
+            for (let m = 1; m <= 12; m++) {
+                const val = byMonth[`${chartYear}-${m}`] || 0;
+                monthData.push({ month: m, name: monthNames[m - 1], count: val });
+                if (val > maxVal) maxVal = val;
+                totalYear += val;
+            }
+
+            // Считаем среднее (только за месяцы с данными)
+            const monthsWithData = monthData.filter(m => m.count > 0).length;
+            const avgPerMonth = monthsWithData > 0 ? Math.round(totalYear / monthsWithData) : 0;
+
+            let barsHtml = '<div class="chart-bars">';
+            monthData.forEach(m => {
+                const height = maxVal > 0 ? Math.max(4, (m.count / maxVal) * 160) : 4;
+                const showValue = m.count > 0 ? `<span class="chart-bar-value">${m.count}</span>` : '';
+                barsHtml += `<div class="chart-bar-wrap">
+                    <div class="chart-bar" style="height:${height}px">${showValue}</div>
+                    <div class="chart-bar-label">${m.name}</div>
+                </div>`;
+            });
+            barsHtml += '</div>';
+
+            barsHtml += `<div class="chart-summary">
+                <div class="chart-stat">
+                    <div class="chart-stat-value">${totalYear}</div>
+                    <div class="chart-stat-label">сделок за ${chartYear}</div>
+                </div>
+                <div class="chart-stat">
+                    <div class="chart-stat-value">${avgPerMonth}</div>
+                    <div class="chart-stat-label">в среднем в месяц</div>
+                </div>
+            </div>`;
+
+            document.getElementById('leads-chart').innerHTML = barsHtml;
+        }
+
+        function setChartYear(y) {
+            chartYear = y;
+            renderLeadsChart();
         }
 
         function populateFilters() {
@@ -1211,7 +1540,85 @@
 
             const data = await api('/api/broadcast', { method: 'POST', body: JSON.stringify({ chat_ids: [...selectedChats], message: text }) });
             alert(data.success ? `Отправлено: ${data.sent}/${data.total}` : `Ошибка: ${data.error}`);
-            if (data.success) { selectedChats.clear(); document.getElementById('broadcast-text').value = ''; loadBroadcastChats(); }
+            if (data.success) { selectedChats.clear(); document.getElementById('broadcast-text').value = ''; updatePreview(); loadBroadcastChats(); }
+        }
+
+        // Markdown Editor
+        function insertFormat(before, after) {
+            const textarea = document.getElementById('broadcast-text');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const text = textarea.value;
+            const selected = text.substring(start, end);
+
+            // Если текст выделен - оборачиваем его
+            // Если нет - вставляем маркеры и ставим курсор между ними
+            const newText = text.substring(0, start) + before + selected + after + text.substring(end);
+            textarea.value = newText;
+
+            // Позиционируем курсор
+            if (selected) {
+                textarea.setSelectionRange(start + before.length, end + before.length);
+            } else {
+                textarea.setSelectionRange(start + before.length, start + before.length);
+            }
+
+            textarea.focus();
+            updatePreview();
+        }
+
+        function insertLink() {
+            const textarea = document.getElementById('broadcast-text');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const text = textarea.value;
+            const selected = text.substring(start, end);
+
+            const linkText = selected || prompt('Текст ссылки:', 'Нажми сюда');
+            if (!linkText) return;
+
+            const url = prompt('URL ссылки:', 'https://');
+            if (!url) return;
+
+            const link = `[${linkText}](${url})`;
+            const newText = text.substring(0, start) + link + text.substring(end);
+            textarea.value = newText;
+            textarea.setSelectionRange(start + link.length, start + link.length);
+            textarea.focus();
+            updatePreview();
+        }
+
+        function togglePreview() {
+            const preview = document.getElementById('editor-preview');
+            const show = document.getElementById('show-preview').checked;
+            preview.style.display = show ? 'block' : 'none';
+            if (show) updatePreview();
+        }
+
+        function updatePreview() {
+            const preview = document.getElementById('editor-preview');
+            if (preview.style.display === 'none') return;
+
+            const text = document.getElementById('broadcast-text').value;
+            let html = escapeHtml(text);
+
+            // Telegram MarkdownV2 преобразования
+            html = html.replace(/\*([^*]+)\*/g, '<b>$1</b>');           // *bold*
+            html = html.replace(/_([^_]+)_/g, '<i>$1</i>');             // _italic_
+            html = html.replace(/__([^_]+)__/g, '<u>$1</u>');           // __underline__
+            html = html.replace(/~([^~]+)~/g, '<s>$1</s>');             // ~strikethrough~
+            html = html.replace(/\|\|([^|]+)\|\|/g, '<span style="background:#1d1d1f;color:#1d1d1f;border-radius:2px">$1</span>'); // ||spoiler||
+            html = html.replace(/`([^`]+)`/g, '<code>$1</code>');       // `code`
+            html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>'); // [text](url)
+            html = html.replace(/\n/g, '<br>');
+
+            preview.innerHTML = html || '<span style="color:#86868b">Начните вводить текст...</span>';
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
         // Chats

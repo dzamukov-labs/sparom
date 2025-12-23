@@ -150,27 +150,27 @@ function sizesMenu(prefix) {
 // Команда /start
 bot.start(async (ctx) => {
     await saveUser(ctx);
+    await saveMessage(ctx.from.id, 'in', '/start');
     await logAction(ctx, 'start');
 
-    await ctx.reply(
-        `👋 Добро пожаловать в «С лёгким паром»!\n\n` +
-        `Здесь вы найдёте:\n` +
-        `📸 50+ фото готовых бань\n` +
-        `📐 35 вариантов планировок\n\n` +
-        `Выберите, что хотите посмотреть:`,
-        mainMenu()
-    );
+    const welcomeText = `👋 Добро пожаловать в «С лёгким паром»!\n\nЗдесь вы найдёте:\n📸 50+ фото готовых бань\n📐 35 вариантов планировок\n\nВыберите, что хотите посмотреть:`;
+    await saveMessage(ctx.from.id, 'out', welcomeText);
+    await ctx.reply(welcomeText, mainMenu());
 });
 
 // Фото
 bot.hears('📸 Посмотреть фото', async (ctx) => {
+    await saveMessage(ctx.from.id, 'in', '📸 Посмотреть фото');
     await logAction(ctx, 'photos_menu');
+    await saveMessage(ctx.from.id, 'out', 'Выберите размер бани:');
     await ctx.reply('Выберите размер бани:', sizesMenu('photo'));
 });
 
 // Планировки
 bot.hears('📐 Посмотреть планировки', async (ctx) => {
+    await saveMessage(ctx.from.id, 'in', '📐 Посмотреть планировки');
     await logAction(ctx, 'layouts_menu');
+    await saveMessage(ctx.from.id, 'out', 'Выберите размер бани:');
     await ctx.reply('Выберите размер бани:', sizesMenu('layout'));
 });
 
@@ -178,14 +178,17 @@ bot.hears('📐 Посмотреть планировки', async (ctx) => {
 SIZES.forEach(size => {
     bot.action(`photo_${size}`, async (ctx) => {
         await ctx.answerCbQuery();
+        await saveMessage(ctx.from.id, 'in', `[Выбрал фото: ${size}]`);
         await logAction(ctx, 'view_photos', { size });
 
         const photos = CONTENT.photos[size] || [];
         if (photos.length === 0) {
+            await saveMessage(ctx.from.id, 'out', `Фото для размера ${size} пока нет`);
             await ctx.reply(`Фото для размера ${size} пока нет. Скоро добавим!`);
             return;
         }
 
+        await saveMessage(ctx.from.id, 'out', `📸 Отправлены фото бань размера ${size} (${photos.length} шт)`);
         await ctx.reply(`📸 Фото бань размера ${size}:`);
 
         // Отправляем как медиагруппу
@@ -212,14 +215,17 @@ SIZES.forEach(size => {
 SIZES.forEach(size => {
     bot.action(`layout_${size}`, async (ctx) => {
         await ctx.answerCbQuery();
+        await saveMessage(ctx.from.id, 'in', `[Выбрал планировку: ${size}]`);
         await logAction(ctx, 'view_layouts', { size });
 
         const layouts = CONTENT.layouts[size] || [];
         if (layouts.length === 0) {
+            await saveMessage(ctx.from.id, 'out', `Планировки для размера ${size} пока нет`);
             await ctx.reply(`Планировки для размера ${size} пока нет. Скоро добавим!`);
             return;
         }
 
+        await saveMessage(ctx.from.id, 'out', `📐 Отправлены планировки бань размера ${size} (${layouts.length} шт)`);
         await ctx.reply(`📐 Планировки бань размера ${size}:`);
 
         const media = layouts.map((url, i) => ({
@@ -254,9 +260,10 @@ bot.on('text', async (ctx) => {
     await logAction(ctx, 'message', { text: text.substring(0, 100) });
 
     // Автоответ
+    const autoReply = '✉️ Спасибо за сообщение! Мы свяжемся с вами в ближайшее время.';
+    await saveMessage(ctx.from.id, 'out', autoReply);
     await ctx.reply(
-        '✉️ Спасибо за сообщение! Мы свяжемся с вами в ближайшее время.\n\n' +
-        'А пока можете посмотреть фото и планировки наших бань:',
+        autoReply + '\n\nА пока можете посмотреть фото и планировки наших бань:',
         mainMenu()
     );
 });
@@ -268,10 +275,9 @@ bot.on('voice', async (ctx) => {
     await saveMessage(ctx.from.id, 'in', `[Голосовое сообщение, ${duration} сек]`);
     await logAction(ctx, 'voice', { duration });
 
-    await ctx.reply(
-        '🎤 Получили ваше голосовое сообщение! Мы прослушаем и ответим в ближайшее время.',
-        mainMenu()
-    );
+    const reply = '🎤 Получили ваше голосовое сообщение! Мы прослушаем и ответим в ближайшее время.';
+    await saveMessage(ctx.from.id, 'out', reply);
+    await ctx.reply(reply, mainMenu());
 });
 
 // Обработка фото
@@ -281,7 +287,9 @@ bot.on('photo', async (ctx) => {
     await saveMessage(ctx.from.id, 'in', `[Фото]${caption ? ' ' + caption : ''}`);
     await logAction(ctx, 'photo', { caption });
 
-    await ctx.reply('📷 Фото получено! Спасибо.', mainMenu());
+    const reply = '📷 Фото получено! Спасибо.';
+    await saveMessage(ctx.from.id, 'out', reply);
+    await ctx.reply(reply, mainMenu());
 });
 
 // Обработка видео
@@ -289,7 +297,10 @@ bot.on('video', async (ctx) => {
     await saveUser(ctx);
     await saveMessage(ctx.from.id, 'in', '[Видео]');
     await logAction(ctx, 'video', {});
-    await ctx.reply('🎬 Видео получено! Спасибо.', mainMenu());
+
+    const reply = '🎬 Видео получено! Спасибо.';
+    await saveMessage(ctx.from.id, 'out', reply);
+    await ctx.reply(reply, mainMenu());
 });
 
 // Обработка документов
@@ -298,7 +309,10 @@ bot.on('document', async (ctx) => {
     const fileName = ctx.message.document.file_name || 'файл';
     await saveMessage(ctx.from.id, 'in', `[Документ: ${fileName}]`);
     await logAction(ctx, 'document', { file_name: fileName });
-    await ctx.reply('📎 Документ получен! Спасибо.', mainMenu());
+
+    const reply = '📎 Документ получен! Спасибо.';
+    await saveMessage(ctx.from.id, 'out', reply);
+    await ctx.reply(reply, mainMenu());
 });
 
 // Express для админки и webhook
@@ -2628,14 +2642,15 @@ app.get('/api/chats/:chatId/messages', async (req, res) => {
     if (!supabase) return res.json({ success: false, error: 'Supabase not configured' });
 
     const { chatId } = req.params;
+    const telegramId = parseInt(chatId, 10); // Преобразуем в число для корректного сравнения
 
     try {
         const { data, error } = await supabase
             .from('bot_messages')
             .select('*')
-            .eq('telegram_id', chatId)
+            .eq('telegram_id', telegramId)
             .order('created_at', { ascending: true })
-            .limit(200);
+            .limit(500); // Увеличиваем лимит
 
         if (error) throw error;
 
