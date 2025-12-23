@@ -1,0 +1,487 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="О компании — С лёгким паром"
+  description="С 2014 года создаём бани, которые служат долгие годы. Производство в Пестово, Новгородская область. Доставка по всей России."
+>
+    <!-- Hero Section with Gradient Mesh -->
+    <section class="about-hero about-hero--mesh">
+        <div class="about-hero__mesh-bg"></div>
+        <div class="container">
+            <div class="about-hero__content">
+                <h1 class="about-hero__title">С 2014 года создаём бани, которые служат долгие годы</h1>
+                <p class="about-hero__subtitle">Производство в Пестово, Новгородская область. Доставка по всей России.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section - Bento Grid -->
+    <section class="about-stats">
+        <div class="container">
+            <div class="bento-grid">
+                <div class="bento-card bento-card--wide">
+                    <span class="bento-card__number">800K</span>
+                    <span class="bento-card__label">километров доставки</span>
+                    <p class="bento-card__desc">Столько проехали наши бани — из Пестово в 18 регионов страны</p>
+                </div>
+                <div class="bento-card">
+                    <span class="bento-card__number">10</span>
+                    <span class="bento-card__label">лет на рынке</span>
+                </div>
+                <div class="bento-card">
+                    <span class="bento-card__number">30+</span>
+                    <span class="bento-card__label">бань в месяц</span>
+                </div>
+                <div class="bento-card">
+                    <span class="bento-card__number">538</span>
+                    <span class="bento-card__label">единиц техники</span>
+                </div>
+                <div class="bento-card">
+                    <span class="bento-card__number">150+</span>
+                    <span class="bento-card__label">видео на YouTube</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Founder Section - 50/50 Full Width -->
+    <section class="about-founder about-founder--fullwidth">
+        <div class="about-founder__photo">
+            <img src="/images/about/founder.webp" alt="Георгий Дзамуков — основатель компании С лёгким паром" loading="eager" width="640" height="480">
+        </div>
+        <div class="about-founder__content">
+            <div class="about-founder__inner">
+                <div class="about-founder__header">
+                    <span class="about-founder__label">Основатель</span>
+                    <h2 class="about-founder__name">Георгий Дзамуков</h2>
+                </div>
+                <div class="about-founder__text">
+                    <p>Привет! Меня зовут Георгий, и я основал «С лёгким паром» в 2014 году.</p>
+                    <p>Я вырос в Пестово — небольшом городе в Новгородской области, где каждый второй умеет работать с деревом. После учёбы в Петербурге на инженера-строителя вернулся домой и открыл производство бань.</p>
+                    <p>Моя философия простая: <strong>делать так, чтобы клиент был доволен через 5 лет, а не только в день покупки.</strong> Большинство производителей гонятся за быстрой прибылью. Мы выбрали другой путь — качество на долгие годы.</p>
+                    <p>У нас открытый YouTube-канал с 150+ видео. Комментарии не удаляем — там много отзывов от клиентов спустя годы эксплуатации. Посмотрите сами и примите взвешенное решение.</p>
+                    <p class="about-founder__signature">Пусть наши бани радуют вас! С лёгким паром!</p>
+                </div>
+                <button type="button" class="btn btn--primary about-founder__btn" id="contactFounderBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    Написать Георгию лично
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section - Bento Style -->
+    <section class="about-timeline about-timeline--bento">
+        <div class="container">
+            <h2 class="about-timeline__title">Наш путь</h2>
+            <div class="timeline-bento">
+                <div class="timeline-bento__card timeline-bento__card--start">
+                    <span class="timeline-bento__year">2014</span>
+                    <p class="timeline-bento__text">Георгий Дзамуков основал компанию «С лёгким паром» в родном Пестово. Первые бани собирали вручную небольшой командой.</p>
+                </div>
+                <div class="timeline-bento__card">
+                    <span class="timeline-bento__year">2016</span>
+                    <p class="timeline-bento__text">Вышли на стабильное производство. Установили регламенты и чек-лист проверки бань.</p>
+                </div>
+                <div class="timeline-bento__card">
+                    <span class="timeline-bento__year">2018</span>
+                    <p class="timeline-bento__text">Открыли YouTube-канал. Более 150 видео обзоров и отзывов.</p>
+                </div>
+                <div class="timeline-bento__card">
+                    <span class="timeline-bento__year">2020</span>
+                    <p class="timeline-bento__text">Получили сертификат ГОСТ Р добровольно — безопасность превыше всего.</p>
+                </div>
+                <div class="timeline-bento__card timeline-bento__card--end">
+                    <span class="timeline-bento__year">2024</span>
+                    <p class="timeline-bento__text">10 лет на рынке. 5000+ бань. 34 сотрудника. Продолжаем расти.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section - Flat Design -->
+    <section class="about-team about-team--flat">
+        <div class="container">
+            <h2 class="about-team__title">Люди, которые помогут вам</h2>
+            <div class="about-team__grid">
+                <div class="team-card team-card--flat">
+                    <div class="team-card__photo">
+                        <img src="/images/about/team-tatiana.webp" alt="Татьяна — руководитель логистики" loading="lazy" width="300" height="300">
+                    </div>
+                    <div class="team-card__info">
+                        <h3 class="team-card__name">Татьяна</h3>
+                        <span class="team-card__role">Менеджер по логистике</span>
+                        <a href="tel:89319813301" class="team-card__phone">8 931 981-33-01</a>
+                    </div>
+                </div>
+                <div class="team-card team-card--flat">
+                    <div class="team-card__photo">
+                        <img src="/images/about/team-ivan.webp" alt="Иван — менеджер по продажам" loading="lazy" width="300" height="224">
+                    </div>
+                    <div class="team-card__info">
+                        <h3 class="team-card__name">Иван</h3>
+                        <span class="team-card__role">Менеджер по продажам</span>
+                        <a href="tel:89811630545" class="team-card__phone">8 981 163-05-45</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Production Section - Masonry Grid -->
+    <section class="about-production about-production--masonry">
+        <div class="container">
+            <div class="about-production__content">
+                <h2 class="about-production__title">Наше производство в Пестово</h2>
+                <p class="about-production__text">Все бани собираются на собственном производстве в городе Пестово, Новгородская область. Здесь работают 34 человека — плотники, сборщики, контролёры качества.</p>
+            </div>
+            <div class="production-gallery">
+                <div class="production-gallery__item">
+                    <img src="/images/about/production-1.webp" alt="Производство бань зимой в Пестово" loading="lazy" width="800" height="447">
+                </div>
+                <div class="production-gallery__item production-gallery__item--director">
+                    <img src="/images/about/production-3.webp" alt="Директор с командой строителей" loading="lazy" width="800" height="600">
+                </div>
+                <div class="production-gallery__item">
+                    <img src="/images/about/production-2.webp" alt="Готовые бани на производстве" loading="lazy" width="800" height="447">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Safety Section -->
+    <section class="about-safety">
+        <div class="container">
+            <div class="about-safety__container">
+                <div class="about-safety__content">
+                    <h2 class="about-safety__title">Наши бани — безопасные</h2>
+                    <p class="about-safety__text">Закон не требует сертификации бань. Но мы получили сертификат ГОСТ Р добровольно — потому что отвечаем за каждое изделие.</p>
+                    <h3 class="about-safety__subtitle">Что это значит:</h3>
+                    <ul class="about-safety__list">
+                        <li>Печь изолирована от деревянных поверхностей</li>
+                        <li>Дымоход выведен через специальный короб из негорючего материала</li>
+                        <li>Электропроводка соответствует нормам пожарной безопасности</li>
+                    </ul>
+                </div>
+                <div class="about-safety__certificate">
+                    <img src="/images/about/certificate.webp" alt="Сертификат ГОСТ Р" loading="lazy" class="about-safety__certificate-img">
+                    <button class="about-safety__zoom-btn" data-lightbox="/images/about/certificate.webp">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                            <path d="M11 8v6M8 11h6"></path>
+                        </svg>
+                        Увеличить
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacts Section - Vertical Split -->
+    <section class="about-contacts about-contacts--bento">
+        <div class="container">
+            <h2 class="about-contacts__title">Контакты и реквизиты</h2>
+            <div class="contacts-split">
+                <!-- Left Column: Phone, Address, Social -->
+                <div class="contacts-split__left">
+                    <!-- Phone -->
+                    <div class="contacts-split__card">
+                        <div class="contacts-split__icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                            </svg>
+                        </div>
+                        <div class="contacts-split__content">
+                            <a href="tel:88003500393" class="contacts-split__phone">8-800-350-03-93</a>
+                            <span class="contacts-split__hint">Бесплатно по России, с 8:00 до 24:00</span>
+                        </div>
+                    </div>
+                    <!-- Address -->
+                    <div class="contacts-split__card">
+                        <div class="contacts-split__icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                <circle cx="12" cy="10" r="3"/>
+                            </svg>
+                        </div>
+                        <div class="contacts-split__content">
+                            <span class="contacts-split__label">Производство</span>
+                            <address class="contacts-split__address">174510, Новгородская обл., г. Пестово, ул. Дачная, 5</address>
+                        </div>
+                    </div>
+                    <!-- Social -->
+                    <div class="contacts-split__card">
+                        <div class="contacts-split__social">
+                            <a href="#" target="_blank" rel="noopener noreferrer" class="contacts-split__social-link" title="YouTube">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                                </svg>
+                            </a>
+                            <a href="https://t.me/bani_1" target="_blank" rel="noopener noreferrer" class="contacts-split__social-link" title="Telegram">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .37z"/>
+                                </svg>
+                            </a>
+                            <a href="#" target="_blank" rel="noopener noreferrer" class="contacts-split__social-link" title="ВКонтакте">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M15.684 0H8.316C1.592 0 0 1.592 0 8.316v7.368C0 22.408 1.592 24 8.316 24h7.368C22.408 24 24 22.408 24 15.684V8.316C24 1.592 22.408 0 15.684 0zm3.692 17.123h-1.744c-.66 0-.864-.525-2.05-1.727-1.033-1-1.49-1.135-1.744-1.135-.356 0-.458.102-.458.593v1.575c0 .424-.135.678-1.253.678-1.846 0-3.896-1.118-5.335-3.202C4.624 10.857 4 8.684 4 8.253c0-.254.102-.491.593-.491h1.744c.44 0 .61.203.78.678.863 2.49 2.303 4.675 2.896 4.675.22 0 .322-.102.322-.66V9.721c-.068-1.186-.695-1.287-.695-1.71 0-.203.17-.407.44-.407h2.744c.373 0 .508.203.508.643v3.473c0 .372.17.508.271.508.22 0 .407-.136.813-.542 1.254-1.406 2.151-3.574 2.151-3.574.119-.254.322-.491.763-.491h1.744c.525 0 .644.27.525.643-.22 1.017-2.354 4.031-2.354 4.031-.186.305-.254.44 0 .78.186.254.796.779 1.203 1.253.745.847 1.32 1.558 1.473 2.05.17.49-.085.744-.576.744z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Requisites -->
+                <div class="contacts-split__right">
+                    <h3 class="contacts-split__title">Реквизиты</h3>
+                    <div class="contacts-split__requisites">
+                        <div class="contacts-split__req">
+                            <span class="contacts-split__req-label">Наименование</span>
+                            <span class="contacts-split__req-value">ИП Дзамуков Георгий Михайлович</span>
+                        </div>
+                        <div class="contacts-split__req">
+                            <span class="contacts-split__req-label">ИНН</span>
+                            <span class="contacts-split__req-value">531312915054</span>
+                        </div>
+                        <div class="contacts-split__req">
+                            <span class="contacts-split__req-label">ОГРНИП</span>
+                            <span class="contacts-split__req-value">319532100003969</span>
+                        </div>
+                        <div class="contacts-split__req">
+                            <span class="contacts-split__req-label">Расчётный счёт</span>
+                            <span class="contacts-split__req-value">40802810010500002442</span>
+                        </div>
+                        <div class="contacts-split__req">
+                            <span class="contacts-split__req-label">Банк</span>
+                            <span class="contacts-split__req-value">ООО «Банк Точка»</span>
+                        </div>
+                        <div class="contacts-split__req">
+                            <span class="contacts-split__req-label">БИК</span>
+                            <span class="contacts-split__req-value">044525104</span>
+                        </div>
+                        <div class="contacts-split__req">
+                            <span class="contacts-split__req-label">Корр. счёт</span>
+                            <span class="contacts-split__req-value">30101810745374525104</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Modal -->
+    <div class="contact-modal" id="contactModal">
+        <div class="contact-modal__overlay"></div>
+        <div class="contact-modal__container">
+            <button class="contact-modal__close" aria-label="Закрыть">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+            </button>
+
+            <div class="contact-modal__content">
+                <h3 class="contact-modal__title">Написать Георгию</h3>
+                <p class="contact-modal__text">Оставьте сообщение — Георгий ответит лично</p>
+
+                <form class="contact-modal__form" id="contactForm">
+                    <div class="contact-modal__field">
+                        <input type="tel" id="contactPhone" name="phone" placeholder="+7" value="+7 " required>
+                    </div>
+                    <div class="contact-modal__field">
+                        <textarea id="contactMessage" name="message" placeholder="Ваше сообщение..." rows="4"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn--primary contact-modal__submit">
+                        Отправить
+                    </button>
+                    <p class="contact-modal__privacy">
+                        Нажимая кнопку, вы соглашаетесь с
+                        <a href="/privacy" target="_blank">политикой конфиденциальности</a>
+                    </p>
+                </form>
+
+                <div class="contact-modal__success" id="contactSuccess" hidden>
+                    <div class="contact-modal__success-icon">✓</div>
+                    <h4 class="contact-modal__success-title">Заявка отправлена!</h4>
+                    <p class="contact-modal__success-text">Георгий свяжется с вами в ближайшее время</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</BaseLayout>
+
+<script is:inline>
+document.addEventListener('DOMContentLoaded', function() {
+    // Contact Modal
+    const contactBtn = document.getElementById('contactFounderBtn');
+    const modal = document.getElementById('contactModal');
+    const overlay = modal?.querySelector('.contact-modal__overlay');
+    const closeBtn = modal?.querySelector('.contact-modal__close');
+    const form = document.getElementById('contactForm');
+    const phoneInput = document.getElementById('contactPhone');
+    const messageInput = document.getElementById('contactMessage');
+    const successBlock = document.getElementById('contactSuccess');
+
+    function openModal() {
+        if (modal) {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closeModal() {
+        if (modal) {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    }
+
+    if (contactBtn) contactBtn.addEventListener('click', openModal);
+    if (overlay) overlay.addEventListener('click', closeModal);
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal?.classList.contains('active')) {
+            closeModal();
+        }
+    });
+
+    // Phone input formatting
+    if (phoneInput) {
+        phoneInput.addEventListener('focus', () => {
+            if (!phoneInput.value || phoneInput.value.length < 3) {
+                phoneInput.value = '+7 ';
+            }
+        });
+
+        phoneInput.addEventListener('input', () => {
+            let value = phoneInput.value.replace(/\D/g, '');
+
+            if (value.length === 0) {
+                value = '7';
+            } else if (value[0] === '8') {
+                value = '7' + value.slice(1);
+            } else if (value[0] !== '7') {
+                value = '7' + value;
+            }
+
+            if (value.length > 11) {
+                value = value.slice(0, 11);
+            }
+
+            let formatted = '+7 ';
+            if (value.length > 1) {
+                formatted += '(' + value.slice(1, 4);
+            }
+            if (value.length > 4) {
+                formatted += ') ' + value.slice(4, 7);
+            }
+            if (value.length > 7) {
+                formatted += '-' + value.slice(7, 9);
+            }
+            if (value.length > 9) {
+                formatted += '-' + value.slice(9, 11);
+            }
+
+            phoneInput.value = formatted;
+        });
+
+        phoneInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Backspace' && phoneInput.value.length <= 4) {
+                e.preventDefault();
+            }
+        });
+    }
+
+    // Form submission
+    if (form) {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const phone = phoneInput?.value.trim();
+            const digits = phone?.replace(/\D/g, '') || '';
+
+            if (digits.length < 11) {
+                phoneInput?.focus();
+                return;
+            }
+
+            const submitBtn = form.querySelector('.contact-modal__submit');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Отправка...';
+            }
+
+            try {
+                const message = messageInput?.value.trim() || '';
+
+                await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        phone: phone,
+                        message: message,
+                        source: 'about-founder',
+                        page_url: window.location.href
+                    })
+                });
+
+                // Show success
+                if (form && successBlock) {
+                    form.hidden = true;
+                    successBlock.hidden = false;
+                }
+
+                // Close after 3 seconds
+                setTimeout(closeModal, 3000);
+
+            } catch (err) {
+                console.error('Submit error:', err);
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Отправить';
+                }
+            }
+        });
+    }
+
+    // Certificate lightbox
+    const zoomBtn = document.querySelector('.about-safety__zoom-btn');
+    if (zoomBtn) {
+        zoomBtn.addEventListener('click', function() {
+            const imgSrc = this.dataset.lightbox;
+            const lightbox = document.createElement('div');
+            lightbox.className = 'lightbox lightbox--open';
+            lightbox.innerHTML = `
+                <div class="lightbox__overlay"></div>
+                <div class="lightbox__content">
+                    <img src="${imgSrc}" alt="Сертификат ГОСТ Р" class="lightbox__image">
+                    <button class="lightbox__close">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(lightbox);
+            document.body.style.overflow = 'hidden';
+
+            const closeLightbox = () => {
+                lightbox.remove();
+                document.body.style.overflow = '';
+            };
+
+            lightbox.querySelector('.lightbox__overlay').addEventListener('click', closeLightbox);
+            lightbox.querySelector('.lightbox__close').addEventListener('click', closeLightbox);
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closeLightbox();
+            }, { once: true });
+        });
+    }
+});
+</script>
