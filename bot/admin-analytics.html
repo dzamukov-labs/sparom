@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Аналитика рекламы | Sparom</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        h1 { color: #D4A04A; margin-bottom: 10px; }
+        h2 { color: #D4A04A; margin: 20px 0 10px; font-size: 1.2rem; }
+        .subtitle { color: #888; margin-bottom: 20px; }
+
+        .card {
+            background: #16213e;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: #0f3460;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #D4A04A;
+        }
+        .stat-label { color: #888; font-size: 0.9rem; margin-top: 5px; }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        select, button, input {
+            font-family: inherit;
+            font-size: 1rem;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            background: #0f3460;
+            color: #eee;
+        }
+        select:focus, input:focus { outline: none; border-color: #D4A04A; }
+        button {
+            background: #D4A04A;
+            color: #1a1a2e;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        button:hover { background: #e5b15b; }
+        button:disabled { background: #555; cursor: not-allowed; }
+        button.secondary { background: #333; color: #eee; }
+        button.danger { background: #e74c3c; color: white; }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 15px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        th, td {
+            padding: 12px 8px;
+            text-align: right;
+            border-bottom: 1px solid #333;
+            white-space: nowrap;
+        }
+        th { background: #0f3460; color: #D4A04A; font-weight: 600; position: sticky; top: 0; }
+        th:first-child, td:first-child { text-align: left; }
+        tr:hover { background: rgba(212, 160, 74, 0.1); }
+        tr.total-row { background: #0f3460; font-weight: bold; }
+        tr.total-row td { border-top: 2px solid #D4A04A; }
+
+        .cost { color: #e74c3c; }
+        .leads { color: #2ecc71; }
+        .cpl { color: #3498db; }
+        .empty { color: #555; }
+
+        .sync-status {
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        .sync-status.success { background: rgba(46, 204, 113, 0.2); color: #2ecc71; }
+        .sync-status.error { background: rgba(231, 76, 60, 0.2); color: #e74c3c; }
+        .sync-status.loading { background: rgba(52, 152, 219, 0.2); color: #3498db; }
+
+        .login-form {
+            max-width: 300px;
+            margin: 100px auto;
+            text-align: center;
+        }
+        .login-form input {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .login-form button { width: 100%; }
+
+        .hidden { display: none; }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 10px 20px;
+            background: #0f3460;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tab:hover { background: #1a4a7a; }
+        .tab.active { background: #D4A04A; color: #1a1a2e; }
+
+        .month-header {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg);
+            height: 80px;
+        }
+
+        .progress {
+            width: 100%;
+            height: 4px;
+            background: #333;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        .progress-bar {
+            height: 100%;
+            background: #D4A04A;
+            transition: width 0.3s;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .controls { flex-direction: column; align-items: stretch; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login -->
+    <div id="loginSection" class="card login-form">
+        <h1>Аналитика</h1>
+        <p class="subtitle">Введите пароль администратора</p>
+        <input type="password" id="password" placeholder="Пароль">
+        <button onclick="login()">Войти</button>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div id="dashboard" class="hidden">
+        <div class="container">
+            <h1>Аналитика рекламных кампаний</h1>
+            <p class="subtitle">Яндекс.Директ + AmoCRM | Расходы и заявки по месяцам</p>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('analytics')">Аналитика</div>
+                <div class="tab" onclick="switchTab('sync')">Синхронизация</div>
+                <div class="tab" onclick="switchTab('logs')">Логи</div>
+            </div>
+
+            <!-- Analytics Tab -->
+            <div id="tab-analytics">
+                <!-- Summary Stats -->
+                <div class="stats-grid" id="summaryStats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalCost">—</div>
+                        <div class="stat-label">Общий расход</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalLeads">—</div>
+                        <div class="stat-label">Всего заявок</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="avgCPL">—</div>
+                        <div class="stat-label">Средняя цена заявки</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="periodsCount">—</div>
+                        <div class="stat-label">Месяцев данных</div>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="card">
+                    <div class="controls">
+                        <select id="yearFilter">
+                            <option value="">Все годы</option>
+                            <option value="2024">2024</option>
+                            <option value="2025" selected>2025</option>
+                        </select>
+                        <button onclick="loadAnalytics()">Загрузить данные</button>
+                        <button class="secondary" onclick="exportCSV()">Экспорт CSV</button>
+                    </div>
+                </div>
+
+                <!-- Analytics Table -->
+                <div class="card">
+                    <h2>Расходы и заявки по кампаниям</h2>
+                    <div class="table-container">
+                        <table id="analyticsTable">
+                            <thead>
+                                <tr id="tableHeader">
+                                    <th>Кампания</th>
+                                    <!-- Месяцы добавляются динамически -->
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                                <tr><td colspan="100" style="text-align: center; color: #888;">Нажмите "Загрузить данные"</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sync Tab -->
+            <div id="tab-sync" class="hidden">
+                <div class="card">
+                    <h2>Синхронизация данных</h2>
+                    <p class="subtitle">Загрузка данных из Яндекс.Директ и AmoCRM</p>
+
+                    <div class="controls">
+                        <select id="syncYear">
+                            <option value="2024">2024</option>
+                            <option value="2025" selected>2025</option>
+                        </select>
+                        <select id="syncMonth">
+                            <option value="1">Январь</option>
+                            <option value="2">Февраль</option>
+                            <option value="3">Март</option>
+                            <option value="4">Апрель</option>
+                            <option value="5">Май</option>
+                            <option value="6">Июнь</option>
+                            <option value="7">Июль</option>
+                            <option value="8">Август</option>
+                            <option value="9">Сентябрь</option>
+                            <option value="10">Октябрь</option>
+                            <option value="11">Ноябрь</option>
+                            <option value="12">Декабрь</option>
+                        </select>
+                        <button onclick="syncMonth()">Синхронизировать месяц</button>
+                    </div>
+
+                    <div id="syncStatus" class="sync-status hidden"></div>
+                </div>
+
+                <div class="card">
+                    <h2>Полная синхронизация</h2>
+                    <p class="subtitle">Загрузить все данные с января 2024</p>
+
+                    <div class="controls">
+                        <button class="danger" onclick="syncAll()">Синхронизировать всё (с января 2024)</button>
+                    </div>
+
+                    <div id="fullSyncStatus" class="sync-status hidden"></div>
+                    <div class="progress hidden" id="syncProgress">
+                        <div class="progress-bar" id="syncProgressBar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Тест подключений</h2>
+                    <div class="controls">
+                        <button class="secondary" onclick="testYandex()">Тест Яндекс.Директ</button>
+                        <button class="secondary" onclick="testAmoCRM()">Тест AmoCRM</button>
+                    </div>
+                    <div id="testStatus" class="sync-status hidden"></div>
+                </div>
+            </div>
+
+            <!-- Logs Tab -->
+            <div id="tab-logs" class="hidden">
+                <div class="card">
+                    <h2>Логи синхронизации</h2>
+                    <button class="secondary" onclick="loadLogs()">Обновить</button>
+                    <div class="table-container">
+                        <table id="logsTable">
+                            <thead>
+                                <tr>
+                                    <th>Дата</th>
+                                    <th>Тип</th>
+                                    <th>Статус</th>
+                                    <th>Записей</th>
+                                    <th>Детали</th>
+                                </tr>
+                            </thead>
+                            <tbody id="logsBody">
+                                <tr><td colspan="5" style="text-align: center; color: #888;">Загрузка...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://sparom.onrender.com';
+        let password = '';
+        let analyticsData = null;
+
+        // Login
+        function login() {
+            password = document.getElementById('password').value;
+            testConnection().then(success => {
+                if (success) {
+                    document.getElementById('loginSection').classList.add('hidden');
+                    document.getElementById('dashboard').classList.remove('hidden');
+                    loadAnalytics();
+                } else {
+                    alert('Неверный пароль или ошибка подключения');
+                }
+            });
+        }
+
+        async function testConnection() {
+            try {
+                const res = await fetch(`${API_URL}/api/stats?password=${password}`);
+                return res.status === 200;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        // Tabs
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('[id^="tab-"]').forEach(t => t.classList.add('hidden'));
+
+            document.querySelector(`.tab[onclick="switchTab('${tabName}')"]`).classList.add('active');
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+
+            if (tabName === 'logs') loadLogs();
+        }
+
+        // Load Analytics
+        async function loadAnalytics() {
+            const year = document.getElementById('yearFilter').value;
+
+            try {
+                const url = `${API_URL}/api/analytics?password=${password}${year ? `&year=${year}` : ''}`;
+                const res = await fetch(url);
+                const data = await res.json();
+
+                if (!data.success) {
+                    alert('Ошибка: ' + data.error);
+                    return;
+                }
+
+                analyticsData = data;
+                renderAnalytics(data);
+
+            } catch (e) {
+                alert('Ошибка загрузки: ' + e.message);
+            }
+        }
+
+        function renderAnalytics(data) {
+            // Summary
+            const totalCost = data.summary.total_cost;
+            const totalLeads = data.summary.total_leads;
+            const avgCPL = totalLeads > 0 ? Math.round(totalCost / totalLeads) : 0;
+
+            document.getElementById('totalCost').textContent = formatMoney(totalCost);
+            document.getElementById('totalLeads').textContent = totalLeads;
+            document.getElementById('avgCPL').textContent = formatMoney(avgCPL);
+            document.getElementById('periodsCount').textContent = data.summary.periods;
+
+            // Get all months
+            const months = [...new Set(data.details.map(d => `${d.month}/${d.year % 100}`))];
+            months.sort((a, b) => {
+                const [am, ay] = a.split('/').map(Number);
+                const [bm, by] = b.split('/').map(Number);
+                return (ay * 12 + am) - (by * 12 + bm);
+            });
+
+            // Header
+            const header = document.getElementById('tableHeader');
+            header.innerHTML = '<th>ID</th><th>Кампания</th>';
+            months.forEach(m => {
+                header.innerHTML += `
+                    <th colspan="3" style="text-align: center; border-left: 2px solid #333;">${m}</th>
+                `;
+            });
+            header.innerHTML += '<th colspan="3" style="text-align: center; border-left: 2px solid #D4A04A;">Итого</th>';
+
+            // Subheader
+            const subheader = document.createElement('tr');
+            subheader.innerHTML = '<th></th><th></th>';
+            months.forEach(() => {
+                subheader.innerHTML += `
+                    <th class="cost" style="border-left: 2px solid #333;">Расход</th>
+                    <th class="leads">Лиды</th>
+                    <th class="cpl">CPL</th>
+                `;
+            });
+            subheader.innerHTML += `
+                <th class="cost" style="border-left: 2px solid #D4A04A;">Расход</th>
+                <th class="leads">Лиды</th>
+                <th class="cpl">CPL</th>
+            `;
+
+            // Body
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+            tbody.appendChild(subheader);
+
+            // Campaign rows
+            data.campaigns.forEach(campaign => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${campaign.campaign_id}</td><td>${campaign.campaign_name || '—'}</td>`;
+
+                let totalCost = 0, totalLeads = 0;
+
+                months.forEach(monthKey => {
+                    const monthData = campaign.months[monthKey] || {};
+                    const cost = monthData.cost || 0;
+                    const leads = monthData.leads || 0;
+                    const cpl = monthData.cost_per_lead;
+
+                    totalCost += cost;
+                    totalLeads += leads;
+
+                    row.innerHTML += `
+                        <td class="cost" style="border-left: 2px solid #333;">${cost ? formatMoney(cost) : '<span class="empty">—</span>'}</td>
+                        <td class="leads">${leads || '<span class="empty">—</span>'}</td>
+                        <td class="cpl">${cpl ? formatMoney(cpl) : '<span class="empty">—</span>'}</td>
+                    `;
+                });
+
+                const totalCPL = totalLeads > 0 ? Math.round(totalCost / totalLeads) : null;
+                row.innerHTML += `
+                    <td class="cost" style="border-left: 2px solid #D4A04A;">${formatMoney(totalCost)}</td>
+                    <td class="leads">${totalLeads}</td>
+                    <td class="cpl">${totalCPL ? formatMoney(totalCPL) : '—'}</td>
+                `;
+
+                tbody.appendChild(row);
+            });
+
+            // Totals row
+            const totalsRow = document.createElement('tr');
+            totalsRow.className = 'total-row';
+            totalsRow.innerHTML = '<td></td><td><strong>ИТОГО</strong></td>';
+
+            let grandCost = 0, grandLeads = 0;
+
+            months.forEach(monthKey => {
+                const monthTotals = data.totals[monthKey] || {};
+                const cost = monthTotals.cost || 0;
+                const leads = monthTotals.leads || 0;
+                const cpl = monthTotals.cost_per_lead;
+
+                grandCost += cost;
+                grandLeads += leads;
+
+                totalsRow.innerHTML += `
+                    <td class="cost" style="border-left: 2px solid #333;">${formatMoney(cost)}</td>
+                    <td class="leads">${leads}</td>
+                    <td class="cpl">${cpl ? formatMoney(cpl) : '—'}</td>
+                `;
+            });
+
+            const grandCPL = grandLeads > 0 ? Math.round(grandCost / grandLeads) : null;
+            totalsRow.innerHTML += `
+                <td class="cost" style="border-left: 2px solid #D4A04A;">${formatMoney(grandCost)}</td>
+                <td class="leads">${grandLeads}</td>
+                <td class="cpl">${grandCPL ? formatMoney(grandCPL) : '—'}</td>
+            `;
+
+            tbody.appendChild(totalsRow);
+        }
+
+        function formatMoney(value) {
+            if (!value && value !== 0) return '—';
+            return new Intl.NumberFormat('ru-RU', {
+                style: 'currency',
+                currency: 'RUB',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(value);
+        }
+
+        // Sync
+        async function syncMonth() {
+            const year = document.getElementById('syncYear').value;
+            const month = document.getElementById('syncMonth').value;
+            const statusEl = document.getElementById('syncStatus');
+
+            statusEl.className = 'sync-status loading';
+            statusEl.textContent = 'Синхронизация расходов...';
+            statusEl.classList.remove('hidden');
+
+            try {
+                // Sync expenses
+                const expRes = await fetch(`${API_URL}/api/sync/yandex-expenses`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password, year: parseInt(year), month: parseInt(month) })
+                });
+                const expData = await expRes.json();
+
+                statusEl.textContent = 'Синхронизация лидов...';
+
+                // Sync leads
+                const leadsRes = await fetch(`${API_URL}/api/sync/crm-leads`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password, year: parseInt(year), month: parseInt(month) })
+                });
+                const leadsData = await leadsRes.json();
+
+                if (expData.success && leadsData.success) {
+                    statusEl.className = 'sync-status success';
+                    statusEl.textContent = `Готово! Расходы: ${expData.records} кампаний, Лиды: ${leadsData.records} (из Яндекса: ${leadsData.yandex_leads || 0})`;
+                } else {
+                    statusEl.className = 'sync-status error';
+                    statusEl.textContent = `Ошибка: ${expData.error || leadsData.error}`;
+                }
+
+            } catch (e) {
+                statusEl.className = 'sync-status error';
+                statusEl.textContent = 'Ошибка: ' + e.message;
+            }
+        }
+
+        async function syncAll() {
+            if (!confirm('Это загрузит ВСЕ данные с января 2024. Продолжить?')) return;
+
+            const statusEl = document.getElementById('fullSyncStatus');
+            const progressEl = document.getElementById('syncProgress');
+            const progressBar = document.getElementById('syncProgressBar');
+
+            statusEl.className = 'sync-status loading';
+            statusEl.textContent = 'Начинаем полную синхронизацию...';
+            statusEl.classList.remove('hidden');
+            progressEl.classList.remove('hidden');
+
+            try {
+                const now = new Date();
+                const endYear = now.getFullYear();
+                const endMonth = now.getMonth() + 1;
+
+                const totalMonths = (endYear - 2024) * 12 + endMonth;
+                let currentProgress = 0;
+
+                for (let year = 2024; year <= endYear; year++) {
+                    const startMonth = year === 2024 ? 1 : 1;
+                    const lastMonth = year === endYear ? endMonth : 12;
+
+                    for (let month = startMonth; month <= lastMonth; month++) {
+                        statusEl.textContent = `Синхронизация ${month}/${year}...`;
+
+                        // Expenses
+                        await fetch(`${API_URL}/api/sync/yandex-expenses`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ password, year, month })
+                        });
+
+                        // Leads
+                        await fetch(`${API_URL}/api/sync/crm-leads`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ password, year, month })
+                        });
+
+                        currentProgress++;
+                        progressBar.style.width = `${(currentProgress / totalMonths) * 100}%`;
+
+                        // Small delay to avoid rate limiting
+                        await new Promise(r => setTimeout(r, 500));
+                    }
+                }
+
+                statusEl.className = 'sync-status success';
+                statusEl.textContent = `Синхронизация завершена! Обработано ${totalMonths} месяцев.`;
+
+            } catch (e) {
+                statusEl.className = 'sync-status error';
+                statusEl.textContent = 'Ошибка: ' + e.message;
+            }
+        }
+
+        async function testYandex() {
+            const statusEl = document.getElementById('testStatus');
+            statusEl.className = 'sync-status loading';
+            statusEl.textContent = 'Проверка Яндекс.Директ...';
+            statusEl.classList.remove('hidden');
+
+            try {
+                const res = await fetch(`${API_URL}/api/yandex-test?password=${password}`);
+                const data = await res.json();
+
+                if (data.success) {
+                    statusEl.className = 'sync-status success';
+                    statusEl.textContent = `Яндекс.Директ: OK! Найдено ${data.campaigns_count} кампаний`;
+                } else {
+                    statusEl.className = 'sync-status error';
+                    statusEl.textContent = 'Яндекс.Директ: ' + data.error;
+                }
+            } catch (e) {
+                statusEl.className = 'sync-status error';
+                statusEl.textContent = 'Ошибка: ' + e.message;
+            }
+        }
+
+        async function testAmoCRM() {
+            const statusEl = document.getElementById('testStatus');
+            statusEl.className = 'sync-status loading';
+            statusEl.textContent = 'Проверка AmoCRM...';
+            statusEl.classList.remove('hidden');
+
+            try {
+                const res = await fetch(`${API_URL}/api/amocrm/test?password=${password}`);
+                const data = await res.json();
+
+                if (data.success) {
+                    statusEl.className = 'sync-status success';
+                    statusEl.textContent = `AmoCRM: OK! Аккаунт: ${data.account?.name || data.account?.subdomain}`;
+                } else {
+                    statusEl.className = 'sync-status error';
+                    statusEl.textContent = 'AmoCRM: ' + data.error;
+                }
+            } catch (e) {
+                statusEl.className = 'sync-status error';
+                statusEl.textContent = 'Ошибка: ' + e.message;
+            }
+        }
+
+        // Logs
+        async function loadLogs() {
+            try {
+                const res = await fetch(`${API_URL}/api/sync/logs?password=${password}&limit=50`);
+                const data = await res.json();
+
+                const tbody = document.getElementById('logsBody');
+
+                if (!data.success || !data.logs?.length) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #888;">Нет логов</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = data.logs.map(log => `
+                    <tr>
+                        <td>${new Date(log.started_at).toLocaleString('ru-RU')}</td>
+                        <td>${log.sync_type}</td>
+                        <td style="color: ${log.status === 'success' ? '#2ecc71' : log.status === 'error' ? '#e74c3c' : '#3498db'}">${log.status}</td>
+                        <td>${log.records_processed}</td>
+                        <td>${log.error_message || JSON.stringify(log.details || {})}</td>
+                    </tr>
+                `).join('');
+
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        // Export
+        function exportCSV() {
+            if (!analyticsData) {
+                alert('Сначала загрузите данные');
+                return;
+            }
+
+            const months = [...new Set(analyticsData.details.map(d => `${d.month}/${d.year % 100}`))];
+            months.sort((a, b) => {
+                const [am, ay] = a.split('/').map(Number);
+                const [bm, by] = b.split('/').map(Number);
+                return (ay * 12 + am) - (by * 12 + bm);
+            });
+
+            let csv = 'ID кампании,Название';
+            months.forEach(m => {
+                csv += `,${m} расход,${m} лиды,${m} CPL`;
+            });
+            csv += ',Итого расход,Итого лиды,Итого CPL\n';
+
+            analyticsData.campaigns.forEach(c => {
+                let row = `${c.campaign_id},"${c.campaign_name || ''}"`;
+                let totalCost = 0, totalLeads = 0;
+
+                months.forEach(m => {
+                    const d = c.months[m] || {};
+                    totalCost += d.cost || 0;
+                    totalLeads += d.leads || 0;
+                    row += `,${d.cost || 0},${d.leads || 0},${d.cost_per_lead || ''}`;
+                });
+
+                const totalCPL = totalLeads > 0 ? Math.round(totalCost / totalLeads) : '';
+                row += `,${totalCost},${totalLeads},${totalCPL}`;
+                csv += row + '\n';
+            });
+
+            const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `analytics_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+        }
+
+        // Enter for login
+        document.getElementById('password').addEventListener('keypress', e => {
+            if (e.key === 'Enter') login();
+        });
+
+        // Set current month in sync dropdown
+        document.getElementById('syncMonth').value = new Date().getMonth() + 1;
+    </script>
+</body>
+</html>
