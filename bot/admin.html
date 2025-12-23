@@ -628,7 +628,17 @@
 
             <div class="card" style="margin-top:20px">
                 <div class="card-header">
-                    <span class="card-title">Тестирование</span>
+                    <span class="card-title">Статус данных</span>
+                    <button class="btn btn-secondary" onclick="loadSyncStatus()">Обновить</button>
+                </div>
+                <div class="card-body" id="sync-status">
+                    <div class="loading"><div class="spinner"></div></div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top:20px">
+                <div class="card-header">
+                    <span class="card-title">Тестирование API</span>
                 </div>
                 <div class="card-body">
                     <div class="btn-group">
@@ -821,6 +831,7 @@
                 const s = item.dataset.section;
                 if (s === 'analytics') loadAnalytics();
                 if (s === 'leads') loadLeads();
+                if (s === 'sync') loadSyncStatus();
                 if (s === 'logs') loadLogs();
                 if (s === 'broadcasts') loadBroadcastChats();
                 if (s === 'chats') loadChats();
@@ -869,25 +880,25 @@
             }
 
             const { campaigns, months, summary } = data;
-            document.getElementById('stat-cost').textContent = money(summary.total_cost);
-            document.getElementById('stat-leads').textContent = summary.total_leads || 0;
-            document.getElementById('stat-cpl').textContent = money(summary.avg_cpl);
+            document.getElementById('stat-cost').textContent = money(summary?.total_cost);
+            document.getElementById('stat-leads').textContent = summary?.total_leads || 0;
+            document.getElementById('stat-cpl').textContent = money(summary?.avg_cpl);
             document.getElementById('stat-months').textContent = months?.length || 0;
 
-            if (!campaigns?.length) {
-                document.getElementById('analytics-table').innerHTML = '<div class="empty">Нет данных. Запустите синхронизацию.</div>';
+            if (!campaigns?.length || !months?.length) {
+                document.getElementById('analytics-table').innerHTML = '<div class="empty">Нет данных. Запустите синхронизацию в разделе «Синхронизация».</div>';
                 return;
             }
 
             let html = '<table><thead><tr><th>ID</th><th>Кампания</th>';
-            months.forEach(m => html += `<th>${m}</th>`);
+            (months || []).forEach(m => html += `<th>${m}</th>`);
             html += '<th>Итого</th></tr></thead><tbody>';
 
             campaigns.forEach(c => {
                 let totalCost = 0, totalLeads = 0;
                 html += `<tr><td><code>${c.campaign_id}</code></td><td>${c.campaign_name || '—'}</td>`;
 
-                months.forEach(m => {
+                (months || []).forEach(m => {
                     const d = c.months[m];
                     if (d) {
                         totalCost += d.cost || 0;
@@ -1064,6 +1075,34 @@
             document.getElementById('test-result').innerHTML = `<div class="alert alert-${type}">${msg}</div>`;
         }
 
+        // Sync Status
+        async function loadSyncStatus() {
+            const data = await api('/api/sync/status');
+            if (!data.success) {
+                document.getElementById('sync-status').innerHTML = `<div class="alert alert-error">${data.error}</div>`;
+                return;
+            }
+
+            if (!data.status?.length) {
+                document.getElementById('sync-status').innerHTML = '<div class="empty">Нет синхронизированных данных</div>';
+                return;
+            }
+
+            const monthNames = ['', 'Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
+            let html = '<table style="width:100%"><thead><tr><th>Период</th><th>Расходы Яндекс</th><th>Сделки CRM</th></tr></thead><tbody>';
+            data.status.forEach(s => {
+                const hasExpenses = s.expenses_count > 0;
+                const hasLeads = s.leads_count > 0;
+                html += `<tr>
+                    <td><b>${monthNames[s.month]} ${s.year}</b></td>
+                    <td>${hasExpenses ? `<span class="tag tag-green">${s.expenses_count} кампаний</span>` : '<span class="tag tag-orange">Нет</span>'}</td>
+                    <td>${hasLeads ? `<span class="tag tag-green">${s.leads_count} сделок</span>` : '<span class="tag tag-orange">Нет</span>'}</td>
+                </tr>`;
+            });
+            html += '</tbody></table>';
+            document.getElementById('sync-status').innerHTML = html;
+        }
+
         // Logs
         async function loadLogs() {
             const data = await api('/api/sync/logs');
@@ -1105,8 +1144,12 @@
             (data.chats || []).forEach(c => {
                 const sel = selectedChats.has(String(c.chat_id));
                 const checkmark = sel ? '<span style="margin-left:auto;color:#34c759;font-size:18px">✓</span>' : '';
+                const avatarStyle = c.avatar_url
+                    ? `background-image:url('${c.avatar_url}');background-size:cover;`
+                    : (sel ? 'background:#34c759' : '');
+                const initial = c.avatar_url ? '' : (c.first_name || c.username || '?')[0].toUpperCase();
                 html += `<div class="chat-item ${sel ? 'selected' : ''}" onclick="toggleChat('${c.chat_id}')" style="display:flex;align-items:center">
-                    <div class="chat-avatar" style="${sel ? 'background:#34c759' : ''}">${(c.first_name || c.username || '?')[0].toUpperCase()}</div>
+                    <div class="chat-avatar" style="${avatarStyle}">${initial}</div>
                     <div style="flex:1"><div class="chat-name">${c.first_name || ''} ${c.last_name || ''}</div><div class="chat-sub">@${c.username || '—'}</div></div>
                     ${checkmark}
                 </div>`;
@@ -1151,8 +1194,12 @@
             let html = '';
             (data.chats || []).forEach(c => {
                 const name = `${c.first_name || ''} ${c.last_name || ''}`.trim();
+                const avatarStyle = c.avatar_url
+                    ? `background-image:url('${c.avatar_url}');background-size:cover;`
+                    : '';
+                const initial = c.avatar_url ? '' : (c.first_name || c.username || '?')[0].toUpperCase();
                 html += `<div class="chat-item" onclick="openChat('${c.chat_id}', '${name.replace(/'/g, "\\'")}')">
-                    <div class="chat-avatar">${(c.first_name || c.username || '?')[0].toUpperCase()}</div>
+                    <div class="chat-avatar" style="${avatarStyle}">${initial}</div>
                     <div><div class="chat-name">${name || 'Без имени'}</div><div class="chat-sub">@${c.username || '—'}</div></div>
                 </div>`;
             });

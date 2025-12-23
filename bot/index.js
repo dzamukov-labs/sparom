@@ -2533,7 +2533,7 @@ app.get('/api/crm-leads/all', async (req, res) => {
     }
 });
 
-// API: Получить чаты для рассылок
+// API: Получить чаты для рассылок (с аватарками)
 app.get('/api/chats', async (req, res) => {
     if (!checkYandexAuth(req, res)) return;
     if (!supabase) return res.json({ success: false, error: 'Supabase not configured' });
@@ -2546,14 +2546,18 @@ app.get('/api/chats', async (req, res) => {
 
         if (error) throw error;
 
-        // Маппим telegram_id в chat_id для совместимости с фронтом
-        const chats = (data || []).map(u => ({
-            chat_id: u.telegram_id,
-            telegram_id: u.telegram_id,
-            username: u.username,
-            first_name: u.first_name,
-            last_name: u.last_name,
-            created_at: u.updated_at
+        // Добавляем аватарки параллельно
+        const chats = await Promise.all((data || []).map(async u => {
+            const avatarUrl = await getUserAvatarUrl(u.telegram_id);
+            return {
+                chat_id: u.telegram_id,
+                telegram_id: u.telegram_id,
+                username: u.username,
+                first_name: u.first_name,
+                last_name: u.last_name,
+                created_at: u.updated_at,
+                avatar_url: avatarUrl
+            };
         }));
 
         res.json({ success: true, chats });
@@ -2571,15 +2575,76 @@ app.get('/api/chats/:chatId/messages', async (req, res) => {
 
     try {
         const { data, error } = await supabase
-            .from('messages')
+            .from('bot_messages')
             .select('*')
-            .eq('chat_id', chatId)
+            .eq('telegram_id', chatId)
             .order('created_at', { ascending: true })
             .limit(200);
 
         if (error) throw error;
 
-        res.json({ success: true, messages: data || [] });
+        // Преобразуем в формат для фронта
+        const messages = (data || []).map(m => ({
+            id: m.id,
+            text: m.message,
+            is_bot: m.direction === 'out',
+            created_at: m.created_at
+        }));
+
+        res.json({ success: true, messages });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// API: Статус синхронизации по месяцам
+app.get('/api/sync/status', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+    if (!supabase) return res.json({ success: false, error: 'Supabase not configured' });
+
+    try {
+        // Получаем уникальные комбинации год-месяц для расходов
+        const { data: expenses } = await supabase
+            .from('yandex_expenses')
+            .select('year, month')
+            .order('year', { ascending: false })
+            .order('month', { ascending: false });
+
+        // Получаем уникальные комбинации год-месяц для лидов
+        const { data: leads } = await supabase
+            .from('crm_leads')
+            .select('lead_created_at');
+
+        // Агрегируем расходы
+        const expensesMap = new Map();
+        (expenses || []).forEach(e => {
+            const key = `${e.year}-${e.month}`;
+            expensesMap.set(key, (expensesMap.get(key) || 0) + 1);
+        });
+
+        // Агрегируем лиды по месяцам
+        const leadsMap = new Map();
+        (leads || []).forEach(l => {
+            if (l.lead_created_at) {
+                const d = new Date(l.lead_created_at);
+                const key = `${d.getFullYear()}-${d.getMonth() + 1}`;
+                leadsMap.set(key, (leadsMap.get(key) || 0) + 1);
+            }
+        });
+
+        // Собираем все месяцы
+        const allMonths = new Set([...expensesMap.keys(), ...leadsMap.keys()]);
+        const status = [...allMonths].map(key => {
+            const [year, month] = key.split('-').map(Number);
+            return {
+                year,
+                month,
+                expenses_count: expensesMap.get(key) || 0,
+                leads_count: leadsMap.get(key) || 0
+            };
+        }).sort((a, b) => b.year - a.year || b.month - a.month);
+
+        res.json({ success: true, status });
     } catch (err) {
         res.json({ success: false, error: err.message });
     }
