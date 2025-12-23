@@ -15,7 +15,7 @@
     "googleapis": "^140.0.0"
   },
   "devDependencies": {
-    "sharp": "^0.33.0"
+    "sharp": "^0.33.5"
   },
   "engines": {
     "node": "20.x"
