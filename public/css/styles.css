@@ -3444,27 +3444,28 @@ a {
 /* About Hero with Gradient Mesh */
 .about-hero {
     padding-top: calc(72px + var(--space-3xl));
-    padding-bottom: var(--space-3xl);
+    padding-bottom: var(--space-xl);
     background: var(--color-bg);
     text-align: center;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .about-hero--mesh {
-    background: linear-gradient(135deg, #f8f9fa 0%, #fff 50%, #f0f4f8 100%);
+    background: linear-gradient(180deg, #f8f9fa 0%, #fff 100%);
 }
 
 .about-hero__mesh-bg {
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 200%;
     background:
-        radial-gradient(circle at 20% 30%, rgba(140, 82, 45, 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 80% 70%, rgba(185, 135, 90, 0.06) 0%, transparent 40%),
-        radial-gradient(circle at 50% 50%, rgba(160, 100, 60, 0.04) 0%, transparent 60%),
-        radial-gradient(circle at 10% 80%, rgba(140, 82, 45, 0.05) 0%, transparent 35%),
-        radial-gradient(circle at 90% 20%, rgba(185, 135, 90, 0.05) 0%, transparent 35%);
-    animation: meshFloat 20s ease-in-out infinite;
+        radial-gradient(ellipse at 20% 20%, rgba(140, 82, 45, 0.07) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 40%, rgba(185, 135, 90, 0.05) 0%, transparent 45%),
+        radial-gradient(ellipse at 50% 60%, rgba(160, 100, 60, 0.04) 0%, transparent 55%);
+    animation: meshFloat 25s ease-in-out infinite;
     pointer-events: none;
 }
 
@@ -3498,19 +3499,16 @@ a {
     line-height: 1.6;
 }
 
-/* About Stats - Bento Grid */
+/* About Stats - Bento Grid (merged with Hero) */
 .about-stats {
-    padding: var(--space-2xl) 0;
-    background: var(--color-bg-alt);
+    padding: 0 0 var(--space-3xl);
+    background: transparent;
 }
 
 .bento-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 2px;
-    background: var(--color-border);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
+    gap: var(--space-md);
 }
 
 .bento-card {
@@ -3520,6 +3518,8 @@ a {
     flex-direction: column;
     justify-content: center;
     min-height: 120px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
 }
 
 .bento-card--wide {
@@ -3912,7 +3912,7 @@ a {
     }
 }
 
-/* About Production - Masonry Grid */
+/* About Production - Simple 3-Column Grid */
 .about-production {
     padding: var(--space-3xl) 0;
     background: var(--color-bg-alt);
@@ -3939,68 +3939,50 @@ a {
     margin-bottom: 0;
 }
 
-/* Masonry Grid */
-.masonry-grid {
+/* Production Gallery - Simple Equal Grid */
+.production-gallery {
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--space-md);
 }
 
-.masonry-grid__item {
+.production-gallery__item {
     position: relative;
     border-radius: var(--radius-lg);
     overflow: hidden;
+    aspect-ratio: 4 / 3;
 }
 
-.masonry-grid__item img {
+.production-gallery__item img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 0.5s ease;
 }
 
-.masonry-grid__item:hover img {
+.production-gallery__item:hover img {
     transform: scale(1.03);
 }
 
 /* Mobile: director photo first */
-.masonry-grid__item--director {
+.production-gallery__item--director {
     order: -1;
 }
 
 @media (min-width: 768px) {
-    .masonry-grid {
+    .production-gallery {
         grid-template-columns: repeat(3, 1fr);
-        grid-template-rows: repeat(2, 200px);
-        gap: var(--space-lg);
     }
 
-    /* Desktop: director in middle, spanning 2 rows */
-    .masonry-grid__item--director {
+    /* Desktop: director in center (second position) */
+    .production-gallery__item--director {
         order: 0;
-        grid-column: 2;
-        grid-row: 1 / 3;
     }
 
-    .masonry-grid__item--tall {
-        grid-row: span 2;
-    }
-
-    .masonry-grid__item:first-child:not(.masonry-grid__item--director) {
-        grid-column: 1;
-        grid-row: 1;
-    }
-
-    .masonry-grid__item:last-child:not(.masonry-grid__item--director) {
-        grid-column: 3;
-        grid-row: 1;
-    }
-}
-
-@media (min-width: 1024px) {
-    .masonry-grid {
-        grid-template-rows: repeat(2, 240px);
-    }
+    .production-gallery__item:nth-child(1) { order: 1; }
+    .production-gallery__item:nth-child(2) { order: 2; }
+    .production-gallery__item:nth-child(3) { order: 3; }
+    .production-gallery__item--director { order: 2; }
 }
 
 /* About Safety */
@@ -4107,137 +4089,124 @@ a {
     }
 }
 
-/* About Contacts */
+/* About Contacts - Bento Style */
 .about-contacts {
-    padding: var(--space-2xl) 0;
+    padding: var(--space-3xl) 0;
     background: var(--color-bg-alt);
 }
 
 .about-contacts__title {
-    font-size: clamp(1.5rem, 4vw, 2.25rem);
-    font-weight: 700;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 800;
     text-align: center;
     color: var(--color-text);
-    margin-bottom: var(--space-xl);
+    margin-bottom: var(--space-2xl);
+    letter-spacing: -0.02em;
 }
 
-.about-contacts__container {
+/* Contacts Bento Grid */
+.contacts-bento {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-xl);
+    gap: var(--space-md);
 }
 
-.about-contacts__phone-block {
-    margin-bottom: var(--space-lg);
+.contacts-bento__card {
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    border: 1px solid var(--color-border);
 }
 
-.about-contacts__phone {
+.contacts-bento__icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-bg-alt);
+    border-radius: var(--radius-md);
+    color: var(--color-accent);
+    margin-bottom: var(--space-md);
+}
+
+.contacts-bento__phone {
     display: block;
-    font-size: 1.75rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: var(--color-text);
-    margin-bottom: 4px;
-    transition: color var(--transition);
+    margin-bottom: var(--space-xs);
+    transition: color 0.3s ease;
 }
 
-.about-contacts__phone:hover {
+.contacts-bento__phone:hover {
     color: var(--color-accent);
 }
 
-.about-contacts__phone-hint {
+.contacts-bento__hint {
     font-size: 0.875rem;
     color: var(--color-text-light);
 }
 
-.about-contacts__address {
-    margin-bottom: var(--space-lg);
-}
-
-.about-contacts__address-label {
+.contacts-bento__label {
     display: block;
-    font-size: 0.8125rem;
+    font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--color-text-light);
-    margin-bottom: var(--space-xs);
-}
-
-.about-contacts__address-text {
-    font-size: 1rem;
-    font-style: normal;
-    color: var(--color-text);
-    line-height: 1.5;
-}
-
-.about-contacts__social-label {
-    display: block;
-    font-size: 0.8125rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.08em;
     color: var(--color-text-light);
     margin-bottom: var(--space-sm);
 }
 
-.about-contacts__social-links {
-    display: flex;
-    gap: var(--space-sm);
+.contacts-bento__address {
+    font-size: 1rem;
+    font-style: normal;
+    color: var(--color-text);
+    line-height: 1.6;
 }
 
-.about-contacts__social-link {
+.contacts-bento__social-links {
+    display: flex;
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+}
+
+.contacts-bento__social-link {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 48px;
     height: 48px;
-    background: var(--color-white);
+    background: var(--color-bg-alt);
     border-radius: var(--radius-md);
     color: var(--color-text);
-    transition: all var(--transition);
-    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
 }
 
-.about-contacts__social-link:hover {
+.contacts-bento__social-link:hover {
     background: var(--color-accent);
     color: var(--color-white);
-    transform: translateY(-2px);
 }
 
-.about-contacts__grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-xl);
+/* Requisites card */
+.contacts-bento__card--requisites {
+    grid-column: 1;
 }
 
-@media (min-width: 768px) {
-    .about-contacts__grid {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-
-/* About Requisites - Open Display */
-.about-requisites {
-    background: var(--color-white);
-    border-radius: var(--radius-lg);
-    padding: var(--space-lg);
-    box-shadow: var(--shadow-sm);
-}
-
-.about-requisites__title {
+.contacts-bento__card-title {
     font-size: 1.125rem;
     font-weight: 700;
     color: var(--color-text);
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--space-lg);
 }
 
-.about-requisites__content {
-    display: flex;
-    flex-direction: column;
+.contacts-bento__requisites-grid {
+    display: grid;
+    grid-template-columns: 1fr;
     gap: var(--space-sm);
 }
 
-.about-requisites__row {
+.contacts-bento__req {
     display: flex;
     flex-direction: column;
     gap: 2px;
@@ -4245,20 +4214,20 @@ a {
     border-bottom: 1px solid var(--color-border);
 }
 
-.about-requisites__row:last-child {
+.contacts-bento__req:last-child {
     border-bottom: none;
     padding-bottom: 0;
 }
 
-.about-requisites__label {
-    font-size: 0.75rem;
-    font-weight: 500;
+.contacts-bento__req-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.08em;
     color: var(--color-text-light);
 }
 
-.about-requisites__value {
+.contacts-bento__req-value {
     font-size: 0.9375rem;
     color: var(--color-text);
     font-weight: 500;
@@ -4266,14 +4235,42 @@ a {
 }
 
 @media (min-width: 768px) {
-    .about-requisites__row {
+    .contacts-bento {
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-lg);
+    }
+
+    .contacts-bento__card--requisites {
+        grid-column: span 3;
+    }
+
+    .contacts-bento__requisites-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-md) var(--space-xl);
+    }
+
+    .contacts-bento__req {
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
     }
 
-    .about-requisites__value {
+    .contacts-bento__req-value {
         text-align: right;
+    }
+}
+
+@media (min-width: 1024px) {
+    .contacts-bento__phone {
+        font-size: 1.75rem;
+    }
+
+    .contacts-bento__requisites-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .contacts-bento__requisites-grid .contacts-bento__req:first-child {
+        grid-column: span 3;
     }
 }
 
