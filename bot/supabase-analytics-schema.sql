@@ -191,7 +191,7 @@ LEFT JOIN (
     FROM crm_leads
     WHERE
         utm_source = 'yandex'
-        AND status_name = 'Заявка оформлена'
+        AND status_name = 'заявка оформлена'
         AND extracted_campaign_id IS NOT NULL
     GROUP BY extracted_campaign_id, year, month
 ) leads ON ye.campaign_id = leads.extracted_campaign_id

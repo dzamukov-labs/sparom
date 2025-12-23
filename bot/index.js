@@ -1923,7 +1923,7 @@ app.post('/api/sync/crm-leads', async (req, res) => {
     if (!checkYandexAuth(req, res)) return;
     if (!supabase) return res.json({ success: false, error: 'Supabase not configured' });
 
-    const { year, month, status_name = 'Заявка оформлена' } = req.body;
+    const { year, month, status_name = 'заявка оформлена' } = req.body;
     if (!year || !month) {
         return res.json({ success: false, error: 'Укажите year и month' });
     }
@@ -1931,7 +1931,7 @@ app.post('/api/sync/crm-leads', async (req, res) => {
     try {
         await logSync('crm_leads', 'started', 0, null, { year, month });
 
-        // Сначала получаем ID статуса "Заявка оформлена"
+        // Сначала получаем ID статуса "заявка оформлена"
         const pipelinesData = await amoRequest('/leads/pipelines');
         const pipelines = pipelinesData?._embedded?.pipelines || [];
 
@@ -1966,7 +1966,7 @@ app.post('/api/sync/crm-leads', async (req, res) => {
         const lastDay = new Date(year, month, 0).getDate();
         const dateTo = `${year}-${String(month).padStart(2, '0')}-${lastDay}T23:59:59`;
 
-        // Получаем ВСЕ сделки со статусом "Заявка оформлена" которые были СОЗДАНЫ в этом месяце
+        // Получаем ВСЕ сделки со статусом "заявка оформлена" которые были СОЗДАНЫ в этом месяце
         const allLeads = [];
         let page = 1;
         const limit = 250;
@@ -2210,7 +2210,7 @@ async function syncYandexExpenses(req, res) {
 }
 
 async function syncCrmLeads(req, res) {
-    const { year, month, status_name = 'Заявка оформлена' } = req.body;
+    const { year, month, status_name = 'заявка оформлена' } = req.body;
 
     try {
         const pipelinesData = await amoRequest('/leads/pipelines');
@@ -2346,7 +2346,7 @@ app.get('/api/analytics', async (req, res) => {
             .from('crm_leads')
             .select('*')
             .eq('utm_source', 'yandex')
-            .eq('status_name', 'Заявка оформлена')
+            .eq('status_name', 'заявка оформлена')
             .not('extracted_campaign_id', 'is', null);
 
         const { data: leads, error: leadsError } = await leadsQuery;
