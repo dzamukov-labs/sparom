@@ -150,27 +150,27 @@ function sizesMenu(prefix) {
 // Команда /start
 bot.start(async (ctx) => {
     await saveUser(ctx);
+    await saveMessage(ctx.from.id, 'in', '/start');
     await logAction(ctx, 'start');
 
-    await ctx.reply(
-        `👋 Добро пожаловать в «С лёгким паром»!\n\n` +
-        `Здесь вы найдёте:\n` +
-        `📸 50+ фото готовых бань\n` +
-        `📐 35 вариантов планировок\n\n` +
-        `Выберите, что хотите посмотреть:`,
-        mainMenu()
-    );
+    const welcomeText = `👋 Добро пожаловать в «С лёгким паром»!\n\nЗдесь вы найдёте:\n📸 50+ фото готовых бань\n📐 35 вариантов планировок\n\nВыберите, что хотите посмотреть:`;
+    await saveMessage(ctx.from.id, 'out', welcomeText);
+    await ctx.reply(welcomeText, mainMenu());
 });
 
 // Фото
 bot.hears('📸 Посмотреть фото', async (ctx) => {
+    await saveMessage(ctx.from.id, 'in', '📸 Посмотреть фото');
     await logAction(ctx, 'photos_menu');
+    await saveMessage(ctx.from.id, 'out', 'Выберите размер бани:');
     await ctx.reply('Выберите размер бани:', sizesMenu('photo'));
 });
 
 // Планировки
 bot.hears('📐 Посмотреть планировки', async (ctx) => {
+    await saveMessage(ctx.from.id, 'in', '📐 Посмотреть планировки');
     await logAction(ctx, 'layouts_menu');
+    await saveMessage(ctx.from.id, 'out', 'Выберите размер бани:');
     await ctx.reply('Выберите размер бани:', sizesMenu('layout'));
 });
 
@@ -178,14 +178,17 @@ bot.hears('📐 Посмотреть планировки', async (ctx) => {
 SIZES.forEach(size => {
     bot.action(`photo_${size}`, async (ctx) => {
         await ctx.answerCbQuery();
+        await saveMessage(ctx.from.id, 'in', `[Выбрал фото: ${size}]`);
         await logAction(ctx, 'view_photos', { size });
 
         const photos = CONTENT.photos[size] || [];
         if (photos.length === 0) {
+            await saveMessage(ctx.from.id, 'out', `Фото для размера ${size} пока нет`);
             await ctx.reply(`Фото для размера ${size} пока нет. Скоро добавим!`);
             return;
         }
 
+        await saveMessage(ctx.from.id, 'out', `📸 Отправлены фото бань размера ${size} (${photos.length} шт)`);
         await ctx.reply(`📸 Фото бань размера ${size}:`);
 
         // Отправляем как медиагруппу
@@ -212,14 +215,17 @@ SIZES.forEach(size => {
 SIZES.forEach(size => {
     bot.action(`layout_${size}`, async (ctx) => {
         await ctx.answerCbQuery();
+        await saveMessage(ctx.from.id, 'in', `[Выбрал планировку: ${size}]`);
         await logAction(ctx, 'view_layouts', { size });
 
         const layouts = CONTENT.layouts[size] || [];
         if (layouts.length === 0) {
+            await saveMessage(ctx.from.id, 'out', `Планировки для размера ${size} пока нет`);
             await ctx.reply(`Планировки для размера ${size} пока нет. Скоро добавим!`);
             return;
         }
 
+        await saveMessage(ctx.from.id, 'out', `📐 Отправлены планировки бань размера ${size} (${layouts.length} шт)`);
         await ctx.reply(`📐 Планировки бань размера ${size}:`);
 
         const media = layouts.map((url, i) => ({
@@ -254,11 +260,59 @@ bot.on('text', async (ctx) => {
     await logAction(ctx, 'message', { text: text.substring(0, 100) });
 
     // Автоответ
+    const autoReply = '✉️ Спасибо за сообщение! Мы свяжемся с вами в ближайшее время.';
+    await saveMessage(ctx.from.id, 'out', autoReply);
     await ctx.reply(
-        '✉️ Спасибо за сообщение! Мы свяжемся с вами в ближайшее время.\n\n' +
-        'А пока можете посмотреть фото и планировки наших бань:',
+        autoReply + '\n\nА пока можете посмотреть фото и планировки наших бань:',
         mainMenu()
     );
+});
+
+// Обработка голосовых сообщений
+bot.on('voice', async (ctx) => {
+    await saveUser(ctx);
+    const duration = ctx.message.voice.duration;
+    await saveMessage(ctx.from.id, 'in', `[Голосовое сообщение, ${duration} сек]`);
+    await logAction(ctx, 'voice', { duration });
+
+    const reply = '🎤 Получили ваше голосовое сообщение! Мы прослушаем и ответим в ближайшее время.';
+    await saveMessage(ctx.from.id, 'out', reply);
+    await ctx.reply(reply, mainMenu());
+});
+
+// Обработка фото
+bot.on('photo', async (ctx) => {
+    await saveUser(ctx);
+    const caption = ctx.message.caption || '';
+    await saveMessage(ctx.from.id, 'in', `[Фото]${caption ? ' ' + caption : ''}`);
+    await logAction(ctx, 'photo', { caption });
+
+    const reply = '📷 Фото получено! Спасибо.';
+    await saveMessage(ctx.from.id, 'out', reply);
+    await ctx.reply(reply, mainMenu());
+});
+
+// Обработка видео
+bot.on('video', async (ctx) => {
+    await saveUser(ctx);
+    await saveMessage(ctx.from.id, 'in', '[Видео]');
+    await logAction(ctx, 'video', {});
+
+    const reply = '🎬 Видео получено! Спасибо.';
+    await saveMessage(ctx.from.id, 'out', reply);
+    await ctx.reply(reply, mainMenu());
+});
+
+// Обработка документов
+bot.on('document', async (ctx) => {
+    await saveUser(ctx);
+    const fileName = ctx.message.document.file_name || 'файл';
+    await saveMessage(ctx.from.id, 'in', `[Документ: ${fileName}]`);
+    await logAction(ctx, 'document', { file_name: fileName });
+
+    const reply = '📎 Документ получен! Спасибо.';
+    await saveMessage(ctx.from.id, 'out', reply);
+    await ctx.reply(reply, mainMenu());
 });
 
 // Express для админки и webhook
@@ -404,22 +458,35 @@ app.get('/api/messages/:telegram_id', async (req, res) => {
 
 // API: Рассылка всем
 app.post('/api/broadcast', async (req, res) => {
-    const { password, message } = req.body;
+    const { password, message, chat_ids } = req.body;
+    const headerKey = req.headers['x-yandex-key'];
+    const decodedHeaderKey = headerKey ? decodeBase64(headerKey) : null;
 
-    if (password !== ADMIN_PASSWORD) {
+    if (decodedHeaderKey !== ADMIN_PASSWORD && headerKey !== ADMIN_PASSWORD && password !== ADMIN_PASSWORD) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    if (!supabase) {
-        return res.status(400).json({ error: 'Supabase not configured' });
+    if (!message) {
+        return res.status(400).json({ error: 'Message is required' });
     }
 
-    const { data: users } = await supabase.from('bot_users').select('telegram_id');
+    let recipients;
+
+    if (chat_ids && chat_ids.length > 0) {
+        // Рассылка выбранным пользователям
+        recipients = chat_ids.map(id => ({ telegram_id: id }));
+    } else if (supabase) {
+        // Рассылка всем пользователям из базы
+        const { data } = await supabase.from('bot_users').select('telegram_id');
+        recipients = data || [];
+    } else {
+        return res.status(400).json({ error: 'No recipients specified and Supabase not configured' });
+    }
 
     let sent = 0;
     let failed = 0;
 
-    for (const user of users || []) {
+    for (const user of recipients) {
         try {
             await bot.telegram.sendMessage(user.telegram_id, message);
             sent++;
@@ -430,11 +497,21 @@ app.post('/api/broadcast', async (req, res) => {
         await new Promise(r => setTimeout(r, 50));
     }
 
-    res.json({ sent, failed, total: users?.length || 0 });
+    res.json({ success: true, sent, failed, total: recipients.length });
 });
 
 // Health check
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
+
+// Админ панель - основная
+app.get('/admin', (req, res) => {
+    res.sendFile(__dirname + '/admin.html');
+});
+
+// Редирект старого URL аналитики на единую админку
+app.get('/admin/analytics', (req, res) => {
+    res.redirect('/admin');
+});
 
 // Хелпер для запросов к Яндекс.Директ API
 async function yandexDirectRequest(endpoint, method, params) {
@@ -671,9 +748,25 @@ app.get('/api/yandex-test', async (req, res) => {
 // ПОЛНЫЙ API ЯНДЕКС.ДИРЕКТ - ВСЕ ВОЗМОЖНОСТИ
 // ============================================
 
+// Декодирование Base64 (для поддержки кириллицы в паролях)
+function decodeBase64(str) {
+    try {
+        return decodeURIComponent(escape(Buffer.from(str, 'base64').toString('binary')));
+    } catch (e) {
+        return str; // Если не Base64, возвращаем как есть
+    }
+}
+
 // Проверка авторизации для Яндекс API
 function checkYandexAuth(req, res) {
-    if (req.query.password !== ADMIN_PASSWORD && req.body?.password !== ADMIN_PASSWORD) {
+    const headerKey = req.headers['x-yandex-key'];
+    const queryKey = req.query.password;
+    const bodyKey = req.body?.password;
+
+    // Декодируем headerKey если он в Base64
+    const decodedHeaderKey = headerKey ? decodeBase64(headerKey) : null;
+
+    if (decodedHeaderKey !== ADMIN_PASSWORD && headerKey !== ADMIN_PASSWORD && queryKey !== ADMIN_PASSWORD && bodyKey !== ADMIN_PASSWORD) {
         res.status(401).json({ error: 'Unauthorized' });
         return false;
     }
@@ -1660,6 +1753,971 @@ app.post('/api/yandex/create-campaign-auto', async (req, res) => {
 
     } catch (err) {
         res.json({ success: false, error: err.message, stack: err.stack });
+    }
+});
+
+// ============================================
+// AMOCRM API ИНТЕГРАЦИЯ
+// ============================================
+
+// Хелпер для запросов к AmoCRM API
+async function amoRequest(endpoint, method = 'GET', body = null) {
+    const subdomain = process.env.AMOCRM_SUBDOMAIN;
+    const token = process.env.AMOCRM_ACCESS_TOKEN;
+
+    if (!subdomain || !token) {
+        throw new Error('AMOCRM_SUBDOMAIN или AMOCRM_ACCESS_TOKEN не заданы');
+    }
+
+    const url = `https://${subdomain}.amocrm.ru/api/v4${endpoint}`;
+
+    const options = {
+        method,
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    };
+
+    if (body) {
+        options.body = JSON.stringify(body);
+    }
+
+    const response = await fetch(url, options);
+
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`AmoCRM API error: ${response.status} - ${errorText}`);
+    }
+
+    // Некоторые endpoints возвращают пустой ответ
+    const text = await response.text();
+    return text ? JSON.parse(text) : null;
+}
+
+// Извлечение числового ID кампании из utm_campaign
+function extractCampaignId(utmCampaign) {
+    if (!utmCampaign) return null;
+    // Ищем последовательность из 8+ цифр
+    const match = utmCampaign.match(/(\d{8,})/);
+    return match ? parseInt(match[1], 10) : null;
+}
+
+// API: Тест подключения к AmoCRM
+app.get('/api/amocrm/test', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    try {
+        const data = await amoRequest('/account');
+        res.json({ success: true, account: data });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// API: Получить воронки и статусы
+app.get('/api/amocrm/pipelines', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    try {
+        const data = await amoRequest('/leads/pipelines');
+        res.json({ success: true, pipelines: data?._embedded?.pipelines || [] });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// API: Получить кастомные поля сделок
+app.get('/api/amocrm/custom-fields', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    try {
+        const data = await amoRequest('/leads/custom_fields');
+        res.json({ success: true, fields: data?._embedded?.custom_fields || [] });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// API: Получить сделки с фильтрами
+app.get('/api/amocrm/leads', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+
+    const { status, created_from, created_to, page = 1, limit = 250 } = req.query;
+
+    try {
+        let endpoint = `/leads?page=${page}&limit=${limit}&with=contacts`;
+
+        if (status) {
+            endpoint += `&filter[statuses][0][status_id]=${status}`;
+        }
+
+        // Даты в Unix timestamp
+        if (created_from) {
+            const fromTs = Math.floor(new Date(created_from).getTime() / 1000);
+            endpoint += `&filter[created_at][from]=${fromTs}`;
+        }
+        if (created_to) {
+            const toTs = Math.floor(new Date(created_to).getTime() / 1000);
+            endpoint += `&filter[created_at][to]=${toTs}`;
+        }
+
+        const data = await amoRequest(endpoint);
+        res.json({
+            success: true,
+            leads: data?._embedded?.leads || [],
+            total: data?._page_count || 0
+        });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// ============================================
+// СИНХРОНИЗАЦИЯ ДАННЫХ
+// ============================================
+
+// Хелпер: Логирование синхронизации
+async function logSync(type, status, records = 0, error = null, details = {}) {
+    if (!supabase) return null;
+
+    const log = {
+        sync_type: type,
+        status,
+        records_processed: records,
+        error_message: error,
+        details,
+        started_at: new Date().toISOString()
+    };
+
+    if (status === 'success' || status === 'error') {
+        log.finished_at = new Date().toISOString();
+    }
+
+    const { data } = await supabase.from('sync_logs').insert(log).select().single();
+    return data;
+}
+
+// Получить расходы из Яндекс.Директ за период
+async function fetchYandexExpenses(dateFrom, dateTo) {
+    const reportParams = {
+        SelectionCriteria: {
+            DateFrom: dateFrom,
+            DateTo: dateTo
+        },
+        FieldNames: ['CampaignId', 'CampaignName', 'Cost', 'Impressions', 'Clicks'],
+        ReportName: 'Expenses_' + Date.now(),
+        ReportType: 'CAMPAIGN_PERFORMANCE_REPORT',
+        DateRangeType: 'CUSTOM_DATE',
+        Format: 'TSV',
+        IncludeVAT: 'YES'
+    };
+
+    return yandexReportRequest(reportParams);
+}
+
+// API: Синхронизировать расходы Яндекс.Директ
+app.post('/api/sync/yandex-expenses', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+    if (!supabase) return res.json({ success: false, error: 'Supabase not configured' });
+
+    const { year, month } = req.body;
+    if (!year || !month) {
+        return res.json({ success: false, error: 'Укажите year и month' });
+    }
+
+    try {
+        await logSync('yandex_expenses', 'started', 0, null, { year, month });
+
+        // Формируем даты для запроса
+        const dateFrom = `${year}-${String(month).padStart(2, '0')}-01`;
+        const lastDay = new Date(year, month, 0).getDate();
+        const dateTo = `${year}-${String(month).padStart(2, '0')}-${lastDay}`;
+
+        // Получаем данные из Яндекс.Директ
+        const data = await fetchYandexExpenses(dateFrom, dateTo);
+
+        if (!data.rows || data.rows.length === 0) {
+            await logSync('yandex_expenses', 'success', 0, null, { year, month, message: 'No data' });
+            return res.json({ success: true, message: 'Нет данных за этот период', records: 0 });
+        }
+
+        // Агрегируем по кампаниям (в отчёте могут быть разбивки по дням)
+        const campaignMap = new Map();
+
+        for (const row of data.rows) {
+            const campaignId = parseInt(row.CampaignId, 10);
+            if (!campaignId || isNaN(campaignId)) continue;
+
+            const existing = campaignMap.get(campaignId) || {
+                campaign_id: campaignId,
+                campaign_name: row.CampaignName,
+                cost: 0,
+                impressions: 0,
+                clicks: 0
+            };
+
+            existing.cost += parseFloat(row.Cost || 0);
+            existing.impressions += parseInt(row.Impressions || 0, 10);
+            existing.clicks += parseInt(row.Clicks || 0, 10);
+
+            campaignMap.set(campaignId, existing);
+        }
+
+        // Сохраняем в базу
+        const records = [];
+        for (const campaign of campaignMap.values()) {
+            records.push({
+                campaign_id: campaign.campaign_id,
+                campaign_name: campaign.campaign_name,
+                year: parseInt(year, 10),
+                month: parseInt(month, 10),
+                cost: campaign.cost,
+                impressions: campaign.impressions,
+                clicks: campaign.clicks,
+                updated_at: new Date().toISOString()
+            });
+        }
+
+        // Upsert - обновляем если запись существует
+        const { error } = await supabase
+            .from('yandex_expenses')
+            .upsert(records, { onConflict: 'campaign_id,year,month' });
+
+        if (error) throw error;
+
+        await logSync('yandex_expenses', 'success', records.length, null, { year, month });
+
+        res.json({
+            success: true,
+            records: records.length,
+            total_cost: records.reduce((sum, r) => sum + r.cost, 0),
+            campaigns: records.map(r => ({ id: r.campaign_id, name: r.campaign_name, cost: r.cost }))
+        });
+
+    } catch (err) {
+        await logSync('yandex_expenses', 'error', 0, err.message, { year, month });
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// API: Синхронизировать лиды из AmoCRM
+app.post('/api/sync/crm-leads', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+    if (!supabase) return res.json({ success: false, error: 'Supabase not configured' });
+
+    const { year, month, status_name = 'заявка оформлена' } = req.body;
+    if (!year || !month) {
+        return res.json({ success: false, error: 'Укажите year и month' });
+    }
+
+    try {
+        await logSync('crm_leads', 'started', 0, null, { year, month });
+
+        // Сначала получаем ID статуса "заявка оформлена"
+        const pipelinesData = await amoRequest('/leads/pipelines');
+        const pipelines = pipelinesData?._embedded?.pipelines || [];
+
+        let targetStatusId = null;
+        let targetPipelineId = null;
+        let targetPipelineName = null;
+
+        for (const pipeline of pipelines) {
+            for (const status of pipeline._embedded?.statuses || []) {
+                if (status.name === status_name) {
+                    targetStatusId = status.id;
+                    targetPipelineId = pipeline.id;
+                    targetPipelineName = pipeline.name;
+                    break;
+                }
+            }
+            if (targetStatusId) break;
+        }
+
+        if (!targetStatusId) {
+            return res.json({
+                success: false,
+                error: `Статус "${status_name}" не найден`,
+                available_statuses: pipelines.flatMap(p =>
+                    (p._embedded?.statuses || []).map(s => ({ pipeline: p.name, status: s.name, id: s.id }))
+                )
+            });
+        }
+
+        // Даты для фильтра
+        const dateFrom = `${year}-${String(month).padStart(2, '0')}-01`;
+        const lastDay = new Date(year, month, 0).getDate();
+        const dateTo = `${year}-${String(month).padStart(2, '0')}-${lastDay}T23:59:59`;
+
+        // Получаем ВСЕ сделки со статусом "заявка оформлена" которые были СОЗДАНЫ в этом месяце
+        const allLeads = [];
+        let page = 1;
+        const limit = 250;
+
+        while (true) {
+            const fromTs = Math.floor(new Date(dateFrom).getTime() / 1000);
+            const toTs = Math.floor(new Date(dateTo).getTime() / 1000);
+
+            const endpoint = `/leads?page=${page}&limit=${limit}&filter[statuses][0][pipeline_id]=${targetPipelineId}&filter[statuses][0][status_id]=${targetStatusId}&filter[created_at][from]=${fromTs}&filter[created_at][to]=${toTs}`;
+
+            const data = await amoRequest(endpoint);
+            const leads = data?._embedded?.leads || [];
+
+            if (leads.length === 0) break;
+
+            allLeads.push(...leads);
+
+            if (leads.length < limit) break;
+            page++;
+
+            // Защита от бесконечного цикла
+            if (page > 100) break;
+        }
+
+        // Получаем кастомные поля для UTM
+        const customFieldsData = await amoRequest('/leads/custom_fields');
+        const customFields = customFieldsData?._embedded?.custom_fields || [];
+
+        // Ищем поля UTM по названию
+        const utmFieldsMap = {};
+        for (const field of customFields) {
+            const name = field.name.toLowerCase();
+            if (name.includes('utm_source')) utmFieldsMap.utm_source = field.id;
+            if (name.includes('utm_medium')) utmFieldsMap.utm_medium = field.id;
+            if (name.includes('utm_campaign')) utmFieldsMap.utm_campaign = field.id;
+            if (name.includes('utm_content')) utmFieldsMap.utm_content = field.id;
+            if (name.includes('utm_term')) utmFieldsMap.utm_term = field.id;
+        }
+
+        // Преобразуем лиды для сохранения
+        const records = [];
+
+        for (const lead of allLeads) {
+            // Извлекаем UTM из кастомных полей
+            const utmValues = {};
+            for (const field of lead.custom_fields_values || []) {
+                const fieldId = field.field_id;
+                const value = field.values?.[0]?.value;
+
+                if (fieldId === utmFieldsMap.utm_source) utmValues.utm_source = value;
+                if (fieldId === utmFieldsMap.utm_medium) utmValues.utm_medium = value;
+                if (fieldId === utmFieldsMap.utm_campaign) utmValues.utm_campaign = value;
+                if (fieldId === utmFieldsMap.utm_content) utmValues.utm_content = value;
+                if (fieldId === utmFieldsMap.utm_term) utmValues.utm_term = value;
+            }
+
+            records.push({
+                lead_id: lead.id,
+                lead_name: lead.name,
+                status_id: targetStatusId,
+                status_name: status_name,
+                pipeline_id: targetPipelineId,
+                pipeline_name: targetPipelineName,
+                price: lead.price || 0,
+                utm_source: utmValues.utm_source || null,
+                utm_medium: utmValues.utm_medium || null,
+                utm_campaign: utmValues.utm_campaign || null,
+                utm_content: utmValues.utm_content || null,
+                utm_term: utmValues.utm_term || null,
+                lead_created_at: new Date(lead.created_at * 1000).toISOString(),
+                lead_closed_at: lead.closed_at ? new Date(lead.closed_at * 1000).toISOString() : null,
+                raw_data: lead,
+                updated_at: new Date().toISOString()
+            });
+        }
+
+        // Upsert в базу
+        if (records.length > 0) {
+            const { error } = await supabase
+                .from('crm_leads')
+                .upsert(records, { onConflict: 'lead_id' });
+
+            if (error) throw error;
+        }
+
+        await logSync('crm_leads', 'success', records.length, null, { year, month });
+
+        // Группируем по кампаниям для отчёта
+        const byCampaign = {};
+        for (const r of records) {
+            const campaignId = extractCampaignId(r.utm_campaign);
+            if (campaignId && r.utm_source === 'yandex') {
+                byCampaign[campaignId] = (byCampaign[campaignId] || 0) + 1;
+            }
+        }
+
+        res.json({
+            success: true,
+            records: records.length,
+            yandex_leads: Object.values(byCampaign).reduce((a, b) => a + b, 0),
+            by_campaign: byCampaign,
+            utm_fields_found: utmFieldsMap
+        });
+
+    } catch (err) {
+        await logSync('crm_leads', 'error', 0, err.message, { year, month });
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// API: Полная синхронизация за период
+app.post('/api/sync/full', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+    if (!supabase) return res.json({ success: false, error: 'Supabase not configured' });
+
+    const { year_from = 2024, month_from = 1, year_to, month_to } = req.body;
+
+    const now = new Date();
+    const endYear = year_to || now.getFullYear();
+    const endMonth = month_to || now.getMonth() + 1;
+
+    try {
+        const results = [];
+
+        let currentYear = year_from;
+        let currentMonth = month_from;
+
+        while (currentYear < endYear || (currentYear === endYear && currentMonth <= endMonth)) {
+            // Синхронизация расходов
+            const expensesResult = await new Promise((resolve) => {
+                const mockReq = {
+                    query: { password: req.body.password || req.query.password },
+                    body: { year: currentYear, month: currentMonth, password: req.body.password }
+                };
+                const mockRes = {
+                    json: (data) => resolve(data),
+                    status: () => mockRes
+                };
+
+                // Вызываем внутренний endpoint
+                syncYandexExpenses(mockReq, mockRes);
+            });
+
+            // Синхронизация лидов
+            const leadsResult = await new Promise((resolve) => {
+                const mockReq = {
+                    query: { password: req.body.password || req.query.password },
+                    body: { year: currentYear, month: currentMonth, password: req.body.password }
+                };
+                const mockRes = {
+                    json: (data) => resolve(data),
+                    status: () => mockRes
+                };
+
+                syncCrmLeads(mockReq, mockRes);
+            });
+
+            results.push({
+                period: `${currentMonth}/${currentYear}`,
+                expenses: expensesResult,
+                leads: leadsResult
+            });
+
+            // Следующий месяц
+            currentMonth++;
+            if (currentMonth > 12) {
+                currentMonth = 1;
+                currentYear++;
+            }
+        }
+
+        res.json({
+            success: true,
+            periods_synced: results.length,
+            results
+        });
+
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// Функции для внутреннего использования (без res)
+async function syncYandexExpenses(req, res) {
+    const { year, month } = req.body;
+
+    try {
+        const dateFrom = `${year}-${String(month).padStart(2, '0')}-01`;
+        const lastDay = new Date(year, month, 0).getDate();
+        const dateTo = `${year}-${String(month).padStart(2, '0')}-${lastDay}`;
+
+        const data = await fetchYandexExpenses(dateFrom, dateTo);
+
+        if (!data.rows || data.rows.length === 0) {
+            return res.json({ success: true, records: 0 });
+        }
+
+        const campaignMap = new Map();
+        for (const row of data.rows) {
+            const campaignId = parseInt(row.CampaignId, 10);
+            if (!campaignId || isNaN(campaignId)) continue;
+
+            const existing = campaignMap.get(campaignId) || {
+                campaign_id: campaignId,
+                campaign_name: row.CampaignName,
+                cost: 0,
+                impressions: 0,
+                clicks: 0
+            };
+
+            existing.cost += parseFloat(row.Cost || 0);
+            existing.impressions += parseInt(row.Impressions || 0, 10);
+            existing.clicks += parseInt(row.Clicks || 0, 10);
+
+            campaignMap.set(campaignId, existing);
+        }
+
+        const records = [];
+        for (const campaign of campaignMap.values()) {
+            records.push({
+                campaign_id: campaign.campaign_id,
+                campaign_name: campaign.campaign_name,
+                year: parseInt(year, 10),
+                month: parseInt(month, 10),
+                cost: campaign.cost,
+                impressions: campaign.impressions,
+                clicks: campaign.clicks,
+                updated_at: new Date().toISOString()
+            });
+        }
+
+        await supabase
+            .from('yandex_expenses')
+            .upsert(records, { onConflict: 'campaign_id,year,month' });
+
+        res.json({ success: true, records: records.length });
+
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+}
+
+async function syncCrmLeads(req, res) {
+    const { year, month, status_name = 'заявка оформлена' } = req.body;
+
+    try {
+        const pipelinesData = await amoRequest('/leads/pipelines');
+        const pipelines = pipelinesData?._embedded?.pipelines || [];
+
+        let targetStatusId = null;
+        let targetPipelineId = null;
+
+        for (const pipeline of pipelines) {
+            for (const status of pipeline._embedded?.statuses || []) {
+                if (status.name === status_name) {
+                    targetStatusId = status.id;
+                    targetPipelineId = pipeline.id;
+                    break;
+                }
+            }
+            if (targetStatusId) break;
+        }
+
+        if (!targetStatusId) {
+            return res.json({ success: false, error: `Статус не найден: ${status_name}` });
+        }
+
+        const dateFrom = `${year}-${String(month).padStart(2, '0')}-01`;
+        const lastDay = new Date(year, month, 0).getDate();
+        const dateTo = `${year}-${String(month).padStart(2, '0')}-${lastDay}T23:59:59`;
+
+        const fromTs = Math.floor(new Date(dateFrom).getTime() / 1000);
+        const toTs = Math.floor(new Date(dateTo).getTime() / 1000);
+
+        const allLeads = [];
+        let page = 1;
+
+        while (true) {
+            const endpoint = `/leads?page=${page}&limit=250&filter[statuses][0][pipeline_id]=${targetPipelineId}&filter[statuses][0][status_id]=${targetStatusId}&filter[created_at][from]=${fromTs}&filter[created_at][to]=${toTs}`;
+            const data = await amoRequest(endpoint);
+            const leads = data?._embedded?.leads || [];
+
+            if (leads.length === 0) break;
+            allLeads.push(...leads);
+            if (leads.length < 250) break;
+            page++;
+            if (page > 100) break;
+        }
+
+        const customFieldsData = await amoRequest('/leads/custom_fields');
+        const customFields = customFieldsData?._embedded?.custom_fields || [];
+
+        const utmFieldsMap = {};
+        for (const field of customFields) {
+            const name = field.name.toLowerCase();
+            if (name.includes('utm_source')) utmFieldsMap.utm_source = field.id;
+            if (name.includes('utm_medium')) utmFieldsMap.utm_medium = field.id;
+            if (name.includes('utm_campaign')) utmFieldsMap.utm_campaign = field.id;
+            if (name.includes('utm_content')) utmFieldsMap.utm_content = field.id;
+            if (name.includes('utm_term')) utmFieldsMap.utm_term = field.id;
+        }
+
+        const records = [];
+        for (const lead of allLeads) {
+            const utmValues = {};
+            for (const field of lead.custom_fields_values || []) {
+                const fieldId = field.field_id;
+                const value = field.values?.[0]?.value;
+
+                if (fieldId === utmFieldsMap.utm_source) utmValues.utm_source = value;
+                if (fieldId === utmFieldsMap.utm_medium) utmValues.utm_medium = value;
+                if (fieldId === utmFieldsMap.utm_campaign) utmValues.utm_campaign = value;
+                if (fieldId === utmFieldsMap.utm_content) utmValues.utm_content = value;
+                if (fieldId === utmFieldsMap.utm_term) utmValues.utm_term = value;
+            }
+
+            records.push({
+                lead_id: lead.id,
+                lead_name: lead.name,
+                status_id: targetStatusId,
+                status_name: status_name,
+                pipeline_id: targetPipelineId,
+                price: lead.price || 0,
+                utm_source: utmValues.utm_source || null,
+                utm_medium: utmValues.utm_medium || null,
+                utm_campaign: utmValues.utm_campaign || null,
+                utm_content: utmValues.utm_content || null,
+                utm_term: utmValues.utm_term || null,
+                lead_created_at: new Date(lead.created_at * 1000).toISOString(),
+                lead_closed_at: lead.closed_at ? new Date(lead.closed_at * 1000).toISOString() : null,
+                raw_data: lead,
+                updated_at: new Date().toISOString()
+            });
+        }
+
+        if (records.length > 0) {
+            await supabase
+                .from('crm_leads')
+                .upsert(records, { onConflict: 'lead_id' });
+        }
+
+        res.json({ success: true, records: records.length });
+
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+}
+
+// API: Получить аналитику
+app.get('/api/analytics', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+    if (!supabase) return res.json({ success: false, error: 'Supabase not configured' });
+
+    const { year, campaign_ids, month_from, month_to } = req.query;
+
+    try {
+        // Получаем расходы
+        let expensesQuery = supabase
+            .from('yandex_expenses')
+            .select('*')
+            .order('year', { ascending: true })
+            .order('month', { ascending: true });
+
+        if (year) {
+            expensesQuery = expensesQuery.eq('year', parseInt(year, 10));
+        }
+
+        if (month_from) {
+            expensesQuery = expensesQuery.gte('month', parseInt(month_from, 10));
+        }
+
+        if (month_to) {
+            expensesQuery = expensesQuery.lte('month', parseInt(month_to, 10));
+        }
+
+        if (campaign_ids) {
+            expensesQuery = expensesQuery.in('campaign_id', campaign_ids.split(',').map(Number));
+        }
+
+        const { data: expenses, error: expensesError } = await expensesQuery;
+        if (expensesError) throw expensesError;
+
+        // Получаем лиды (заказы со статусом "заявка оформлена")
+        let leadsQuery = supabase
+            .from('crm_leads')
+            .select('*')
+            .not('extracted_campaign_id', 'is', null);
+
+        const { data: allLeads, error: leadsError } = await leadsQuery;
+        if (leadsError) throw leadsError;
+
+        // Фильтруем лиды: utm_source должен содержать 'yandex' (case-insensitive)
+        // и статус должен быть 'заявка оформлена', и по периоду если указан
+        const leads = (allLeads || []).filter(lead => {
+            const source = (lead.utm_source || '').toLowerCase();
+            const status = (lead.status_name || '').toLowerCase();
+            if (!source.includes('yandex') || status !== 'заявка оформлена') return false;
+
+            // Фильтр по периоду
+            if (year || month_from || month_to) {
+                const date = new Date(lead.lead_created_at);
+                const leadYear = date.getFullYear();
+                const leadMonth = date.getMonth() + 1;
+
+                if (year && leadYear !== parseInt(year, 10)) return false;
+                if (month_from && leadMonth < parseInt(month_from, 10)) return false;
+                if (month_to && leadMonth > parseInt(month_to, 10)) return false;
+            }
+
+            return true;
+        });
+
+        // Агрегируем лиды (заказы) по кампаниям и месяцам
+        const leadsMap = {};
+        for (const lead of leads) {
+            const date = new Date(lead.lead_created_at);
+            const leadYear = date.getFullYear();
+            const leadMonth = date.getMonth() + 1;
+            const key = `${lead.extracted_campaign_id}_${leadYear}_${leadMonth}`;
+
+            leadsMap[key] = (leadsMap[key] || 0) + 1;
+        }
+
+        // Объединяем данные
+        const analytics = [];
+        const campaignsMap = new Map();
+
+        for (const expense of expenses || []) {
+            const key = `${expense.campaign_id}_${expense.year}_${expense.month}`;
+            const leadsCount = leadsMap[key] || 0;
+            const costPerLead = leadsCount > 0 ? Math.round(expense.cost / leadsCount) : null;
+
+            // Группируем по кампаниям
+            if (!campaignsMap.has(expense.campaign_id)) {
+                campaignsMap.set(expense.campaign_id, {
+                    campaign_id: expense.campaign_id,
+                    campaign_name: expense.campaign_name,
+                    months: {}
+                });
+            }
+
+            const campaign = campaignsMap.get(expense.campaign_id);
+            const monthKey = `${expense.month}/${expense.year % 100}`;
+
+            campaign.months[monthKey] = {
+                cost: expense.cost,
+                leads: leadsCount,
+                cost_per_lead: costPerLead
+            };
+
+            analytics.push({
+                campaign_id: expense.campaign_id,
+                campaign_name: expense.campaign_name,
+                year: expense.year,
+                month: expense.month,
+                cost: expense.cost,
+                leads: leadsCount,
+                cost_per_lead: costPerLead
+            });
+        }
+
+        // Считаем итоги
+        const totals = {};
+        for (const row of analytics) {
+            const monthKey = `${row.month}/${row.year % 100}`;
+            if (!totals[monthKey]) {
+                totals[monthKey] = { cost: 0, leads: 0 };
+            }
+            totals[monthKey].cost += row.cost;
+            totals[monthKey].leads += row.leads;
+        }
+
+        for (const key of Object.keys(totals)) {
+            totals[key].cost_per_lead = totals[key].leads > 0
+                ? Math.round(totals[key].cost / totals[key].leads)
+                : null;
+        }
+
+        // Собираем уникальные месяцы для заголовков
+        const monthsSet = new Set();
+        for (const expense of expenses || []) {
+            monthsSet.add(`${expense.month}/${expense.year % 100}`);
+        }
+        const months = [...monthsSet].sort((a, b) => {
+            const [am, ay] = a.split('/').map(Number);
+            const [bm, by] = b.split('/').map(Number);
+            return (ay - by) || (am - bm);
+        });
+
+        const totalCost = analytics.reduce((sum, r) => sum + r.cost, 0);
+        const totalLeads = analytics.reduce((sum, r) => sum + r.leads, 0);
+
+        res.json({
+            success: true,
+            campaigns: Array.from(campaignsMap.values()),
+            months,
+            details: analytics,
+            totals,
+            summary: {
+                total_cost: totalCost,
+                total_leads: totalLeads,
+                avg_cpl: totalLeads > 0 ? Math.round(totalCost / totalLeads) : null,
+                periods: months.length
+            }
+        });
+
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// API: Получить логи синхронизации
+app.get('/api/sync/logs', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+    if (!supabase) return res.json({ success: false, error: 'Supabase not configured' });
+
+    const { limit = 50 } = req.query;
+
+    try {
+        const { data, error } = await supabase
+            .from('sync_logs')
+            .select('*')
+            .order('started_at', { ascending: false })
+            .limit(parseInt(limit, 10));
+
+        if (error) throw error;
+
+        res.json({ success: true, logs: data || [] });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// API: Получить все заявки/заказы из CRM
+app.get('/api/crm-leads/all', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+    if (!supabase) return res.json({ success: false, error: 'Supabase not configured' });
+
+    try {
+        const { data, error } = await supabase
+            .from('crm_leads')
+            .select('lead_id, lead_name, status_id, status_name, pipeline_id, price, utm_source, utm_medium, utm_campaign, utm_content, utm_term, extracted_campaign_id, lead_created_at, lead_closed_at, updated_at')
+            .order('lead_created_at', { ascending: false })
+            .limit(1000);
+
+        if (error) throw error;
+
+        res.json({ success: true, leads: data || [] });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// API: Получить чаты для рассылок (с аватарками)
+app.get('/api/chats', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+    if (!supabase) return res.json({ success: false, error: 'Supabase not configured' });
+
+    try {
+        const { data, error } = await supabase
+            .from('bot_users')
+            .select('telegram_id, username, first_name, last_name, updated_at')
+            .order('updated_at', { ascending: false });
+
+        if (error) throw error;
+
+        // Добавляем аватарки параллельно
+        const chats = await Promise.all((data || []).map(async u => {
+            const avatarUrl = await getUserAvatarUrl(u.telegram_id);
+            return {
+                chat_id: u.telegram_id,
+                telegram_id: u.telegram_id,
+                username: u.username,
+                first_name: u.first_name,
+                last_name: u.last_name,
+                created_at: u.updated_at,
+                avatar_url: avatarUrl
+            };
+        }));
+
+        res.json({ success: true, chats });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// API: Получить историю сообщений чата
+app.get('/api/chats/:chatId/messages', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+    if (!supabase) return res.json({ success: false, error: 'Supabase not configured' });
+
+    const { chatId } = req.params;
+    const telegramId = parseInt(chatId, 10); // Преобразуем в число для корректного сравнения
+
+    try {
+        const { data, error } = await supabase
+            .from('bot_messages')
+            .select('*')
+            .eq('telegram_id', telegramId)
+            .order('created_at', { ascending: true })
+            .limit(500); // Увеличиваем лимит
+
+        if (error) throw error;
+
+        // Преобразуем в формат для фронта
+        const messages = (data || []).map(m => ({
+            id: m.id,
+            text: m.message,
+            is_bot: m.direction === 'out',
+            created_at: m.created_at
+        }));
+
+        res.json({ success: true, messages });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
+    }
+});
+
+// API: Статус синхронизации по месяцам
+app.get('/api/sync/status', async (req, res) => {
+    if (!checkYandexAuth(req, res)) return;
+    if (!supabase) return res.json({ success: false, error: 'Supabase not configured' });
+
+    try {
+        // Получаем уникальные комбинации год-месяц для расходов
+        const { data: expenses } = await supabase
+            .from('yandex_expenses')
+            .select('year, month')
+            .order('year', { ascending: false })
+            .order('month', { ascending: false });
+
+        // Получаем уникальные комбинации год-месяц для лидов
+        const { data: leads } = await supabase
+            .from('crm_leads')
+            .select('lead_created_at');
+
+        // Агрегируем расходы
+        const expensesMap = new Map();
+        (expenses || []).forEach(e => {
+            const key = `${e.year}-${e.month}`;
+            expensesMap.set(key, (expensesMap.get(key) || 0) + 1);
+        });
+
+        // Агрегируем лиды по месяцам
+        const leadsMap = new Map();
+        (leads || []).forEach(l => {
+            if (l.lead_created_at) {
+                const d = new Date(l.lead_created_at);
+                const key = `${d.getFullYear()}-${d.getMonth() + 1}`;
+                leadsMap.set(key, (leadsMap.get(key) || 0) + 1);
+            }
+        });
+
+        // Собираем все месяцы
+        const allMonths = new Set([...expensesMap.keys(), ...leadsMap.keys()]);
+        const status = [...allMonths].map(key => {
+            const [year, month] = key.split('-').map(Number);
+            return {
+                year,
+                month,
+                expenses_count: expensesMap.get(key) || 0,
+                leads_count: leadsMap.get(key) || 0
+            };
+        }).sort((a, b) => b.year - a.year || b.month - a.month);
+
+        res.json({ success: true, status });
+    } catch (err) {
+        res.json({ success: false, error: err.message });
     }
 });
 

@@ -3,285 +3,1692 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sparom Bot Admin</title>
+    <title>СтройГлобал — Админ</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f5f5f5;
-            padding: 20px;
-            max-width: 800px;
-            margin: 0 auto;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;
+            background: #f5f5f7;
+            color: #1d1d1f;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
         }
-        h1 { color: #2C1810; margin-bottom: 20px; }
-        h2 { color: #5D3A1A; margin: 20px 0 10px; font-size: 1.2rem; }
-        .card {
-            background: white;
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Navigation */
+        .nav {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 32px;
+            border-bottom: 1px solid #d2d2d7;
+            padding-bottom: 16px;
+        }
+
+        .nav-item {
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: #86868b;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover { color: #1d1d1f; }
+        .nav-item.active { background: #1d1d1f; color: #fff; }
+
+        /* Sections */
+        .section { display: none; }
+        .section.active { display: block; }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #86868b;
+            font-size: 15px;
+            margin-bottom: 32px;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat {
+            background: #fff;
             border-radius: 12px;
             padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
-        .stats { display: flex; gap: 20px; }
-        .stat {
-            text-align: center;
-            flex: 1;
-        }
+
         .stat-value {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #D4A04A;
-        }
-        .stat-label { color: #666; font-size: 0.9rem; }
-        input, textarea, button {
-            font-family: inherit;
-            font-size: 1rem;
-            padding: 10px 15px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            width: 100%;
-            margin-bottom: 10px;
-        }
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: #D4A04A;
-        }
-        button {
-            background: #D4A04A;
-            color: white;
-            border: none;
-            cursor: pointer;
+            font-size: 28px;
             font-weight: 600;
+            letter-spacing: -0.5px;
         }
-        button:hover { background: #c4903a; }
-        button.secondary {
-            background: #666;
+
+        .stat-label {
+            color: #86868b;
+            font-size: 13px;
+            margin-top: 4px;
         }
-        .users-list {
-            max-height: 400px;
-            overflow-y: auto;
+
+        /* Cards */
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            margin-bottom: 20px;
         }
-        .user-item {
+
+        .card-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #f5f5f7;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid #eee;
         }
-        .user-item:last-child { border-bottom: none; }
-        .user-name { font-weight: 500; }
-        .user-id { color: #999; font-size: 0.85rem; }
-        .user-actions { display: flex; gap: 5px; }
-        .user-actions button {
+
+        .card-title {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .card-body { padding: 20px; }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-primary { background: #0071e3; color: #fff; }
+        .btn-primary:hover { background: #0077ed; }
+        .btn-secondary { background: #f5f5f7; color: #1d1d1f; }
+        .btn-secondary:hover { background: #e8e8ed; }
+        .btn-success { background: #34c759; color: #fff; }
+
+        .btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
+
+        /* Tables */
+        .table-wrap { overflow-x: auto; }
+
+        table { width: 100%; border-collapse: collapse; }
+
+        th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #f5f5f7;
+            font-size: 14px;
+        }
+
+        th {
+            font-weight: 500;
+            color: #86868b;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        th.sortable { cursor: pointer; }
+        th.sortable:hover { color: #1d1d1f; }
+
+        tr:hover { background: #fafafa; }
+
+        /* Forms */
+        select, input[type="text"] {
+            padding: 8px 12px;
+            border: 1px solid #d2d2d7;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            background: #fff;
+            min-width: 150px;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #0071e3;
+        }
+
+        .filters {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .filter-group label {
+            display: block;
+            font-size: 11px;
+            color: #86868b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        /* Tags */
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            background: #f5f5f7;
+        }
+
+        .tag-blue { background: #e3f2fd; color: #1976d2; }
+        .tag-green { background: #e8f5e9; color: #388e3c; }
+        .tag-orange { background: #fff3e0; color: #f57c00; }
+
+        /* Sync Cards */
+        .sync-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+        }
+
+        .sync-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .sync-card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .sync-card p {
+            color: #86868b;
+            font-size: 13px;
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .sync-options {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .sync-options select { flex: 1; }
+
+        /* Chat */
+        .chat-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+        }
+
+        .chat-list { max-height: 500px; overflow-y: auto; }
+
+        .chat-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .chat-item:hover { background: #f5f5f7; }
+        .chat-item.selected { background: #e3f2fd; }
+
+        .chat-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #0071e3;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .chat-name { font-weight: 500; font-size: 14px; }
+        .chat-sub { font-size: 12px; color: #86868b; }
+
+        .messages {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .message {
+            max-width: 70%;
+            padding: 10px 14px;
+            border-radius: 16px;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .message.incoming {
+            background: #f5f5f7;
+            border-bottom-left-radius: 4px;
+        }
+
+        .message.outgoing {
+            background: #0071e3;
+            color: #fff;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+
+        /* Broadcast */
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d2d2d7;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #0071e3;
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+
+        .alert-info { background: #e3f2fd; color: #1976d2; }
+        .alert-success { background: #e8f5e9; color: #388e3c; }
+        .alert-error { background: #ffebee; color: #c62828; }
+
+        /* Empty & Loading */
+        .empty {
+            text-align: center;
+            padding: 40px;
+            color: #86868b;
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #d2d2d7;
+            border-top-color: #0071e3;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Analytics table - improved visibility */
+        .cell-data {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .cell-cost {
+            color: #1d1d1f;
+            font-weight: 600;
+            font-size: 15px;
+        }
+        .cell-leads {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .cell-leads::before {
+            content: '📦';
+            font-size: 12px;
+        }
+        .cell-cpl {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #fff3e0;
+            color: #e65100;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .cell-cpl::before {
+            content: 'CPL';
+            font-size: 10px;
+            font-weight: 700;
+            opacity: 0.7;
+        }
+        .cell-empty {
+            color: #d2d2d7;
+            font-size: 13px;
+        }
+
+        /* Deals Chart */
+        .chart-container {
+            padding: 0 20px 20px;
+        }
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            height: 200px;
+            padding: 20px 0;
+            border-bottom: 1px solid #e8e8ed;
+        }
+        .chart-bar-wrap {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            min-width: 40px;
+        }
+        .chart-bar {
+            width: 100%;
+            max-width: 50px;
+            background: linear-gradient(180deg, #34c759 0%, #2e7d32 100%);
+            border-radius: 6px 6px 0 0;
+            min-height: 4px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .chart-bar:hover {
+            opacity: 0.8;
+            transform: translateY(-2px);
+        }
+        .chart-bar-value {
+            position: absolute;
+            top: -24px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 13px;
+            font-weight: 600;
+            color: #1d1d1f;
+            white-space: nowrap;
+        }
+        .chart-bar-label {
+            font-size: 11px;
+            color: #86868b;
+            text-align: center;
+            white-space: nowrap;
+        }
+        .chart-summary {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            padding-top: 16px;
+        }
+        .chart-stat {
+            text-align: center;
+        }
+        .chart-stat-value {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1d1d1f;
+        }
+        .chart-stat-label {
+            font-size: 12px;
+            color: #86868b;
+        }
+        .year-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .year-tab {
+            padding: 6px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            background: #f5f5f7;
+            color: #86868b;
+            transition: all 0.2s;
+        }
+        .year-tab:hover {
+            background: #e8e8ed;
+        }
+        .year-tab.active {
+            background: #1d1d1f;
+            color: #fff;
+        }
+
+        /* Markdown Editor */
+        .editor-wrap {
+            border: 1px solid #d2d2d7;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .editor-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            padding: 8px;
+            background: #f5f5f7;
+            border-bottom: 1px solid #d2d2d7;
+        }
+        .editor-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: #fff;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            color: #1d1d1f;
+        }
+        .editor-btn:hover {
+            background: #e8e8ed;
+        }
+        .editor-btn.wide {
             width: auto;
-            padding: 5px 10px;
-            font-size: 0.85rem;
-            margin: 0;
+            padding: 0 12px;
+            font-size: 12px;
         }
-        .message-form { display: none; }
-        .message-form.active { display: block; }
-        .status { padding: 10px; border-radius: 8px; margin-top: 10px; }
-        .status.success { background: #d4edda; color: #155724; }
-        .status.error { background: #f8d7da; color: #721c24; }
-        .login-form { max-width: 300px; margin: 100px auto; }
-        .hidden { display: none; }
+        .editor-divider {
+            width: 1px;
+            background: #d2d2d7;
+            margin: 0 4px;
+        }
+        .editor-textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 12px;
+            border: none;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+        }
+        .editor-textarea:focus {
+            outline: none;
+        }
+        .editor-hint {
+            padding: 8px 12px;
+            background: #f5f5f7;
+            border-top: 1px solid #d2d2d7;
+            font-size: 11px;
+            color: #86868b;
+        }
+        .editor-preview {
+            padding: 12px;
+            background: #fff;
+            border-top: 1px solid #d2d2d7;
+            font-size: 14px;
+            min-height: 60px;
+        }
+        .editor-preview b { font-weight: 600; }
+        .editor-preview i { font-style: italic; }
+        .editor-preview u { text-decoration: underline; }
+        .editor-preview s { text-decoration: line-through; }
+        .editor-preview code {
+            background: #f5f5f7;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        .editor-preview a { color: #0071e3; text-decoration: underline; }
+
+        /* Logs */
+        .log {
+            display: flex;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f5f5f7;
+            font-size: 13px;
+        }
+
+        .log-time { color: #86868b; min-width: 140px; }
+        .log-type { min-width: 100px; }
+
+        code {
+            background: #f5f5f7;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .chat-layout { grid-template-columns: 1fr; }
+            .stats { grid-template-columns: 1fr 1fr; }
+        }
+
+        /* Login */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #f5f5f7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .login-box {
+            background: #fff;
+            border-radius: 16px;
+            padding: 40px;
+            width: 100%;
+            max-width: 360px;
+            text-align: center;
+        }
+
+        .login-box h2 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .login-box p {
+            color: #86868b;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d2d2d7;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            margin-bottom: 16px;
+        }
+
+        .login-box input:focus {
+            outline: none;
+            border-color: #0071e3;
+        }
+
+        .login-box .btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 15px;
+        }
+
+        .login-error {
+            color: #c62828;
+            font-size: 13px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .admin-content { display: none; }
+        .admin-content.visible { display: block; }
+        .login-overlay.hidden { display: none; }
     </style>
 </head>
 <body>
-    <!-- Login -->
-    <div id="loginSection" class="card login-form">
-        <h1>🔐 Вход</h1>
-        <input type="password" id="password" placeholder="Пароль">
-        <button onclick="login()">Войти</button>
+    <!-- Login Form -->
+    <div id="login-overlay" class="login-overlay">
+        <div id="login-loading" class="login-box" style="padding:60px">
+            <div class="loading"><div class="spinner"></div></div>
+        </div>
+        <div id="login-form" class="login-box" style="display:none">
+            <h2>СтройГлобал</h2>
+            <p>Введите ключ доступа</p>
+            <div id="login-error" class="login-error">Неверный ключ доступа</div>
+            <input type="password" id="login-input" placeholder="Ключ доступа" autocomplete="current-password">
+            <button class="btn btn-primary" onclick="tryLogin()">Войти</button>
+        </div>
     </div>
 
-    <!-- Dashboard -->
-    <div id="dashboard" class="hidden">
-        <h1>🤖 Sparom Bot Admin</h1>
+    <div id="admin-content" class="admin-content">
+    <div class="container">
+        <nav class="nav">
+            <div class="nav-item active" data-section="analytics">Аналитика</div>
+            <div class="nav-item" data-section="leads">Сделки CRM</div>
+            <div class="nav-item" data-section="sync">Синхронизация</div>
+            <div class="nav-item" data-section="broadcasts">Рассылки</div>
+            <div class="nav-item" data-section="chats">Чаты</div>
+            <div class="nav-item" data-section="logs">Логи</div>
+            <div style="flex:1"></div>
+            <div class="nav-item" onclick="logout()" style="color:#c62828">Выйти</div>
+        </nav>
 
-        <!-- Stats -->
-        <div class="card">
-            <h2>📊 Статистика</h2>
+        <!-- Analytics -->
+        <section id="analytics" class="section active">
+            <h1>Аналитика рекламы</h1>
+            <p class="subtitle">Расходы Яндекс.Директ и заказы из AmoCRM</p>
+
             <div class="stats">
                 <div class="stat">
-                    <div class="stat-value" id="totalUsers">—</div>
-                    <div class="stat-label">Всего пользователей</div>
+                    <div class="stat-value" id="stat-cost">—</div>
+                    <div class="stat-label">Общий расход</div>
                 </div>
                 <div class="stat">
-                    <div class="stat-value" id="actions24h">—</div>
-                    <div class="stat-label">Действий за 24ч</div>
+                    <div class="stat-value" id="stat-leads">—</div>
+                    <div class="stat-label">Всего заказов</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="stat-cpl">—</div>
+                    <div class="stat-label">Цена заказа</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="stat-months">—</div>
+                    <div class="stat-label">Месяцев</div>
                 </div>
             </div>
-        </div>
 
-        <!-- Broadcast -->
-        <div class="card">
-            <h2>📢 Рассылка всем</h2>
-            <textarea id="broadcastMessage" rows="3" placeholder="Текст сообщения..."></textarea>
-            <button onclick="broadcast()">Отправить всем</button>
-            <div id="broadcastStatus" class="status hidden"></div>
-        </div>
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Расходы по кампаниям</span>
+                    <div class="filters" style="margin:0;gap:8px">
+                        <select id="filter-year" onchange="loadAnalytics()">
+                            <option value="">Все годы</option>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                        </select>
+                        <select id="filter-month-from" onchange="loadAnalytics()">
+                            <option value="">С начала</option>
+                        </select>
+                        <select id="filter-month-to" onchange="loadAnalytics()">
+                            <option value="">До конца</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-wrap" id="analytics-table">
+                        <div class="loading"><div class="spinner"></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        <!-- Users -->
-        <div class="card">
-            <h2>👥 Пользователи</h2>
-            <button class="secondary" onclick="loadUsers()">Обновить список</button>
-            <div class="users-list" id="usersList"></div>
-        </div>
+        <!-- Leads -->
+        <section id="leads" class="section">
+            <h1>Сделки из AmoCRM</h1>
+            <p class="subtitle">Все сделки со статусом «заявка оформлена»</p>
 
-        <!-- Message to user -->
-        <div id="messageForm" class="card message-form">
-            <h2>💬 Сообщение пользователю</h2>
-            <p id="messageToUser"></p>
-            <textarea id="userMessage" rows="3" placeholder="Текст сообщения..."></textarea>
-            <button onclick="sendToUser()">Отправить</button>
-            <button class="secondary" onclick="closeMessageForm()">Отмена</button>
-            <div id="messageStatus" class="status hidden"></div>
-        </div>
+            <div class="card" style="margin-bottom:20px">
+                <div class="card-header">
+                    <span class="card-title">Динамика сделок</span>
+                    <div class="year-tabs" id="chart-year-tabs"></div>
+                </div>
+                <div class="chart-container" id="leads-chart">
+                    <div class="loading"><div class="spinner"></div></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Фильтры</span>
+                    <button class="btn btn-secondary" onclick="loadLeads()">Обновить</button>
+                </div>
+                <div class="card-body">
+                    <div class="filters">
+                        <div class="filter-group">
+                            <label>UTM Source</label>
+                            <select id="filter-source" onchange="filterLeads()">
+                                <option value="">Все</option>
+                                <option value="__empty__">Без метки</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>UTM Medium</label>
+                            <select id="filter-medium" onchange="filterLeads()">
+                                <option value="">Все</option>
+                                <option value="__empty__">Без метки</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>UTM Campaign</label>
+                            <select id="filter-campaign" onchange="filterLeads()">
+                                <option value="">Все</option>
+                                <option value="__empty__">Без метки</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>В аналитике Яндекс</label>
+                            <select id="filter-yandex" onchange="filterLeads()">
+                                <option value="">Все</option>
+                                <option value="yes">Да</option>
+                                <option value="no">Нет</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Сделки <span id="leads-count" class="tag tag-blue">0</span></span>
+                </div>
+                <div class="card-body">
+                    <div class="table-wrap" id="leads-table">
+                        <div class="loading"><div class="spinner"></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sync -->
+        <section id="sync" class="section">
+            <h1>Синхронизация</h1>
+            <p class="subtitle">Загрузка данных из внешних систем</p>
+
+            <div id="sync-result" style="margin-bottom:16px"></div>
+
+            <div class="sync-grid">
+                <div class="sync-card">
+                    <h3>Яндекс.Директ</h3>
+                    <p>Загружает расходы по рекламным кампаниям за выбранный месяц</p>
+                    <div class="sync-options">
+                        <select id="yandex-year">
+                            <option value="2024">2024</option>
+                            <option value="2025" selected>2025</option>
+                        </select>
+                        <select id="yandex-month"></select>
+                    </div>
+                    <button class="btn btn-primary" onclick="syncYandex()">Синхронизировать</button>
+                </div>
+
+                <div class="sync-card">
+                    <h3>AmoCRM</h3>
+                    <p>Загружает сделки со статусом «заявка оформлена» за выбранный месяц</p>
+                    <div class="sync-options">
+                        <select id="amo-year">
+                            <option value="2024">2024</option>
+                            <option value="2025" selected>2025</option>
+                        </select>
+                        <select id="amo-month"></select>
+                    </div>
+                    <button class="btn btn-primary" onclick="syncAmo()">Синхронизировать</button>
+                </div>
+
+                <div class="sync-card">
+                    <h3>Полная синхронизация</h3>
+                    <p>Загружает все данные: расходы из Яндекс + сделки из AmoCRM</p>
+                    <div class="sync-options">
+                        <select id="full-year">
+                            <option value="2024">С 2024</option>
+                            <option value="2025">С 2025</option>
+                        </select>
+                        <select id="full-month"></select>
+                    </div>
+                    <button class="btn btn-success" onclick="syncFull()">Запустить</button>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top:20px">
+                <div class="card-header">
+                    <span class="card-title">Статус данных</span>
+                    <button class="btn btn-secondary" onclick="loadSyncStatus()">Обновить</button>
+                </div>
+                <div class="card-body" id="sync-status">
+                    <div class="loading"><div class="spinner"></div></div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top:20px">
+                <div class="card-header">
+                    <span class="card-title">Тестирование API</span>
+                </div>
+                <div class="card-body">
+                    <div class="btn-group">
+                        <button class="btn btn-secondary" onclick="testYandex()">Тест Яндекс</button>
+                        <button class="btn btn-secondary" onclick="testAmo()">Тест AmoCRM</button>
+                    </div>
+                    <div id="test-result" style="margin-top:12px"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Broadcasts -->
+        <section id="broadcasts" class="section">
+            <h1>Рассылки</h1>
+            <p class="subtitle">Отправка сообщений в Telegram</p>
+
+            <div class="chat-layout">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Получатели</span>
+                    </div>
+                    <div class="card-body" style="padding:0">
+                        <div id="broadcast-list" class="chat-list">
+                            <div class="loading"><div class="spinner"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Сообщение</span>
+                        <label style="font-size:12px;color:#86868b;display:flex;align-items:center;gap:6px">
+                            <input type="checkbox" id="show-preview" onchange="togglePreview()"> Превью
+                        </label>
+                    </div>
+                    <div class="card-body">
+                        <div class="editor-wrap">
+                            <div class="editor-toolbar">
+                                <button class="editor-btn" onclick="insertFormat('*', '*')" title="Жирный"><b>B</b></button>
+                                <button class="editor-btn" onclick="insertFormat('_', '_')" title="Курсив"><i>I</i></button>
+                                <button class="editor-btn" onclick="insertFormat('__', '__')" title="Подчёркнутый"><u>U</u></button>
+                                <button class="editor-btn" onclick="insertFormat('~', '~')" title="Зачёркнутый"><s>S</s></button>
+                                <button class="editor-btn" onclick="insertFormat('||', '||')" title="Спойлер">◐</button>
+                                <div class="editor-divider"></div>
+                                <button class="editor-btn" onclick="insertFormat('\`', '\`')" title="Код"><code>&lt;&gt;</code></button>
+                                <button class="editor-btn" onclick="insertFormat('\`\`\`\\n', '\\n\`\`\`')" title="Блок кода">{ }</button>
+                                <div class="editor-divider"></div>
+                                <button class="editor-btn wide" onclick="insertLink()" title="Ссылка">🔗 Ссылка</button>
+                            </div>
+                            <textarea id="broadcast-text" class="editor-textarea" placeholder="Текст сообщения..." oninput="updatePreview()"></textarea>
+                            <div id="editor-preview" class="editor-preview" style="display:none"></div>
+                            <div class="editor-hint">
+                                Telegram markdown: *жирный* _курсив_ __подчёркнутый__ ~зачёркнутый~ `код` ||спойлер|| [текст](ссылка)
+                            </div>
+                        </div>
+                        <div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center">
+                            <span style="color:#86868b;font-size:13px">Выбрано: <span id="selected-count">0</span></span>
+                            <div class="btn-group">
+                                <button class="btn btn-secondary" onclick="selectAll()">Выбрать всех</button>
+                                <button class="btn btn-primary" onclick="sendBroadcast()">Отправить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chats -->
+        <section id="chats" class="section">
+            <h1>Чаты</h1>
+            <p class="subtitle">История переписки с клиентами</p>
+
+            <div class="chat-layout">
+                <div class="card">
+                    <div class="card-header"><span class="card-title">Диалоги</span></div>
+                    <div class="card-body" style="padding:0">
+                        <div id="chats-list" class="chat-list">
+                            <div class="loading"><div class="spinner"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><span class="card-title" id="chat-title">Выберите чат</span></div>
+                    <div id="chat-messages" class="messages">
+                        <div class="empty">Выберите диалог слева</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Logs -->
+        <section id="logs" class="section">
+            <h1>Логи</h1>
+            <p class="subtitle">История синхронизаций данных</p>
+
+            <div class="card" style="margin-bottom:16px">
+                <div class="card-body" style="padding:16px 20px">
+                    <p style="font-size:13px;color:#86868b;line-height:1.6;margin:0">
+                        Здесь отображаются операции загрузки данных из внешних систем.
+                        <b>yandex_expenses</b> — расходы на рекламу из Яндекс.Директ.
+                        <b>crm_leads</b> — сделки из AmoCRM.
+                        Статус «OK» означает успешную загрузку, число — количество обработанных записей.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Последние операции</span>
+                    <button class="btn btn-secondary" onclick="loadLogs()">Обновить</button>
+                </div>
+                <div class="card-body" id="logs-container">
+                    <div class="loading"><div class="spinner"></div></div>
+                </div>
+            </div>
+        </section>
+    </div>
     </div>
 
     <script>
-        // Конфиг - измени на свой URL
-        const API_URL = 'https://sparom.onrender.com';
+        let AUTH = null;
+        let allLeads = [];
+        let selectedChats = new Set();
 
-        let password = '';
-        let selectedUserId = null;
-
-        function login() {
-            password = document.getElementById('password').value;
-            loadStats().then(success => {
-                if (success) {
-                    document.getElementById('loginSection').classList.add('hidden');
-                    document.getElementById('dashboard').classList.remove('hidden');
-                    loadUsers();
-                } else {
-                    alert('Неверный пароль');
-                }
-            });
+        // Base64 encode for HTTP headers (supports Cyrillic)
+        function encodeKey(str) {
+            return btoa(unescape(encodeURIComponent(str)));
         }
 
-        async function loadStats() {
-            try {
-                const res = await fetch(`${API_URL}/api/stats?password=${password}`);
-                if (res.status === 401) return false;
-                const data = await res.json();
-                document.getElementById('totalUsers').textContent = data.total_users;
-                document.getElementById('actions24h').textContent = data.actions_24h;
-                return true;
-            } catch (e) {
-                console.error(e);
-                return false;
-            }
-        }
+        // Login functions
+        async function tryLogin() {
+            const input = document.getElementById('login-input');
+            const key = input.value.trim();
+            if (!key) return;
 
-        async function loadUsers() {
-            try {
-                const res = await fetch(`${API_URL}/api/users?password=${password}`);
-                const data = await res.json();
-                const list = document.getElementById('usersList');
-
-                if (!data.users || data.users.length === 0) {
-                    list.innerHTML = '<p style="padding: 20px; color: #999;">Пользователей пока нет</p>';
-                    return;
-                }
-
-                list.innerHTML = data.users.map(u => `
-                    <div class="user-item">
-                        <div>
-                            <div class="user-name">${u.first_name || ''} ${u.last_name || ''} ${u.username ? '@' + u.username : ''}</div>
-                            <div class="user-id">ID: ${u.telegram_id}</div>
-                        </div>
-                        <div class="user-actions">
-                            <button onclick="openMessageForm(${u.telegram_id}, '${u.first_name || u.username || u.telegram_id}')">✉️</button>
-                        </div>
-                    </div>
-                `).join('');
-            } catch (e) {
-                console.error(e);
-            }
-        }
-
-        function openMessageForm(userId, name) {
-            selectedUserId = userId;
-            document.getElementById('messageToUser').textContent = `Кому: ${name} (${userId})`;
-            document.getElementById('messageForm').classList.add('active');
-            document.getElementById('userMessage').value = '';
-            document.getElementById('messageStatus').classList.add('hidden');
-        }
-
-        function closeMessageForm() {
-            document.getElementById('messageForm').classList.remove('active');
-            selectedUserId = null;
-        }
-
-        async function sendToUser() {
-            if (!selectedUserId) return;
-
-            const message = document.getElementById('userMessage').value;
-            if (!message.trim()) return;
-
-            const statusEl = document.getElementById('messageStatus');
+            const encoded = encodeKey(key);
 
             try {
-                const res = await fetch(`${API_URL}/api/send`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ password, telegram_id: selectedUserId, message })
+                const res = await fetch('/api/analytics', {
+                    headers: { 'Content-Type': 'application/json', 'X-Yandex-Key': encoded }
                 });
 
-                const data = await res.json();
-
-                if (data.success) {
-                    statusEl.textContent = 'Сообщение отправлено!';
-                    statusEl.className = 'status success';
+                if (res.ok) {
+                    AUTH = encoded;
+                    localStorage.setItem('admin_key', encoded);
+                    showAdmin();
                 } else {
-                    statusEl.textContent = 'Ошибка: ' + data.error;
-                    statusEl.className = 'status error';
+                    showLoginError();
                 }
             } catch (e) {
-                statusEl.textContent = 'Ошибка сети';
-                statusEl.className = 'status error';
+                showLoginError();
             }
-            statusEl.classList.remove('hidden');
         }
 
-        async function broadcast() {
-            const message = document.getElementById('broadcastMessage').value;
-            if (!message.trim()) return;
+        function showLoginError() {
+            document.getElementById('login-error').style.display = 'block';
+            document.getElementById('login-input').value = '';
+            document.getElementById('login-input').focus();
+        }
 
-            if (!confirm('Отправить сообщение ВСЕМ пользователям?')) return;
+        function showAdmin() {
+            document.getElementById('login-overlay').classList.add('hidden');
+            document.getElementById('admin-content').classList.add('visible');
+            loadAnalytics();
+        }
 
-            const statusEl = document.getElementById('broadcastStatus');
-            statusEl.textContent = 'Отправка...';
-            statusEl.className = 'status';
-            statusEl.classList.remove('hidden');
+        function logout() {
+            localStorage.removeItem('admin_key');
+            AUTH = null;
+            document.getElementById('admin-content').classList.remove('visible');
+            document.getElementById('login-overlay').classList.remove('hidden');
+            document.getElementById('login-loading').style.display = 'none';
+            document.getElementById('login-form').style.display = 'block';
+            document.getElementById('login-error').style.display = 'none';
+            document.getElementById('login-input').value = '';
+        }
+
+        // Show login form (after loading check)
+        function showLoginForm() {
+            document.getElementById('login-loading').style.display = 'none';
+            document.getElementById('login-form').style.display = 'block';
+        }
+
+        // Check saved auth on load
+        async function checkAuth() {
+            const saved = localStorage.getItem('admin_key');
+            if (!saved) {
+                showLoginForm();
+                return;
+            }
 
             try {
-                const res = await fetch(`${API_URL}/api/broadcast`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ password, message })
+                const res = await fetch('/api/analytics', {
+                    headers: { 'Content-Type': 'application/json', 'X-Yandex-Key': saved }
                 });
 
-                const data = await res.json();
-
-                if (data.sent !== undefined) {
-                    statusEl.textContent = `Отправлено: ${data.sent}, ошибок: ${data.failed}`;
-                    statusEl.className = 'status success';
+                if (res.ok) {
+                    AUTH = saved;
+                    showAdmin();
                 } else {
-                    statusEl.textContent = 'Ошибка: ' + data.error;
-                    statusEl.className = 'status error';
+                    localStorage.removeItem('admin_key');
+                    showLoginForm();
                 }
             } catch (e) {
-                statusEl.textContent = 'Ошибка сети';
-                statusEl.className = 'status error';
+                localStorage.removeItem('admin_key');
+                showLoginForm();
             }
         }
 
-        // Enter для логина
-        document.getElementById('password').addEventListener('keypress', e => {
-            if (e.key === 'Enter') login();
+        // Enter key for login
+        document.getElementById('login-input').addEventListener('keypress', e => {
+            if (e.key === 'Enter') tryLogin();
         });
+
+        // Navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.onclick = () => {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                item.classList.add('active');
+                document.getElementById(item.dataset.section).classList.add('active');
+
+                const s = item.dataset.section;
+                if (s === 'analytics') loadAnalytics();
+                if (s === 'leads') loadLeads();
+                if (s === 'sync') loadSyncStatus();
+                if (s === 'logs') loadLogs();
+                if (s === 'broadcasts') loadBroadcastChats();
+                if (s === 'chats') loadChats();
+            };
+        });
+
+        // API
+        async function api(url, opts = {}) {
+            try {
+                const res = await fetch(url, {
+                    ...opts,
+                    headers: { 'Content-Type': 'application/json', 'X-Yandex-Key': AUTH }
+                });
+                return await res.json();
+            } catch (e) {
+                return { success: false, error: e.message };
+            }
+        }
+
+        function money(v) {
+            if (!v && v !== 0) return '—';
+            return new Intl.NumberFormat('ru-RU').format(Math.round(v)) + ' ₽';
+        }
+
+        function date(d) {
+            if (!d) return '—';
+            return new Date(d).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' });
+        }
+
+        // Analytics
+        async function loadAnalytics() {
+            const year = document.getElementById('filter-year').value;
+            const monthFrom = document.getElementById('filter-month-from').value;
+            const monthTo = document.getElementById('filter-month-to').value;
+
+            let params = [];
+            if (year) params.push('year=' + year);
+            if (monthFrom) params.push('month_from=' + monthFrom);
+            if (monthTo) params.push('month_to=' + monthTo);
+
+            const data = await api('/api/analytics' + (params.length ? '?' + params.join('&') : ''));
+
+            if (!data.success) {
+                document.getElementById('analytics-table').innerHTML = `<div class="alert alert-error">${data.error}</div>`;
+                return;
+            }
+
+            const { campaigns, months, summary } = data;
+            document.getElementById('stat-cost').textContent = money(summary?.total_cost);
+            document.getElementById('stat-leads').textContent = summary?.total_leads || 0;
+            document.getElementById('stat-cpl').textContent = money(summary?.avg_cpl);
+            document.getElementById('stat-months').textContent = months?.length || 0;
+
+            if (!campaigns?.length || !months?.length) {
+                document.getElementById('analytics-table').innerHTML = '<div class="empty">Нет данных. Запустите синхронизацию в разделе «Синхронизация».</div>';
+                return;
+            }
+
+            let html = '<table><thead><tr><th>ID</th><th>Кампания</th>';
+            (months || []).forEach(m => html += `<th>${m}</th>`);
+            html += '<th>Итого</th></tr></thead><tbody>';
+
+            campaigns.forEach(c => {
+                let totalCost = 0, totalLeads = 0;
+                html += `<tr><td><code>${c.campaign_id}</code></td><td>${c.campaign_name || '—'}</td>`;
+
+                (months || []).forEach(m => {
+                    const d = c.months[m];
+                    if (d) {
+                        totalCost += d.cost || 0;
+                        totalLeads += d.leads || 0;
+                        const leadsText = d.leads === 1 ? 'заказ' : (d.leads < 5 ? 'заказа' : 'заказов');
+                        html += `<td><div class="cell-data">
+                            <div class="cell-cost">${money(d.cost)}</div>
+                            ${d.leads ? `<div class="cell-leads">${d.leads} ${leadsText}</div>` : ''}
+                            ${d.cost_per_lead ? `<div class="cell-cpl">${money(d.cost_per_lead)}</div>` : ''}
+                        </div></td>`;
+                    } else {
+                        html += '<td><span class="cell-empty">—</span></td>';
+                    }
+                });
+
+                const cpl = totalLeads > 0 ? Math.round(totalCost / totalLeads) : null;
+                const totalLeadsText = totalLeads === 1 ? 'заказ' : (totalLeads < 5 ? 'заказа' : 'заказов');
+                html += `<td><div class="cell-data">
+                    <div class="cell-cost">${money(totalCost)}</div>
+                    ${totalLeads ? `<div class="cell-leads">${totalLeads} ${totalLeadsText}</div>` : ''}
+                    ${cpl ? `<div class="cell-cpl">${money(cpl)}</div>` : ''}
+                </div></td></tr>`;
+            });
+
+            html += '</tbody></table>';
+            document.getElementById('analytics-table').innerHTML = html;
+        }
+
+        // Leads
+        let chartYear = new Date().getFullYear();
+
+        async function loadLeads() {
+            document.getElementById('leads-table').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+            const data = await api('/api/crm-leads/all');
+
+            if (!data.success) {
+                document.getElementById('leads-table').innerHTML = `<div class="alert alert-error">${data.error}</div>`;
+                document.getElementById('leads-chart').innerHTML = `<div class="alert alert-error">${data.error}</div>`;
+                return;
+            }
+
+            allLeads = data.leads || [];
+            populateFilters();
+            filterLeads();
+            renderLeadsChart();
+        }
+
+        function renderLeadsChart() {
+            // Группируем лиды по месяцам и годам
+            const byMonth = {};
+            const years = new Set();
+
+            allLeads.forEach(l => {
+                if (!l.lead_created_at) return;
+                const d = new Date(l.lead_created_at);
+                const y = d.getFullYear();
+                const m = d.getMonth() + 1;
+                years.add(y);
+                const key = `${y}-${m}`;
+                byMonth[key] = (byMonth[key] || 0) + 1;
+            });
+
+            // Рендерим вкладки годов
+            const yearsArr = [...years].sort((a, b) => b - a);
+            if (!yearsArr.includes(chartYear)) chartYear = yearsArr[0] || new Date().getFullYear();
+
+            let tabsHtml = '';
+            yearsArr.forEach(y => {
+                tabsHtml += `<div class="year-tab ${y === chartYear ? 'active' : ''}" onclick="setChartYear(${y})">${y}</div>`;
+            });
+            document.getElementById('chart-year-tabs').innerHTML = tabsHtml;
+
+            // Рендерим график для выбранного года
+            const monthNames = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
+            const monthData = [];
+            let maxVal = 0, totalYear = 0;
+
+            for (let m = 1; m <= 12; m++) {
+                const val = byMonth[`${chartYear}-${m}`] || 0;
+                monthData.push({ month: m, name: monthNames[m - 1], count: val });
+                if (val > maxVal) maxVal = val;
+                totalYear += val;
+            }
+
+            // Считаем среднее (только за месяцы с данными)
+            const monthsWithData = monthData.filter(m => m.count > 0).length;
+            const avgPerMonth = monthsWithData > 0 ? Math.round(totalYear / monthsWithData) : 0;
+
+            let barsHtml = '<div class="chart-bars">';
+            monthData.forEach(m => {
+                const height = maxVal > 0 ? Math.max(4, (m.count / maxVal) * 160) : 4;
+                const showValue = m.count > 0 ? `<span class="chart-bar-value">${m.count}</span>` : '';
+                barsHtml += `<div class="chart-bar-wrap">
+                    <div class="chart-bar" style="height:${height}px">${showValue}</div>
+                    <div class="chart-bar-label">${m.name}</div>
+                </div>`;
+            });
+            barsHtml += '</div>';
+
+            barsHtml += `<div class="chart-summary">
+                <div class="chart-stat">
+                    <div class="chart-stat-value">${totalYear}</div>
+                    <div class="chart-stat-label">сделок за ${chartYear}</div>
+                </div>
+                <div class="chart-stat">
+                    <div class="chart-stat-value">${avgPerMonth}</div>
+                    <div class="chart-stat-label">в среднем в месяц</div>
+                </div>
+            </div>`;
+
+            document.getElementById('leads-chart').innerHTML = barsHtml;
+        }
+
+        function setChartYear(y) {
+            chartYear = y;
+            renderLeadsChart();
+        }
+
+        function populateFilters() {
+            const sources = new Set(), mediums = new Set(), campaigns = new Set();
+            allLeads.forEach(l => {
+                if (l.utm_source) sources.add(l.utm_source);
+                if (l.utm_medium) mediums.add(l.utm_medium);
+                if (l.utm_campaign) campaigns.add(l.utm_campaign);
+            });
+
+            fillSelect('filter-source', sources);
+            fillSelect('filter-medium', mediums);
+            fillSelect('filter-campaign', campaigns);
+        }
+
+        function fillSelect(id, values) {
+            const sel = document.getElementById(id);
+            const cur = sel.value;
+            sel.innerHTML = '<option value="">Все</option><option value="__empty__">Без метки</option>';
+            [...values].sort().forEach(v => sel.innerHTML += `<option value="${v}">${v}</option>`);
+            sel.value = cur;
+        }
+
+        function filterLeads() {
+            const source = document.getElementById('filter-source').value;
+            const medium = document.getElementById('filter-medium').value;
+            const campaign = document.getElementById('filter-campaign').value;
+            const yandex = document.getElementById('filter-yandex').value;
+
+            const filtered = allLeads.filter(l => {
+                // Фильтр "Без метки"
+                if (source === '__empty__' && l.utm_source) return false;
+                if (medium === '__empty__' && l.utm_medium) return false;
+                if (campaign === '__empty__' && l.utm_campaign) return false;
+
+                // Обычные фильтры
+                if (source && source !== '__empty__' && (l.utm_source || '').toLowerCase() !== source.toLowerCase()) return false;
+                if (medium && medium !== '__empty__' && (l.utm_medium || '').toLowerCase() !== medium.toLowerCase()) return false;
+                if (campaign && campaign !== '__empty__' && (l.utm_campaign || '').toLowerCase() !== campaign.toLowerCase()) return false;
+
+                const isY = (l.utm_source || '').toLowerCase().includes('yandex') && l.extracted_campaign_id;
+                if (yandex === 'yes' && !isY) return false;
+                if (yandex === 'no' && isY) return false;
+
+                return true;
+            });
+
+            document.getElementById('leads-count').textContent = filtered.length;
+            renderLeads(filtered);
+        }
+
+        function shortDate(d) {
+            if (!d) return '—';
+            return new Date(d).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: '2-digit' });
+        }
+
+        function renderLeads(leads) {
+            if (!leads.length) {
+                document.getElementById('leads-table').innerHTML = '<div class="empty">Нет сделок</div>';
+                return;
+            }
+
+            let html = `<table><thead><tr>
+                <th class="sortable" onclick="sortLeads('lead_id')">ID</th>
+                <th class="sortable" onclick="sortLeads('lead_name')">Название</th>
+                <th class="sortable" onclick="sortLeads('lead_created_at')">Создан</th>
+                <th class="sortable" onclick="sortLeads('lead_closed_at')">Закрыт</th>
+                <th>Source</th><th>Campaign</th><th>ID</th><th>В Яндекс</th>
+            </tr></thead><tbody>`;
+
+            leads.forEach(l => {
+                const isY = (l.utm_source || '').toLowerCase().includes('yandex') && l.extracted_campaign_id;
+                html += `<tr>
+                    <td><code>${l.lead_id}</code></td>
+                    <td>${l.lead_name || '—'}</td>
+                    <td>${shortDate(l.lead_created_at)}</td>
+                    <td>${shortDate(l.lead_closed_at)}</td>
+                    <td>${l.utm_source ? `<span class="tag">${l.utm_source}</span>` : '—'}</td>
+                    <td>${l.utm_campaign ? `<span class="tag">${l.utm_campaign}</span>` : '—'}</td>
+                    <td>${l.extracted_campaign_id ? `<code>${l.extracted_campaign_id}</code>` : '—'}</td>
+                    <td>${isY ? '<span class="tag tag-green">Да</span>' : '<span class="tag tag-orange">Нет</span>'}</td>
+                </tr>`;
+            });
+
+            html += '</tbody></table>';
+            document.getElementById('leads-table').innerHTML = html;
+        }
+
+        let sortField = 'lead_created_at', sortDir = 'desc';
+        function sortLeads(field) {
+            if (sortField === field) sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+            else { sortField = field; sortDir = 'asc'; }
+
+            allLeads.sort((a, b) => {
+                let av = a[field] || '', bv = b[field] || '';
+                if (field === 'lead_created_at') { av = new Date(av).getTime(); bv = new Date(bv).getTime(); }
+                return sortDir === 'asc' ? (av > bv ? 1 : -1) : (av < bv ? 1 : -1);
+            });
+            filterLeads();
+        }
+
+        // Sync
+        function showSyncResult(msg, type) {
+            document.getElementById('sync-result').innerHTML = `<div class="alert alert-${type}">${msg}</div>`;
+        }
+
+        async function syncYandex() {
+            showSyncResult('Синхронизация Яндекс...', 'info');
+            const data = await api('/api/sync/yandex-expenses', {
+                method: 'POST',
+                body: JSON.stringify({ year: +document.getElementById('yandex-year').value, month: +document.getElementById('yandex-month').value })
+            });
+            showSyncResult(data.success ? `Яндекс: загружено ${data.records || 0} записей` : `Ошибка: ${data.error}`, data.success ? 'success' : 'error');
+            if (data.success) loadSyncStatus();
+        }
+
+        async function syncAmo() {
+            showSyncResult('Синхронизация AmoCRM...', 'info');
+            const data = await api('/api/sync/crm-leads', {
+                method: 'POST',
+                body: JSON.stringify({ year: +document.getElementById('amo-year').value, month: +document.getElementById('amo-month').value })
+            });
+            showSyncResult(data.success ? `AmoCRM: загружено ${data.records || 0} сделок` : `Ошибка: ${data.error}`, data.success ? 'success' : 'error');
+            if (data.success) loadSyncStatus();
+        }
+
+        async function syncFull() {
+            showSyncResult('Полная синхронизация... Это займёт несколько минут', 'info');
+            const data = await api('/api/sync/full', {
+                method: 'POST',
+                body: JSON.stringify({ year_from: +document.getElementById('full-year').value, month_from: +document.getElementById('full-month').value })
+            });
+            if (data.success) {
+                showSyncResult(`Готово! Яндекс: ${data.yandex_total || 0} записей, AmoCRM: ${data.amo_total || 0} сделок`, 'success');
+                loadSyncStatus();
+                loadAnalytics();
+            } else {
+                showSyncResult(`Ошибка: ${data.error}`, 'error');
+            }
+        }
+
+        async function testYandex() {
+            showResult('Проверка Яндекс...', 'info');
+            const data = await api('/api/yandex/campaigns');
+            const count = data.result?.Campaigns?.length || data.campaigns?.length || 0;
+            showResult(data.success || data.result ? `Яндекс OK: ${count} кампаний` : `Ошибка: ${data.error}`, data.success || data.result ? 'success' : 'error');
+        }
+
+        async function testAmo() {
+            showResult('Проверка AmoCRM...', 'info');
+            const data = await api('/api/amocrm/test');
+            showResult(data.success ? `AmoCRM OK: ${data.account?.name || data.account}` : `Ошибка: ${data.error}`, data.success ? 'success' : 'error');
+        }
+
+        function showResult(msg, type) {
+            document.getElementById('test-result').innerHTML = `<div class="alert alert-${type}">${msg}</div>`;
+        }
+
+        // Sync Status
+        async function loadSyncStatus() {
+            const data = await api('/api/sync/status');
+            if (!data.success) {
+                document.getElementById('sync-status').innerHTML = `<div class="alert alert-error">${data.error}</div>`;
+                return;
+            }
+
+            if (!data.status?.length) {
+                document.getElementById('sync-status').innerHTML = '<div class="empty">Нет синхронизированных данных</div>';
+                return;
+            }
+
+            const monthNames = ['', 'Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
+            let html = '<table style="width:100%"><thead><tr><th>Период</th><th>Расходы Яндекс</th><th>Сделки CRM</th></tr></thead><tbody>';
+            data.status.forEach(s => {
+                const hasExpenses = s.expenses_count > 0;
+                const hasLeads = s.leads_count > 0;
+                html += `<tr>
+                    <td><b>${monthNames[s.month]} ${s.year}</b></td>
+                    <td>${hasExpenses ? `<span class="tag tag-green">${s.expenses_count} кампаний</span>` : '<span class="tag tag-orange">Нет</span>'}</td>
+                    <td>${hasLeads ? `<span class="tag tag-green">${s.leads_count} сделок</span>` : '<span class="tag tag-orange">Нет</span>'}</td>
+                </tr>`;
+            });
+            html += '</tbody></table>';
+            document.getElementById('sync-status').innerHTML = html;
+        }
+
+        // Logs
+        async function loadLogs() {
+            const data = await api('/api/sync/logs');
+            if (!data.success) {
+                document.getElementById('logs-container').innerHTML = `<div class="alert alert-error">${data.error}</div>`;
+                return;
+            }
+
+            if (!data.logs?.length) {
+                document.getElementById('logs-container').innerHTML = '<div class="empty">Нет логов синхронизации</div>';
+                return;
+            }
+
+            let html = '<table style="width:100%"><thead><tr><th>Дата и время</th><th>Тип</th><th>Статус</th><th>Записей</th></tr></thead><tbody>';
+            data.logs.forEach(l => {
+                const statusClass = l.status === 'success' ? 'tag-green' : l.status === 'error' ? 'tag-orange' : 'tag-blue';
+                const statusText = l.status === 'success' ? 'OK' : l.status === 'error' ? 'Ошибка' : 'В процессе';
+                const records = l.records_count != null ? l.records_count : '—';
+                html += `<tr>
+                    <td>${date(l.started_at || l.finished_at)}</td>
+                    <td><span class="tag">${l.sync_type}</span></td>
+                    <td><span class="tag ${statusClass}">${statusText}</span></td>
+                    <td>${records}${l.error_message ? ` <span style="color:#c62828">${l.error_message}</span>` : ''}</td>
+                </tr>`;
+            });
+            html += '</tbody></table>';
+            document.getElementById('logs-container').innerHTML = html;
+        }
+
+        // Broadcasts
+        async function loadBroadcastChats() {
+            const data = await api('/api/chats');
+            if (!data.success) {
+                document.getElementById('broadcast-list').innerHTML = `<div class="alert alert-error">${data.error}</div>`;
+                return;
+            }
+
+            let html = '';
+            (data.chats || []).forEach(c => {
+                const sel = selectedChats.has(String(c.chat_id));
+                const checkmark = sel ? '<span style="margin-left:auto;color:#34c759;font-size:18px">✓</span>' : '';
+                const avatarStyle = c.avatar_url
+                    ? `background-image:url('${c.avatar_url}');background-size:cover;`
+                    : (sel ? 'background:#34c759' : '');
+                const initial = c.avatar_url ? '' : (c.first_name || c.username || '?')[0].toUpperCase();
+                html += `<div class="chat-item ${sel ? 'selected' : ''}" onclick="toggleChat('${c.chat_id}')" style="display:flex;align-items:center">
+                    <div class="chat-avatar" style="${avatarStyle}">${initial}</div>
+                    <div style="flex:1"><div class="chat-name">${c.first_name || ''} ${c.last_name || ''}</div><div class="chat-sub">@${c.username || '—'}</div></div>
+                    ${checkmark}
+                </div>`;
+            });
+            document.getElementById('broadcast-list').innerHTML = html || '<div class="empty">Нет чатов</div>';
+            document.getElementById('selected-count').textContent = selectedChats.size;
+        }
+
+        function toggleChat(id) {
+            id = String(id);
+            selectedChats.has(id) ? selectedChats.delete(id) : selectedChats.add(id);
+            loadBroadcastChats();
+        }
+
+        function selectAll() {
+            document.querySelectorAll('#broadcast-list .chat-item').forEach(el => {
+                const match = el.getAttribute('onclick')?.match(/'(.+)'/);
+                if (match) selectedChats.add(String(match[1]));
+            });
+            loadBroadcastChats();
+        }
+
+        async function sendBroadcast() {
+            const text = document.getElementById('broadcast-text').value.trim();
+            if (!text) return alert('Введите текст');
+            if (!selectedChats.size) return alert('Выберите получателей');
+            if (!confirm(`Отправить ${selectedChats.size} получателям?`)) return;
+
+            const data = await api('/api/broadcast', { method: 'POST', body: JSON.stringify({ chat_ids: [...selectedChats], message: text }) });
+            alert(data.success ? `Отправлено: ${data.sent}/${data.total}` : `Ошибка: ${data.error}`);
+            if (data.success) { selectedChats.clear(); document.getElementById('broadcast-text').value = ''; updatePreview(); loadBroadcastChats(); }
+        }
+
+        // Markdown Editor
+        function insertFormat(before, after) {
+            const textarea = document.getElementById('broadcast-text');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const text = textarea.value;
+            const selected = text.substring(start, end);
+
+            // Если текст выделен - оборачиваем его
+            // Если нет - вставляем маркеры и ставим курсор между ними
+            const newText = text.substring(0, start) + before + selected + after + text.substring(end);
+            textarea.value = newText;
+
+            // Позиционируем курсор
+            if (selected) {
+                textarea.setSelectionRange(start + before.length, end + before.length);
+            } else {
+                textarea.setSelectionRange(start + before.length, start + before.length);
+            }
+
+            textarea.focus();
+            updatePreview();
+        }
+
+        function insertLink() {
+            const textarea = document.getElementById('broadcast-text');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const text = textarea.value;
+            const selected = text.substring(start, end);
+
+            const linkText = selected || prompt('Текст ссылки:', 'Нажми сюда');
+            if (!linkText) return;
+
+            const url = prompt('URL ссылки:', 'https://');
+            if (!url) return;
+
+            const link = `[${linkText}](${url})`;
+            const newText = text.substring(0, start) + link + text.substring(end);
+            textarea.value = newText;
+            textarea.setSelectionRange(start + link.length, start + link.length);
+            textarea.focus();
+            updatePreview();
+        }
+
+        function togglePreview() {
+            const preview = document.getElementById('editor-preview');
+            const show = document.getElementById('show-preview').checked;
+            preview.style.display = show ? 'block' : 'none';
+            if (show) updatePreview();
+        }
+
+        function updatePreview() {
+            const preview = document.getElementById('editor-preview');
+            if (preview.style.display === 'none') return;
+
+            const text = document.getElementById('broadcast-text').value;
+            let html = escapeHtml(text);
+
+            // Telegram MarkdownV2 преобразования
+            html = html.replace(/\*([^*]+)\*/g, '<b>$1</b>');           // *bold*
+            html = html.replace(/_([^_]+)_/g, '<i>$1</i>');             // _italic_
+            html = html.replace(/__([^_]+)__/g, '<u>$1</u>');           // __underline__
+            html = html.replace(/~([^~]+)~/g, '<s>$1</s>');             // ~strikethrough~
+            html = html.replace(/\|\|([^|]+)\|\|/g, '<span style="background:#1d1d1f;color:#1d1d1f;border-radius:2px">$1</span>'); // ||spoiler||
+            html = html.replace(/`([^`]+)`/g, '<code>$1</code>');       // `code`
+            html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>'); // [text](url)
+            html = html.replace(/\n/g, '<br>');
+
+            preview.innerHTML = html || '<span style="color:#86868b">Начните вводить текст...</span>';
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Chats
+        async function loadChats() {
+            const data = await api('/api/chats');
+            if (!data.success) {
+                document.getElementById('chats-list').innerHTML = `<div class="alert alert-error">${data.error}</div>`;
+                return;
+            }
+
+            let html = '';
+            (data.chats || []).forEach(c => {
+                const name = `${c.first_name || ''} ${c.last_name || ''}`.trim();
+                const avatarStyle = c.avatar_url
+                    ? `background-image:url('${c.avatar_url}');background-size:cover;`
+                    : '';
+                const initial = c.avatar_url ? '' : (c.first_name || c.username || '?')[0].toUpperCase();
+                html += `<div class="chat-item" onclick="openChat('${c.chat_id}', '${name.replace(/'/g, "\\'")}')">
+                    <div class="chat-avatar" style="${avatarStyle}">${initial}</div>
+                    <div><div class="chat-name">${name || 'Без имени'}</div><div class="chat-sub">@${c.username || '—'}</div></div>
+                </div>`;
+            });
+            document.getElementById('chats-list').innerHTML = html || '<div class="empty">Нет чатов</div>';
+        }
+
+        async function openChat(id, name) {
+            document.getElementById('chat-title').textContent = name || 'Чат';
+            document.getElementById('chat-messages').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+
+            const data = await api(`/api/chats/${id}/messages`);
+            if (!data.success) {
+                // Показываем понятное сообщение если таблица не создана
+                const isTableMissing = data.error?.includes('messages') || data.error?.includes('schema');
+                if (isTableMissing) {
+                    document.getElementById('chat-messages').innerHTML = '<div class="empty" style="padding:20px"><p style="margin-bottom:8px">История сообщений пока недоступна</p><p style="font-size:12px;color:#86868b">Для работы чатов требуется таблица messages в базе данных</p></div>';
+                } else {
+                    document.getElementById('chat-messages').innerHTML = `<div class="alert alert-error">${data.error}</div>`;
+                }
+                return;
+            }
+
+            let html = '';
+            (data.messages || []).forEach(m => {
+                html += `<div class="message ${m.is_bot ? 'outgoing' : 'incoming'}">${m.text || ''}</div>`;
+            });
+            document.getElementById('chat-messages').innerHTML = html || '<div class="empty">Нет сообщений</div>';
+        }
+
+        // Init
+        const months = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+        const monthsShort = ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'];
+        const now = new Date();
+
+        // Sync month selectors
+        ['yandex-month', 'amo-month', 'full-month'].forEach(id => {
+            const sel = document.getElementById(id);
+            months.forEach((m, i) => sel.innerHTML += `<option value="${i + 1}">${m}</option>`);
+            sel.value = now.getMonth() + 1;
+        });
+
+        // Analytics period filters
+        ['filter-month-from', 'filter-month-to'].forEach(id => {
+            const sel = document.getElementById(id);
+            const isFrom = id.includes('from');
+            sel.innerHTML = `<option value="">${isFrom ? 'С начала' : 'До конца'}</option>`;
+            monthsShort.forEach((m, i) => sel.innerHTML += `<option value="${i + 1}">${m}</option>`);
+        });
+
+        // Check auth on page load
+        checkAuth();
     </script>
 </body>
 </html>
