@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Баня 2,3×4 м — от 397 900 ₽ — С лёгким паром</title>
+    <meta name="description" content="Готовая баня 2,3×4 метра. Цена от 397 900 ₽. Изготовление 4 дня. Доставка по России. 3 варианта планировки. Гарантия 1 год.">
+
+    <!-- Preload critical resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==========================================================================
+           CSS Variables & Reset
+           ========================================================================== */
+        :root {
+            --bg: #FDFCFA;
+            --bg-cream: #F5F1EB;
+            --bg-warm: #EDE8E0;
+            --text: #1F1A15;
+            --text-light: #8A7D6D;
+            --text-muted: #A89F91;
+            --accent: #C67B3C;
+            --accent-dark: #9A5A28;
+            --accent-light: #D4915A;
+            --white: #FFFFFF;
+            --border: #E5DDD4;
+            --success: #6B8E6B;
+            --shadow-sm: 0 2px 8px rgba(31,26,21,0.06);
+            --shadow-md: 0 8px 24px rgba(31,26,21,0.08);
+            --shadow-lg: 0 20px 60px rgba(31,26,21,0.12);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --radius-xl: 24px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { font-size: 16px; scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+        body { font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif; color: var(--text); background: var(--bg); line-height: 1.6; overflow-x: hidden; }
+        img { max-width: 100%; height: auto; display: block; }
+        a { color: inherit; text-decoration: none; }
+        button { font-family: inherit; cursor: pointer; border: none; background: none; }
+        ul, ol { list-style: none; }
+
+        /* ==========================================================================
+           Header
+           ========================================================================== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background var(--transition), box-shadow var(--transition);
+        }
+        .header--scrolled {
+            background: rgba(253,252,250,0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-sm);
+        }
+        .header--light .logo,
+        .header--light .header__nav a,
+        .header--light .phone { color: white; }
+        .header--scrolled.header--light .logo,
+        .header--scrolled.header--light .header__nav a,
+        .header--scrolled.header--light .phone { color: var(--text); }
+
+        .logo { font-weight: 700; font-size: 1.1rem; letter-spacing: -0.02em; transition: color var(--transition); }
+        .header__nav { display: none; gap: 2rem; }
+        .header__nav a { font-size: 0.9rem; font-weight: 500; transition: opacity var(--transition); }
+        .header__nav a:hover { opacity: 0.7; }
+
+        .header__right { display: flex; align-items: center; gap: 1.5rem; }
+        .phone { font-weight: 600; font-size: 0.95rem; transition: color var(--transition); }
+        .phone:hover { color: var(--accent); }
+        .phone-hint { display: none; font-size: 0.75rem; color: var(--text-light); }
+
+        /* Burger Menu */
+        .burger { display: flex; flex-direction: column; gap: 5px; width: 24px; padding: 4px 0; }
+        .burger span { height: 2px; background: currentColor; border-radius: 2px; transition: var(--transition); }
+        .header--light .burger span { background: white; }
+        .header--scrolled .burger span { background: var(--text); }
+
+        @media (min-width: 768px) {
+            .header { padding: 1.25rem 2rem; }
+            .header__nav { display: flex; }
+            .burger { display: none; }
+        }
+        @media (min-width: 1024px) {
+            .phone-hint { display: block; }
+            .header__right { flex-direction: column; align-items: flex-end; gap: 0.25rem; }
+        }
+
+        /* ==========================================================================
+           Hero Section - Fullscreen
+           ========================================================================== */
+        .hero {
+            height: 100vh;
+            min-height: 600px;
+            max-height: 900px;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+        }
+        .hero__bg {
+            position: absolute;
+            inset: 0;
+        }
+        .hero__bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .hero__overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(31,26,21,0.85) 0%, rgba(31,26,21,0.4) 40%, rgba(31,26,21,0.1) 70%, transparent 100%);
+        }
+
+        .hero__content {
+            position: relative;
+            z-index: 1;
+            color: white;
+            padding: 2rem 1.5rem 3rem;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .hero__eyebrow {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            opacity: 0.8;
+            margin-bottom: 0.75rem;
+        }
+        .hero__title {
+            font-size: clamp(1.75rem, 5vw, 3rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            max-width: 500px;
+        }
+        .hero__subtitle {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            max-width: 450px;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .hero__cta { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            transition: all var(--transition);
+        }
+        .btn--primary { background: var(--accent); color: white; }
+        .btn--primary:hover { background: var(--accent-dark); transform: translateY(-2px); }
+        .btn--outline { background: transparent; border: 2px solid rgba(255,255,255,0.4); color: white; }
+        .btn--outline:hover { border-color: white; background: rgba(255,255,255,0.1); }
+        .btn--large { padding: 1rem 2rem; font-size: 1rem; }
+        .btn--full { width: 100%; }
+
+        /* Video Button */
+        .hero__video {
+            position: absolute;
+            right: 1.5rem;
+            bottom: 3rem;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+        }
+        .video-play {
+            width: 56px;
+            height: 56px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform var(--transition), box-shadow var(--transition);
+        }
+        .video-play:hover { transform: scale(1.1); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+        .video-play svg { margin-left: 3px; color: var(--accent); }
+        .video-label { font-size: 0.7rem; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.1em; }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            opacity: 0.5;
+            font-size: 0.65rem;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            animation: bounce 2s infinite;
+        }
+        .scroll-indicator svg { margin-top: 0.5rem; }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-8px); }
+            60% { transform: translateX(-50%) translateY(-4px); }
+        }
+
+        @media (min-width: 768px) {
+            .hero__content { padding: 2rem 2rem 4rem; }
+            .hero__video { display: flex; right: 2rem; }
+        }
+        @media (min-width: 1024px) {
+            .hero { max-height: 100vh; }
+            .hero__title { font-size: 3.5rem; }
+        }
+
+        /* ==========================================================================
+           Gallery Section
+           ========================================================================== */
+        .gallery-section {
+            background: var(--bg-cream);
+            padding: 3rem 0 2rem;
+        }
+        .gallery-section__header {
+            text-align: center;
+            padding: 0 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .gallery-section__title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .gallery-section__subtitle {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .gallery-slider {
+            display: flex;
+            gap: 0.75rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding: 0 1.5rem 1rem;
+            scrollbar-width: none;
+        }
+        .gallery-slider::-webkit-scrollbar { display: none; }
+
+        .gallery-slide {
+            flex: 0 0 85%;
+            max-width: 700px;
+            scroll-snap-align: center;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+        }
+        .gallery-slide img {
+            width: 100%;
+            aspect-ratio: 16/10;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .gallery-slide:hover img { transform: scale(1.03); }
+        .gallery-slide__zoom {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity var(--transition);
+        }
+        .gallery-slide:hover .gallery-slide__zoom { opacity: 1; }
+
+        .gallery-hint {
+            text-align: center;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        @media (min-width: 768px) {
+            .gallery-section { padding: 4rem 0 2rem; }
+            .gallery-slide { flex: 0 0 60%; }
+        }
+        @media (min-width: 1024px) {
+            .gallery-slide { flex: 0 0 50%; max-width: 800px; }
+        }
+
+        /* ==========================================================================
+           Product Section
+           ========================================================================== */
+        .product-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+        }
+
+        @media (min-width: 1024px) {
+            .product-section {
+                display: grid;
+                grid-template-columns: 1fr 400px;
+                gap: 3rem;
+                padding: 4rem 2rem;
+            }
+        }
+
+        /* Product Content */
+        .product-content { margin-bottom: 2rem; }
+
+        .product-header { margin-bottom: 2rem; }
+        .product-header__meta {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .meta-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--bg-cream);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .meta-tag svg { color: var(--accent); flex-shrink: 0; }
+
+        .product-header__title {
+            font-size: clamp(1.5rem, 4vw, 2.25rem);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+        .product-header__desc {
+            font-size: 1rem;
+            color: var(--text-light);
+            max-width: 550px;
+            line-height: 1.7;
+        }
+
+        /* Stats Row */
+        .stats-row {
+            display: flex;
+            gap: 2rem;
+            padding: 1.5rem 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .stat {}
+        .stat__value { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+        .stat__label { font-size: 0.75rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.05em; }
+
+        /* ==========================================================================
+           Price Card (Sidebar)
+           ========================================================================== */
+        .price-card {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-lg);
+        }
+        @media (min-width: 1024px) {
+            .price-card {
+                position: sticky;
+                top: 100px;
+                padding: 2rem;
+            }
+        }
+
+        .price-card__header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .price-card__label { font-size: 0.85rem; color: var(--text-light); margin-bottom: 0.25rem; }
+        .price-card__price { font-size: 2.25rem; font-weight: 700; }
+        .price-card__price-value { transition: var(--transition); }
+
+        /* Package Tabs */
+        .package-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .package-tab {
+            flex: 1;
+            padding: 0.75rem 0.5rem;
+            text-align: center;
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--border);
+            background: transparent;
+            transition: all var(--transition);
+            position: relative;
+        }
+        .package-tab:hover { border-color: var(--accent); }
+        .package-tab--active {
+            border-color: var(--accent);
+            background: rgba(198,123,60,0.08);
+        }
+        .package-tab__badge {
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
+            color: white;
+            font-size: 0.55rem;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 10px;
+            white-space: nowrap;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .package-tab__name { display: block; font-size: 0.7rem; color: var(--text-light); margin-bottom: 0.125rem; }
+        .package-tab__price { display: block; font-size: 0.85rem; font-weight: 700; }
+
+        /* Features Panel */
+        .features-panel { margin-bottom: 1.5rem; }
+        .features-panel__content { display: none; }
+        .features-panel__content--active { display: block; }
+
+        .features-panel__list {
+            background: var(--bg-cream);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+        }
+        .features-panel__list li {
+            padding: 0.5rem 0;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+        .features-panel__list li::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            margin-top: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        /* CTA Buttons */
+        .price-card__cta { margin-bottom: 0.75rem; }
+        .price-card__secondary {
+            width: 100%;
+            padding: 0.875rem;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text);
+            transition: all var(--transition);
+        }
+        .price-card__secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+        .price-card__guarantee {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1.25rem;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+        .price-card__guarantee svg { color: var(--success); }
+
+        /* ==========================================================================
+           Compare Table
+           ========================================================================== */
+        .compare-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1.5rem 3rem;
+            display: none;
+        }
+        .compare-section--visible { display: block; }
+
+        .compare-table {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+        .compare-table__header {
+            display: grid;
+            grid-template-columns: 1fr repeat(3, 80px);
+            background: var(--bg-cream);
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+        .compare-table__col {
+            padding: 1rem 0.75rem;
+            text-align: center;
+        }
+        .compare-table__col--feature { text-align: left; }
+
+        .compare-table__section {
+            grid-column: 1 / -1;
+            background: var(--bg-warm);
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: var(--accent);
+        }
+
+        .compare-table__row {
+            display: grid;
+            grid-template-columns: 1fr repeat(3, 80px);
+            border-bottom: 1px solid var(--border);
+            font-size: 0.8rem;
+        }
+        .compare-table__row:last-child { border-bottom: none; }
+        .compare-table__row .compare-table__col { padding: 0.75rem; }
+        .compare-table__col--text { font-size: 0.75rem; color: var(--text-light); }
+        .compare-table__col--best { color: var(--accent); font-weight: 500; }
+
+        .compare-check, .compare-cross {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+        }
+        .compare-check {
+            background: var(--success);
+            position: relative;
+        }
+        .compare-check::after {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 4px;
+            width: 5px;
+            height: 8px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+        .compare-cross {
+            background: var(--border);
+            position: relative;
+        }
+        .compare-cross::before, .compare-cross::after {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 4px;
+            width: 2px;
+            height: 10px;
+            background: var(--text-muted);
+        }
+        .compare-cross::before { transform: rotate(45deg); }
+        .compare-cross::after { transform: rotate(-45deg); }
+
+        @media (min-width: 768px) {
+            .compare-table__header { grid-template-columns: 1fr repeat(3, 120px); }
+            .compare-table__row { grid-template-columns: 1fr repeat(3, 120px); }
+        }
+
+        /* ==========================================================================
+           Layouts Section
+           ========================================================================== */
+        .layouts-section {
+            background: var(--bg-cream);
+            padding: 3rem 1.5rem;
+        }
+        .section-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+        .section-header__title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .section-header__text { color: var(--text-light); font-size: 0.95rem; }
+
+        .layouts-grid {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            gap: 1rem;
+        }
+        @media (min-width: 640px) {
+            .layouts-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        .layout-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: transform var(--transition), box-shadow var(--transition);
+        }
+        .layout-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+        .layout-card img { aspect-ratio: 4/3; object-fit: cover; }
+        .layout-card__body { padding: 1.25rem; text-align: center; }
+        .layout-card__name { font-weight: 700; font-size: 1rem; margin-bottom: 0.25rem; }
+        .layout-card__desc { font-size: 0.85rem; color: var(--text-light); }
+
+        @media (min-width: 768px) {
+            .layouts-section { padding: 4rem 2rem; }
+        }
+
+        /* ==========================================================================
+           Features Section
+           ========================================================================== */
+        .features-section {
+            padding: 3rem 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .features-grid {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(2, 1fr);
+        }
+        @media (min-width: 768px) {
+            .features-grid { grid-template-columns: repeat(4, 1fr); }
+            .features-section { padding: 4rem 2rem; }
+        }
+
+        .feature-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow var(--transition);
+        }
+        .feature-card:hover { box-shadow: var(--shadow-md); }
+        .feature-card__icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1rem;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+        .feature-card__icon img { width: 100%; height: 100%; object-fit: cover; }
+        .feature-card__title { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.25rem; }
+        .feature-card__desc { font-size: 0.8rem; color: var(--text-light); }
+
+        /* ==========================================================================
+           CTA Section
+           ========================================================================== */
+        .cta-section {
+            padding: 3rem 1.5rem 4rem;
+        }
+        .cta-box {
+            max-width: 800px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, var(--accent) 0%, #8B5A2B 100%);
+            border-radius: var(--radius-xl);
+            padding: 3rem 2rem;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+        .cta-box__title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; position: relative; }
+        .cta-box__text { font-size: 1rem; opacity: 0.9; margin-bottom: 1.5rem; position: relative; }
+        .cta-box .btn--primary { background: white; color: var(--accent); }
+        .cta-box .btn--primary:hover { background: var(--bg); }
+        .cta-box__hint { font-size: 0.8rem; opacity: 0.8; margin-top: 1rem; position: relative; }
+
+        @media (min-width: 768px) {
+            .cta-section { padding: 4rem 2rem 5rem; }
+            .cta-box { padding: 4rem 3rem; }
+        }
+
+        /* ==========================================================================
+           Lightbox
+           ========================================================================== */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .lightbox--active { display: flex; }
+        .lightbox__overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.95);
+        }
+        .lightbox__content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+        }
+        .lightbox__image {
+            max-width: 100%;
+            max-height: 85vh;
+            border-radius: var(--radius-md);
+        }
+        .lightbox__close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            padding: 8px;
+        }
+        .lightbox__nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            padding: 1rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            transition: background var(--transition);
+        }
+        .lightbox__nav:hover { background: rgba(255,255,255,0.2); }
+        .lightbox__nav--prev { left: -60px; }
+        .lightbox__nav--next { right: -60px; }
+        .lightbox__counter {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .lightbox__nav--prev { left: 10px; }
+            .lightbox__nav--next { right: 10px; }
+        }
+
+        /* ==========================================================================
+           Mobile Menu
+           ========================================================================== */
+        .mobile-menu {
+            position: fixed;
+            inset: 0;
+            z-index: 1500;
+            background: var(--bg);
+            display: none;
+            flex-direction: column;
+            padding: 5rem 2rem 2rem;
+        }
+        .mobile-menu--active { display: flex; }
+        .mobile-menu__close {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            padding: 0.5rem;
+        }
+        .mobile-menu__nav { display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem; }
+        .mobile-menu__nav a { font-size: 1.25rem; font-weight: 600; }
+        .mobile-menu__phone { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+        .mobile-menu__hint { font-size: 0.85rem; color: var(--text-light); }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header header--light" id="header">
+        <a href="/" class="logo">С лёгким паром</a>
+        <nav class="header__nav">
+            <a href="/#projects">Проекты</a>
+            <a href="/dostavka">Доставка</a>
+            <a href="/about">О компании</a>
+        </nav>
+        <div class="header__right">
+            <a href="tel:88003500393" class="phone">8-800-350-03-93</a>
+            <span class="phone-hint">Бесплатно по России</span>
+        </div>
+        <button class="burger" id="burger-btn" aria-label="Меню">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobile-menu">
+        <button class="mobile-menu__close" id="menu-close">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+        <nav class="mobile-menu__nav">
+            <a href="/#projects">Проекты</a>
+            <a href="/dostavka">Доставка</a>
+            <a href="/about">О компании</a>
+        </nav>
+        <a href="tel:88003500393" class="mobile-menu__phone">8-800-350-03-93</a>
+        <span class="mobile-menu__hint">Бесплатно по России</span>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero__bg">
+            <img src="/images/proekty/2-3x4/main.webp" alt="Баня 2,3×4 м — вид снаружи" fetchpriority="high">
+        </div>
+        <div class="hero__overlay"></div>
+
+        <div class="hero__content">
+            <p class="hero__eyebrow">Готовая баня под ключ</p>
+            <h1 class="hero__title">Баня 2,3 × 4 м</h1>
+            <p class="hero__subtitle">Представьте: морозный вечер, за окном −20°C, а вы в жаркой парилке своей бани. Берёзовый веник, аромат хвои, раскалённые камни.</p>
+            <div class="hero__cta">
+                <a href="tel:88003500393" class="btn btn--primary btn--large">Заказать от 397 900 ₽</a>
+                <a href="#product" class="btn btn--outline">Подробнее</a>
+            </div>
+        </div>
+
+        <a href="https://vk.com/video" target="_blank" class="hero__video">
+            <span class="video-play">
+                <svg width="20" height="20" fill="currentColor"><polygon points="6 3 18 10 6 17"/></svg>
+            </span>
+            <span class="video-label">Видеообзор</span>
+        </a>
+
+        <div class="scroll-indicator">
+            Листайте
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Gallery -->
+    <section class="gallery-section">
+        <div class="gallery-section__header">
+            <h2 class="gallery-section__title">Фото готовых бань</h2>
+            <p class="gallery-section__subtitle">Реальные фото с нашего производства</p>
+        </div>
+        <div class="gallery-slider" id="gallery-slider">
+            <div class="gallery-slide" data-index="0">
+                <img src="/images/proekty/2-3x4/01.webp" alt="Интерьер бани" loading="lazy">
+                <span class="gallery-slide__zoom">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </span>
+            </div>
+            <div class="gallery-slide" data-index="1">
+                <img src="/images/proekty/2-3x4/02.webp" alt="Парилка" loading="lazy">
+                <span class="gallery-slide__zoom">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </span>
+            </div>
+            <div class="gallery-slide" data-index="2">
+                <img src="/images/proekty/2-3x4/03.webp" alt="Печь" loading="lazy">
+                <span class="gallery-slide__zoom">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </span>
+            </div>
+            <div class="gallery-slide" data-index="3">
+                <img src="/images/proekty/2-3x4/04.webp" alt="Полки" loading="lazy">
+                <span class="gallery-slide__zoom">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </span>
+            </div>
+            <div class="gallery-slide" data-index="4">
+                <img src="/images/proekty/2-3x4/05.webp" alt="Моечная" loading="lazy">
+                <span class="gallery-slide__zoom">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </span>
+            </div>
+            <div class="gallery-slide" data-index="5">
+                <img src="/images/proekty/2-3x4/06.webp" alt="Комната отдыха" loading="lazy">
+                <span class="gallery-slide__zoom">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </span>
+            </div>
+            <div class="gallery-slide" data-index="6">
+                <img src="/images/proekty/2-3x4/07.webp" alt="Вид снаружи" loading="lazy">
+                <span class="gallery-slide__zoom">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </span>
+            </div>
+            <div class="gallery-slide" data-index="7">
+                <img src="/images/proekty/2-3x4/08.webp" alt="Детали" loading="lazy">
+                <span class="gallery-slide__zoom">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </span>
+            </div>
+        </div>
+        <p class="gallery-hint">← Листайте фото →</p>
+    </section>
+
+    <!-- Product Section -->
+    <section class="product-section" id="product">
+        <div class="product-content">
+            <div class="product-header">
+                <div class="product-header__meta">
+                    <span class="meta-tag">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7" cy="7" r="6"/><path d="M7 4v3l2 1"/></svg>
+                        Изготовим за 4 дня
+                    </span>
+                    <span class="meta-tag">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="10" height="10" rx="2"/><path d="M2 5h10"/><path d="M5 12V5"/></svg>
+                        3 планировки
+                    </span>
+                </div>
+                <h2 class="product-header__title">Компактная баня для дачи</h2>
+                <p class="product-header__desc">Размер 2,3 × 4 метра — идеальный баланс между пространством и ценой. Парилка, моечная и раздевалка. Устанавливается даже на небольшом участке. Изготавливаем на собственном производстве в Пестово без посредников.</p>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat">
+                    <div class="stat__value">4 дня</div>
+                    <div class="stat__label">Изготовление</div>
+                </div>
+                <div class="stat">
+                    <div class="stat__value">1 год</div>
+                    <div class="stat__label">Гарантия</div>
+                </div>
+                <div class="stat">
+                    <div class="stat__value">3</div>
+                    <div class="stat__label">Планировки</div>
+                </div>
+                <div class="stat">
+                    <div class="stat__value">9,2 м²</div>
+                    <div class="stat__label">Площадь</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Price Card -->
+        <div class="price-card">
+            <div class="price-card__header">
+                <div class="price-card__label">Цена от</div>
+                <div class="price-card__price"><span class="price-card__price-value" id="current-price">397 900</span> ₽</div>
+            </div>
+
+            <div class="package-tabs">
+                <button class="package-tab package-tab--active" data-package="base" data-price="397900">
+                    <span class="package-tab__name">Базовая</span>
+                    <span class="package-tab__price">397 900</span>
+                </button>
+                <button class="package-tab" data-package="comfort" data-price="469900">
+                    <span class="package-tab__badge">Выбирают чаще</span>
+                    <span class="package-tab__name">Комфорт</span>
+                    <span class="package-tab__price">469 900</span>
+                </button>
+                <button class="package-tab" data-package="max" data-price="612000">
+                    <span class="package-tab__name">Максимум</span>
+                    <span class="package-tab__price">612 000</span>
+                </button>
+            </div>
+
+            <div class="features-panel">
+                <div class="features-panel__content features-panel__content--active" data-panel="base">
+                    <ul class="features-panel__list">
+                        <li>Парилка зашита осиновой вагонкой без сучков через фольгу</li>
+                        <li>Тёплый угол</li>
+                        <li>Высокий конёк 30 см</li>
+                        <li>Обработка основания маслом</li>
+                        <li>Печь Ермак 12-Т + 40 кг камней</li>
+                        <li>Электрика в цвет дерева</li>
+                        <li>Слив в центре пола или душевой поддон</li>
+                    </ul>
+                </div>
+                <div class="features-panel__content" data-panel="comfort">
+                    <ul class="features-panel__list">
+                        <li>Всё из «Базовой» +</li>
+                        <li>Клиновые двери с шариковыми фиксаторами</li>
+                        <li>Высокий конёк 45 см</li>
+                        <li>Потолок в виде арки</li>
+                        <li>Цветная кровля на выбор</li>
+                        <li>Обработка чернового пола маслом</li>
+                        <li>Заводские экраны по периметру печи</li>
+                        <li>Широкие двухъярусные полки</li>
+                        <li>Слив по авторской технологии «Жёлоб»</li>
+                    </ul>
+                </div>
+                <div class="features-panel__content" data-panel="max">
+                    <ul class="features-panel__list">
+                        <li>Всё из «Комфорта» +</li>
+                        <li>Брус камерной сушки</li>
+                        <li>Усиленное основание</li>
+                        <li>Утолщённые доски пола 36 мм</li>
+                        <li>Двойное утепление потолка и пола 100 мм</li>
+                        <li>Цветная металлочерепица</li>
+                        <li>Резные заводские наличники</li>
+                        <li>Печь Grill'd Cometa Vega Long + 100 кг камней</li>
+                        <li>Полки без сучков + спинка + светильник</li>
+                        <li>Банные принадлежности, табличка, термометр</li>
+                    </ul>
+                </div>
+            </div>
+
+            <a href="tel:88003500393" class="btn btn--primary btn--full price-card__cta">Заказать баню</a>
+            <button class="price-card__secondary" id="toggle-compare">Сравнить комплектации</button>
+
+            <p class="price-card__guarantee">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 14s6-3 6-7.5V3L8 1 2 3v3.5C2 11 8 14 8 14z"/></svg>
+                Гарантия 1 год на всё
+            </p>
+        </div>
+    </section>
+
+    <!-- Compare Table -->
+    <section class="compare-section" id="compare-section">
+        <div class="compare-table">
+            <div class="compare-table__header">
+                <div class="compare-table__col compare-table__col--feature">Характеристика</div>
+                <div class="compare-table__col">Базовая</div>
+                <div class="compare-table__col">Комфорт</div>
+                <div class="compare-table__col">Максимум</div>
+            </div>
+
+            <div class="compare-table__section">Фундамент и основание</div>
+            <div class="compare-table__row">
+                <div class="compare-table__col compare-table__col--feature">Фундамент из бетонных блоков 200×200×400</div>
+                <div class="compare-table__col"><span class="compare-check"></span></div>
+                <div class="compare-table__col"><span class="compare-check"></span></div>
+                <div class="compare-table__col"><span class="compare-check"></span></div>
+            </div>
+            <div class="compare-table__row">
+                <div class="compare-table__col compare-table__col--feature">Лаги</div>
+                <div class="compare-table__col compare-table__col--text">40×100, шаг 0,7 м</div>
+                <div class="compare-table__col compare-table__col--text">40×100, шаг 0,5 м</div>
+                <div class="compare-table__col compare-table__col--text compare-table__col--best">100×150, шаг 0,5 м</div>
+            </div>
+
+            <div class="compare-table__section">Стены и конструкция</div>
+            <div class="compare-table__row">
+                <div class="compare-table__col compare-table__col--feature">Стены из бруса или каркасные</div>
+                <div class="compare-table__col"><span class="compare-check"></span></div>
+                <div class="compare-table__col"><span class="compare-check"></span></div>
+                <div class="compare-table__col"><span class="compare-check"></span></div>
+            </div>
+            <div class="compare-table__row">
+                <div class="compare-table__col compare-table__col--feature">Брус камерной сушки</div>
+                <div class="compare-table__col"><span class="compare-cross"></span></div>
+                <div class="compare-table__col"><span class="compare-cross"></span></div>
+                <div class="compare-table__col"><span class="compare-check"></span></div>
+            </div>
+
+            <div class="compare-table__section">Крыша и потолок</div>
+            <div class="compare-table__row">
+                <div class="compare-table__col compare-table__col--feature">Высота конька</div>
+                <div class="compare-table__col compare-table__col--text">30 см</div>
+                <div class="compare-table__col compare-table__col--text compare-table__col--best">45 см</div>
+                <div class="compare-table__col compare-table__col--text compare-table__col--best">45 см</div>
+            </div>
+            <div class="compare-table__row">
+                <div class="compare-table__col compare-table__col--feature">Арочный потолок</div>
+                <div class="compare-table__col"><span class="compare-cross"></span></div>
+                <div class="compare-table__col"><span class="compare-check"></span></div>
+                <div class="compare-table__col"><span class="compare-check"></span></div>
+            </div>
+            <div class="compare-table__row">
+                <div class="compare-table__col compare-table__col--feature">Кровля</div>
+                <div class="compare-table__col compare-table__col--text">оцинкованный профнастил</div>
+                <div class="compare-table__col compare-table__col--text">цветной профнастил</div>
+                <div class="compare-table__col compare-table__col--text compare-table__col--best">металлочерепица</div>
+            </div>
+
+            <div class="compare-table__section">Печь и дымоход</div>
+            <div class="compare-table__row">
+                <div class="compare-table__col compare-table__col--feature">Печь</div>
+                <div class="compare-table__col compare-table__col--text">Ермак 12-Т</div>
+                <div class="compare-table__col compare-table__col--text">Ермак 12-Т + экраны</div>
+                <div class="compare-table__col compare-table__col--text compare-table__col--best">Grill'd Cometa Vega</div>
+            </div>
+            <div class="compare-table__row">
+                <div class="compare-table__col compare-table__col--feature">Камни для печи</div>
+                <div class="compare-table__col compare-table__col--text">40 кг</div>
+                <div class="compare-table__col compare-table__col--text">40 кг</div>
+                <div class="compare-table__col compare-table__col--text compare-table__col--best">100 кг</div>
+            </div>
+
+            <div class="compare-table__section">Утепление</div>
+            <div class="compare-table__row">
+                <div class="compare-table__col compare-table__col--feature">Утепление пола и потолка</div>
+                <div class="compare-table__col compare-table__col--text">50 мм</div>
+                <div class="compare-table__col compare-table__col--text">50 мм</div>
+                <div class="compare-table__col compare-table__col--text compare-table__col--best">100 мм</div>
+            </div>
+
+            <div class="compare-table__section">Интерьер</div>
+            <div class="compare-table__row">
+                <div class="compare-table__col compare-table__col--feature">Полки из древесины без сучков + спинка</div>
+                <div class="compare-table__col"><span class="compare-cross"></span></div>
+                <div class="compare-table__col"><span class="compare-cross"></span></div>
+                <div class="compare-table__col"><span class="compare-check"></span></div>
+            </div>
+            <div class="compare-table__row">
+                <div class="compare-table__col compare-table__col--feature">Слив по технологии «Жёлоб»</div>
+                <div class="compare-table__col"><span class="compare-cross"></span></div>
+                <div class="compare-table__col"><span class="compare-check"></span></div>
+                <div class="compare-table__col"><span class="compare-check"></span></div>
+            </div>
+
+            <div class="compare-table__section">Бонусы</div>
+            <div class="compare-table__row">
+                <div class="compare-table__col compare-table__col--feature">Ступенька, термометр, табличка, принадлежности</div>
+                <div class="compare-table__col"><span class="compare-cross"></span></div>
+                <div class="compare-table__col"><span class="compare-cross"></span></div>
+                <div class="compare-table__col"><span class="compare-check"></span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Layouts -->
+    <section class="layouts-section">
+        <div class="section-header">
+            <h2 class="section-header__title">3 планировки на выбор</h2>
+            <p class="section-header__text">Выберите удобное расположение помещений под ваши задачи</p>
+        </div>
+        <div class="layouts-grid">
+            <div class="layout-card">
+                <img src="/images/banya-winter-1.png" alt="Планировка 1" loading="lazy">
+                <div class="layout-card__body">
+                    <div class="layout-card__name">Планировка №1</div>
+                    <div class="layout-card__desc">Парилка + моечная + раздевалка</div>
+                </div>
+            </div>
+            <div class="layout-card">
+                <img src="/images/banya-winter-2.png" alt="Планировка 2" loading="lazy">
+                <div class="layout-card__body">
+                    <div class="layout-card__name">Планировка №2</div>
+                    <div class="layout-card__desc">Парилка + комната отдыха</div>
+                </div>
+            </div>
+            <div class="layout-card">
+                <img src="/images/banya-winter-3.png" alt="Планировка 3" loading="lazy">
+                <div class="layout-card__body">
+                    <div class="layout-card__name">Планировка №3</div>
+                    <div class="layout-card__desc">Большая парилка + моечная</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features-section">
+        <div class="section-header">
+            <h2 class="section-header__title">Что входит в комплектацию</h2>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-card__icon">
+                    <img src="/images/banya-winter-1.png" alt="">
+                </div>
+                <div class="feature-card__title">Стены из массива бруса</div>
+                <div class="feature-card__desc">Профилированный брус 90×140 мм</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-card__icon">
+                    <img src="/images/banya-winter-2.png" alt="">
+                </div>
+                <div class="feature-card__title">Заводская печь</div>
+                <div class="feature-card__desc">Ермак или Grill'D с гарантией</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-card__icon">
+                    <img src="/images/banya-winter-3.png" alt="">
+                </div>
+                <div class="feature-card__title">Безопасная электрика</div>
+                <div class="feature-card__desc">Термостойкий провод, влагозащита</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-card__icon">
+                    <img src="/images/banya-winter-1.png" alt="">
+                </div>
+                <div class="feature-card__title">Утеплитель Knauf</div>
+                <div class="feature-card__desc">Потолок и пол утеплены</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="cta-box">
+            <h2 class="cta-box__title">Остались вопросы?</h2>
+            <p class="cta-box__text">Позвоните — расскажем подробнее и поможем выбрать комплектацию</p>
+            <a href="tel:88003500393" class="btn btn--primary btn--large">8-800-350-03-93</a>
+            <p class="cta-box__hint">Бесплатно по России, с 8:00 до 24:00</p>
+        </div>
+    </section>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox__overlay"></div>
+        <div class="lightbox__content">
+            <button class="lightbox__close" aria-label="Закрыть">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <button class="lightbox__nav lightbox__nav--prev" aria-label="Предыдущее">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+            <img src="" alt="" class="lightbox__image" id="lightbox-image">
+            <button class="lightbox__nav lightbox__nav--next" aria-label="Следующее">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+            <div class="lightbox__counter" id="lightbox-counter">1 / 8</div>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        'use strict';
+
+        // ==========================================================================
+        // Header scroll effect
+        // ==========================================================================
+        const header = document.getElementById('header');
+        let lastScroll = 0;
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            if (currentScroll > 100) {
+                header.classList.add('header--scrolled');
+            } else {
+                header.classList.remove('header--scrolled');
+            }
+            lastScroll = currentScroll;
+        });
+
+        // ==========================================================================
+        // Mobile menu
+        // ==========================================================================
+        const burgerBtn = document.getElementById('burger-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuClose = document.getElementById('menu-close');
+
+        burgerBtn?.addEventListener('click', () => {
+            mobileMenu.classList.add('mobile-menu--active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        menuClose?.addEventListener('click', () => {
+            mobileMenu.classList.remove('mobile-menu--active');
+            document.body.style.overflow = '';
+        });
+
+        mobileMenu?.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('mobile-menu--active');
+                document.body.style.overflow = '';
+            });
+        });
+
+        // ==========================================================================
+        // Package tabs
+        // ==========================================================================
+        const packageTabs = document.querySelectorAll('.package-tab');
+        const featuresPanels = document.querySelectorAll('.features-panel__content');
+        const priceDisplay = document.getElementById('current-price');
+
+        packageTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const pkg = tab.dataset.package;
+                const price = tab.dataset.price;
+
+                // Update tabs
+                packageTabs.forEach(t => t.classList.remove('package-tab--active'));
+                tab.classList.add('package-tab--active');
+
+                // Update panels
+                featuresPanels.forEach(panel => {
+                    panel.classList.remove('features-panel__content--active');
+                    if (panel.dataset.panel === pkg) {
+                        panel.classList.add('features-panel__content--active');
+                    }
+                });
+
+                // Update price with animation
+                priceDisplay.style.opacity = '0';
+                setTimeout(() => {
+                    priceDisplay.textContent = Number(price).toLocaleString('ru-RU');
+                    priceDisplay.style.opacity = '1';
+                }, 150);
+            });
+        });
+
+        // ==========================================================================
+        // Compare table toggle
+        // ==========================================================================
+        const toggleCompare = document.getElementById('toggle-compare');
+        const compareSection = document.getElementById('compare-section');
+
+        toggleCompare?.addEventListener('click', () => {
+            compareSection.classList.toggle('compare-section--visible');
+            toggleCompare.textContent = compareSection.classList.contains('compare-section--visible')
+                ? 'Скрыть сравнение'
+                : 'Сравнить комплектации';
+
+            if (compareSection.classList.contains('compare-section--visible')) {
+                compareSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+
+        // ==========================================================================
+        // Lightbox
+        // ==========================================================================
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImage = document.getElementById('lightbox-image');
+        const lightboxCounter = document.getElementById('lightbox-counter');
+        const gallerySlides = document.querySelectorAll('.gallery-slide');
+        let currentIndex = 0;
+
+        const images = Array.from(gallerySlides).map(slide => slide.querySelector('img').src);
+
+        function openLightbox(index) {
+            currentIndex = index;
+            lightboxImage.src = images[currentIndex];
+            lightboxCounter.textContent = `${currentIndex + 1} / ${images.length}`;
+            lightbox.classList.add('lightbox--active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('lightbox--active');
+            document.body.style.overflow = '';
+        }
+
+        function nextImage() {
+            currentIndex = (currentIndex + 1) % images.length;
+            lightboxImage.src = images[currentIndex];
+            lightboxCounter.textContent = `${currentIndex + 1} / ${images.length}`;
+        }
+
+        function prevImage() {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            lightboxImage.src = images[currentIndex];
+            lightboxCounter.textContent = `${currentIndex + 1} / ${images.length}`;
+        }
+
+        gallerySlides.forEach((slide, index) => {
+            slide.addEventListener('click', () => openLightbox(index));
+        });
+
+        lightbox.querySelector('.lightbox__overlay').addEventListener('click', closeLightbox);
+        lightbox.querySelector('.lightbox__close').addEventListener('click', closeLightbox);
+        lightbox.querySelector('.lightbox__nav--next').addEventListener('click', nextImage);
+        lightbox.querySelector('.lightbox__nav--prev').addEventListener('click', prevImage);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (!lightbox.classList.contains('lightbox--active')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowRight') nextImage();
+            if (e.key === 'ArrowLeft') prevImage();
+        });
+
+        // ==========================================================================
+        // Smooth scroll for anchor links
+        // ==========================================================================
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+    })();
+    </script>
+</body>
+</html>
