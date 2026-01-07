@@ -1,1042 +1,815 @@
 ---
-// Вариант 5: "Помощник в выборе" — Интерактивный квиз-лендинг
-// Концепция: Помогаем выбрать идеальную баню через простой квиз
+// V5 - Editorial Magazine (Zurich style)
+// Magazine layout, huge typography, asymmetric grid, pull quotes
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const projects = [
+  { size: '2×3', price: '364 900 ₽', img: '/images/proekty/2-3x3/main.webp', link: '/proekty/2-3x3/' },
+  { size: '2.5×3', price: '394 900 ₽', img: '/images/proekty/2-3x4/main.webp', link: '/proekty/2-3x4/' },
+  { size: '3×3', price: '409 900 ₽', img: '/images/banya-winter-3.png', link: '/proekty/2-3x5/' },
+  { size: '3.5×3', price: '449 900 ₽', img: '/images/proekty/2-3x6/main.webp', link: '/proekty/2-3x6/' },
+  { size: '4×3', price: '459 900 ₽', img: '/images/banya-winter-1.png', link: '/proekty/2-3x7/' },
+  { size: '4.5×3', price: '499 900 ₽', img: '/images/proekty/2-3x8/main.webp', link: '/proekty/2-3x8/' },
+];
+
+const reviews = [
+  {
+    name: 'Александр',
+    location: 'Московская область',
+    text: 'Заказывали баню-бочку 4 метра. Привезли и установили за один день, как и обещали. Качество отличное, париться одно удовольствие. Жена довольна, дети в восторге!'
+  },
+  {
+    name: 'Елена',
+    location: 'Тверская область',
+    text: 'Долго выбирали между разными производителями. Остановились на этой компании из-за честных цен и хороших отзывов. Не пожалели ни разу!'
+  },
+  {
+    name: 'Михаил',
+    location: 'Владимирская область',
+    text: 'Баня греется быстро, держит тепло хорошо. Уже год пользуемся, никаких проблем. Рекомендую всем соседям.'
+  }
+];
 ---
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>С лёгким паром — Подберём идеальную баню за 2 минуты</title>
-    <meta name="description" content="Ответьте на 3 вопроса и получите персональную рекомендацию бани. Бесплатно.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-        :root {
-            --bg: #FFFFFF;
-            --bg-soft: #F7F8FA;
-            --bg-accent: #EEF4FF;
-            --text: #1F2937;
-            --text-secondary: #6B7280;
-            --accent: #4F46E5;
-            --accent-hover: #4338CA;
-            --accent-light: #C7D2FE;
-            --success: #10B981;
-            --white: #FFFFFF;
-            --border: #E5E7EB;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
-
-        html { font-size: 16px; scroll-behavior: smooth; }
-        body {
-            font-family: 'Nunito', -apple-system, sans-serif;
-            color: var(--text);
-            background: var(--bg);
-            line-height: 1.6;
-        }
-
-        a { color: inherit; text-decoration: none; }
-        img { max-width: 100%; height: auto; display: block; }
-
-        /* Header — Дружелюбный */
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            padding: 1rem 1.5rem;
-            background: var(--white);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .header-inner {
-            max-width: 1100px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-weight: 800;
-            font-size: 1.125rem;
-            color: var(--text);
-        }
-
-        .logo span {
-            color: var(--accent);
-        }
-
-        .header-phone {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-weight: 600;
-            font-size: 0.9375rem;
-            color: var(--text);
-        }
-
-        .header-phone-icon {
-            width: 36px;
-            height: 36px;
-            background: var(--bg-accent);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--accent);
-        }
-
-        /* Hero — Квиз на первом экране */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 6rem 1.5rem 3rem;
-            background: linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%);
-        }
-
-        .hero-inner {
-            max-width: 1100px;
-            margin: 0 auto;
-            width: 100%;
-            display: grid;
-            gap: 3rem;
-        }
-
-        .hero-content {
-            text-align: center;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: var(--bg-accent);
-            color: var(--accent);
-            font-weight: 600;
-            font-size: 0.8125rem;
-            border-radius: 100px;
-            margin-bottom: 1.5rem;
-        }
-
-        .hero h1 {
-            font-size: clamp(1.75rem, 5vw, 2.75rem);
-            font-weight: 800;
-            line-height: 1.2;
-            margin-bottom: 1rem;
-            letter-spacing: -0.02em;
-        }
-
-        .hero-subtitle {
-            font-size: 1.125rem;
-            color: var(--text-secondary);
-            max-width: 500px;
-            margin: 0 auto 2rem;
-        }
-
-        /* Quiz Card */
-        .quiz-card {
-            background: var(--white);
-            border-radius: 24px;
-            padding: 2rem;
-            box-shadow: var(--shadow), 0 20px 50px rgba(79, 70, 229, 0.1);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .quiz-progress {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .quiz-progress-step {
-            flex: 1;
-            height: 4px;
-            background: var(--border);
-            border-radius: 2px;
-            transition: background 0.3s;
-        }
-
-        .quiz-progress-step.active {
-            background: var(--accent);
-        }
-
-        .quiz-progress-step.done {
-            background: var(--success);
-        }
-
-        .quiz-question {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .quiz-question-number {
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 0.5rem;
-        }
-
-        .quiz-question h2 {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .quiz-options {
-            display: grid;
-            gap: 0.75rem;
-        }
-
-        .quiz-option {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem 1.25rem;
-            background: var(--bg-soft);
-            border: 2px solid transparent;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .quiz-option:hover {
-            background: var(--bg-accent);
-            border-color: var(--accent-light);
-        }
-
-        .quiz-option.selected {
-            background: var(--bg-accent);
-            border-color: var(--accent);
-        }
-
-        .quiz-option-icon {
-            width: 48px;
-            height: 48px;
-            background: var(--white);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            flex-shrink: 0;
-        }
-
-        .quiz-option-content {
-            text-align: left;
-        }
-
-        .quiz-option-title {
-            font-weight: 700;
-            margin-bottom: 0.125rem;
-        }
-
-        .quiz-option-desc {
-            font-size: 0.8125rem;
-            color: var(--text-secondary);
-        }
-
-        .quiz-option-check {
-            margin-left: auto;
-            width: 24px;
-            height: 24px;
-            border: 2px solid var(--border);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-        }
-
-        .quiz-option.selected .quiz-option-check {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: var(--white);
-        }
-
-        .quiz-nav {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--border);
-        }
-
-        .btn-back {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1rem;
-            color: var(--text-secondary);
-            font-weight: 600;
-            font-size: 0.9375rem;
-            background: none;
-            border: none;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .btn-back:hover {
-            color: var(--text);
-        }
-
-        .btn-next {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.875rem 1.5rem;
-            background: var(--accent);
-            color: var(--white);
-            font-weight: 700;
-            font-size: 0.9375rem;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-next:hover {
-            background: var(--accent-hover);
-            transform: translateY(-1px);
-        }
-
-        .btn-next:disabled {
-            background: var(--border);
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* Result */
-        .quiz-result {
-            display: none;
-            text-align: center;
-        }
-
-        .quiz-result.active {
-            display: block;
-        }
-
-        .result-icon {
-            width: 64px;
-            height: 64px;
-            background: linear-gradient(135deg, var(--accent) 0%, #7C3AED 100%);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.5rem;
-            color: var(--white);
-            font-size: 2rem;
-        }
-
-        .result-title {
-            font-size: 1.5rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
-        }
-
-        .result-subtitle {
-            color: var(--text-secondary);
-            margin-bottom: 2rem;
-        }
-
-        .result-card {
-            background: var(--bg-soft);
-            border-radius: 16px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .result-card img {
-            border-radius: 12px;
-            margin-bottom: 1rem;
-            aspect-ratio: 16/9;
-            object-fit: cover;
-        }
-
-        .result-card-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin-bottom: 0.25rem;
-        }
-
-        .result-card-price {
-            color: var(--accent);
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .result-card-desc {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-        }
-
-        .result-cta {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .btn-call {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            padding: 1rem 2rem;
-            background: var(--accent);
-            color: var(--white);
-            font-weight: 700;
-            font-size: 1rem;
-            border-radius: 12px;
-            transition: all 0.2s;
-        }
-
-        .btn-call:hover {
-            background: var(--accent-hover);
-            transform: translateY(-2px);
-        }
-
-        .btn-projects {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            padding: 1rem 2rem;
-            background: var(--bg-soft);
-            color: var(--text);
-            font-weight: 600;
-            font-size: 1rem;
-            border-radius: 12px;
-            transition: all 0.2s;
-        }
-
-        .btn-projects:hover {
-            background: var(--border);
-        }
-
-        /* Trust */
-        .trust {
-            padding: 4rem 1.5rem;
-            background: var(--bg);
-        }
-
-        .trust-inner {
-            max-width: 900px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .trust h2 {
-            font-size: clamp(1.5rem, 4vw, 2rem);
-            font-weight: 800;
-            margin-bottom: 3rem;
-        }
-
-        .trust-grid {
-            display: grid;
-            gap: 2rem;
-        }
-
-        .trust-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            text-align: left;
-        }
-
-        .trust-icon {
-            width: 56px;
-            height: 56px;
-            background: var(--bg-accent);
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            flex-shrink: 0;
-        }
-
-        .trust-item h3 {
-            font-size: 1rem;
-            font-weight: 700;
-            margin-bottom: 0.25rem;
-        }
-
-        .trust-item p {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-        }
-
-        /* Products Preview */
-        .products {
-            padding: 4rem 1.5rem;
-            background: var(--bg-soft);
-        }
-
-        .products-inner {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .products-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .products-header h2 {
-            font-size: clamp(1.5rem, 4vw, 2rem);
-            font-weight: 800;
-            margin-bottom: 0.5rem;
-        }
-
-        .products-header p {
-            color: var(--text-secondary);
-        }
-
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1rem;
-        }
-
-        .product-card {
-            background: var(--white);
-            border-radius: 16px;
-            overflow: hidden;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .product-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow);
-        }
-
-        .product-card img {
-            width: 100%;
-            aspect-ratio: 4/3;
-            object-fit: cover;
-        }
-
-        .product-info {
-            padding: 1rem;
-        }
-
-        .product-size {
-            font-weight: 700;
-            margin-bottom: 0.25rem;
-        }
-
-        .product-price {
-            color: var(--accent);
-            font-weight: 600;
-            font-size: 0.9375rem;
-        }
-
-        /* CTA */
-        .cta {
-            padding: 4rem 1.5rem;
-            background: var(--accent);
-            color: var(--white);
-            text-align: center;
-        }
-
-        .cta-inner {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .cta h2 {
-            font-size: clamp(1.5rem, 4vw, 2rem);
-            font-weight: 800;
-            margin-bottom: 1rem;
-        }
-
-        .cta p {
-            opacity: 0.9;
-            margin-bottom: 2rem;
-        }
-
-        .cta-phone {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--white);
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-
-        .cta-hint {
-            font-size: 0.875rem;
-            opacity: 0.8;
-        }
-
-        /* Footer */
-        .footer {
-            padding: 2rem 1.5rem;
-            background: var(--bg);
-            text-align: center;
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-        }
-
-        /* Responsive */
-        @media (min-width: 640px) {
-            .trust-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-
-        @media (min-width: 768px) {
-            .header { padding: 1rem 2rem; }
-            .hero { padding: 8rem 2rem 4rem; }
-            .hero-inner { grid-template-columns: 1fr 1fr; align-items: center; text-align: left; }
-            .hero-content { text-align: left; }
-            .hero-subtitle { margin-left: 0; margin-right: 0; }
-            .quiz-card { margin: 0; }
-        }
-
-        @media (min-width: 1024px) {
-            .trust-grid { grid-template-columns: repeat(4, 1fr); }
-        }
-
-        /* Quiz hide class */
-        .quiz-step { display: none; }
-        .quiz-step.active { display: block; }
-    </style>
-</head>
-<body>
-    <header class="header">
-        <div class="header-inner">
-            <a href="/" class="logo">С лёгким <span>паром</span></a>
-            <a href="tel:88003500393" class="header-phone">
-                <span class="header-phone-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-                    </svg>
-                </span>
-                8-800-350-03-93
-            </a>
+
+<BaseLayout title="Бани-бочки под ключ — С лёгким паром">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&family=Source+Sans+3:wght@300;400;500;600&display=swap');
+
+    :root {
+      --bg: #FAFAF8;
+      --bg-dark: #1A1A1A;
+      --text: #1A1A1A;
+      --text-light: #666666;
+      --accent: #C45C26;
+      --serif: 'Playfair Display', Georgia, serif;
+      --sans: 'Source Sans 3', -apple-system, sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      font-weight: 300;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Header - Magazine masthead */
+    .masthead {
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #E5E5E5;
+    }
+
+    .masthead-logo {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .masthead-nav {
+      display: flex;
+      gap: 32px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .masthead-nav a:hover {
+      color: var(--accent);
+    }
+
+    .masthead-phone {
+      font-weight: 500;
+    }
+
+    /* Hero - Magazine cover */
+    .cover {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 90vh;
+    }
+
+    .cover-text {
+      padding: 80px 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .cover-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      margin-bottom: 24px;
+    }
+
+    .cover h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 32px;
+    }
+
+    .cover h1 em {
+      font-style: italic;
+    }
+
+    .cover-subtitle {
+      font-size: 1.25rem;
+      color: var(--text-light);
+      max-width: 400px;
+      margin-bottom: 48px;
+      font-weight: 300;
+    }
+
+    .cover-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      border-bottom: 2px solid var(--text);
+      padding-bottom: 8px;
+      transition: all 0.3s;
+    }
+
+    .cover-cta:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .cover-image {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cover-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .cover-image-caption {
+      position: absolute;
+      bottom: 40px;
+      left: 40px;
+      background: white;
+      padding: 16px 24px;
+      font-size: 0.875rem;
+    }
+
+    .cover-image-caption strong {
+      display: block;
+      font-weight: 600;
+    }
+
+    /* Stats strip */
+    .stats-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid #E5E5E5;
+      border-bottom: 1px solid #E5E5E5;
+    }
+
+    .stat-item {
+      padding: 40px;
+      text-align: center;
+      border-right: 1px solid #E5E5E5;
+    }
+
+    .stat-item:last-child {
+      border-right: none;
+    }
+
+    .stat-number {
+      font-family: var(--serif);
+      font-size: 3rem;
+      font-weight: 400;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-light);
+    }
+
+    /* Editorial section */
+    .editorial {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 80px;
+      padding: 100px 60px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .editorial-sidebar {
+      position: sticky;
+      top: 100px;
+      height: fit-content;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-family: var(--serif);
+      font-size: 2.5rem;
+      font-weight: 400;
+      line-height: 1.2;
+      margin-bottom: 24px;
+    }
+
+    .section-intro {
+      font-size: 1rem;
+      color: var(--text-light);
+      line-height: 1.8;
+    }
+
+    /* Project grid - Magazine layout */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 40px;
+    }
+
+    .project-item {
+      display: block;
+    }
+
+    .project-item:nth-child(1) {
+      grid-column: span 2;
+    }
+
+    .project-item:nth-child(1) .project-image {
+      height: 500px;
+    }
+
+    .project-image {
+      height: 300px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .project-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .project-item:hover .project-image img {
+      transform: scale(1.03);
+    }
+
+    .project-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .project-size {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+    }
+
+    .project-price {
+      font-size: 1rem;
+      color: var(--text-light);
+    }
+
+    /* Pull quote */
+    .pullquote {
+      padding: 100px 60px;
+      background: var(--bg-dark);
+      color: white;
+    }
+
+    .pullquote-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .pullquote-mark {
+      font-family: var(--serif);
+      font-size: 6rem;
+      line-height: 1;
+      color: var(--accent);
+      margin-bottom: -20px;
+    }
+
+    .pullquote-text {
+      font-family: var(--serif);
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.4;
+      margin-bottom: 40px;
+    }
+
+    .pullquote-author {
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      opacity: 0.7;
+    }
+
+    /* Benefits - Magazine article style */
+    .benefits {
+      padding: 100px 60px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .benefits-header {
+      text-align: center;
+      margin-bottom: 80px;
+    }
+
+    .benefits-grid {
+      display: grid;
+      gap: 60px;
+    }
+
+    .benefit-item {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    .benefit-number {
+      font-family: var(--serif);
+      font-size: 4rem;
+      font-weight: 400;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .benefit-content h3 {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin-bottom: 12px;
+    }
+
+    .benefit-content p {
+      color: var(--text-light);
+      line-height: 1.8;
+    }
+
+    /* Reviews - Testimonials */
+    .reviews {
+      padding: 100px 60px;
+      background: #F0EDE8;
+    }
+
+    .reviews-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .review-item {
+      background: white;
+      padding: 40px;
+    }
+
+    .review-text {
+      font-size: 1rem;
+      line-height: 1.8;
+      margin-bottom: 24px;
+      font-style: italic;
+    }
+
+    .review-author {
+      font-size: 0.875rem;
+    }
+
+    .review-author strong {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .review-author span {
+      color: var(--text-light);
+    }
+
+    /* Geography */
+    .geography {
+      padding: 100px 60px;
+    }
+
+    .geography-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .geography h2 {
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-weight: 400;
+      margin-bottom: 40px;
+    }
+
+    .geography-list {
+      font-size: 1rem;
+      color: var(--text-light);
+      line-height: 2;
+    }
+
+    /* CTA - Magazine subscription style */
+    .cta {
+      padding: 80px 60px;
+      background: var(--bg-dark);
+      color: white;
+      text-align: center;
+    }
+
+    .cta h2 {
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-weight: 400;
+      margin-bottom: 16px;
+    }
+
+    .cta p {
+      opacity: 0.7;
+      margin-bottom: 32px;
+    }
+
+    .cta-phone {
+      font-family: var(--serif);
+      font-size: 2.5rem;
+      font-weight: 400;
+      display: block;
+      margin-bottom: 8px;
+      transition: color 0.3s;
+    }
+
+    .cta-phone:hover {
+      color: var(--accent);
+    }
+
+    .cta-hint {
+      font-size: 0.875rem;
+      opacity: 0.5;
+    }
+
+    /* Footer - Magazine colophon */
+    .colophon {
+      padding: 40px 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #E5E5E5;
+      font-size: 0.875rem;
+      color: var(--text-light);
+    }
+
+    .colophon-links {
+      display: flex;
+      gap: 32px;
+    }
+
+    .colophon-links a:hover {
+      color: var(--accent);
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 1024px) {
+      .cover {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+
+      .cover-text {
+        padding: 60px 40px;
+        order: 2;
+      }
+
+      .cover-image {
+        height: 50vh;
+        order: 1;
+      }
+
+      .editorial {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding: 60px 40px;
+      }
+
+      .editorial-sidebar {
+        position: static;
+      }
+
+      .reviews-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .masthead {
+        padding: 16px 24px;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .masthead-nav {
+        display: none;
+      }
+
+      .stats-strip {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .stat-item {
+        padding: 24px;
+      }
+
+      .stat-item:nth-child(2) {
+        border-right: none;
+      }
+
+      .stat-item:nth-child(3),
+      .stat-item:nth-child(4) {
+        border-top: 1px solid #E5E5E5;
+      }
+
+      .stat-number {
+        font-size: 2rem;
+      }
+
+      .project-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .project-item:nth-child(1) {
+        grid-column: span 1;
+      }
+
+      .project-item:nth-child(1) .project-image {
+        height: 300px;
+      }
+
+      .benefit-item {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .benefit-number {
+        font-size: 2.5rem;
+      }
+
+      .pullquote {
+        padding: 60px 24px;
+      }
+
+      .benefits,
+      .reviews,
+      .geography {
+        padding: 60px 24px;
+      }
+
+      .colophon {
+        flex-direction: column;
+        gap: 24px;
+        text-align: center;
+        padding: 40px 24px;
+      }
+    }
+  </style>
+
+  <!-- Masthead -->
+  <header class="masthead">
+    <a href="/" class="masthead-logo">С лёгким паром</a>
+    <nav class="masthead-nav">
+      <a href="/projects">Проекты</a>
+      <a href="/about">О нас</a>
+      <a href="/delivery">Доставка</a>
+      <a href="/contacts">Контакты</a>
+    </nav>
+    <a href="tel:88003500393" class="masthead-phone">8-800-350-03-93</a>
+  </header>
+
+  <!-- Cover -->
+  <section class="cover">
+    <div class="cover-text">
+      <span class="cover-label">Производство с 2014 года</span>
+      <h1>Своя баня — это <em>пятница</em>, которую ждёшь всю неделю</h1>
+      <p class="cover-subtitle">Готовая баня на вашу дачу с доставкой и установкой за 1 день.</p>
+      <a href="#projects" class="cover-cta">
+        Смотреть проекты
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+    </div>
+    <div class="cover-image">
+      <img src="/images/banya-winter-1.png" alt="Баня-бочка" loading="eager" />
+      <div class="cover-image-caption">
+        <strong>от 364 900 ₽</strong>
+        с доставкой и установкой
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <div class="stats-strip">
+    <div class="stat-item">
+      <div class="stat-number">3000+</div>
+      <div class="stat-label">Бань установлено</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">600 000</div>
+      <div class="stat-label">Км доставки</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">10</div>
+      <div class="stat-label">Лет на рынке</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">150+</div>
+      <div class="stat-label">Видео с установок</div>
+    </div>
+  </div>
+
+  <!-- Projects -->
+  <section class="editorial" id="projects">
+    <aside class="editorial-sidebar">
+      <span class="section-label">Каталог</span>
+      <h2 class="section-title">Наши проекты</h2>
+      <p class="section-intro">
+        Шесть размеров бань-бочек для любого участка и бюджета.
+        Каждая баня поставляется полностью готовой — с печью, электрикой и мебелью.
+      </p>
+    </aside>
+
+    <div class="project-grid">
+      {projects.map((project, index) => (
+        <a href={project.link} class="project-item">
+          <div class="project-image">
+            <img src={project.img} alt={`Баня ${project.size}`} loading="lazy" />
+          </div>
+          <div class="project-meta">
+            <span class="project-size">{project.size} м</span>
+            <span class="project-price">{project.price}</span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Pull quote -->
+  <section class="pullquote">
+    <div class="pullquote-inner">
+      <div class="pullquote-mark">"</div>
+      <p class="pullquote-text">
+        Заказывали баню-бочку 4 метра. Привезли и установили за один день, как и обещали.
+        Качество отличное, париться одно удовольствие.
+      </p>
+      <div class="pullquote-author">Александр, Московская область</div>
+    </div>
+  </section>
+
+  <!-- Benefits -->
+  <section class="benefits">
+    <div class="benefits-header">
+      <span class="section-label">Преимущества</span>
+      <h2 class="section-title">Почему выбирают нас</h2>
+    </div>
+
+    <div class="benefits-grid">
+      <div class="benefit-item">
+        <div class="benefit-number">01</div>
+        <div class="benefit-content">
+          <h3>Установка за 1 час</h3>
+          <p>Привозим готовую баню и устанавливаем на вашем участке. Вам остаётся только париться.</p>
         </div>
-    </header>
+      </div>
 
-    <section class="hero">
-        <div class="hero-inner">
-            <div class="hero-content">
-                <div class="hero-badge">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                    </svg>
-                    Бесплатный подбор
-                </div>
-                <h1>Подберём идеальную баню за 2 минуты</h1>
-                <p class="hero-subtitle">
-                    Ответьте на 3 простых вопроса — и мы покажем, какая баня вам подходит лучше всего
-                </p>
-            </div>
-
-            <div class="quiz-card" id="quiz">
-                <div class="quiz-progress">
-                    <div class="quiz-progress-step active" id="progress-1"></div>
-                    <div class="quiz-progress-step" id="progress-2"></div>
-                    <div class="quiz-progress-step" id="progress-3"></div>
-                </div>
-
-                <!-- Step 1 -->
-                <div class="quiz-step active" id="step-1">
-                    <div class="quiz-question">
-                        <div class="quiz-question-number">Вопрос 1 из 3</div>
-                        <h2>Сколько человек будет париться?</h2>
-                    </div>
-
-                    <div class="quiz-options">
-                        <label class="quiz-option" data-value="small">
-                            <div class="quiz-option-icon">👫</div>
-                            <div class="quiz-option-content">
-                                <div class="quiz-option-title">1–2 человека</div>
-                                <div class="quiz-option-desc">Для пары или одного</div>
-                            </div>
-                            <div class="quiz-option-check">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                    <polyline points="20 6 9 17 4 12"></polyline>
-                                </svg>
-                            </div>
-                        </label>
-
-                        <label class="quiz-option" data-value="medium">
-                            <div class="quiz-option-icon">👨‍👩‍👧</div>
-                            <div class="quiz-option-content">
-                                <div class="quiz-option-title">3–4 человека</div>
-                                <div class="quiz-option-desc">Для небольшой семьи</div>
-                            </div>
-                            <div class="quiz-option-check">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                    <polyline points="20 6 9 17 4 12"></polyline>
-                                </svg>
-                            </div>
-                        </label>
-
-                        <label class="quiz-option" data-value="large">
-                            <div class="quiz-option-icon">👨‍👩‍👧‍👦</div>
-                            <div class="quiz-option-content">
-                                <div class="quiz-option-title">5+ человек</div>
-                                <div class="quiz-option-desc">Для большой компании</div>
-                            </div>
-                            <div class="quiz-option-check">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                    <polyline points="20 6 9 17 4 12"></polyline>
-                                </svg>
-                            </div>
-                        </label>
-                    </div>
-
-                    <div class="quiz-nav">
-                        <div></div>
-                        <button class="btn-next" id="next-1" disabled>
-                            Далее
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                                <polyline points="12 5 19 12 12 19"></polyline>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Step 2 -->
-                <div class="quiz-step" id="step-2">
-                    <div class="quiz-question">
-                        <div class="quiz-question-number">Вопрос 2 из 3</div>
-                        <h2>Нужна комната отдыха?</h2>
-                    </div>
-
-                    <div class="quiz-options">
-                        <label class="quiz-option" data-value="no">
-                            <div class="quiz-option-icon">🧖</div>
-                            <div class="quiz-option-content">
-                                <div class="quiz-option-title">Нет, только парная</div>
-                                <div class="quiz-option-desc">Компактный вариант</div>
-                            </div>
-                            <div class="quiz-option-check">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                    <polyline points="20 6 9 17 4 12"></polyline>
-                                </svg>
-                            </div>
-                        </label>
-
-                        <label class="quiz-option" data-value="yes">
-                            <div class="quiz-option-icon">☕</div>
-                            <div class="quiz-option-content">
-                                <div class="quiz-option-title">Да, хочу комнату отдыха</div>
-                                <div class="quiz-option-desc">Попить чай, отдохнуть между заходами</div>
-                            </div>
-                            <div class="quiz-option-check">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                    <polyline points="20 6 9 17 4 12"></polyline>
-                                </svg>
-                            </div>
-                        </label>
-                    </div>
-
-                    <div class="quiz-nav">
-                        <button class="btn-back" id="back-2">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="19" y1="12" x2="5" y2="12"></line>
-                                <polyline points="12 19 5 12 12 5"></polyline>
-                            </svg>
-                            Назад
-                        </button>
-                        <button class="btn-next" id="next-2" disabled>
-                            Далее
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                                <polyline points="12 5 19 12 12 19"></polyline>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Step 3 -->
-                <div class="quiz-step" id="step-3">
-                    <div class="quiz-question">
-                        <div class="quiz-question-number">Вопрос 3 из 3</div>
-                        <h2>Какой у вас бюджет?</h2>
-                    </div>
-
-                    <div class="quiz-options">
-                        <label class="quiz-option" data-value="budget">
-                            <div class="quiz-option-icon">💰</div>
-                            <div class="quiz-option-content">
-                                <div class="quiz-option-title">До 400 000 ₽</div>
-                                <div class="quiz-option-desc">Компактные модели</div>
-                            </div>
-                            <div class="quiz-option-check">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                    <polyline points="20 6 9 17 4 12"></polyline>
-                                </svg>
-                            </div>
-                        </label>
-
-                        <label class="quiz-option" data-value="middle">
-                            <div class="quiz-option-icon">💎</div>
-                            <div class="quiz-option-content">
-                                <div class="quiz-option-title">400 000 – 500 000 ₽</div>
-                                <div class="quiz-option-desc">Оптимальный выбор</div>
-                            </div>
-                            <div class="quiz-option-check">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                    <polyline points="20 6 9 17 4 12"></polyline>
-                                </svg>
-                            </div>
-                        </label>
-
-                        <label class="quiz-option" data-value="premium">
-                            <div class="quiz-option-icon">👑</div>
-                            <div class="quiz-option-content">
-                                <div class="quiz-option-title">Более 500 000 ₽</div>
-                                <div class="quiz-option-desc">Максимум комфорта</div>
-                            </div>
-                            <div class="quiz-option-check">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                    <polyline points="20 6 9 17 4 12"></polyline>
-                                </svg>
-                            </div>
-                        </label>
-                    </div>
-
-                    <div class="quiz-nav">
-                        <button class="btn-back" id="back-3">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="19" y1="12" x2="5" y2="12"></line>
-                                <polyline points="12 19 5 12 12 5"></polyline>
-                            </svg>
-                            Назад
-                        </button>
-                        <button class="btn-next" id="finish" disabled>
-                            Узнать результат
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Result -->
-                <div class="quiz-result" id="result">
-                    <div class="result-icon">✨</div>
-                    <h3 class="result-title">Ваша идеальная баня:</h3>
-                    <p class="result-subtitle">Основано на ваших ответах</p>
-
-                    <div class="result-card">
-                        <img src="/images/banya-winter-1.png" alt="Рекомендованная баня" id="result-image">
-                        <div class="result-card-title" id="result-title">2,3 × 6 м</div>
-                        <div class="result-card-price" id="result-price">от 467 900 ₽</div>
-                        <p class="result-card-desc" id="result-desc">Оптимальный размер для семьи с комнатой отдыха</p>
-                    </div>
-
-                    <div class="result-cta">
-                        <a href="tel:88003500393" class="btn-call">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-                            </svg>
-                            Позвонить и обсудить
-                        </a>
-                        <a href="/#projects" class="btn-projects">Посмотреть все проекты</a>
-                    </div>
-                </div>
-            </div>
+      <div class="benefit-item">
+        <div class="benefit-number">02</div>
+        <div class="benefit-content">
+          <h3>Вес 5 тонн — без фундамента</h3>
+          <p>Баня устанавливается на любую ровную поверхность. Специальный фундамент не требуется.</p>
         </div>
-    </section>
+      </div>
 
-    <section class="trust">
-        <div class="trust-inner">
-            <h2>Почему выбирают нас</h2>
-            <div class="trust-grid">
-                <div class="trust-item">
-                    <div class="trust-icon">⏱️</div>
-                    <div>
-                        <h3>1 час установка</h3>
-                        <p>Привезём и поставим за один день</p>
-                    </div>
-                </div>
-
-                <div class="trust-item">
-                    <div class="trust-icon">💸</div>
-                    <div>
-                        <h3>0 ₽ доплат</h3>
-                        <p>Всё включено в цену</p>
-                    </div>
-                </div>
-
-                <div class="trust-item">
-                    <div class="trust-icon">🏭</div>
-                    <div>
-                        <h3>10 лет опыта</h3>
-                        <p>Более 3000 бань по России</p>
-                    </div>
-                </div>
-
-                <div class="trust-item">
-                    <div class="trust-icon">📹</div>
-                    <div>
-                        <h3>150+ видео</h3>
-                        <p>Открытая компания</p>
-                    </div>
-                </div>
-            </div>
+      <div class="benefit-item">
+        <div class="benefit-number">03</div>
+        <div class="benefit-content">
+          <h3>0₽ доплат</h3>
+          <p>Цена фиксируется в договоре и не меняется. Печь, электрика, мебель — всё включено.</p>
         </div>
-    </section>
+      </div>
 
-    <section class="products" id="products">
-        <div class="products-inner">
-            <div class="products-header">
-                <h2>Все проекты бань</h2>
-                <p>8 размеров на любой вкус и бюджет</p>
-            </div>
-
-            <div class="products-grid">
-                <a href="/proekty/2-3x3/" class="product-card">
-                    <img src="/images/proekty/2-3x3/main.webp" alt="Баня 2,3×3" loading="lazy">
-                    <div class="product-info">
-                        <div class="product-size">2,3 × 3 м</div>
-                        <div class="product-price">от 364 900 ₽</div>
-                    </div>
-                </a>
-
-                <a href="/proekty/2-3x4/" class="product-card">
-                    <img src="/images/proekty/2-3x4/main.webp" alt="Баня 2,3×4" loading="lazy">
-                    <div class="product-info">
-                        <div class="product-size">2,3 × 4 м</div>
-                        <div class="product-price">от 397 900 ₽</div>
-                    </div>
-                </a>
-
-                <a href="/proekty/2-3x6/" class="product-card">
-                    <img src="/images/proekty/2-3x6/main.webp" alt="Баня 2,3×6" loading="lazy">
-                    <div class="product-info">
-                        <div class="product-size">2,3 × 6 м</div>
-                        <div class="product-price">от 467 900 ₽</div>
-                    </div>
-                </a>
-
-                <a href="/proekty/2-3x8/" class="product-card">
-                    <img src="/images/proekty/2-3x8/main.webp" alt="Баня 2,3×8" loading="lazy">
-                    <div class="product-info">
-                        <div class="product-size">2,3 × 8 м</div>
-                        <div class="product-price">от 567 900 ₽</div>
-                    </div>
-                </a>
-            </div>
+      <div class="benefit-item">
+        <div class="benefit-number">04</div>
+        <div class="benefit-content">
+          <h3>150+ видео с установок</h3>
+          <p>Снимаем каждую доставку и установку. Смотрите реальные отзывы на нашем YouTube канале.</p>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <section class="cta">
-        <div class="cta-inner">
-            <h2>Остались вопросы?</h2>
-            <p>Позвоните — поможем выбрать, рассчитаем доставку, ответим на все вопросы. Без давления.</p>
-            <a href="tel:88003500393" class="cta-phone">8-800-350-03-93</a>
-            <span class="cta-hint">Бесплатно по России · 9:00–21:00</span>
+  <!-- Reviews -->
+  <section class="reviews">
+    <div class="reviews-header">
+      <span class="section-label">Отзывы</span>
+      <h2 class="section-title">Что говорят клиенты</h2>
+    </div>
+
+    <div class="reviews-grid">
+      {reviews.map(review => (
+        <div class="review-item">
+          <p class="review-text">"{review.text}"</p>
+          <div class="review-author">
+            <strong>{review.name}</strong>
+            <span>{review.location}</span>
+          </div>
         </div>
-    </section>
+      ))}
+    </div>
+  </section>
 
-    <footer class="footer">
-        <p>© 2014–2024 С лёгким паром · Пестово, Новгородская область</p>
-    </footer>
+  <!-- Geography -->
+  <section class="geography">
+    <div class="geography-inner">
+      <span class="section-label">Доставка</span>
+      <h2>География доставки</h2>
+      <p class="geography-list">
+        Москва и МО · Санкт-Петербург и ЛО · Тверь · Рязань · Владимир · Калуга ·
+        Тула · Ярославль · Кострома · Иваново · Нижний Новгород · Смоленск ·
+        Брянск · Орёл · Курск · Воронеж · Липецк · Тамбов · Пенза · Саратов ·
+        Волгоград · Казань
+      </p>
+    </div>
+  </section>
 
-    <script>
-        // Quiz Logic
-        const answers = { people: null, room: null, budget: null };
+  <!-- CTA -->
+  <section class="cta">
+    <h2>Остались вопросы?</h2>
+    <p>Позвоните — расскажем про любой проект и рассчитаем доставку</p>
+    <a href="tel:88003500393" class="cta-phone">8-800-350-03-93</a>
+    <span class="cta-hint">Бесплатно по России · 9:00–21:00</span>
+  </section>
 
-        // Step 1
-        document.querySelectorAll('#step-1 .quiz-option').forEach(opt => {
-            opt.addEventListener('click', () => {
-                document.querySelectorAll('#step-1 .quiz-option').forEach(o => o.classList.remove('selected'));
-                opt.classList.add('selected');
-                answers.people = opt.dataset.value;
-                document.getElementById('next-1').disabled = false;
-            });
-        });
-
-        document.getElementById('next-1').addEventListener('click', () => {
-            document.getElementById('step-1').classList.remove('active');
-            document.getElementById('step-2').classList.add('active');
-            document.getElementById('progress-1').classList.add('done');
-            document.getElementById('progress-2').classList.add('active');
-        });
-
-        // Step 2
-        document.querySelectorAll('#step-2 .quiz-option').forEach(opt => {
-            opt.addEventListener('click', () => {
-                document.querySelectorAll('#step-2 .quiz-option').forEach(o => o.classList.remove('selected'));
-                opt.classList.add('selected');
-                answers.room = opt.dataset.value;
-                document.getElementById('next-2').disabled = false;
-            });
-        });
-
-        document.getElementById('back-2').addEventListener('click', () => {
-            document.getElementById('step-2').classList.remove('active');
-            document.getElementById('step-1').classList.add('active');
-            document.getElementById('progress-2').classList.remove('active');
-            document.getElementById('progress-1').classList.remove('done');
-        });
-
-        document.getElementById('next-2').addEventListener('click', () => {
-            document.getElementById('step-2').classList.remove('active');
-            document.getElementById('step-3').classList.add('active');
-            document.getElementById('progress-2').classList.add('done');
-            document.getElementById('progress-3').classList.add('active');
-        });
-
-        // Step 3
-        document.querySelectorAll('#step-3 .quiz-option').forEach(opt => {
-            opt.addEventListener('click', () => {
-                document.querySelectorAll('#step-3 .quiz-option').forEach(o => o.classList.remove('selected'));
-                opt.classList.add('selected');
-                answers.budget = opt.dataset.value;
-                document.getElementById('finish').disabled = false;
-            });
-        });
-
-        document.getElementById('back-3').addEventListener('click', () => {
-            document.getElementById('step-3').classList.remove('active');
-            document.getElementById('step-2').classList.add('active');
-            document.getElementById('progress-3').classList.remove('active');
-            document.getElementById('progress-2').classList.remove('done');
-        });
-
-        document.getElementById('finish').addEventListener('click', () => {
-            // Simple recommendation logic
-            let rec = { size: '2,3 × 5 м', price: 'от 436 900 ₽', desc: 'Оптимальный размер', img: '/images/banya-winter-3.png' };
-
-            if (answers.people === 'small' && answers.room === 'no') {
-                rec = { size: '2,3 × 3 м', price: 'от 364 900 ₽', desc: 'Компактная баня для двоих', img: '/images/proekty/2-3x3/main.webp' };
-            } else if (answers.people === 'small' && answers.room === 'yes') {
-                rec = { size: '2,3 × 4 м', price: 'от 397 900 ₽', desc: 'Уютная баня с комнатой отдыха', img: '/images/proekty/2-3x4/main.webp' };
-            } else if (answers.people === 'medium' && answers.room === 'no') {
-                rec = { size: '2,3 × 5 м', price: 'от 436 900 ₽', desc: 'Просторная парная для семьи', img: '/images/banya-winter-3.png' };
-            } else if (answers.people === 'medium' && answers.room === 'yes') {
-                rec = { size: '2,3 × 6 м', price: 'от 467 900 ₽', desc: 'Комфортная баня с комнатой отдыха', img: '/images/proekty/2-3x6/main.webp' };
-            } else if (answers.people === 'large') {
-                if (answers.budget === 'premium') {
-                    rec = { size: '2,3 × 8 м', price: 'от 567 900 ₽', desc: 'Максимум пространства для большой компании', img: '/images/proekty/2-3x8/main.webp' };
-                } else {
-                    rec = { size: '2,3 × 7 м', price: 'от 494 900 ₽', desc: 'Просторная баня для компании друзей', img: '/images/banya-winter-1.png' };
-                }
-            }
-
-            document.getElementById('result-title').textContent = rec.size;
-            document.getElementById('result-price').textContent = rec.price;
-            document.getElementById('result-desc').textContent = rec.desc;
-            document.getElementById('result-image').src = rec.img;
-
-            document.getElementById('step-3').classList.remove('active');
-            document.getElementById('result').classList.add('active');
-            document.getElementById('progress-3').classList.add('done');
-        });
-    </script>
-</body>
-</html>
+  <!-- Colophon -->
+  <footer class="colophon">
+    <div>© 2014–2025 С лёгким паром. Производство бань-бочек.</div>
+    <nav class="colophon-links">
+      <a href="/about">О компании</a>
+      <a href="/projects">Проекты</a>
+      <a href="/delivery">Доставка</a>
+      <a href="/contacts">Контакты</a>
+    </nav>
+  </footer>
+</BaseLayout>

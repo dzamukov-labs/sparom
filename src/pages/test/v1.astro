@@ -1,331 +1,382 @@
 ---
-// Вариант 1: "Чистый продукт" — Минимализм, фокус на бане
-// Концепция: Apple-like approach. Минимум слов, максимум продукта.
+// Вариант 1: Скандинавский минимализм (Копенгаген)
+// Single column, огромное белое пространство, фото на всю ширину
 ---
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>С лёгким паром — Готовые бани-бочки</title>
-    <meta name="description" content="Готовые бани-бочки с доставкой. От 364 900 ₽. Установка за 1 час.">
+    <title>С лёгким паром — Готовые бани под ключ</title>
+    <meta name="description" content="Готовые бани-бочки с доставкой и установкой. Производство с 2014 года. Более 2500 бань по всей России.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-            --bg: #FAFAFA;
+            --bg: #FFFFFF;
             --text: #1A1A1A;
-            --text-secondary: #666;
-            --accent: #C17F4E;
-            --accent-hover: #A66B3D;
-            --white: #FFF;
-            --border: #E5E5E5;
+            --text-light: #767676;
+            --accent: #B5694D;
+            --border: #EBEBEB;
         }
 
-        html { font-size: 16px; scroll-behavior: smooth; }
+        html { font-size: 18px; }
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
+            font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+            font-weight: 300;
             color: var(--text);
             background: var(--bg);
-            line-height: 1.5;
+            line-height: 1.7;
         }
 
         a { color: inherit; text-decoration: none; }
         img { max-width: 100%; height: auto; display: block; }
 
-        /* Header — Ультра-минимал */
+        /* Всё в одну колонку, максимум 680px */
+        .content {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .content-wide {
+            max-width: 100%;
+            padding: 0;
+        }
+
+        /* Header — Еле заметный */
         .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            padding: 1rem 1.5rem;
+            padding: 2rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(250,250,250,0.9);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            max-width: 680px;
+            margin: 0 auto;
         }
 
         .logo {
-            font-weight: 700;
-            font-size: 1.125rem;
-            letter-spacing: -0.02em;
+            font-weight: 500;
+            font-size: 0.875rem;
+            letter-spacing: 0.02em;
         }
 
         .header-phone {
-            font-weight: 600;
             font-size: 0.875rem;
-            color: var(--text);
-            padding: 0.5rem 1rem;
-            border: 1px solid var(--border);
-            border-radius: 100px;
-            transition: all 0.2s;
+            color: var(--text-light);
         }
 
         .header-phone:hover {
-            border-color: var(--accent);
             color: var(--accent);
         }
 
-        /* Hero — Полноэкранный, чистый */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 6rem 1.5rem 3rem;
-        }
-
+        /* Hero — Огромное фото, минимум текста */
         .hero-image {
             width: 100%;
-            max-width: 600px;
-            margin-bottom: 2.5rem;
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 0 40px 80px rgba(0,0,0,0.1);
+            margin: 2rem 0;
         }
 
         .hero-image img {
             width: 100%;
-            aspect-ratio: 4/3;
+            height: 70vh;
+            min-height: 400px;
+            max-height: 700px;
             object-fit: cover;
         }
 
-        .hero h1 {
-            font-size: clamp(1.75rem, 5vw, 3rem);
-            font-weight: 700;
-            letter-spacing: -0.03em;
-            line-height: 1.1;
-            margin-bottom: 1rem;
-            max-width: 600px;
+        .hero-text {
+            padding: 4rem 0;
         }
 
-        .hero-price {
-            font-size: 1.25rem;
-            color: var(--text-secondary);
+        .hero-text h1 {
+            font-size: 2rem;
+            font-weight: 400;
+            line-height: 1.3;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-text p {
+            color: var(--text-light);
             margin-bottom: 2rem;
+            font-size: 1rem;
         }
 
-        .hero-price strong {
-            color: var(--text);
-            font-weight: 600;
+        .hero-actions {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .btn {
+            font-size: 0.875rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            padding: 0.875rem 1.75rem;
+            transition: all 0.2s;
         }
 
         .btn-primary {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 1rem 2rem;
             background: var(--text);
-            color: var(--white);
-            font-weight: 600;
-            font-size: 1rem;
-            border-radius: 100px;
-            transition: all 0.2s;
+            color: var(--bg);
         }
 
         .btn-primary:hover {
             background: var(--accent);
-            transform: translateY(-2px);
         }
 
-        .btn-primary svg {
-            transition: transform 0.2s;
+        .btn-link {
+            color: var(--text-light);
+            padding: 0.875rem 0;
+            border-bottom: 1px solid var(--border);
         }
 
-        .btn-primary:hover svg {
-            transform: translateX(4px);
-        }
-
-        /* Trust badges — горизонтальная полоса */
-        .trust-bar {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            padding: 1.5rem;
-            margin-top: 3rem;
-            border-top: 1px solid var(--border);
-            width: 100%;
-            max-width: 600px;
-        }
-
-        .trust-item {
-            text-align: center;
-        }
-
-        .trust-number {
-            font-size: 1.5rem;
-            font-weight: 700;
+        .btn-link:hover {
             color: var(--text);
-            letter-spacing: -0.02em;
+            border-color: var(--text);
         }
 
-        .trust-label {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        /* Products — Чистая сетка */
-        .products {
-            padding: 4rem 1.5rem;
-            background: var(--white);
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .section-header h2 {
-            font-size: clamp(1.5rem, 4vw, 2rem);
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            margin-bottom: 0.5rem;
-        }
-
-        .section-header p {
-            color: var(--text-secondary);
-            font-size: 1rem;
-        }
-
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .product-card {
-            background: var(--bg);
-            border-radius: 16px;
-            overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .product-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-        }
-
-        .product-card img {
-            width: 100%;
-            aspect-ratio: 4/3;
-            object-fit: cover;
-        }
-
-        .product-info {
-            padding: 1.25rem;
-        }
-
-        .product-size {
-            font-size: 1.125rem;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-
-        .product-price {
-            color: var(--accent);
-            font-weight: 600;
-        }
-
-        /* Benefits — Иконки в ряд */
-        .benefits {
-            padding: 4rem 1.5rem;
-            background: var(--bg);
-        }
-
-        .benefits-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            max-width: 900px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .benefit-icon {
-            width: 48px;
-            height: 48px;
-            margin: 0 auto 1rem;
-            background: var(--white);
-            border-radius: 12px;
+        /* Stats — Горизонтальная линия */
+        .stats {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--accent);
+            gap: 3rem;
+            padding: 3rem 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            margin: 2rem 0 4rem;
+            flex-wrap: wrap;
         }
 
-        .benefit h3 {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
         }
 
-        .benefit p {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 500;
+            letter-spacing: -0.02em;
         }
 
-        /* CTA — Простой и четкий */
-        .cta {
-            padding: 4rem 1.5rem;
-            text-align: center;
-            background: var(--white);
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
         }
 
-        .cta h2 {
-            font-size: clamp(1.5rem, 4vw, 2rem);
-            font-weight: 700;
+        /* Section */
+        .section {
+            padding: 4rem 0;
+        }
+
+        .section-title {
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
+        .section-heading {
+            font-size: 1.5rem;
+            font-weight: 400;
+            line-height: 1.4;
             margin-bottom: 1rem;
+        }
+
+        .section-text {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
+        /* Projects — Вертикальный список с большими фото */
+        .projects-list {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+        }
+
+        .project-item {
+            display: block;
+        }
+
+        .project-item img {
+            width: 100%;
+            aspect-ratio: 3/2;
+            object-fit: cover;
+            margin-bottom: 1rem;
+        }
+
+        .project-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .project-size {
+            font-weight: 500;
+        }
+
+        .project-price {
+            color: var(--text-light);
+            font-size: 0.9375rem;
+        }
+
+        .project-badge {
+            display: inline-block;
+            font-size: 0.6875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            margin-left: 0.5rem;
+        }
+
+        /* Benefits — Простой список */
+        .benefits-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+
+        .benefit-item {
+            display: grid;
+            grid-template-columns: 4rem 1fr;
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        .benefit-number {
+            font-size: 2rem;
+            font-weight: 500;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .benefit-label {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .benefit-text {
+            color: var(--text-light);
+            font-size: 0.9375rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Reviews — Цитаты */
+        .reviews-list {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+        }
+
+        .review-item {
+            padding-left: 1.5rem;
+            border-left: 2px solid var(--border);
+        }
+
+        .review-text {
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .review-author {
+            font-size: 0.8125rem;
+            color: var(--text-light);
+        }
+
+        /* Geography */
+        .geography-stats {
+            display: flex;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .geography-stat {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .geography-number {
+            font-size: 1.25rem;
+            font-weight: 500;
+        }
+
+        .geography-label {
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        .regions-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem 1rem;
+            margin: 2rem 0;
+            font-size: 0.875rem;
+            color: var(--text-light);
+        }
+
+        /* CTA */
+        .cta {
+            padding: 5rem 0;
+            text-align: center;
+        }
+
+        .cta-title {
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+        }
+
+        .cta-text {
+            color: var(--text-light);
+            margin-bottom: 2rem;
         }
 
         .cta-phone {
             font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--accent);
+            font-weight: 500;
+            color: var(--text);
             display: block;
             margin-bottom: 0.5rem;
         }
 
+        .cta-phone:hover {
+            color: var(--accent);
+        }
+
         .cta-hint {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
+            font-size: 0.8125rem;
+            color: var(--text-light);
         }
 
-        /* Footer — Минимальный */
+        /* Footer */
         .footer {
-            padding: 2rem 1.5rem;
-            text-align: center;
-            font-size: 0.875rem;
-            color: var(--text-secondary);
+            padding: 3rem 0;
             border-top: 1px solid var(--border);
+            text-align: center;
+            font-size: 0.8125rem;
+            color: var(--text-light);
         }
 
-        /* Desktop */
+        /* Responsive */
         @media (min-width: 768px) {
-            .header { padding: 1.25rem 3rem; }
-            .hero { padding: 8rem 3rem 4rem; }
-            .hero-image { max-width: 700px; }
-            .trust-bar { gap: 4rem; }
-            .products, .benefits, .cta { padding: 5rem 3rem; }
-        }
-
-        @media (min-width: 1024px) {
-            .hero { flex-direction: row; gap: 4rem; text-align: left; }
-            .hero-image { order: 2; max-width: 50%; }
-            .hero-content { order: 1; max-width: 500px; }
-            .trust-bar { justify-content: flex-start; width: auto; max-width: none; }
+            html { font-size: 18px; }
+            .header { padding: 3rem 1.5rem; }
+            .hero-text h1 { font-size: 2.5rem; }
+            .stats { gap: 4rem; }
+            .section { padding: 5rem 0; }
         }
     </style>
 </head>
@@ -335,159 +386,227 @@
         <a href="tel:88003500393" class="header-phone">8-800-350-03-93</a>
     </header>
 
-    <section class="hero">
+    <div class="content-wide">
         <div class="hero-image">
-            <img src="/images/banya-winter-1.png" alt="Баня-бочка" loading="eager">
+            <img src="/images/banya-winter-1.png" alt="Баня-бочка зимой" loading="eager">
         </div>
-        <div class="hero-content">
-            <h1>Баня на вашу дачу. Готовая. За один день.</h1>
-            <p class="hero-price">Бани-бочки от <strong>364 900 ₽</strong>. Печь, электрика, мебель — всё включено.</p>
-            <a href="#products" class="btn-primary">
-                Выбрать баню
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                </svg>
-            </a>
-            <div class="trust-bar">
-                <div class="trust-item">
-                    <div class="trust-number">3000+</div>
-                    <div class="trust-label">Бань</div>
-                </div>
-                <div class="trust-item">
-                    <div class="trust-number">10 лет</div>
-                    <div class="trust-label">Опыта</div>
-                </div>
-                <div class="trust-item">
-                    <div class="trust-number">85</div>
-                    <div class="trust-label">Регионов</div>
-                </div>
+    </div>
+
+    <div class="content">
+        <div class="hero-text">
+            <h1>Своя баня — это пятница, которую ждёшь всю неделю</h1>
+            <p>Готовая баня на вашу дачу с доставкой и установкой за 1 день. Производим с 2014 года.</p>
+            <div class="hero-actions">
+                <a href="#projects" class="btn btn-primary">Смотреть проекты</a>
+                <a href="tel:88003500393" class="btn btn-link">Позвонить</a>
             </div>
         </div>
-    </section>
 
-    <section class="products" id="products">
-        <div class="section-header">
-            <h2>Проекты бань</h2>
-            <p>8 размеров на любой участок и бюджет</p>
-        </div>
-
-        <div class="products-grid">
-            <a href="/proekty/2-3x3/" class="product-card">
-                <img src="/images/proekty/2-3x3/main.webp" alt="Баня 2,3×3" loading="lazy">
-                <div class="product-info">
-                    <div class="product-size">2,3 × 3 м</div>
-                    <div class="product-price">от 364 900 ₽</div>
-                </div>
-            </a>
-
-            <a href="/proekty/2-3x4/" class="product-card">
-                <img src="/images/proekty/2-3x4/main.webp" alt="Баня 2,3×4" loading="lazy">
-                <div class="product-info">
-                    <div class="product-size">2,3 × 4 м</div>
-                    <div class="product-price">от 397 900 ₽</div>
-                </div>
-            </a>
-
-            <a href="/proekty/2-3x5/" class="product-card">
-                <img src="/images/banya-winter-3.png" alt="Баня 2,3×5" loading="lazy">
-                <div class="product-info">
-                    <div class="product-size">2,3 × 5 м</div>
-                    <div class="product-price">от 436 900 ₽</div>
-                </div>
-            </a>
-
-            <a href="/proekty/2-3x6/" class="product-card">
-                <img src="/images/proekty/2-3x6/main.webp" alt="Баня 2,3×6" loading="lazy">
-                <div class="product-info">
-                    <div class="product-size">2,3 × 6 м</div>
-                    <div class="product-price">от 467 900 ₽</div>
-                </div>
-            </a>
-
-            <a href="/proekty/2-3x7/" class="product-card">
-                <img src="/images/banya-winter-1.png" alt="Баня 2,3×7" loading="lazy">
-                <div class="product-info">
-                    <div class="product-size">2,3 × 7 м</div>
-                    <div class="product-price">от 494 900 ₽</div>
-                </div>
-            </a>
-
-            <a href="/proekty/2-3x8/" class="product-card">
-                <img src="/images/proekty/2-3x8/main.webp" alt="Баня 2,3×8" loading="lazy">
-                <div class="product-info">
-                    <div class="product-size">2,3 × 8 м</div>
-                    <div class="product-price">от 567 900 ₽</div>
-                </div>
-            </a>
-        </div>
-    </section>
-
-    <section class="benefits">
-        <div class="section-header">
-            <h2>Почему мы</h2>
-        </div>
-
-        <div class="benefits-grid">
-            <div class="benefit">
-                <div class="benefit-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <polyline points="12 6 12 12 16 14"></polyline>
-                    </svg>
-                </div>
-                <h3>Установка за 1 час</h3>
-                <p>Привезём, поставим краном. Вечером — первый пар</p>
+        <div class="stats">
+            <div class="stat-item">
+                <span class="stat-number">3000+</span>
+                <span class="stat-label">Бань</span>
             </div>
-
-            <div class="benefit">
-                <div class="benefit-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                    </svg>
-                </div>
-                <h3>0 ₽ доплат</h3>
-                <p>Печь, электрика, мебель и фундамент включены</p>
+            <div class="stat-item">
+                <span class="stat-number">600 000 км</span>
+                <span class="stat-label">Доставки</span>
             </div>
-
-            <div class="benefit">
-                <div class="benefit-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M14.5 10c-.83 0-1.5-.67-1.5-1.5v-5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5z"></path>
-                        <path d="M20.5 10H19V8.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"></path>
-                        <path d="M9.5 14c.83 0 1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5S8 21.33 8 20.5v-5c0-.83.67-1.5 1.5-1.5z"></path>
-                        <path d="M3.5 14H5v1.5c0 .83-.67 1.5-1.5 1.5S2 16.33 2 15.5 2.67 14 3.5 14z"></path>
-                        <path d="M14 14.5c0-.83.67-1.5 1.5-1.5h5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-5c-.83 0-1.5-.67-1.5-1.5z"></path>
-                        <path d="M15.5 19H14v1.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"></path>
-                        <path d="M10 9.5C10 8.67 9.33 8 8.5 8h-5C2.67 8 2 8.67 2 9.5S2.67 11 3.5 11h5c.83 0 1.5-.67 1.5-1.5z"></path>
-                        <path d="M8.5 5H10V3.5C10 2.67 9.33 2 8.5 2S7 2.67 7 3.5 7.67 5 8.5 5z"></path>
-                    </svg>
-                </div>
-                <h3>−30°C? Без проблем</h3>
-                <p>Капитальное строение. Жарко через 45 минут</p>
-            </div>
-
-            <div class="benefit">
-                <div class="benefit-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polygon points="23 7 16 12 23 17 23 7"></polygon>
-                        <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
-                    </svg>
-                </div>
-                <h3>150+ видео</h3>
-                <p>Открытая компания. Канал ведёт руководитель</p>
+            <div class="stat-item">
+                <span class="stat-number">10 лет</span>
+                <span class="stat-label">На рынке</span>
             </div>
         </div>
-    </section>
 
-    <section class="cta">
-        <h2>Готовы обсудить?</h2>
-        <a href="tel:88003500393" class="cta-phone">8-800-350-03-93</a>
-        <span class="cta-hint">Бесплатно по России, 9:00–21:00</span>
-    </section>
+        <section class="section" id="projects">
+            <div class="section-title">Проекты</div>
+            <h2 class="section-heading">Проекты готовых бань</h2>
+            <p class="section-text">8 размеров, от компактной до просторной. Каждая — с печью, мебелью и электрикой.</p>
 
-    <footer class="footer">
-        <p>© 2014–2024 С лёгким паром. Пестово, Новгородская область</p>
-    </footer>
+            <div class="projects-list">
+                <a href="/proekty/2-3x3/" class="project-item">
+                    <img src="/images/proekty/2-3x3/main.webp" alt="Баня 2,3×3 м" loading="lazy">
+                    <div class="project-meta">
+                        <span class="project-size">2,3 × 3 м <span class="project-badge">Компактная</span></span>
+                        <span class="project-price">от 364 900 ₽</span>
+                    </div>
+                </a>
+
+                <a href="/proekty/2-3x4/" class="project-item">
+                    <img src="/images/proekty/2-3x4/main.webp" alt="Баня 2,3×4 м" loading="lazy">
+                    <div class="project-meta">
+                        <span class="project-size">2,3 × 4 м</span>
+                        <span class="project-price">от 397 900 ₽</span>
+                    </div>
+                </a>
+
+                <a href="/proekty/2-3x5/" class="project-item">
+                    <img src="/images/banya-winter-3.png" alt="Баня 2,3×5 м" loading="lazy">
+                    <div class="project-meta">
+                        <span class="project-size">2,3 × 5 м</span>
+                        <span class="project-price">от 436 900 ₽</span>
+                    </div>
+                </a>
+
+                <a href="/proekty/2-3x6-krylco/" class="project-item">
+                    <img src="/images/banya-winter-1.png" alt="Баня 2,3×6 м с крыльцом" loading="lazy">
+                    <div class="project-meta">
+                        <span class="project-size">2,3 × 6 м <span class="project-badge">С крыльцом</span></span>
+                        <span class="project-price">от 455 900 ₽</span>
+                    </div>
+                </a>
+
+                <a href="/proekty/2-3x6/" class="project-item">
+                    <img src="/images/proekty/2-3x6/main.webp" alt="Баня 2,3×6 м" loading="lazy">
+                    <div class="project-meta">
+                        <span class="project-size">2,3 × 6 м</span>
+                        <span class="project-price">от 467 900 ₽</span>
+                    </div>
+                </a>
+
+                <a href="/proekty/2-3x7-krylco/" class="project-item">
+                    <img src="/images/proekty/2-3x7-krylco/main.webp" alt="Баня 2,3×7 м с крыльцом" loading="lazy">
+                    <div class="project-meta">
+                        <span class="project-size">2,3 × 7 м <span class="project-badge">С крыльцом</span></span>
+                        <span class="project-price">от 494 900 ₽</span>
+                    </div>
+                </a>
+
+                <a href="/proekty/2-3x7/" class="project-item">
+                    <img src="/images/banya-winter-1.png" alt="Баня 2,3×7 м" loading="lazy">
+                    <div class="project-meta">
+                        <span class="project-size">2,3 × 7 м <span class="project-badge">Популярная</span></span>
+                        <span class="project-price">от 494 900 ₽</span>
+                    </div>
+                </a>
+
+                <a href="/proekty/2-3x8/" class="project-item">
+                    <img src="/images/proekty/2-3x8/main.webp" alt="Баня 2,3×8 м" loading="lazy">
+                    <div class="project-meta">
+                        <span class="project-size">2,3 × 8 м <span class="project-badge">Просторная</span></span>
+                        <span class="project-price">от 567 900 ₽</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">Преимущества</div>
+            <h2 class="section-heading">Почему выбирают нас</h2>
+
+            <div class="benefits-list">
+                <div class="benefit-item">
+                    <div>
+                        <div class="benefit-number">1</div>
+                        <div class="benefit-label">час</div>
+                    </div>
+                    <div>
+                        <p class="benefit-text">Привезём готовую баню, поставим краном на блоки. Вечером — первый пар.</p>
+                    </div>
+                </div>
+
+                <div class="benefit-item">
+                    <div>
+                        <div class="benefit-number">5</div>
+                        <div class="benefit-label">тонн</div>
+                    </div>
+                    <div>
+                        <p class="benefit-text">Капитальное строение из бруса. В −30°C внутри жарко через 45 минут.</p>
+                    </div>
+                </div>
+
+                <div class="benefit-item">
+                    <div>
+                        <div class="benefit-number">0 ₽</div>
+                        <div class="benefit-label">доплат</div>
+                    </div>
+                    <div>
+                        <p class="benefit-text">Печь, электрика, мебель и фундамент включены. Никаких сюрпризов.</p>
+                    </div>
+                </div>
+
+                <div class="benefit-item">
+                    <div>
+                        <div class="benefit-number">150+</div>
+                        <div class="benefit-label">видео</div>
+                    </div>
+                    <div>
+                        <p class="benefit-text">Открытая компания. Канал ведёт лично руководитель. Не прячем лица.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">Отзывы</div>
+            <h2 class="section-heading">Что говорят клиенты</h2>
+            <p class="section-text">Честные отзывы от тех, кто уже парится в наших банях</p>
+
+            <div class="reviews-list">
+                <div class="review-item">
+                    <p class="review-text">«Заказал баню 2,3×6 с крыльцом. Привезли точно в срок, установили за час. Жена сначала сомневалась, теперь сама каждые выходные парится. Качество на высоте — зимой в −25 топится отлично.»</p>
+                    <div class="review-author">Андрей К., Московская обл. — Октябрь 2024</div>
+                </div>
+
+                <div class="review-item">
+                    <p class="review-text">«Долго выбирали между каркасной баней и бочкой. Остановились на бочке — и не пожалели. Прогревается быстро, дерево приятное, запах кедра! Отдельное спасибо за консультацию по выбору печи.»</p>
+                    <div class="review-author">Елена С., Тверская обл. — Сентябрь 2024</div>
+                </div>
+
+                <div class="review-item">
+                    <p class="review-text">«Доставили из Пестово до Краснодара — 1500 км! Думал, будут проблемы, но всё чётко. Баня приехала целая, установили быстро. Уже второй год пользуемся, никаких нареканий.»</p>
+                    <div class="review-author">Игорь В., Краснодарский край — Август 2024</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem;">
+                <a href="/otzyvy" class="btn btn-link">Все отзывы</a>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">Доставка</div>
+            <h2 class="section-heading">Доставляем по всей России</h2>
+            <p class="section-text">Из Пестово — в любую точку страны. Собственный автопарк и проверенные перевозчики.</p>
+
+            <div class="geography-stats">
+                <div class="geography-stat">
+                    <span class="geography-number">600 000</span>
+                    <span class="geography-label">километров доставки</span>
+                </div>
+                <div class="geography-stat">
+                    <span class="geography-number">85</span>
+                    <span class="geography-label">регионов России</span>
+                </div>
+                <div class="geography-stat">
+                    <span class="geography-number">0 ₽</span>
+                    <span class="geography-label">до 500 км от Пестово</span>
+                </div>
+            </div>
+
+            <div class="regions-list">
+                <span>Москва и МО</span>
+                <span>Санкт-Петербург</span>
+                <span>Краснодарский край</span>
+                <span>Нижний Новгород</span>
+                <span>Казань</span>
+                <span>Екатеринбург</span>
+                <span>Новосибирск</span>
+                <span>и ещё 78 регионов</span>
+            </div>
+
+            <a href="/dostavka" class="btn btn-link">Рассчитать доставку</a>
+        </section>
+
+        <section class="cta">
+            <h2 class="cta-title">Готовы обсудить вашу баню?</h2>
+            <p class="cta-text">Позвоните — расскажем про модели, посчитаем доставку, ответим на вопросы. Без давления.</p>
+            <a href="tel:88003500393" class="cta-phone">8-800-350-03-93</a>
+            <span class="cta-hint">Бесплатно по России, 9:00–21:00</span>
+        </section>
+
+        <footer class="footer">
+            <p>© 2014–2024 С лёгким паром. Пестово, Новгородская область</p>
+        </footer>
+    </div>
 </body>
 </html>

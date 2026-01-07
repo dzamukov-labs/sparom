@@ -1,696 +1,716 @@
 ---
-// Вариант 2: "Русская душа" — Эмоциональный storytelling
-// Концепция: Баня = традиции, семья, здоровье. Тёплые тона, душевность.
+// Вариант 2: Fullscreen Immersive (Токио)
+// Scroll-snap, каждая секция = весь экран, навигация точками
 ---
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>С лёгким паром — Своя баня для семьи</title>
-    <meta name="description" content="Баня-бочка — место, где собирается семья. Готовые бани с доставкой по всей России.">
+    <title>С лёгким паром — Готовые бани под ключ</title>
+    <meta name="description" content="Готовые бани-бочки с доставкой и установкой. Производство с 2014 года. Более 2500 бань по всей России.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-            --bg: #FBF9F7;
-            --bg-warm: #F5EDE4;
-            --text: #2D241C;
-            --text-secondary: #6B5D4D;
-            --accent: #9B5F3C;
-            --accent-light: #D4A574;
-            --white: #FFFFFF;
-            --border: #E5DDD4;
+            --bg: #0A0A0A;
+            --bg-light: #141414;
+            --text: #FFFFFF;
+            --text-muted: #888888;
+            --accent: #E07A5F;
+            --accent-light: #F2CC8F;
         }
 
-        html { font-size: 16px; scroll-behavior: smooth; }
+        html {
+            font-size: 16px;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: 'Open Sans', sans-serif;
+            font-family: 'Noto Sans JP', -apple-system, sans-serif;
+            font-weight: 300;
             color: var(--text);
             background: var(--bg);
-            line-height: 1.7;
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        h1, h2, h3 { font-family: 'Merriweather', Georgia, serif; }
         a { color: inherit; text-decoration: none; }
         img { max-width: 100%; height: auto; display: block; }
 
-        /* Header — Тёплый, домашний */
+        /* Каждая секция = полный экран */
+        .screen {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 2rem;
+        }
+
+        /* Навигация точками */
+        .nav-dots {
+            position: fixed;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .nav-dot {
+            width: 10px;
+            height: 10px;
+            border: 1px solid var(--text-muted);
+            border-radius: 50%;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-dot:hover,
+        .nav-dot.active {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        /* Header плавающий */
         .header {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             z-index: 100;
-            padding: 1rem 1.5rem;
-            background: rgba(251,249,247,0.95);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .header-inner {
-            max-width: 1200px;
-            margin: 0 auto;
+            padding: 1.5rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .logo {
-            font-family: 'Merriweather', serif;
-            font-weight: 700;
-            font-size: 1.125rem;
-            color: var(--accent);
+            font-weight: 500;
+            font-size: 0.875rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
         }
 
         .header-phone {
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: var(--text);
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            transition: color 0.3s;
         }
 
-        .header-phone span {
-            display: none;
+        .header-phone:hover {
+            color: var(--accent);
         }
 
-        /* Hero — Эмоциональный, с историей */
-        .hero {
-            min-height: 100vh;
-            padding: 7rem 1.5rem 4rem;
-            background: linear-gradient(135deg, var(--bg) 0%, var(--bg-warm) 100%);
-            display: flex;
-            align-items: center;
+        /* Screen 1: Hero */
+        .screen-hero {
+            background: var(--bg);
         }
 
-        .hero-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            gap: 3rem;
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .hero-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.5;
         }
 
         .hero-content {
-            order: 2;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 800px;
         }
 
-        .hero-tagline {
-            font-family: 'Merriweather', serif;
-            font-size: 0.875rem;
+        .hero-content h1 {
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 300;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-content p {
+            font-size: 1.125rem;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-top: 4rem;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-number {
+            font-size: 2rem;
+            font-weight: 500;
             color: var(--accent);
+        }
+
+        .hero-stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            margin-bottom: 1rem;
         }
 
-        .hero h1 {
-            font-size: clamp(1.75rem, 5vw, 3rem);
-            font-weight: 700;
-            line-height: 1.3;
-            margin-bottom: 1.5rem;
-            color: var(--text);
-        }
-
-        .hero-text {
-            font-size: 1.125rem;
-            color: var(--text-secondary);
-            margin-bottom: 2rem;
-            max-width: 520px;
-        }
-
-        .hero-cta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .btn-warm {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 1rem 2rem;
-            background: var(--accent);
-            color: var(--white);
-            font-weight: 600;
-            font-size: 1rem;
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
-
-        .btn-warm:hover {
-            background: #7A4A2E;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(155,95,60,0.25);
-        }
-
-        .btn-outline {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 1rem 1.5rem;
-            background: transparent;
-            color: var(--text);
-            font-weight: 500;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
-
-        .btn-outline:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-
-        .hero-image {
-            order: 1;
-            position: relative;
-        }
-
-        .hero-image img {
-            border-radius: 20px;
-            box-shadow: 0 30px 60px rgba(45,36,28,0.15);
-        }
-
-        .hero-badge {
+        .scroll-hint {
             position: absolute;
-            bottom: -1rem;
-            right: 1rem;
-            background: var(--white);
-            padding: 1rem 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-
-        .hero-badge-number {
-            font-family: 'Merriweather', serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--accent);
-        }
-
-        .hero-badge-text {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-        }
-
-        /* Story Section */
-        .story {
-            padding: 5rem 1.5rem;
-            background: var(--white);
-        }
-
-        .story-inner {
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .story h2 {
-            font-size: clamp(1.5rem, 4vw, 2.25rem);
-            margin-bottom: 1.5rem;
-            color: var(--text);
-        }
-
-        .story-text {
-            font-size: 1.125rem;
-            color: var(--text-secondary);
-            line-height: 1.8;
-            margin-bottom: 2rem;
-        }
-
-        .story-highlight {
-            display: inline-block;
-            background: var(--bg-warm);
-            padding: 0.25rem 0.75rem;
-            border-radius: 4px;
-            color: var(--accent);
-            font-weight: 600;
-        }
-
-        .story-founder {
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 1rem;
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--border);
+            gap: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            animation: bounce 2s infinite;
         }
 
-        .founder-photo {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            background: var(--bg-warm);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Merriweather', serif;
-            font-weight: 700;
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        /* Screen 2: Projects carousel */
+        .screen-projects {
+            background: var(--bg-light);
+            flex-direction: column;
+            padding: 6rem 2rem 2rem;
+        }
+
+        .screen-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
             color: var(--accent);
-        }
-
-        .founder-name {
-            font-weight: 600;
-            color: var(--text);
-        }
-
-        .founder-role {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-        }
-
-        /* Benefits — Карточки с иллюстрациями */
-        .benefits {
-            padding: 5rem 1.5rem;
-            background: var(--bg);
-        }
-
-        .benefits-inner {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .benefits h2 {
-            text-align: center;
-            font-size: clamp(1.5rem, 4vw, 2rem);
-            margin-bottom: 3rem;
-        }
-
-        .benefits-grid {
-            display: grid;
-            gap: 2rem;
-        }
-
-        .benefit-card {
-            background: var(--white);
-            padding: 2rem;
-            border-radius: 16px;
-            display: flex;
-            gap: 1.5rem;
-            align-items: flex-start;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-        }
-
-        .benefit-icon {
-            width: 56px;
-            height: 56px;
-            flex-shrink: 0;
-            background: var(--bg-warm);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--accent);
-        }
-
-        .benefit-card h3 {
-            font-size: 1.125rem;
             margin-bottom: 0.5rem;
-            font-family: 'Open Sans', sans-serif;
-            font-weight: 600;
-        }
-
-        .benefit-card p {
-            color: var(--text-secondary);
-            font-size: 0.9375rem;
-        }
-
-        /* Products */
-        .products {
-            padding: 5rem 1.5rem;
-            background: var(--white);
-        }
-
-        .products-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .products-header {
             text-align: center;
-            margin-bottom: 3rem;
         }
 
-        .products-header h2 {
-            font-size: clamp(1.5rem, 4vw, 2rem);
+        .screen-heading {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 300;
+            text-align: center;
             margin-bottom: 0.75rem;
         }
 
-        .products-header p {
-            color: var(--text-secondary);
+        .screen-subheading {
+            color: var(--text-muted);
+            text-align: center;
+            margin-bottom: 3rem;
         }
 
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        .projects-scroll {
+            display: flex;
             gap: 1.5rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            max-width: 100%;
         }
 
-        .product-card {
+        .projects-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .project-card {
+            flex: 0 0 300px;
+            scroll-snap-align: center;
             background: var(--bg);
-            border-radius: 16px;
+            border-radius: 8px;
             overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: transform 0.3s;
         }
 
-        .product-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+        .project-card:hover {
+            transform: scale(1.02);
         }
 
-        .product-card img {
+        .project-card img {
             width: 100%;
             aspect-ratio: 4/3;
             object-fit: cover;
         }
 
-        .product-info {
-            padding: 1.25rem;
+        .project-card-info {
+            padding: 1rem;
         }
 
-        .product-size {
-            font-family: 'Merriweather', serif;
-            font-size: 1.125rem;
-            font-weight: 700;
+        .project-card-size {
+            font-weight: 500;
             margin-bottom: 0.25rem;
         }
 
-        .product-desc {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            margin-bottom: 0.5rem;
-        }
-
-        .product-price {
+        .project-card-price {
             color: var(--accent);
-            font-weight: 600;
-        }
-
-        /* Quote */
-        .quote {
-            padding: 5rem 1.5rem;
-            background: var(--bg-warm);
-            text-align: center;
-        }
-
-        .quote-inner {
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .quote-text {
-            font-family: 'Merriweather', serif;
-            font-size: clamp(1.25rem, 3vw, 1.75rem);
-            font-style: italic;
-            line-height: 1.6;
-            color: var(--text);
-            margin-bottom: 1.5rem;
-        }
-
-        .quote-author {
             font-size: 0.9375rem;
-            color: var(--text-secondary);
         }
 
-        /* CTA */
-        .cta {
-            padding: 5rem 1.5rem;
-            background: var(--white);
+        .project-card-badge {
+            display: inline-block;
+            font-size: 0.625rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 0.25rem 0.5rem;
+            background: var(--accent);
+            color: var(--bg);
+            border-radius: 2px;
+            margin-left: 0.5rem;
+        }
+
+        /* Screen 3: Benefits */
+        .screen-benefits {
+            background: var(--bg);
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3rem;
+            max-width: 800px;
+        }
+
+        .benefit-item {
             text-align: center;
         }
 
-        .cta-inner {
-            max-width: 600px;
-            margin: 0 auto;
+        .benefit-number {
+            font-size: 4rem;
+            font-weight: 500;
+            color: var(--accent);
+            line-height: 1;
+            margin-bottom: 0.25rem;
         }
 
-        .cta h2 {
-            font-size: clamp(1.5rem, 4vw, 2rem);
+        .benefit-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
             margin-bottom: 1rem;
         }
 
-        .cta p {
-            color: var(--text-secondary);
+        .benefit-text {
+            color: var(--text-muted);
+            font-size: 0.9375rem;
+            line-height: 1.7;
+        }
+
+        /* Screen 4: Reviews */
+        .screen-reviews {
+            background: var(--bg-light);
+            flex-direction: column;
+        }
+
+        .review-big {
+            max-width: 700px;
+            text-align: center;
+        }
+
+        .review-quote {
+            font-size: clamp(1.25rem, 3vw, 1.75rem);
+            font-weight: 300;
+            line-height: 1.6;
             margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .review-quote::before {
+            content: '«';
+            color: var(--accent);
+        }
+
+        .review-quote::after {
+            content: '»';
+            color: var(--accent);
+        }
+
+        .review-author {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .reviews-nav {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .review-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .review-dot.active {
+            background: var(--accent);
+        }
+
+        /* Screen 5: Geography */
+        .screen-geography {
+            background: var(--bg);
+            flex-direction: column;
+        }
+
+        .geo-stats {
+            display: flex;
+            gap: 4rem;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .geo-stat {
+            text-align: center;
+        }
+
+        .geo-stat-number {
+            font-size: 3rem;
+            font-weight: 500;
+            color: var(--accent-light);
+        }
+
+        .geo-stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .geo-regions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            max-width: 600px;
+        }
+
+        .geo-region {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--text-muted);
+            border-radius: 100px;
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            transition: all 0.3s;
+        }
+
+        .geo-region:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Screen 6: CTA */
+        .screen-cta {
+            background: linear-gradient(135deg, var(--accent) 0%, #C1666B 100%);
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .cta-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 300;
+            margin-bottom: 1rem;
+        }
+
+        .cta-text {
+            opacity: 0.9;
+            margin-bottom: 3rem;
+            max-width: 500px;
         }
 
         .cta-phone {
-            font-family: 'Merriweather', serif;
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--accent);
+            font-size: 2.5rem;
+            font-weight: 500;
+            color: var(--text);
             display: block;
             margin-bottom: 0.5rem;
+            transition: opacity 0.3s;
+        }
+
+        .cta-phone:hover {
+            opacity: 0.8;
         }
 
         .cta-hint {
             font-size: 0.875rem;
-            color: var(--text-secondary);
+            opacity: 0.8;
         }
 
-        /* Footer */
-        .footer {
-            padding: 2rem 1.5rem;
-            background: var(--bg);
-            text-align: center;
-            font-size: 0.875rem;
-            color: var(--text-secondary);
+        .cta-footer {
+            position: absolute;
+            bottom: 2rem;
+            font-size: 0.75rem;
+            opacity: 0.6;
         }
 
         /* Responsive */
-        @media (min-width: 768px) {
-            .header { padding: 1rem 3rem; }
-            .header-phone span { display: inline; }
-            .hero { padding: 8rem 3rem 5rem; }
-            .hero-inner { grid-template-columns: 1fr 1fr; align-items: center; }
-            .hero-content { order: 1; }
-            .hero-image { order: 2; }
-            .benefits-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-
-        @media (min-width: 1024px) {
-            .hero-inner { gap: 4rem; }
+        @media (max-width: 768px) {
+            .nav-dots { display: none; }
+            .hero-stats { gap: 2rem; flex-wrap: wrap; }
+            .benefits-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .geo-stats { gap: 2rem; }
+            .project-card { flex: 0 0 260px; }
         }
     </style>
 </head>
 <body>
     <header class="header">
-        <div class="header-inner">
-            <a href="/" class="logo">С лёгким паром</a>
-            <a href="tel:88003500393" class="header-phone">
-                <span>Звоните: </span>8-800-350-03-93
-            </a>
-        </div>
+        <a href="/" class="logo">С лёгким паром</a>
+        <a href="tel:88003500393" class="header-phone">8-800-350-03-93</a>
     </header>
 
-    <section class="hero">
-        <div class="hero-inner">
-            <div class="hero-content">
-                <div class="hero-tagline">Семейная традиция</div>
-                <h1>Своя баня — это пятница, которую ждёшь всю неделю</h1>
-                <p class="hero-text">
-                    Место, где собирается семья. Где дети учатся париться от дедов.
-                    Где после жаркой парной — чай с мёдом и разговоры до полуночи.
-                </p>
-                <div class="hero-cta">
-                    <a href="#products" class="btn-warm">
-                        Выбрать свою баню
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                            <polyline points="12 5 19 12 12 19"></polyline>
-                        </svg>
-                    </a>
-                    <a href="tel:88003500393" class="btn-outline">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-                        </svg>
-                        Позвонить
-                    </a>
-                </div>
-            </div>
+    <nav class="nav-dots">
+        <a href="#hero" class="nav-dot active"></a>
+        <a href="#projects" class="nav-dot"></a>
+        <a href="#benefits" class="nav-dot"></a>
+        <a href="#reviews" class="nav-dot"></a>
+        <a href="#geography" class="nav-dot"></a>
+        <a href="#contact" class="nav-dot"></a>
+    </nav>
 
-            <div class="hero-image">
-                <img src="/images/banya-winter-1.png" alt="Баня-бочка зимой" loading="eager">
-                <div class="hero-badge">
-                    <div class="hero-badge-number">10 лет</div>
-                    <div class="hero-badge-text">делаем бани</div>
+    <section class="screen screen-hero" id="hero">
+        <div class="hero-bg">
+            <img src="/images/banya-winter-1.png" alt="" loading="eager">
+        </div>
+        <div class="hero-content">
+            <h1>Своя баня — это пятница, которую ждёшь всю неделю</h1>
+            <p>Готовая баня на вашу дачу с доставкой и установкой за 1 день. Производим с 2014 года.</p>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="hero-stat-number">3000+</div>
+                    <div class="hero-stat-label">Бань</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-number">600 000</div>
+                    <div class="hero-stat-label">км доставки</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-number">10 лет</div>
+                    <div class="hero-stat-label">На рынке</div>
                 </div>
             </div>
         </div>
-    </section>
-
-    <section class="story">
-        <div class="story-inner">
-            <h2>Мы делаем бани с 2014 года</h2>
-            <p class="story-text">
-                Всё началось в Пестово, небольшом городке в Новгородской области.
-                Георгий Дзамуков, потомственный плотник, сделал первую баню-бочку для себя.
-                Потом — для соседа. Потом соседи стали звонить из других городов.
-                <br><br>
-                Сегодня <span class="story-highlight">более 3000 наших бань</span> стоят по всей России —
-                от Калининграда до Владивостока. И каждую мы делаем так, будто для своей семьи.
-            </p>
-            <div class="story-founder">
-                <div class="founder-photo">ГД</div>
-                <div>
-                    <div class="founder-name">Георгий Дзамуков</div>
-                    <div class="founder-role">Основатель</div>
-                </div>
-            </div>
+        <div class="scroll-hint">
+            <span>Листайте вниз</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
         </div>
     </section>
 
-    <section class="benefits">
-        <div class="benefits-inner">
-            <h2>Почему выбирают нас</h2>
-            <div class="benefits-grid">
-                <div class="benefit-card">
-                    <div class="benefit-icon">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <polyline points="12 6 12 12 16 14"></polyline>
-                        </svg>
-                    </div>
-                    <div>
-                        <h3>Установка за 1 час</h3>
-                        <p>Привезём готовую баню, аккуратно поставим краном. Вечером уже можно париться. Никаких строителей на участке неделями.</p>
-                    </div>
-                </div>
+    <section class="screen screen-projects" id="projects">
+        <div class="screen-title">Проекты</div>
+        <h2 class="screen-heading">Проекты готовых бань</h2>
+        <p class="screen-subheading">8 размеров, от компактной до просторной. Каждая — с печью, мебелью и электрикой.</p>
 
-                <div class="benefit-card">
-                    <div class="benefit-icon">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <h3>Цена = итоговая цена</h3>
-                        <p>Печь, электрика, мебель, фундаментные блоки — всё включено. Сколько на сайте — столько и заплатите. Без сюрпризов.</p>
-                    </div>
+        <div class="projects-scroll">
+            <a href="/proekty/2-3x3/" class="project-card">
+                <img src="/images/proekty/2-3x3/main.webp" alt="Баня 2,3×3 м" loading="lazy">
+                <div class="project-card-info">
+                    <div class="project-card-size">2,3 × 3 м <span class="project-card-badge">Компактная</span></div>
+                    <div class="project-card-price">от 364 900 ₽</div>
                 </div>
-
-                <div class="benefit-card">
-                    <div class="benefit-icon">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                            <circle cx="12" cy="10" r="3"></circle>
-                        </svg>
-                    </div>
-                    <div>
-                        <h3>Доставка по всей России</h3>
-                        <p>600 000 км наших дорог. 85 регионов. До 500 км от Пестово — бесплатно. Дальше — посчитаем индивидуально.</p>
-                    </div>
+            </a>
+            <a href="/proekty/2-3x4/" class="project-card">
+                <img src="/images/proekty/2-3x4/main.webp" alt="Баня 2,3×4 м" loading="lazy">
+                <div class="project-card-info">
+                    <div class="project-card-size">2,3 × 4 м</div>
+                    <div class="project-card-price">от 397 900 ₽</div>
                 </div>
-
-                <div class="benefit-card">
-                    <div class="benefit-icon">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polygon points="23 7 16 12 23 17 23 7"></polygon>
-                            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
-                        </svg>
-                    </div>
-                    <div>
-                        <h3>150+ видео на YouTube</h3>
-                        <p>Мы открытая компания. Георгий сам ведёт канал, показывает производство, отвечает на вопросы. Нам нечего скрывать.</p>
-                    </div>
+            </a>
+            <a href="/proekty/2-3x5/" class="project-card">
+                <img src="/images/banya-winter-3.png" alt="Баня 2,3×5 м" loading="lazy">
+                <div class="project-card-info">
+                    <div class="project-card-size">2,3 × 5 м</div>
+                    <div class="project-card-price">от 436 900 ₽</div>
                 </div>
-            </div>
+            </a>
+            <a href="/proekty/2-3x6-krylco/" class="project-card">
+                <img src="/images/banya-winter-1.png" alt="Баня 2,3×6 м" loading="lazy">
+                <div class="project-card-info">
+                    <div class="project-card-size">2,3 × 6 м <span class="project-card-badge">С крыльцом</span></div>
+                    <div class="project-card-price">от 455 900 ₽</div>
+                </div>
+            </a>
+            <a href="/proekty/2-3x6/" class="project-card">
+                <img src="/images/proekty/2-3x6/main.webp" alt="Баня 2,3×6 м" loading="lazy">
+                <div class="project-card-info">
+                    <div class="project-card-size">2,3 × 6 м</div>
+                    <div class="project-card-price">от 467 900 ₽</div>
+                </div>
+            </a>
+            <a href="/proekty/2-3x7-krylco/" class="project-card">
+                <img src="/images/proekty/2-3x7-krylco/main.webp" alt="Баня 2,3×7 м" loading="lazy">
+                <div class="project-card-info">
+                    <div class="project-card-size">2,3 × 7 м <span class="project-card-badge">С крыльцом</span></div>
+                    <div class="project-card-price">от 494 900 ₽</div>
+                </div>
+            </a>
+            <a href="/proekty/2-3x7/" class="project-card">
+                <img src="/images/banya-winter-1.png" alt="Баня 2,3×7 м" loading="lazy">
+                <div class="project-card-info">
+                    <div class="project-card-size">2,3 × 7 м <span class="project-card-badge">Популярная</span></div>
+                    <div class="project-card-price">от 494 900 ₽</div>
+                </div>
+            </a>
+            <a href="/proekty/2-3x8/" class="project-card">
+                <img src="/images/proekty/2-3x8/main.webp" alt="Баня 2,3×8 м" loading="lazy">
+                <div class="project-card-info">
+                    <div class="project-card-size">2,3 × 8 м <span class="project-card-badge">Просторная</span></div>
+                    <div class="project-card-price">от 567 900 ₽</div>
+                </div>
+            </a>
         </div>
     </section>
 
-    <section class="products" id="products">
-        <div class="products-inner">
-            <div class="products-header">
-                <h2>Выберите свою баню</h2>
-                <p>8 размеров — от компактной для двоих до просторной для большой компании</p>
-            </div>
-
-            <div class="products-grid">
-                <a href="/proekty/2-3x3/" class="product-card">
-                    <img src="/images/proekty/2-3x3/main.webp" alt="Баня 2,3×3" loading="lazy">
-                    <div class="product-info">
-                        <div class="product-size">2,3 × 3 м</div>
-                        <div class="product-desc">Компактная, для двоих</div>
-                        <div class="product-price">от 364 900 ₽</div>
-                    </div>
-                </a>
-
-                <a href="/proekty/2-3x4/" class="product-card">
-                    <img src="/images/proekty/2-3x4/main.webp" alt="Баня 2,3×4" loading="lazy">
-                    <div class="product-info">
-                        <div class="product-size">2,3 × 4 м</div>
-                        <div class="product-desc">Для небольшой семьи</div>
-                        <div class="product-price">от 397 900 ₽</div>
-                    </div>
-                </a>
-
-                <a href="/proekty/2-3x5/" class="product-card">
-                    <img src="/images/banya-winter-3.png" alt="Баня 2,3×5" loading="lazy">
-                    <div class="product-info">
-                        <div class="product-size">2,3 × 5 м</div>
-                        <div class="product-desc">Оптимальный выбор</div>
-                        <div class="product-price">от 436 900 ₽</div>
-                    </div>
-                </a>
-
-                <a href="/proekty/2-3x6/" class="product-card">
-                    <img src="/images/proekty/2-3x6/main.webp" alt="Баня 2,3×6" loading="lazy">
-                    <div class="product-info">
-                        <div class="product-size">2,3 × 6 м</div>
-                        <div class="product-desc">С комнатой отдыха</div>
-                        <div class="product-price">от 467 900 ₽</div>
-                    </div>
-                </a>
-
-                <a href="/proekty/2-3x7/" class="product-card">
-                    <img src="/images/banya-winter-1.png" alt="Баня 2,3×7" loading="lazy">
-                    <div class="product-info">
-                        <div class="product-size">2,3 × 7 м</div>
-                        <div class="product-desc">Популярная, для компании</div>
-                        <div class="product-price">от 494 900 ₽</div>
-                    </div>
-                </a>
-
-                <a href="/proekty/2-3x8/" class="product-card">
-                    <img src="/images/proekty/2-3x8/main.webp" alt="Баня 2,3×8" loading="lazy">
-                    <div class="product-info">
-                        <div class="product-size">2,3 × 8 м</div>
-                        <div class="product-desc">Просторная, максимум комфорта</div>
-                        <div class="product-price">от 567 900 ₽</div>
-                    </div>
-                </a>
+    <section class="screen screen-benefits" id="benefits">
+        <div style="text-align: center; width: 100%;">
+            <div class="screen-title">Преимущества</div>
+            <h2 class="screen-heading">Почему выбирают нас</h2>
+            <div class="benefits-grid" style="margin: 3rem auto 0;">
+                <div class="benefit-item">
+                    <div class="benefit-number">1</div>
+                    <div class="benefit-label">час</div>
+                    <p class="benefit-text">Привезём готовую баню, поставим краном на блоки. Вечером — первый пар.</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-number">5</div>
+                    <div class="benefit-label">тонн</div>
+                    <p class="benefit-text">Капитальное строение из бруса. В −30°C внутри жарко через 45 минут.</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-number">0 ₽</div>
+                    <div class="benefit-label">доплат</div>
+                    <p class="benefit-text">Печь, электрика, мебель и фундамент включены. Никаких сюрпризов.</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-number">150+</div>
+                    <div class="benefit-label">видео</div>
+                    <p class="benefit-text">Открытая компания. Канал ведёт лично руководитель. Не прячем лица.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="quote">
-        <div class="quote-inner">
-            <p class="quote-text">
-                «Баня — это не просто постройка. Это место силы.
-                Здесь снимается усталость недели, здесь разговариваешь с близкими по душам,
-                здесь чувствуешь, что жизнь — хороша.»
-            </p>
-            <p class="quote-author">— Из отзыва клиента, Московская область</p>
+    <section class="screen screen-reviews" id="reviews">
+        <div class="screen-title">Отзывы</div>
+        <h2 class="screen-heading">Что говорят клиенты</h2>
+        <p class="screen-subheading">Честные отзывы от тех, кто уже парится в наших банях</p>
+
+        <div class="review-big">
+            <p class="review-quote" id="review-text">Заказал баню 2,3×6 с крыльцом. Привезли точно в срок, установили за час. Жена сначала сомневалась, теперь сама каждые выходные парится. Качество на высоте — зимой в −25 топится отлично.</p>
+            <div class="review-author" id="review-author">Андрей К., Московская обл. — Октябрь 2024</div>
+        </div>
+
+        <div class="reviews-nav">
+            <div class="review-dot active" data-index="0"></div>
+            <div class="review-dot" data-index="1"></div>
+            <div class="review-dot" data-index="2"></div>
         </div>
     </section>
 
-    <section class="cta">
-        <div class="cta-inner">
-            <h2>Обсудим вашу баню?</h2>
-            <p>Позвоните — расскажем про размеры, посчитаем доставку до вашего участка, ответим на все вопросы. Без спешки, по-человечески.</p>
-            <a href="tel:88003500393" class="cta-phone">8-800-350-03-93</a>
-            <span class="cta-hint">Бесплатно по России, 9:00–21:00</span>
+    <section class="screen screen-geography" id="geography">
+        <div class="screen-title">Доставка</div>
+        <h2 class="screen-heading">Доставляем по всей России</h2>
+        <p class="screen-subheading">Из Пестово — в любую точку страны. Собственный автопарк и проверенные перевозчики.</p>
+
+        <div class="geo-stats">
+            <div class="geo-stat">
+                <div class="geo-stat-number">600 000</div>
+                <div class="geo-stat-label">километров доставки</div>
+            </div>
+            <div class="geo-stat">
+                <div class="geo-stat-number">85</div>
+                <div class="geo-stat-label">регионов России</div>
+            </div>
+            <div class="geo-stat">
+                <div class="geo-stat-number">0 ₽</div>
+                <div class="geo-stat-label">до 500 км от Пестово</div>
+            </div>
+        </div>
+
+        <div class="geo-regions">
+            <span class="geo-region">Москва и МО</span>
+            <span class="geo-region">Санкт-Петербург</span>
+            <span class="geo-region">Краснодарский край</span>
+            <span class="geo-region">Нижний Новгород</span>
+            <span class="geo-region">Казань</span>
+            <span class="geo-region">Екатеринбург</span>
+            <span class="geo-region">Новосибирск</span>
+            <span class="geo-region">и ещё 78 регионов</span>
         </div>
     </section>
 
-    <footer class="footer">
-        <p>© 2014–2024 С лёгким паром · Пестово, Новгородская область</p>
-    </footer>
+    <section class="screen screen-cta" id="contact">
+        <h2 class="cta-title">Готовы обсудить вашу баню?</h2>
+        <p class="cta-text">Позвоните — расскажем про модели, посчитаем доставку, ответим на вопросы. Без давления.</p>
+        <a href="tel:88003500393" class="cta-phone">8-800-350-03-93</a>
+        <span class="cta-hint">Бесплатно по России, 9:00–21:00</span>
+        <div class="cta-footer">© 2014–2024 С лёгким паром. Пестово, Новгородская область</div>
+    </section>
+
+    <script>
+        // Reviews carousel
+        const reviews = [
+            { text: 'Заказал баню 2,3×6 с крыльцом. Привезли точно в срок, установили за час. Жена сначала сомневалась, теперь сама каждые выходные парится. Качество на высоте — зимой в −25 топится отлично.', author: 'Андрей К., Московская обл. — Октябрь 2024' },
+            { text: 'Долго выбирали между каркасной баней и бочкой. Остановились на бочке — и не пожалели. Прогревается быстро, дерево приятное, запах кедра! Отдельное спасибо за консультацию по выбору печи.', author: 'Елена С., Тверская обл. — Сентябрь 2024' },
+            { text: 'Доставили из Пестово до Краснодара — 1500 км! Думал, будут проблемы, но всё чётко. Баня приехала целая, установили быстро. Уже второй год пользуемся, никаких нареканий.', author: 'Игорь В., Краснодарский край — Август 2024' }
+        ];
+
+        document.querySelectorAll('.review-dot').forEach(dot => {
+            dot.addEventListener('click', () => {
+                const idx = parseInt(dot.dataset.index);
+                document.getElementById('review-text').textContent = reviews[idx].text;
+                document.getElementById('review-author').textContent = reviews[idx].author;
+                document.querySelectorAll('.review-dot').forEach(d => d.classList.remove('active'));
+                dot.classList.add('active');
+            });
+        });
+
+        // Nav dots active state
+        const sections = document.querySelectorAll('.screen');
+        const navDots = document.querySelectorAll('.nav-dot');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const idx = Array.from(sections).indexOf(entry.target);
+                    navDots.forEach((dot, i) => {
+                        dot.classList.toggle('active', i === idx);
+                    });
+                }
+            });
+        }, { threshold: 0.5 });
+
+        sections.forEach(section => observer.observe(section));
+    </script>
 </body>
 </html>
