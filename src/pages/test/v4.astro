@@ -1,14 +1,23 @@
 ---
-// Вариант 4: "Тёмный премиум" — Luxury подход
-// Концепция: Баня как инвестиция в качество жизни. Тёмные тона, кинематографично.
+// Вариант 4: "Тёмная древесина" — Cinematic warmth
+// Концепция: Тёплые древесные тона на тёмном фоне. Уютно, кинематографично, не премиум.
+//
+// СТИЛЬ-ГАЙД:
+// - Фон: глубокий тёмно-коричневый (#1A1512), не чёрный
+// - Акцент: медно-янтарный (#C17F4E), тёплый, древесный
+// - Шрифт заголовков: Cormorant Garamond — элегантный, но не пафосный
+// - Шрифт текста: Outfit — современный, легко читается
+// - Ощущение: баня в зимнем лесу, тепло внутри, снег за окном
+// - НЕ использовать: "премиум", "люкс", "эксклюзив", золотые тона
+// - Использовать: "готовая", "под ключ", "с доставкой", тёплые слова
 ---
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>С лёгким паром — Премиум бани ручной работы</title>
-    <meta name="description" content="Бани-бочки премиум класса. Ручная работа, натуральное дерево, 10 лет гарантии качества.">
+    <title>С лёгким паром — Готовые бани под ключ</title>
+    <meta name="description" content="Готовые бани-бочки с доставкой и установкой за 1 день. Производство с 2014 года. Более 3000 бань по всей России.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -16,15 +25,15 @@
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-            --bg-dark: #0D0D0D;
-            --bg-medium: #1A1A1A;
-            --bg-light: #262626;
-            --text: #FFFFFF;
-            --text-secondary: #A3A3A3;
-            --text-muted: #737373;
-            --accent: #C9A962;
-            --accent-hover: #D4B978;
-            --border: #333333;
+            --bg-dark: #1A1512;
+            --bg-medium: #241E1A;
+            --bg-light: #2E2620;
+            --text: #FAF7F4;
+            --text-secondary: #B8AEA4;
+            --text-muted: #8C8278;
+            --accent: #C17F4E;
+            --accent-hover: #D4915E;
+            --border: #3D332A;
         }
 
         html { font-size: 16px; scroll-behavior: smooth; }
@@ -495,8 +504,8 @@
             <a href="/" class="logo">С ЛЁГКИМ ПАРОМ</a>
 
             <nav class="header-nav">
-                <a href="#collection">Коллекция</a>
-                <a href="#craft">Мастерство</a>
+                <a href="#collection">Проекты</a>
+                <a href="#craft">Доставка</a>
                 <a href="#contact">Контакты</a>
             </nav>
 
@@ -510,21 +519,20 @@
         </div>
 
         <div class="hero-content">
-            <div class="hero-tagline">Ручная работа с 2014 года</div>
-            <h1>Баня как искусство</h1>
+            <div class="hero-tagline">Производим с 2014 года</div>
+            <h1>Своя баня — это пятница, которую ждёшь всю неделю</h1>
             <p class="hero-subtitle">
-                Каждая баня — результат работы мастеров с многолетним опытом.
-                Натуральное дерево, традиционные технологии, внимание к деталям.
+                Готовая баня на вашу дачу с доставкой и установкой за 1 день.
             </p>
             <div class="hero-cta">
                 <a href="#collection" class="btn-gold">
-                    Смотреть коллекцию
+                    Смотреть проекты
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="5" y1="12" x2="19" y2="12"></line>
                         <polyline points="12 5 19 12 12 19"></polyline>
                     </svg>
                 </a>
-                <a href="tel:88003500393" class="btn-outline-gold">Связаться с нами</a>
+                <a href="tel:88003500393" class="btn-outline-gold">Позвонить</a>
             </div>
         </div>
     </section>
@@ -533,32 +541,31 @@
         <div class="features-inner">
             <div class="features-header">
                 <h2>Почему выбирают нас</h2>
-                <p>Мы не просто производим бани. Мы создаём пространство для жизни.</p>
             </div>
 
             <div class="features-grid">
                 <div class="feature-card">
-                    <div class="feature-number">01</div>
-                    <div class="feature-label">Установка</div>
-                    <p class="feature-text">Готовая баня доставляется на участок и устанавливается за один час. Без строителей, без шума, без пыли.</p>
+                    <div class="feature-number">1</div>
+                    <div class="feature-label">час</div>
+                    <p class="feature-text">Привезём готовую баню, поставим краном на блоки. Вечером — первый пар.</p>
                 </div>
 
                 <div class="feature-card">
-                    <div class="feature-number">02</div>
-                    <div class="feature-label">Качество</div>
-                    <p class="feature-text">5 тонн натурального дерева. Капитальная конструкция, которая прослужит десятилетия в любом климате.</p>
+                    <div class="feature-number">5</div>
+                    <div class="feature-label">тонн</div>
+                    <p class="feature-text">Капитальное строение из бруса. В −30°C внутри жарко через 45 минут.</p>
                 </div>
 
                 <div class="feature-card">
-                    <div class="feature-number">03</div>
-                    <div class="feature-label">Всё включено</div>
-                    <p class="feature-text">Печь, электрика, мебель, фундамент — в стоимости. Никаких скрытых платежей и неприятных сюрпризов.</p>
+                    <div class="feature-number">0 ₽</div>
+                    <div class="feature-label">доплат</div>
+                    <p class="feature-text">Печь, электрика, мебель и фундамент включены. Никаких сюрпризов.</p>
                 </div>
 
                 <div class="feature-card">
-                    <div class="feature-number">04</div>
-                    <div class="feature-label">Прозрачность</div>
-                    <p class="feature-text">150+ видео на нашем канале. Мы показываем каждый этап: от заготовки леса до установки у клиента.</p>
+                    <div class="feature-number">150+</div>
+                    <div class="feature-label">видео</div>
+                    <p class="feature-text">Открытая компания. Канал ведёт лично руководитель. Не прячем лица.</p>
                 </div>
             </div>
         </div>
@@ -567,8 +574,8 @@
     <section class="collection" id="collection">
         <div class="collection-inner">
             <div class="collection-header">
-                <h2>Коллекция</h2>
-                <p>Восемь моделей для разных потребностей и пространств</p>
+                <h2>Проекты готовых бань</h2>
+                <p>8 размеров, от компактной до просторной. Каждая — с печью, мебелью и электрикой.</p>
             </div>
 
             <div class="collection-grid">
@@ -625,30 +632,27 @@
 
     <section class="craft" id="craft">
         <div class="craft-inner">
-            <h2>Традиции мастерства</h2>
+            <h2>Доставляем по всей России</h2>
             <p class="craft-text">
-                В Пестово, небольшом городе в Новгородской области, работают наши мастера.
-                Каждая баня проходит через руки людей, которые знают дерево не по учебникам —
-                а по десятилетиям работы с ним. Мы не гонимся за количеством. Мы делаем так,
-                чтобы каждая баня стала частью вашей семьи на долгие годы.
+                Из Пестово — в любую точку страны. Собственный автопарк и проверенные перевозчики.
             </p>
 
             <div class="craft-stats">
                 <div class="craft-stat">
                     <div class="craft-stat-number">3000+</div>
-                    <div class="craft-stat-label">Бань создано</div>
+                    <div class="craft-stat-label">бань</div>
                 </div>
                 <div class="craft-stat">
-                    <div class="craft-stat-number">10</div>
-                    <div class="craft-stat-label">Лет опыта</div>
+                    <div class="craft-stat-number">600 000 км</div>
+                    <div class="craft-stat-label">доставки</div>
                 </div>
                 <div class="craft-stat">
-                    <div class="craft-stat-number">34</div>
-                    <div class="craft-stat-label">Мастера</div>
+                    <div class="craft-stat-number">10 лет</div>
+                    <div class="craft-stat-label">на рынке</div>
                 </div>
                 <div class="craft-stat">
                     <div class="craft-stat-number">85</div>
-                    <div class="craft-stat-label">Регионов</div>
+                    <div class="craft-stat-label">регионов</div>
                 </div>
             </div>
         </div>
@@ -656,16 +660,15 @@
 
     <section class="cta" id="contact">
         <div class="cta-inner">
-            <div class="cta-tagline">Персональная консультация</div>
-            <h2>Обсудим вашу баню</h2>
-            <p>Позвоните — расскажем о каждой модели, поможем выбрать оптимальный размер, рассчитаем доставку до вашего участка.</p>
+            <h2>Готовы обсудить вашу баню?</h2>
+            <p>Позвоните — расскажем про модели, посчитаем доставку, ответим на вопросы. Без давления.</p>
             <a href="tel:88003500393" class="cta-phone">8-800-350-03-93</a>
             <span class="cta-hint">Бесплатно по России · 9:00–21:00</span>
         </div>
     </section>
 
     <footer class="footer">
-        <p>© 2014–2024 С ЛЁГКИМ ПАРОМ · ПЕСТОВО, НОВГОРОДСКАЯ ОБЛАСТЬ</p>
+        <p>© 2014–2025 С лёгким паром · Пестово, Новгородская область</p>
     </footer>
 
     <script>
