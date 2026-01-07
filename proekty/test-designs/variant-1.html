@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Баня 2,3×4 м — Вариант 1 — С лёгким паром</title>
+    <meta name="description" content="Готовая баня 2,3×4 метра. Цена от 397 900 ₽. Изготовление 4 дня.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FAF8F5;
+            --text: #3D2E1E;
+            --text-light: #6B5D4D;
+            --accent: #C17F4E;
+            --accent-hover: #A66B3D;
+            --white: #FFFFFF;
+            --border: #E5DDD4;
+            --shadow: 0 8px 24px rgba(61,46,30,0.08);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { font-size: 16px; scroll-behavior: smooth; }
+        body { font-family: 'Montserrat', sans-serif; color: var(--text); background: var(--bg); line-height: 1.6; }
+        img { max-width: 100%; height: auto; display: block; }
+        a { color: inherit; text-decoration: none; }
+
+        /* Header */
+        .header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(--bg); border-bottom: 1px solid var(--border); }
+        .header__inner { max-width: 1280px; margin: 0 auto; padding: 0 1.25rem; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+        .logo { font-weight: 700; font-size: 1.1rem; }
+        .phone { font-weight: 600; color: var(--accent); }
+
+        /* Breadcrumbs */
+        .breadcrumbs { padding: 80px 1.25rem 1rem; max-width: 1280px; margin: 0 auto; font-size: 0.875rem; color: var(--text-light); }
+        .breadcrumbs a:hover { color: var(--accent); }
+
+        /* Hero Section - Full Width Photo Strip */
+        .hero { overflow: hidden; }
+        .photo-strip { display: flex; gap: 8px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; padding: 0 1.25rem 1rem; scrollbar-width: none; }
+        .photo-strip::-webkit-scrollbar { display: none; }
+        .photo-strip__item { flex: 0 0 auto; width: 80vw; max-width: 600px; scroll-snap-align: start; border-radius: 16px; overflow: hidden; }
+        .photo-strip__item img { width: 100%; aspect-ratio: 4/3; object-fit: cover; }
+        .photo-strip__item:first-child { margin-left: 0; }
+
+        /* Scroll Hint */
+        .scroll-hint { text-align: center; padding: 0.5rem 1.25rem; font-size: 0.8rem; color: var(--text-light); }
+
+        /* Main Content */
+        .main { max-width: 800px; margin: 0 auto; padding: 2rem 1.25rem; }
+
+        /* Product Title */
+        .product-header { margin-bottom: 2rem; }
+        .product-title { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .product-tagline { color: var(--text-light); font-size: 1rem; line-height: 1.7; }
+
+        /* Quick Stats */
+        .stats { display: flex; gap: 1.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .stat { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; }
+        .stat__icon { width: 32px; height: 32px; background: var(--accent); color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .stat strong { color: var(--text); }
+
+        /* Pricing Tabs */
+        .pricing { background: var(--white); border-radius: 20px; padding: 1.5rem; box-shadow: var(--shadow); margin-bottom: 2rem; }
+        .pricing__tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-bottom: 1.5rem; }
+        .pricing__tab { padding: 1rem 0.5rem; text-align: center; border-radius: 12px; cursor: pointer; border: 2px solid var(--border); background: transparent; font-family: inherit; transition: all 0.2s; position: relative; }
+        .pricing__tab:hover { border-color: var(--accent); }
+        .pricing__tab--active { border-color: var(--accent); background: rgba(193,127,78,0.08); }
+        .pricing__tab-name { font-size: 0.75rem; color: var(--text-light); display: block; margin-bottom: 0.25rem; }
+        .pricing__tab-price { font-size: 1.1rem; font-weight: 700; }
+        .pricing__badge { position: absolute; top: -8px; left: 50%; transform: translateX(-50%); background: var(--accent); color: white; font-size: 0.6rem; padding: 2px 8px; border-radius: 10px; white-space: nowrap; }
+
+        /* Features List */
+        .features { list-style: none; margin-bottom: 1.5rem; }
+        .features li { padding: 0.5rem 0; padding-left: 1.5rem; position: relative; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+        .features li:last-child { border-bottom: none; }
+        .features li::before { content: ''; position: absolute; left: 0; top: 0.75rem; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; }
+
+        /* CTA */
+        .cta-btn { display: block; width: 100%; padding: 1rem; background: var(--accent); color: white; text-align: center; font-weight: 600; font-size: 1rem; border-radius: 12px; border: none; cursor: pointer; transition: background 0.2s; }
+        .cta-btn:hover { background: var(--accent-hover); }
+        .warranty { display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-top: 1rem; font-size: 0.85rem; color: var(--text-light); }
+
+        /* Compare Button */
+        .compare-btn { display: block; width: 100%; padding: 0.75rem; background: transparent; border: 1px solid var(--border); border-radius: 10px; font-family: inherit; font-size: 0.875rem; color: var(--text-light); cursor: pointer; margin-top: 1rem; transition: all 0.2s; }
+        .compare-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* Section Divider */
+        .divider { height: 1px; background: var(--border); margin: 2rem 0; }
+
+        /* Layouts Section */
+        .layouts { margin-bottom: 2rem; }
+        .section-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; }
+        .layouts__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+        .layout-card { background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); }
+        .layout-card img { aspect-ratio: 4/3; object-fit: cover; }
+        .layout-card__info { padding: 0.75rem; }
+        .layout-card__name { font-weight: 600; font-size: 0.85rem; margin-bottom: 0.25rem; }
+        .layout-card__desc { font-size: 0.75rem; color: var(--text-light); }
+
+        /* Features Grid */
+        .features-section { background: var(--white); border-radius: 20px; padding: 1.5rem; box-shadow: var(--shadow); margin-bottom: 2rem; }
+        .features-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+        .feature-item { display: flex; gap: 0.75rem; }
+        .feature-item__icon { width: 40px; height: 40px; border-radius: 10px; overflow: hidden; flex-shrink: 0; }
+        .feature-item__icon img { width: 100%; height: 100%; object-fit: cover; }
+        .feature-item__name { font-weight: 600; font-size: 0.8rem; margin-bottom: 0.125rem; }
+        .feature-item__desc { font-size: 0.7rem; color: var(--text-light); }
+
+        /* CTA Section */
+        .cta-section { background: var(--accent); border-radius: 20px; padding: 2rem 1.5rem; text-align: center; color: white; margin-bottom: 2rem; }
+        .cta-section__title { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .cta-section__text { font-size: 0.9rem; opacity: 0.9; margin-bottom: 1.5rem; }
+        .cta-section .cta-btn { background: white; color: var(--accent); }
+        .cta-section .cta-btn:hover { background: var(--bg); }
+        .cta-section__hint { font-size: 0.75rem; opacity: 0.8; margin-top: 0.75rem; }
+
+        /* Video button */
+        .video-btn { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(0,0,0,0.7); color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.8rem; position: absolute; top: 1rem; left: 1rem; }
+        .photo-strip__item { position: relative; }
+
+        /* Mobile Optimizations */
+        @media (min-width: 768px) {
+            .photo-strip__item { width: 45vw; }
+            .layouts__grid { grid-template-columns: repeat(3, 1fr); }
+            .features-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+        @media (min-width: 1024px) {
+            .photo-strip__item { width: 400px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header__inner">
+            <a href="/" class="logo">С лёгким паром</a>
+            <a href="tel:88003500393" class="phone">8-800-350-03-93</a>
+        </div>
+    </header>
+
+    <nav class="breadcrumbs">
+        <a href="/">Главная</a> / <a href="/#projects">Проекты</a> / Баня 2,3×4 м
+    </nav>
+
+    <section class="hero">
+        <div class="photo-strip">
+            <div class="photo-strip__item">
+                <a href="https://vk.com/video" target="_blank" class="video-btn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    Видеообзор
+                </a>
+                <img src="/images/proekty/2-3x4/main.webp" alt="Баня 2,3×4 м — главное фото" loading="eager">
+            </div>
+            <div class="photo-strip__item">
+                <img src="/images/proekty/2-3x4/01.webp" alt="Интерьер бани" loading="lazy">
+            </div>
+            <div class="photo-strip__item">
+                <img src="/images/proekty/2-3x4/02.webp" alt="Парилка" loading="lazy">
+            </div>
+            <div class="photo-strip__item">
+                <img src="/images/proekty/2-3x4/03.webp" alt="Печь" loading="lazy">
+            </div>
+            <div class="photo-strip__item">
+                <img src="/images/proekty/2-3x4/04.webp" alt="Внутренняя отделка" loading="lazy">
+            </div>
+            <div class="photo-strip__item">
+                <img src="/images/proekty/2-3x4/05.webp" alt="Полки" loading="lazy">
+            </div>
+        </div>
+        <p class="scroll-hint">← Листайте фото →</p>
+    </section>
+
+    <main class="main">
+        <div class="product-header">
+            <h1 class="product-title">Баня 2,3 × 4 м</h1>
+            <p class="product-tagline">Представьте: морозный вечер, за окном −20°C, а вы в жаркой парилке своей бани. Берёзовый веник, аромат хвои, раскалённые камни.</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat">
+                <span class="stat__icon">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="7"/><path d="M8 4v4l2 2"/></svg>
+                </span>
+                <span>Изготовим за <strong>4 дня</strong></span>
+            </div>
+            <div class="stat">
+                <span class="stat__icon">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M2 6h12"/><path d="M6 14V6"/></svg>
+                </span>
+                <span><strong>3 планировки</strong> на выбор</span>
+            </div>
+        </div>
+
+        <div class="pricing">
+            <div class="pricing__tabs">
+                <button class="pricing__tab pricing__tab--active">
+                    <span class="pricing__tab-name">Базовая</span>
+                    <span class="pricing__tab-price">397 900 ₽</span>
+                </button>
+                <button class="pricing__tab">
+                    <span class="pricing__badge">Выбирают чаще</span>
+                    <span class="pricing__tab-name">Комфорт</span>
+                    <span class="pricing__tab-price">469 900 ₽</span>
+                </button>
+                <button class="pricing__tab">
+                    <span class="pricing__tab-name">Максимум</span>
+                    <span class="pricing__tab-price">612 000 ₽</span>
+                </button>
+            </div>
+
+            <ul class="features">
+                <li>Парилка зашита осиновой вагонкой без сучков через фольгу</li>
+                <li>Тёплый угол</li>
+                <li>Высокий конёк 30 см</li>
+                <li>Обработка основания маслом</li>
+                <li>Печь Ермак 12-Т + 40 кг камней</li>
+                <li>Электрика в цвет дерева</li>
+                <li>Слив в центре пола или душевой поддон</li>
+            </ul>
+
+            <a href="tel:88003500393" class="cta-btn">Заказать баню</a>
+            <p class="warranty">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 14s6-3 6-7.5V3L8 1 2 3v3.5C2 11 8 14 8 14z"/></svg>
+                Гарантия 1 год
+            </p>
+            <button class="compare-btn">Показать полное сравнение ↓</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <section class="layouts">
+            <h2 class="section-title">Планировки</h2>
+            <div class="layouts__grid">
+                <div class="layout-card">
+                    <img src="/images/banya-winter-1.png" alt="Планировка 1" loading="lazy">
+                    <div class="layout-card__info">
+                        <div class="layout-card__name">№1</div>
+                        <div class="layout-card__desc">Парилка + моечная + раздевалка</div>
+                    </div>
+                </div>
+                <div class="layout-card">
+                    <img src="/images/banya-winter-2.png" alt="Планировка 2" loading="lazy">
+                    <div class="layout-card__info">
+                        <div class="layout-card__name">№2</div>
+                        <div class="layout-card__desc">Парилка + комната отдыха</div>
+                    </div>
+                </div>
+                <div class="layout-card">
+                    <img src="/images/banya-winter-3.png" alt="Планировка 3" loading="lazy">
+                    <div class="layout-card__info">
+                        <div class="layout-card__name">№3</div>
+                        <div class="layout-card__desc">Большая парилка + моечная</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features-section">
+            <h2 class="section-title">Что входит в комплектацию</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-item__icon">
+                        <img src="/images/banya-winter-1.png" alt="">
+                    </div>
+                    <div>
+                        <div class="feature-item__name">Стены из бруса</div>
+                        <div class="feature-item__desc">Профилированный брус 90×140</div>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-item__icon">
+                        <img src="/images/banya-winter-2.png" alt="">
+                    </div>
+                    <div>
+                        <div class="feature-item__name">Заводская печь</div>
+                        <div class="feature-item__desc">Ермак или Grill'D</div>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-item__icon">
+                        <img src="/images/banya-winter-3.png" alt="">
+                    </div>
+                    <div>
+                        <div class="feature-item__name">Безопасная электрика</div>
+                        <div class="feature-item__desc">Термостойкий провод</div>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-item__icon">
+                        <img src="/images/banya-winter-1.png" alt="">
+                    </div>
+                    <div>
+                        <div class="feature-item__name">Утеплитель Knauf</div>
+                        <div class="feature-item__desc">Минеральная вата</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <h2 class="cta-section__title">Остались вопросы?</h2>
+            <p class="cta-section__text">Позвоните — расскажем подробнее и поможем выбрать</p>
+            <a href="tel:88003500393" class="cta-btn">8-800-350-03-93</a>
+            <p class="cta-section__hint">Бесплатно по России, с 8:00 до 24:00</p>
+        </section>
+    </main>
+</body>
+</html>
