@@ -365,6 +365,27 @@
             letter-spacing: 0.05em;
         }
 
+        .collection-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            z-index: 2;
+            padding: 0.375rem 0.75rem;
+            font-size: 0.6875rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            background: var(--bg-dark);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .collection-badge--accent {
+            background: var(--accent);
+            color: var(--bg-dark);
+            border-color: var(--accent);
+        }
+
         /* Craftsmanship */
         .craft {
             padding: 6rem 1.5rem;
@@ -415,6 +436,34 @@
             letter-spacing: 0.15em;
             text-transform: uppercase;
             color: var(--text-muted);
+        }
+
+        .craft-regions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 3rem;
+        }
+
+        .craft-region {
+            padding: 0.5rem 1rem;
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .craft-region:hover {
+            border-color: var(--accent);
+            color: var(--text);
+        }
+
+        .craft-region--more {
+            color: var(--accent);
+            border-color: var(--accent);
+            background: transparent;
         }
 
         /* CTA */
@@ -581,6 +630,7 @@
 
             <div class="collection-grid">
                 <a href="/proekty/2-3x3/" class="collection-card">
+                    <span class="collection-badge">Компактная</span>
                     <img src="/images/proekty/2-3x3/main.webp" alt="Баня 2,3×3" loading="lazy">
                     <div class="collection-card-content">
                         <div class="collection-card-size">2,3 × 3 м</div>
@@ -604,6 +654,15 @@
                     </div>
                 </a>
 
+                <a href="/proekty/2-3x6-krylco/" class="collection-card">
+                    <span class="collection-badge collection-badge--accent">С крыльцом</span>
+                    <img src="/images/banya-winter-1.png" alt="Баня 2,3×6 с крыльцом" loading="lazy">
+                    <div class="collection-card-content">
+                        <div class="collection-card-size">2,3 × 6 м</div>
+                        <div class="collection-card-price">от 455 900 ₽</div>
+                    </div>
+                </a>
+
                 <a href="/proekty/2-3x6/" class="collection-card">
                     <img src="/images/proekty/2-3x6/main.webp" alt="Баня 2,3×6" loading="lazy">
                     <div class="collection-card-content">
@@ -612,7 +671,17 @@
                     </div>
                 </a>
 
+                <a href="/proekty/2-3x7-krylco/" class="collection-card">
+                    <span class="collection-badge collection-badge--accent">С крыльцом</span>
+                    <img src="/images/proekty/2-3x7-krylco/main.webp" alt="Баня 2,3×7 с крыльцом" loading="lazy">
+                    <div class="collection-card-content">
+                        <div class="collection-card-size">2,3 × 7 м</div>
+                        <div class="collection-card-price">от 494 900 ₽</div>
+                    </div>
+                </a>
+
                 <a href="/proekty/2-3x7/" class="collection-card">
+                    <span class="collection-badge">Популярная</span>
                     <img src="/images/banya-winter-1.png" alt="Баня 2,3×7" loading="lazy">
                     <div class="collection-card-content">
                         <div class="collection-card-size">2,3 × 7 м</div>
@@ -621,6 +690,7 @@
                 </a>
 
                 <a href="/proekty/2-3x8/" class="collection-card">
+                    <span class="collection-badge">Просторная</span>
                     <img src="/images/proekty/2-3x8/main.webp" alt="Баня 2,3×8" loading="lazy">
                     <div class="collection-card-content">
                         <div class="collection-card-size">2,3 × 8 м</div>
@@ -640,22 +710,37 @@
 
             <div class="craft-stats">
                 <div class="craft-stat">
-                    <div class="craft-stat-number">3000+</div>
-                    <div class="craft-stat-label">бань</div>
-                </div>
-                <div class="craft-stat">
-                    <div class="craft-stat-number">600 000 км</div>
-                    <div class="craft-stat-label">доставки</div>
-                </div>
-                <div class="craft-stat">
-                    <div class="craft-stat-number">10 лет</div>
-                    <div class="craft-stat-label">на рынке</div>
+                    <div class="craft-stat-number">600 000</div>
+                    <div class="craft-stat-label">километров доставки</div>
                 </div>
                 <div class="craft-stat">
                     <div class="craft-stat-number">85</div>
-                    <div class="craft-stat-label">регионов</div>
+                    <div class="craft-stat-label">регионов России</div>
+                </div>
+                <div class="craft-stat">
+                    <div class="craft-stat-number">0 ₽</div>
+                    <div class="craft-stat-label">до 500 км от Пестово</div>
                 </div>
             </div>
+
+            <div class="craft-regions">
+                <span class="craft-region">Москва и МО</span>
+                <span class="craft-region">Санкт-Петербург</span>
+                <span class="craft-region">Краснодарский край</span>
+                <span class="craft-region">Нижний Новгород</span>
+                <span class="craft-region">Казань</span>
+                <span class="craft-region">Екатеринбург</span>
+                <span class="craft-region">Новосибирск</span>
+                <span class="craft-region craft-region--more">и ещё 78 регионов</span>
+            </div>
+
+            <a href="/dostavka" class="btn-outline-gold" style="margin-top: 2rem;">
+                Рассчитать доставку
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+            </a>
         </div>
     </section>
 
