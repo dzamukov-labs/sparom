@@ -371,17 +371,24 @@
             border: 1px solid var(--border);
             padding: 2.5rem;
             position: relative;
-            transition: border-color 0.3s;
+            transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
             cursor: pointer;
+            display: flex;
+            flex-direction: column;
         }
 
-        .pricing-card:hover,
-        .pricing-card--active {
+        .pricing-card:hover {
             border-color: var(--accent);
+            box-shadow: 0 8px 32px rgba(212, 145, 94, 0.15);
+            transform: translateY(-4px);
         }
 
         .pricing-card--recommended {
             border-color: var(--accent);
+        }
+
+        .pricing-card--recommended:hover {
+            box-shadow: 0 12px 40px rgba(212, 145, 94, 0.25);
         }
 
         .pricing-card__badge {
@@ -428,6 +435,7 @@
             list-style: none;
             columns: 1;
             column-gap: 2rem;
+            flex-grow: 1;
         }
 
         .pricing-card__list li {
@@ -438,6 +446,7 @@
             display: flex;
             align-items: flex-start;
             gap: 0.75rem;
+            break-inside: avoid;
         }
 
         .pricing-card__list li::before {
@@ -448,7 +457,7 @@
 
         .pricing-card__cta {
             display: inline-block;
-            margin-top: 2rem;
+            margin-top: auto;
             padding: 1rem 2rem;
             background: transparent;
             border: 1px solid var(--accent);
@@ -542,6 +551,11 @@
 
         .compare-category__toggle:hover {
             background: var(--bg-medium);
+        }
+
+        .compare-category__toggle:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: -2px;
         }
 
         .compare-category__toggle svg {
@@ -687,7 +701,7 @@
 
         /* Config Panels */
         .config-panels {
-            min-height: 400px;
+            min-height: 550px;
         }
 
         .config-panel {
@@ -696,6 +710,25 @@
         }
 
         .config-panel--active { display: block; }
+
+        .config-panel--details {
+            max-height: 600px;
+            overflow-y: auto;
+            padding-right: 1rem;
+        }
+
+        .config-panel--details::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .config-panel--details::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        .config-panel--details::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 2px;
+        }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
@@ -1231,11 +1264,34 @@
             width: 90%;
             max-width: 900px;
             aspect-ratio: 16/9;
+            position: relative;
+            background: transparent;
+        }
+
+        .video-modal__content::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 48px;
+            height: 48px;
+            margin: -24px 0 0 -24px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spinner 0.8s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes spinner {
+            to { transform: rotate(360deg); }
         }
 
         .video-modal__content iframe {
             width: 100%;
             height: 100%;
+            border: none;
+            background: #000;
         }
 
         .video-modal__close {
@@ -1246,6 +1302,7 @@
             border: none;
             color: var(--text);
             cursor: pointer;
+            z-index: 10;
         }
 
         /* ========== RESPONSIVE ========== */
@@ -1743,7 +1800,7 @@
                 </div>
 
                 <!-- Step 3: Options -->
-                <div class="config-panel" data-panel="3">
+                <div class="config-panel config-panel--details" data-panel="3">
                     <h3>Настройте детали</h3>
 
                     <div class="config-options-group">
@@ -2103,6 +2160,9 @@
                 p.classList.remove('config-panel--active');
                 if (parseInt(p.dataset.panel) === step) p.classList.add('config-panel--active');
             });
+
+            // Scroll configurator into view smoothly
+            document.querySelector('.configurator').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
             // Update buttons
             btnBack.style.display = step > 1 ? 'inline-block' : 'none';
