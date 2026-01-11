@@ -471,12 +471,27 @@
             color: var(--text-muted);
         }
 
-        .craft-regions {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 0.75rem;
+        .craft-regions-marquee {
             margin-top: 3rem;
+            overflow: hidden;
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+
+        .craft-regions-track {
+            display: flex;
+            gap: 0.75rem;
+            animation: marquee 30s linear infinite;
+            width: max-content;
+        }
+
+        .craft-regions-track:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
         }
 
         .craft-region {
@@ -485,18 +500,8 @@
             color: var(--text-secondary);
             background: var(--bg-light);
             border: 1px solid var(--border);
-            transition: all 0.3s;
-        }
-
-        .craft-region:hover {
-            border-color: var(--accent);
-            color: var(--text);
-        }
-
-        .craft-region--more {
-            color: var(--accent);
-            border-color: var(--accent);
-            background: transparent;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         /* CTA */
@@ -606,7 +611,7 @@
             <div class="hero-tagline">Производим с 2014 года</div>
             <h1>Своя баня — это пятница, которую ждёшь всю неделю</h1>
             <p class="hero-subtitle">
-                Готовая баня на вашу дачу с доставкой и установкой за 1 день.
+                Готовая баня на вашу дачу с доставкой и установкой за 1 день
             </p>
             <div class="hero-cta">
                 <a href="#collection" class="btn-gold">
@@ -763,7 +768,7 @@
                     <div class="craft-stat-label">километров доставки</div>
                 </div>
                 <div class="craft-stat">
-                    <div class="craft-stat-number">85</div>
+                    <div class="craft-stat-number">18</div>
                     <div class="craft-stat-label">регионов России</div>
                 </div>
                 <div class="craft-stat">
@@ -772,15 +777,38 @@
                 </div>
             </div>
 
-            <div class="craft-regions">
-                <span class="craft-region">Москва и МО</span>
-                <span class="craft-region">Санкт-Петербург</span>
-                <span class="craft-region">Краснодарский край</span>
-                <span class="craft-region">Нижний Новгород</span>
-                <span class="craft-region">Казань</span>
-                <span class="craft-region">Екатеринбург</span>
-                <span class="craft-region">Новосибирск</span>
-                <span class="craft-region craft-region--more">и ещё 78 регионов</span>
+            <div class="craft-regions-marquee">
+                <div class="craft-regions-track">
+                    <span class="craft-region">Москва и МО</span>
+                    <span class="craft-region">Санкт-Петербург и ЛО</span>
+                    <span class="craft-region">Новгородская</span>
+                    <span class="craft-region">Тверская</span>
+                    <span class="craft-region">Ярославская</span>
+                    <span class="craft-region">Вологодская</span>
+                    <span class="craft-region">Псковская</span>
+                    <span class="craft-region">Костромская</span>
+                    <span class="craft-region">Владимирская</span>
+                    <span class="craft-region">Калужская</span>
+                    <span class="craft-region">Тульская</span>
+                    <span class="craft-region">Рязанская</span>
+                    <span class="craft-region">Смоленская</span>
+                    <span class="craft-region">Республика Карелия</span>
+                    <!-- Duplicate for seamless loop -->
+                    <span class="craft-region">Москва и МО</span>
+                    <span class="craft-region">Санкт-Петербург и ЛО</span>
+                    <span class="craft-region">Новгородская</span>
+                    <span class="craft-region">Тверская</span>
+                    <span class="craft-region">Ярославская</span>
+                    <span class="craft-region">Вологодская</span>
+                    <span class="craft-region">Псковская</span>
+                    <span class="craft-region">Костромская</span>
+                    <span class="craft-region">Владимирская</span>
+                    <span class="craft-region">Калужская</span>
+                    <span class="craft-region">Тульская</span>
+                    <span class="craft-region">Рязанская</span>
+                    <span class="craft-region">Смоленская</span>
+                    <span class="craft-region">Республика Карелия</span>
+                </div>
             </div>
 
             <a href="/dostavka" class="btn-outline-gold" style="margin-top: 2rem;">
