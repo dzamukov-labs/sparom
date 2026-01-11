@@ -43,6 +43,10 @@
         a { color: inherit; text-decoration: none; }
         img { max-width: 100%; height: auto; display: block; }
 
+        /* Global focus styles */
+        *:focus { outline: none; }
+        *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
         /* ========== HEADER ========== */
         .header {
             position: fixed;
@@ -321,6 +325,34 @@
         }
 
         .gallery-item:hover img { transform: scale(1.03); }
+
+        /* Gallery Dots */
+        .gallery-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+            padding: 0 2rem;
+        }
+
+        .gallery-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .gallery-dot:hover {
+            background: var(--text-muted);
+        }
+
+        .gallery-dot--active {
+            background: var(--accent);
+            width: 24px;
+            border-radius: 4px;
+        }
 
         .gallery-item--video {
             position: relative;
@@ -618,6 +650,9 @@
         .configurator-inner {
             max-width: 1200px;
             margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            min-height: 600px;
         }
 
         .configurator h2 {
@@ -701,15 +736,19 @@
 
         /* Config Panels */
         .config-panels {
-            min-height: 550px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .config-panel {
             display: none;
             animation: fadeIn 0.4s ease;
+            flex: 1;
+            flex-direction: column;
         }
 
-        .config-panel--active { display: block; }
+        .config-panel--active { display: flex; }
 
         .config-panel--details {
             max-height: 600px;
@@ -783,6 +822,7 @@
             text-transform: uppercase;
             color: var(--text-muted);
             margin-bottom: 1rem;
+            min-height: 1.5rem;
         }
 
         .config-size--selected .config-size__tag {
@@ -997,7 +1037,8 @@
             display: flex;
             justify-content: center;
             gap: 1rem;
-            margin-top: 3rem;
+            margin-top: auto;
+            padding-top: 2rem;
         }
 
         .config-btn {
@@ -1427,6 +1468,19 @@
                 <img src="/images/proekty/2-3x4/10.webp" alt="Фото 10">
             </div>
         </div>
+        <div class="gallery-dots" id="gallery-dots">
+            <div class="gallery-dot gallery-dot--active" data-index="0"></div>
+            <div class="gallery-dot" data-index="1"></div>
+            <div class="gallery-dot" data-index="2"></div>
+            <div class="gallery-dot" data-index="3"></div>
+            <div class="gallery-dot" data-index="4"></div>
+            <div class="gallery-dot" data-index="5"></div>
+            <div class="gallery-dot" data-index="6"></div>
+            <div class="gallery-dot" data-index="7"></div>
+            <div class="gallery-dot" data-index="8"></div>
+            <div class="gallery-dot" data-index="9"></div>
+            <div class="gallery-dot" data-index="10"></div>
+        </div>
     </section>
 
     <!-- PRICING -->
@@ -1734,6 +1788,7 @@
                             <div class="config-size__price">от 397 900 ₽</div>
                         </div>
                         <div class="config-size" data-size="2-3x5" data-price="436900">
+                            <span class="config-size__tag">&nbsp;</span>
                             <img src="/images/banya-winter-3.png" alt="2,3×5">
                             <div class="config-size__name">2,3 × 5 м</div>
                             <div class="config-size__price">от 436 900 ₽</div>
@@ -1745,6 +1800,7 @@
                             <div class="config-size__price">от 455 900 ₽</div>
                         </div>
                         <div class="config-size" data-size="2-3x6" data-price="467900">
+                            <span class="config-size__tag">&nbsp;</span>
                             <img src="/images/proekty/2-3x6/main.webp" alt="2,3×6">
                             <div class="config-size__name">2,3 × 6 м</div>
                             <div class="config-size__price">от 467 900 ₽</div>
@@ -2261,6 +2317,30 @@
             currentIndex = (currentIndex + 1) % images.length;
             lightboxImg.src = images[currentIndex];
             lightboxCounter.textContent = `${currentIndex + 1} / ${images.length}`;
+        });
+
+        // Gallery dots indicator
+        const galleryTrack = document.querySelector('.gallery-track');
+        const galleryDots = document.querySelectorAll('.gallery-dot');
+        const allGalleryItems = document.querySelectorAll('.gallery-item');
+
+        function updateGalleryDots() {
+            if (!galleryTrack || galleryDots.length === 0) return;
+            const scrollLeft = galleryTrack.scrollLeft;
+            const itemWidth = allGalleryItems[0]?.offsetWidth + 16 || 300; // 16px gap
+            const activeIndex = Math.round(scrollLeft / itemWidth);
+            galleryDots.forEach((dot, i) => {
+                dot.classList.toggle('gallery-dot--active', i === activeIndex);
+            });
+        }
+
+        galleryTrack?.addEventListener('scroll', updateGalleryDots);
+
+        galleryDots.forEach((dot, i) => {
+            dot.addEventListener('click', () => {
+                const itemWidth = allGalleryItems[0]?.offsetWidth + 16 || 300;
+                galleryTrack.scrollTo({ left: i * itemWidth, behavior: 'smooth' });
+            });
         });
 
         // Video modal
