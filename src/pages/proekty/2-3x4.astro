@@ -410,7 +410,6 @@
         }
 
         .pricing-card:hover {
-            border-color: var(--accent);
             box-shadow: 0 8px 32px rgba(212, 145, 94, 0.15);
             transform: translateY(-4px);
         }
@@ -585,9 +584,8 @@
             background: var(--bg-medium);
         }
 
-        .compare-category__toggle:focus-visible {
-            outline: 2px solid var(--accent);
-            outline-offset: -2px;
+        .compare-category__toggle:focus {
+            outline: none;
         }
 
         .compare-category__toggle svg {
@@ -967,7 +965,7 @@
 
         /* Delivery Step */
         .config-delivery-input {
-            max-width: 500px;
+            max-width: 700px;
             margin: 0 auto 2rem;
         }
 
@@ -996,7 +994,7 @@
             background: var(--bg-dark);
             border: 1px solid var(--border);
             padding: 2rem;
-            max-width: 500px;
+            max-width: 700px;
             margin: 2rem auto 0;
         }
 
@@ -1061,7 +1059,7 @@
 
         .config-btn--next {
             background: var(--accent);
-            border: 1px solid var(--accent);
+            border: none;
             color: var(--bg-dark);
         }
 
