@@ -1,629 +1,1852 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-
-const projectSize = '2-3x4';
+// Баня 2,3×4 м — Смелая версия
+// Тексты сохранены, квиз сохранён
+// Дизайн: драматичный, современный, тёмная тема
 ---
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Баня 2,3×4 м — С лёгким паром</title>
+    <meta name="description" content="Готовая баня 2,3×4 метра без крыльца. Цена от 397 900 ₽. Изготовление 4 дня. Доставка и установка. 3 варианта планировки.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-<BaseLayout
-  title="Баня 2,3×4 м без крыльца — С лёгким паром"
-  description="Готовая баня 2,3×4 метра без крыльца. Цена от 397 900 ₽. Изготовление 4 дня. Доставка и установка. 3 варианта планировки."
->
-    <!-- Breadcrumbs -->
-    <nav class="breadcrumbs">
-        <div class="container">
-            <a href="/" class="breadcrumbs__link">Главная</a>
-            <span class="breadcrumbs__sep">/</span>
-            <a href="/#projects" class="breadcrumbs__link">Проекты</a>
-            <span class="breadcrumbs__sep">/</span>
-            <span class="breadcrumbs__current">Баня 2,3×4 м</span>
+        :root {
+            --bg-dark: #0D0D0D;
+            --bg-medium: #151515;
+            --bg-light: #1A1A1A;
+            --text: #FAFAFA;
+            --text-secondary: #A8A8A8;
+            --text-muted: #707070;
+            --accent: #D4915E;
+            --accent-hover: #E5A36E;
+            --border: #2A2A2A;
+        }
+
+        html { font-size: 16px; scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Outfit', -apple-system, sans-serif;
+            font-weight: 300;
+            color: var(--text);
+            background: var(--bg-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .serif { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 400; }
+        a { color: inherit; text-decoration: none; }
+        img { max-width: 100%; height: auto; display: block; }
+
+        /* Global focus styles */
+        *:focus { outline: none; }
+        *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+        /* ========== HEADER ========== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1.25rem 1.5rem;
+            background: transparent;
+            transition: background 0.3s;
+        }
+
+        .header.scrolled {
+            background: rgba(13,13,13,0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .header-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            color: var(--text);
+        }
+
+        .header-nav {
+            display: none;
+            gap: 2.5rem;
+        }
+
+        .header-nav a {
+            font-size: 0.8125rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            transition: color 0.3s;
+        }
+
+        .header-nav a:hover { color: var(--accent); }
+
+        .header-phone {
+            font-size: 0.875rem;
+            font-weight: 400;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .header-phone::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        /* ========== HERO — Full Screen with Giant Size ========== */
+        .hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .hero-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.35;
+        }
+
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, var(--bg-dark) 0%, transparent 40%),
+                        linear-gradient(to top, var(--bg-dark) 0%, transparent 50%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            padding: 8rem 2rem 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-width: 700px;
+        }
+
+        .hero-breadcrumb {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .hero-breadcrumb a {
+            color: var(--text-muted);
+            transition: color 0.3s;
+        }
+
+        .hero-breadcrumb a:hover { color: var(--accent); }
+
+        .hero-size {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(5rem, 20vw, 12rem);
+            font-weight: 400;
+            line-height: 0.9;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-size span {
+            color: var(--accent);
+        }
+
+        .hero h1 {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-tagline {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            max-width: 500px;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+        }
+
+        .hero-meta-item svg {
+            color: var(--accent);
+        }
+
+        .hero-meta-item strong {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        /* Floating Price Card */
+        .hero-price-card {
+            position: absolute;
+            bottom: 4rem;
+            right: 2rem;
+            background: var(--bg-medium);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            z-index: 2;
+            max-width: 300px;
+            display: none;
+        }
+
+        .hero-price-card__label {
+            font-size: 0.6875rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-price-card__price {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-price-card__from {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-price-card__btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            background: var(--accent);
+            color: var(--bg-dark);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .hero-price-card__btn:hover { background: var(--accent-hover); }
+
+        /* ========== GALLERY — Horizontal Scroll ========== */
+        .gallery {
+            padding: 4rem 0;
+            background: var(--bg-dark);
+            overflow: hidden;
+        }
+
+        .gallery-header {
+            padding: 0 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .gallery h2 {
+            font-size: 1.5rem;
+        }
+
+        .gallery-hint {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .gallery-track {
+            display: flex;
+            gap: 1rem;
+            padding: 0 2rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .gallery-track::-webkit-scrollbar { display: none; }
+
+        .gallery-item {
+            flex-shrink: 0;
+            width: 75vw;
+            max-width: 600px;
+            scroll-snap-align: start;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .gallery-item:hover img { transform: scale(1.03); }
+
+        /* Gallery Dots */
+        .gallery-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+            padding: 0 2rem;
+        }
+
+        .gallery-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .gallery-dot:hover {
+            background: var(--text-muted);
+        }
+
+        .gallery-dot--active {
+            background: var(--accent);
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        .gallery-item--video {
+            position: relative;
+        }
+
+        .gallery-item--video::after {
+            content: '▶ Видеообзор';
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            background: rgba(0,0,0,0.8);
+            color: var(--text);
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+        }
+
+        /* ========== PRICING — Bold Cards ========== */
+        .pricing {
+            padding: 6rem 2rem;
+            background: var(--bg-medium);
+        }
+
+        .pricing-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .pricing-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 4rem;
+        }
+
+        .pricing-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .pricing-card {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            position: relative;
+            transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pricing-card:hover {
+            box-shadow: 0 8px 32px rgba(212, 145, 94, 0.15);
+            transform: translateY(-4px);
+        }
+
+        .pricing-card--recommended {
+            border-color: var(--accent);
+        }
+
+        .pricing-card--recommended:hover {
+            box-shadow: 0 12px 40px rgba(212, 145, 94, 0.25);
+        }
+
+        .pricing-card__badge {
+            position: absolute;
+            top: -0.75rem;
+            left: 2rem;
+            background: var(--accent);
+            color: var(--bg-dark);
+            padding: 0.375rem 1rem;
+            font-size: 0.6875rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .pricing-card__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-card__name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+        }
+
+        .pricing-card__price {
+            text-align: right;
+        }
+
+        .pricing-card__price-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            color: var(--accent);
+        }
+
+        .pricing-card__price-hint {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .pricing-card__list {
+            list-style: none;
+            columns: 1;
+            column-gap: 2rem;
+            flex-grow: 1;
+        }
+
+        .pricing-card__list li {
+            padding: 0.5rem 0;
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            break-inside: avoid;
+        }
+
+        .pricing-card__list li::before {
+            content: '→';
+            color: var(--accent);
+            flex-shrink: 0;
+        }
+
+        .pricing-card__cta {
+            display: inline-block;
+            margin-top: auto;
+            padding: 1rem 2rem;
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.875rem;
+            transition: all 0.3s;
+        }
+
+        .pricing-card__cta:hover {
+            background: var(--accent);
+            color: var(--bg-dark);
+        }
+
+        .pricing-card--recommended .pricing-card__cta {
+            background: var(--accent);
+            color: var(--bg-dark);
+        }
+
+        .pricing-card__warranty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+        }
+
+        .pricing-card__warranty svg {
+            color: var(--accent);
+        }
+
+        /* ========== COMPARE — Accordion Categories ========== */
+        .compare {
+            padding: 4rem 2rem;
+            background: var(--bg-dark);
+        }
+
+        .compare-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .compare-title {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .compare-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            background: var(--bg-medium);
+            border: 1px solid var(--border);
+            padding: 1rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            position: sticky;
+            top: 70px;
+            z-index: 10;
+        }
+
+        .compare-header__col:not(:first-child) {
+            text-align: center;
+        }
+
+        .compare-category {
+            border: 1px solid var(--border);
+            border-top: none;
+        }
+
+        .compare-category__toggle {
+            width: 100%;
+            background: var(--bg-light);
+            border: none;
+            color: var(--text);
+            padding: 1rem 1.5rem;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .compare-category__toggle:hover {
+            background: var(--bg-medium);
+        }
+
+        .compare-category__toggle:focus {
+            outline: none;
+        }
+
+        .compare-category__toggle svg {
+            transition: transform 0.3s;
+            color: var(--accent);
+        }
+
+        .compare-category__toggle.active svg {
+            transform: rotate(180deg);
+        }
+
+        .compare-category__content {
+            display: none;
+            background: var(--bg-medium);
+        }
+
+        .compare-category__content.active {
+            display: block;
+        }
+
+        .compare-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.8125rem;
+        }
+
+        .compare-row > div {
+            padding: 0.75rem 1rem;
+        }
+
+        .compare-row > div:first-child {
+            color: var(--text-secondary);
+        }
+
+        .compare-row > div:not(:first-child) {
+            text-align: center;
+            color: var(--text);
+        }
+
+        .compare-row .check {
+            color: var(--accent);
+        }
+
+        .compare-row .cross {
+            color: var(--text-muted);
+        }
+
+        .compare-row .best {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        /* ========== CONFIGURATOR — Visual Wizard ========== */
+        .configurator {
+            padding: 6rem 2rem;
+            background: var(--bg-medium);
+        }
+
+        .configurator-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            min-height: 600px;
+        }
+
+        .configurator h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .configurator-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 4rem;
+        }
+
+        /* Progress Steps — Large */
+        .config-progress {
+            display: flex;
+            justify-content: center;
+            gap: 0;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .config-progress::before {
+            content: '';
+            position: absolute;
+            top: 2rem;
+            left: 15%;
+            right: 15%;
+            height: 2px;
+            background: var(--border);
+        }
+
+        .config-step-indicator {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 1.5rem;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .config-step-num {
+            width: 4rem;
+            height: 4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-dark);
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            transition: all 0.3s;
+        }
+
+        .config-step-indicator--active .config-step-num {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .config-step-indicator--done .config-step-num {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--bg-dark);
+        }
+
+        .config-step-label {
+            margin-top: 1rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: color 0.3s;
+        }
+
+        .config-step-indicator--active .config-step-label {
+            color: var(--text);
+        }
+
+        /* Config Panels */
+        .config-panels {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .config-panel {
+            display: none;
+            animation: fadeIn 0.4s ease;
+            flex: 1;
+            flex-direction: column;
+        }
+
+        .config-panel--active { display: flex; }
+
+        .config-panel--details {
+            max-height: 600px;
+            overflow-y: auto;
+            padding-right: 1rem;
+        }
+
+        .config-panel--details::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .config-panel--details::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        .config-panel--details::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .config-panel h3 {
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .config-panel-hint {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Size Selection */
+        .config-sizes {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+            scroll-snap-type: x mandatory;
+        }
+
+        .config-size {
+            flex-shrink: 0;
+            width: 180px;
+            background: var(--bg-dark);
+            border: 2px solid var(--border);
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            scroll-snap-align: start;
+            transition: all 0.3s;
+        }
+
+        .config-size:hover,
+        .config-size--selected {
+            border-color: var(--accent);
+        }
+
+        .config-size__tag {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background: var(--bg-light);
+            font-size: 0.625rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            min-height: 1.5rem;
+        }
+
+        .config-size--selected .config-size__tag {
+            background: var(--accent);
+            color: var(--bg-dark);
+        }
+
+        .config-size img {
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            margin-bottom: 1rem;
+        }
+
+        .config-size__name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .config-size__price {
+            font-size: 0.875rem;
+            color: var(--accent);
+        }
+
+        /* Package Selection */
+        .config-packages {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .config-package {
+            background: var(--bg-dark);
+            border: 2px solid var(--border);
+            padding: 2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .config-package:hover,
+        .config-package--selected {
+            border-color: var(--accent);
+        }
+
+        .config-package__badge {
+            position: absolute;
+            top: -0.75rem;
+            right: 2rem;
+            background: var(--accent);
+            color: var(--bg-dark);
+            padding: 0.25rem 0.75rem;
+            font-size: 0.625rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .config-package__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .config-package__name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.75rem;
+        }
+
+        .config-package__price {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            color: var(--accent);
+        }
+
+        .config-package__desc {
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+        }
+
+        /* Options Grid */
+        .config-options-group {
+            margin-bottom: 3rem;
+        }
+
+        .config-options-group h4 {
+            font-size: 1rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .config-options-group h4 svg {
+            color: var(--accent);
+        }
+
+        .config-options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .config-option {
+            background: var(--bg-dark);
+            border: 2px solid var(--border);
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .config-option:hover,
+        .config-option--selected {
+            border-color: var(--accent);
+        }
+
+        .config-option img {
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            margin-bottom: 0.75rem;
+        }
+
+        .config-option__name {
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .config-option__price {
+            font-size: 0.75rem;
+            color: var(--accent);
+        }
+
+        .config-option__included {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Delivery Step */
+        .config-delivery-input {
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .config-delivery-input input {
+            width: 100%;
+            padding: 1.25rem 1.5rem;
+            background: var(--bg-dark);
+            border: 2px solid var(--border);
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .config-delivery-input input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .config-delivery-input input::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* Summary */
+        .config-summary {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            max-width: 700px;
+            margin: 2rem auto 0;
+        }
+
+        .config-summary h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .config-summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9375rem;
+        }
+
+        .config-summary-item span:first-child {
+            color: var(--text-secondary);
+        }
+
+        .config-summary-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 1.5rem 0 0;
+            font-size: 1.25rem;
+        }
+
+        .config-summary-total span:last-child {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            color: var(--accent);
+        }
+
+        /* Config Footer */
+        .config-footer {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: auto;
+            padding-top: 2rem;
+        }
+
+        .config-btn {
+            padding: 1.25rem 2.5rem;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9375rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .config-btn--back {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .config-btn--back:hover {
+            border-color: var(--accent);
+        }
+
+        .config-btn--next {
+            background: var(--accent);
+            border: none;
+            color: var(--bg-dark);
+        }
+
+        .config-btn--next:hover {
+            background: var(--accent-hover);
+        }
+
+        /* ========== LAYOUTS ========== */
+        .layouts {
+            padding: 6rem 2rem;
+            background: var(--bg-dark);
+        }
+
+        .layouts-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .layouts h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .layouts-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 4rem;
+        }
+
+        .layouts-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .layout-card {
+            background: var(--bg-medium);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+
+        .layout-card:hover { border-color: var(--accent); }
+
+        .layout-card img {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+        }
+
+        .layout-card__content {
+            padding: 1.5rem;
+        }
+
+        .layout-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .layout-card p {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+        }
+
+        /* ========== FEATURES ========== */
+        .features {
+            padding: 6rem 2rem;
+            background: var(--bg-medium);
+        }
+
+        .features-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .features h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .features-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .feature-card {
+            display: flex;
+            gap: 1.5rem;
+            padding: 2rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+        }
+
+        .feature-card img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+        }
+
+        /* ========== CTA ========== */
+        .cta {
+            padding: 8rem 2rem;
+            background: var(--bg-dark);
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 1rem;
+        }
+
+        .cta p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-phone {
+            display: inline-block;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 8vw, 4rem);
+            color: var(--text);
+            transition: color 0.3s;
+        }
+
+        .cta-phone:hover { color: var(--accent); }
+
+        .cta-hint {
+            margin-top: 1rem;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* ========== FOOTER ========== */
+        .footer {
+            padding: 2rem;
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+        }
+
+        /* ========== LIGHTBOX ========== */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: rgba(0,0,0,0.98);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .lightbox.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90vh;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: none;
+            border: none;
+            color: var(--text);
+            cursor: pointer;
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--bg-medium);
+            border: 1px solid var(--border);
+            width: 3rem;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        .lightbox-nav:hover { border-color: var(--accent); }
+
+        .lightbox-nav--prev { left: 2rem; }
+        .lightbox-nav--next { right: 2rem; }
+
+        .lightbox-counter {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* ========== VIDEO MODAL ========== */
+        .video-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: rgba(0,0,0,0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .video-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .video-modal__content {
+            width: 90%;
+            max-width: 900px;
+            aspect-ratio: 16/9;
+            position: relative;
+            background: transparent;
+        }
+
+        .video-modal__content::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 48px;
+            height: 48px;
+            margin: -24px 0 0 -24px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spinner 0.8s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes spinner {
+            to { transform: rotate(360deg); }
+        }
+
+        .video-modal__content iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #000;
+        }
+
+        .video-modal__close {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: none;
+            border: none;
+            color: var(--text);
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (min-width: 640px) {
+            .header-nav { display: flex; }
+            .hero-price-card { display: block; }
+            .pricing-grid { grid-template-columns: repeat(3, 1fr); }
+            .layouts-grid { grid-template-columns: repeat(3, 1fr); }
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+            .config-packages { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (min-width: 768px) {
+            .pricing-card__list { columns: 2; }
+        }
+
+        @media (min-width: 1024px) {
+            .hero { grid-template-columns: 1fr 1fr; }
+            .gallery-item { width: 45vw; max-width: 500px; }
+        }
+
+        /* Reduce motion */
+        @media (prefers-reduced-motion: reduce) {
+            * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header" id="header">
+        <div class="header-inner">
+            <a href="/" class="logo">С ЛЁГКИМ ПАРОМ</a>
+            <nav class="header-nav">
+                <a href="/#collection">Проекты</a>
+                <a href="/#craft">Доставка</a>
+                <a href="/about">О компании</a>
+                <a href="#cta">Контакты</a>
+            </nav>
+            <a href="tel:88003500393" class="header-phone">8-800-350-03-93</a>
         </div>
-    </nav>
+    </header>
 
-    <!-- Product Section -->
-    <section class="product">
-        <div class="container product__container">
-            <!-- Gallery -->
-            <div class="product__gallery">
-                <div class="gallery-compact">
-                    <!-- Main image -->
-                    <div class="gallery-compact__main" id="gallery-main-wrapper">
-                        <img src="/images/proekty/2-3x4/main.webp" alt="Баня 2,3×4 м — вид снаружи" id="gallery-main">
-                        <!-- Video button with VK icon -->
-                        <button type="button" class="gallery-compact__video-btn" id="open-video-modal">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M15.684 0H8.316C1.592 0 0 1.592 0 8.316v7.368C0 22.408 1.592 24 8.316 24h7.368C22.408 24 24 22.408 24 15.684V8.316C24 1.592 22.408 0 15.684 0zm3.692 17.123h-1.744c-.66 0-.862-.523-2.049-1.713-1.033-1.01-1.49-1.135-1.744-1.135-.356 0-.458.102-.458.593v1.563c0 .424-.135.678-1.253.678-1.846 0-3.896-1.118-5.335-3.202C4.624 10.857 4 8.684 4 8.245c0-.254.102-.491.593-.491h1.744c.44 0 .61.203.78.678.847 2.49 2.27 4.675 2.853 4.675.22 0 .322-.102.322-.66V9.721c-.068-1.186-.695-1.287-.695-1.71 0-.203.17-.407.44-.407h2.744c.373 0 .508.203.508.643v3.473c0 .372.17.508.271.508.22 0 .407-.136.814-.542 1.27-1.422 2.168-3.608 2.168-3.608.119-.254.322-.491.763-.491h1.744c.525 0 .644.27.525.643-.22 1.017-2.354 4.031-2.354 4.031-.186.305-.254.44 0 .78.186.254.796.78 1.202 1.253.745.864 1.32 1.59 1.473 2.096.17.508-.085.763-.576.763z"/>
-                            </svg>
-                            Смотреть видеообзор
-                        </button>
-                    </div>
-                    <!-- Thumbnails 2x2 grid -->
-                    <div class="gallery-compact__grid">
-                        <button class="gallery-compact__thumb" data-src="/images/proekty/2-3x4/01.webp" data-index="1">
-                            <img src="/images/proekty/2-3x4/01.webp" alt="Фото 1">
-                        </button>
-                        <button class="gallery-compact__thumb" data-src="/images/proekty/2-3x4/02.webp" data-index="2">
-                            <img src="/images/proekty/2-3x4/02.webp" alt="Фото 2">
-                        </button>
-                        <button class="gallery-compact__thumb" data-src="/images/proekty/2-3x4/03.webp" data-index="3">
-                            <img src="/images/proekty/2-3x4/03.webp" alt="Фото 3">
-                        </button>
-                        <button class="gallery-compact__thumb gallery-compact__thumb--more" data-src="/images/proekty/2-3x4/04.webp" data-index="4" id="gallery-view-all">
-                            <img src="/images/proekty/2-3x4/04.webp" alt="Фото 4">
-                            <span class="gallery-compact__more-overlay">
-                                <span class="gallery-compact__more-count">+7</span>
-                                <span class="gallery-compact__more-text">фото</span>
-                            </span>
-                        </button>
-                    </div>
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-bg">
+            <img src="/images/proekty/2-3x4/main.webp" alt="Баня 2,3×4">
+        </div>
+        <div class="hero-content">
+            <div class="hero-breadcrumb">
+                <a href="/">Главная</a>
+                <span>/</span>
+                <a href="/#collection">Проекты</a>
+                <span>/</span>
+                <span>Баня 2,3×4 м</span>
+            </div>
+            <div class="hero-size">2,3<span>×</span>4</div>
+            <h1>Готовая баня под ключ</h1>
+            <p class="hero-tagline">Представьте: морозный вечер, за окном −20°C, а вы в жаркой парилке своей бани. Берёзовый веник, аромат хвои, раскалённые камни. Выходите — и сразу в сугроб. Эти ощущения не купишь ни за какие деньги, но можно создать за 4 дня.</p>
+            <div class="hero-meta">
+                <div class="hero-meta-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    <span>Изготовим за <strong>4 дня</strong></span>
                 </div>
-                <!-- Hidden thumbs for lightbox -->
-                <div class="gallery-compact__hidden" style="display:none;">
-                    <button class="gallery__thumb" data-src="/images/proekty/2-3x4/main.webp" data-index="0"></button>
-                    <button class="gallery__thumb" data-src="/images/proekty/2-3x4/01.webp" data-index="1"></button>
-                    <button class="gallery__thumb" data-src="/images/proekty/2-3x4/02.webp" data-index="2"></button>
-                    <button class="gallery__thumb" data-src="/images/proekty/2-3x4/03.webp" data-index="3"></button>
-                    <button class="gallery__thumb" data-src="/images/proekty/2-3x4/04.webp" data-index="4"></button>
-                    <button class="gallery__thumb" data-src="/images/proekty/2-3x4/05.webp" data-index="5"></button>
-                    <button class="gallery__thumb" data-src="/images/proekty/2-3x4/06.webp" data-index="6"></button>
-                    <button class="gallery__thumb" data-src="/images/proekty/2-3x4/07.webp" data-index="7"></button>
-                    <button class="gallery__thumb" data-src="/images/proekty/2-3x4/08.webp" data-index="8"></button>
-                    <button class="gallery__thumb" data-src="/images/proekty/2-3x4/09.webp" data-index="9"></button>
-                    <button class="gallery__thumb" data-src="/images/proekty/2-3x4/10.webp" data-index="10"></button>
+                <div class="hero-meta-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="3" y1="9" x2="21" y2="9"/>
+                        <line x1="9" y1="21" x2="9" y2="9"/>
+                    </svg>
+                    <span><strong>3 планировки</strong> на выбор</span>
                 </div>
             </div>
+        </div>
+        <div class="hero-price-card">
+            <div class="hero-price-card__label">Цена от</div>
+            <div class="hero-price-card__price">397 900 ₽</div>
+            <div class="hero-price-card__from">Базовая комплектация</div>
+            <a href="#configurator" class="hero-price-card__btn">Собрать свою баню</a>
+        </div>
+    </section>
 
-            <!-- Info -->
-            <div class="product__info">
-                <h1 class="product__title">Баня 2,3 × 4 м</h1>
+    <!-- GALLERY -->
+    <section class="gallery">
+        <div class="gallery-header">
+            <h2>Фотогалерея</h2>
+            <span class="gallery-hint">← Листайте →</span>
+        </div>
+        <div class="gallery-track">
+            <div class="gallery-item gallery-item--video" id="open-video">
+                <img src="/images/proekty/2-3x4/main.webp" alt="Видеообзор">
+            </div>
+            <div class="gallery-item" data-index="1">
+                <img src="/images/proekty/2-3x4/01.webp" alt="Фото 1">
+            </div>
+            <div class="gallery-item" data-index="2">
+                <img src="/images/proekty/2-3x4/02.webp" alt="Фото 2">
+            </div>
+            <div class="gallery-item" data-index="3">
+                <img src="/images/proekty/2-3x4/03.webp" alt="Фото 3">
+            </div>
+            <div class="gallery-item" data-index="4">
+                <img src="/images/proekty/2-3x4/04.webp" alt="Фото 4">
+            </div>
+            <div class="gallery-item" data-index="5">
+                <img src="/images/proekty/2-3x4/05.webp" alt="Фото 5">
+            </div>
+            <div class="gallery-item" data-index="6">
+                <img src="/images/proekty/2-3x4/06.webp" alt="Фото 6">
+            </div>
+            <div class="gallery-item" data-index="7">
+                <img src="/images/proekty/2-3x4/07.webp" alt="Фото 7">
+            </div>
+            <div class="gallery-item" data-index="8">
+                <img src="/images/proekty/2-3x4/08.webp" alt="Фото 8">
+            </div>
+            <div class="gallery-item" data-index="9">
+                <img src="/images/proekty/2-3x4/09.webp" alt="Фото 9">
+            </div>
+            <div class="gallery-item" data-index="10">
+                <img src="/images/proekty/2-3x4/10.webp" alt="Фото 10">
+            </div>
+        </div>
+        <div class="gallery-dots" id="gallery-dots">
+            <div class="gallery-dot gallery-dot--active" data-index="0"></div>
+            <div class="gallery-dot" data-index="1"></div>
+            <div class="gallery-dot" data-index="2"></div>
+            <div class="gallery-dot" data-index="3"></div>
+            <div class="gallery-dot" data-index="4"></div>
+            <div class="gallery-dot" data-index="5"></div>
+            <div class="gallery-dot" data-index="6"></div>
+            <div class="gallery-dot" data-index="7"></div>
+            <div class="gallery-dot" data-index="8"></div>
+            <div class="gallery-dot" data-index="9"></div>
+            <div class="gallery-dot" data-index="10"></div>
+        </div>
+    </section>
 
-                <p class="product__tagline">Представьте: морозный вечер, за окном −20°C, а вы в жаркой парилке своей бани. Берёзовый веник, аромат хвои, раскалённые камни. Выходите — и сразу в сугроб. Эти ощущения не купишь ни за какие деньги, но можно создать за 4 дня.</p>
+    <!-- PRICING -->
+    <section class="pricing" id="pricing">
+        <div class="pricing-inner">
+            <h2>Выберите комплектацию</h2>
+            <p class="pricing-subtitle">Три варианта — от базового до максимального комфорта</p>
 
-                <div class="product__meta">
-                    <div class="product__meta-item">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"/>
-                            <polyline points="12 6 12 12 16 14"/>
-                        </svg>
-                        <span>Изготовим за <strong>4 дня</strong></span>
-                    </div>
-                    <div class="product__meta-item">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                            <line x1="3" y1="9" x2="21" y2="9"/>
-                            <line x1="9" y1="21" x2="9" y2="9"/>
-                        </svg>
-                        <span><strong>3 планировки</strong> на выбор</span>
-                    </div>
-                </div>
-
-                <!-- Pricing -->
-                <div class="product__pricing">
-                    <!-- Price overview -->
-                    <div class="pricing-overview">
-                        <button class="pricing-overview__item pricing-overview__item--active" data-tab="base">
-                            <span class="pricing-overview__label">Базовая</span>
-                            <span class="pricing-overview__price">397 900 ₽</span>
-                        </button>
-                        <button class="pricing-overview__item" data-tab="comfort">
-                            <span class="pricing-overview__badge">Выбирают чаще</span>
-                            <span class="pricing-overview__label">Комфорт</span>
-                            <span class="pricing-overview__price">469 900 ₽</span>
-                        </button>
-                        <button class="pricing-overview__item" data-tab="max">
-                            <span class="pricing-overview__label">Максимум</span>
-                            <span class="pricing-overview__price">612 000 ₽</span>
-                        </button>
-                    </div>
-
-                    <div class="pricing-content">
-                        <!-- Base -->
-                        <div class="pricing-panel pricing-panel--active" data-panel="base">
-                            <ul class="pricing-panel__list">
-                                <li>Парилка зашита осиновой вагонкой без сучков через фольгу</li>
-                                <li>Тёплый угол</li>
-                                <li>Высокий конёк 30 см</li>
-                                <li>Обработка основания маслом</li>
-                                <li>Печь Ермак 12-Т + 40 кг камней</li>
-                                <li>Электрика в цвет дерева</li>
-                                <li>Слив в центре пола или душевой поддон</li>
-                            </ul>
-                            <a href="tel:88003500393" class="btn btn--primary btn--wide pricing-panel__cta">
-                                Заказать баню
-                            </a>
-                            <p class="pricing-panel__warranty">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                                </svg>
-                                Гарантия 1 год
-                            </p>
-                        </div>
-
-                        <!-- Comfort -->
-                        <div class="pricing-panel" data-panel="comfort">
-                            <ul class="pricing-panel__list">
-                                <li>Всё из «Базовой» +</li>
-                                <li>Клиновые двери</li>
-                                <li>Высокий конёк 45 см</li>
-                                <li>Потолок в виде арки</li>
-                                <li>Цветная кровля</li>
-                                <li>Обработка чернового пола маслом</li>
-                                <li>Заводские экраны по периметру печи</li>
-                                <li>Широкие двухъярусные полки</li>
-                                <li>Слив по авторской технологии «Жёлоб»</li>
-                            </ul>
-                            <a href="tel:88003500393" class="btn btn--primary btn--wide pricing-panel__cta">
-                                Заказать баню
-                            </a>
-                            <p class="pricing-panel__warranty">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                                </svg>
-                                Гарантия 1 год
-                            </p>
-                        </div>
-
-                        <!-- Max -->
-                        <div class="pricing-panel" data-panel="max">
-                            <ul class="pricing-panel__list">
-                                <li>Всё из «Комфорта» +</li>
-                                <li>Брус камерной сушки</li>
-                                <li>Усиленное основание</li>
-                                <li>Утолщённые доски пола</li>
-                                <li>Двойное утепление потолка и пола</li>
-                                <li>Рельефная цветная кровля</li>
-                                <li>Обработка чернового пола огнебиозащитой</li>
-                                <li>Резные заводские наличники окон и двери</li>
-                                <li>Цвет бани, углов и наличников на ваш выбор</li>
-                                <li>Печь Grill'd Cometa Vega Long + 100 кг камней</li>
-                                <li>Широкие двухъярусные полки без сучков + спинка</li>
-                                <li>Светильник под полками</li>
-                                <li>Банные принадлежности, табличка «БАНЯ», термометр, ступеньки</li>
-                            </ul>
-                            <a href="tel:88003500393" class="btn btn--primary btn--wide pricing-panel__cta">
-                                Заказать баню
-                            </a>
-                            <p class="pricing-panel__warranty">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                                </svg>
-                                Гарантия 1 год
-                            </p>
+            <div class="pricing-grid">
+                <!-- Base -->
+                <div class="pricing-card" data-package="base">
+                    <div class="pricing-card__header">
+                        <div class="pricing-card__name">Базовая</div>
+                        <div class="pricing-card__price">
+                            <div class="pricing-card__price-value">397 900 ₽</div>
                         </div>
                     </div>
-
-                    <button class="pricing-compare-btn" id="toggle-compare">
-                        Показать полное сравнение
+                    <ul class="pricing-card__list">
+                        <li>Парилка зашита осиновой вагонкой без сучков через фольгу</li>
+                        <li>Тёплый угол</li>
+                        <li>Высокий конёк 30 см</li>
+                        <li>Обработка основания маслом</li>
+                        <li>Печь Ермак 12-Т + 40 кг камней</li>
+                        <li>Электрика в цвет дерева</li>
+                        <li>Слив в центре пола или душевой поддон</li>
+                    </ul>
+                    <a href="tel:88003500393" class="pricing-card__cta">Заказать</a>
+                    <p class="pricing-card__warranty">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="6 9 12 15 18 9"></polyline>
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                         </svg>
-                    </button>
-
+                        Гарантия 1 год
+                    </p>
                 </div>
-            </div>
-        </div>
 
-        <!-- Comparison Table - Full Width -->
-        <div class="container">
-            <div class="compare-table" id="compare-table">
-                        <div class="compare-table__header">
-                            <div class="compare-table__col compare-table__col--feature">Характеристика</div>
-                            <div class="compare-table__col">Базовая</div>
-                            <div class="compare-table__col">Комфорт</div>
-                            <div class="compare-table__col">Максимум</div>
+                <!-- Comfort -->
+                <div class="pricing-card pricing-card--recommended" data-package="comfort">
+                    <span class="pricing-card__badge">Выбирают чаще</span>
+                    <div class="pricing-card__header">
+                        <div class="pricing-card__name">Комфорт</div>
+                        <div class="pricing-card__price">
+                            <div class="pricing-card__price-value">469 900 ₽</div>
                         </div>
+                    </div>
+                    <ul class="pricing-card__list">
+                        <li>Всё из «Базовой» +</li>
+                        <li>Клиновые двери</li>
+                        <li>Высокий конёк 45 см</li>
+                        <li>Потолок в виде арки</li>
+                        <li>Цветная кровля</li>
+                        <li>Обработка чернового пола маслом</li>
+                        <li>Заводские экраны по периметру печи</li>
+                        <li>Широкие двухъярусные полки</li>
+                        <li>Слив по авторской технологии «Жёлоб»</li>
+                    </ul>
+                    <a href="tel:88003500393" class="pricing-card__cta">Заказать</a>
+                    <p class="pricing-card__warranty">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                        Гарантия 1 год
+                    </p>
+                </div>
 
-                        <div class="compare-table__section">Фундамент и основание</div>
-
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Опорно-столбчатый фундамент из бетонных блоков 200×200×400</div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
+                <!-- Max -->
+                <div class="pricing-card" data-package="max">
+                    <div class="pricing-card__header">
+                        <div class="pricing-card__name">Максимум</div>
+                        <div class="pricing-card__price">
+                            <div class="pricing-card__price-value">612 000 ₽</div>
                         </div>
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Обвязка из бруса 100×150</div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                        </div>
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Лаги</div>
-                            <div class="compare-table__col compare-table__col--text">40×100, шаг 0,7 м</div>
-                            <div class="compare-table__col compare-table__col--text">40×100, шаг 0,5 м</div>
-                            <div class="compare-table__col compare-table__col--text compare-table__col--best">100×150, шаг 0,5 м</div>
-                        </div>
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Обработка обвязки и лаг</div>
-                            <div class="compare-table__col compare-table__col--text">маслом</div>
-                            <div class="compare-table__col compare-table__col--text">маслом</div>
-                            <div class="compare-table__col compare-table__col--text compare-table__col--best">огнебиозащитой</div>
-                        </div>
-
-                        <div class="compare-table__section">Стены и конструкция</div>
-
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Стены из бруса или каркасные на выбор</div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                        </div>
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Профилированный брус 90×140 камерной сушки</div>
-                            <div class="compare-table__col"><span class="compare-cross"></span></div>
-                            <div class="compare-table__col"><span class="compare-cross"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                        </div>
-
-                        <div class="compare-table__section">Полы</div>
-
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Раздельный пол в каждом помещении</div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                        </div>
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Черновой пол из обрезной доски 20 мм</div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                        </div>
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Обработка чернового пола</div>
-                            <div class="compare-table__col compare-table__col--text">антисептиком</div>
-                            <div class="compare-table__col compare-table__col--text">антисептиком</div>
-                            <div class="compare-table__col compare-table__col--text compare-table__col--best">огнебиозащитой</div>
-                        </div>
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Чистовой пол из шпунтованной доски</div>
-                            <div class="compare-table__col compare-table__col--text">27 мм</div>
-                            <div class="compare-table__col compare-table__col--text">27 мм</div>
-                            <div class="compare-table__col compare-table__col--text compare-table__col--best">36 мм</div>
-                        </div>
-
-                        <div class="compare-table__section">Крыша и потолок</div>
-
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Двускатная крыша</div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                        </div>
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Высота конька</div>
-                            <div class="compare-table__col compare-table__col--text">30 см</div>
-                            <div class="compare-table__col compare-table__col--text compare-table__col--best">45 см</div>
-                            <div class="compare-table__col compare-table__col--text compare-table__col--best">45 см</div>
-                        </div>
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Арочный потолок</div>
-                            <div class="compare-table__col"><span class="compare-cross"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                        </div>
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Высота потолка</div>
-                            <div class="compare-table__col compare-table__col--text">2 м</div>
-                            <div class="compare-table__col compare-table__col--text">1,8–2 м (арка)</div>
-                            <div class="compare-table__col compare-table__col--text">1,8–2 м (арка)</div>
-                        </div>
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Кровля</div>
-                            <div class="compare-table__col compare-table__col--text">оцинкованный профнастил</div>
-                            <div class="compare-table__col compare-table__col--text">цветной профнастил</div>
-                            <div class="compare-table__col compare-table__col--text compare-table__col--best">цветная металлочерепица</div>
-                        </div>
-
-                        <div class="compare-table__section">Окна и двери</div>
-
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Окна деревянные с двойным остеклением</div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                        </div>
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Вентиляционный клапан в комнате отдыха</div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                        </div>
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Каркасные двери с шариковыми фиксаторами</div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-cross"></span></div>
-                            <div class="compare-table__col"><span class="compare-cross"></span></div>
-                        </div>
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Клиновые двери c шариковыми фиксаторами</div>
-                            <div class="compare-table__col"><span class="compare-cross"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                        </div>
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Заводские резные наличники окон и двери</div>
-                            <div class="compare-table__col"><span class="compare-cross"></span></div>
-                            <div class="compare-table__col"><span class="compare-cross"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                        </div>
-
-                        <div class="compare-table__section">Утепление</div>
-
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Утеплитель Knauf + пароизоляция Наноизол</div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                        </div>
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Утепление пола и потолка</div>
-                            <div class="compare-table__col compare-table__col--text">50 мм</div>
-                            <div class="compare-table__col compare-table__col--text">50 мм</div>
-                            <div class="compare-table__col compare-table__col--text compare-table__col--best">100 мм</div>
-                        </div>
-
-                        <div class="compare-table__section">Печь и дымоход</div>
-
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Печь</div>
-                            <div class="compare-table__col compare-table__col--text">Ермак 12-Т, бак 55 л</div>
-                            <div class="compare-table__col compare-table__col--text">Ермак 12-Т + экраны, бак 55 л</div>
-                            <div class="compare-table__col compare-table__col--text compare-table__col--best">Grill'd Cometa Vega Long + экраны, бак 55 л</div>
-                        </div>
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Вывод дымохода</div>
-                            <div class="compare-table__col compare-table__col--text">через стену</div>
-                            <div class="compare-table__col compare-table__col--text">через стену</div>
-                            <div class="compare-table__col compare-table__col--text compare-table__col--best">через крышу</div>
-                        </div>
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Камни для печи</div>
-                            <div class="compare-table__col compare-table__col--text">40 кг</div>
-                            <div class="compare-table__col compare-table__col--text">40 кг</div>
-                            <div class="compare-table__col compare-table__col--text compare-table__col--best">100 кг</div>
-                        </div>
-
-                        <div class="compare-table__section">Интерьер</div>
-
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Наружная и внутренняя отделка</div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                        </div>
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Двухъярусные осиновые полки</div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                        </div>
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Полки из древесины без сучков + спинка</div>
-                            <div class="compare-table__col"><span class="compare-cross"></span></div>
-                            <div class="compare-table__col"><span class="compare-cross"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                        </div>
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Столик и лавки на брусовых ножках</div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                        </div>
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Вывод воды по технологии «Жёлоб»</div>
-                            <div class="compare-table__col"><span class="compare-cross"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                        </div>
-
-                        <div class="compare-table__section">Электрика и освещение</div>
-
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Электрика и освещение</div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                        </div>
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Дополнительный светильник под полками</div>
-                            <div class="compare-table__col"><span class="compare-cross"></span></div>
-                            <div class="compare-table__col"><span class="compare-cross"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                        </div>
-
-                        <div class="compare-table__section">Внешний вид</div>
-
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Обработка бани снаружи</div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                        </div>
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Цвет бани</div>
-                            <div class="compare-table__col compare-table__col--text">светло-коричневый</div>
-                            <div class="compare-table__col compare-table__col--text">светло-коричневый</div>
-                            <div class="compare-table__col compare-table__col--text compare-table__col--best">на выбор</div>
-                        </div>
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Цвет углов и наличников</div>
-                            <div class="compare-table__col compare-table__col--text">коричневый</div>
-                            <div class="compare-table__col compare-table__col--text">коричневый</div>
-                            <div class="compare-table__col compare-table__col--text compare-table__col--best">на выбор</div>
-                        </div>
-
-                        <div class="compare-table__section">Бонусы</div>
-
-                        <div class="compare-table__row">
-                            <div class="compare-table__col compare-table__col--feature">Ступенька, термометр, табличка «Баня», принадлежности</div>
-                            <div class="compare-table__col"><span class="compare-cross"></span></div>
-                            <div class="compare-table__col"><span class="compare-cross"></span></div>
-                            <div class="compare-table__col"><span class="compare-check"></span></div>
-                        </div>
-                <div class="compare-table__row">
-                    <div class="compare-table__col compare-table__col--feature">Упаковка бани и документация</div>
-                    <div class="compare-table__col"><span class="compare-check"></span></div>
-                    <div class="compare-table__col"><span class="compare-check"></span></div>
-                    <div class="compare-table__col"><span class="compare-check"></span></div>
+                    </div>
+                    <ul class="pricing-card__list">
+                        <li>Всё из «Комфорта» +</li>
+                        <li>Брус камерной сушки</li>
+                        <li>Усиленное основание</li>
+                        <li>Утолщённые доски пола</li>
+                        <li>Двойное утепление потолка и пола</li>
+                        <li>Рельефная цветная кровля</li>
+                        <li>Обработка чернового пола огнебиозащитой</li>
+                        <li>Резные заводские наличники окон и двери</li>
+                        <li>Цвет бани, углов и наличников на ваш выбор</li>
+                        <li>Печь Grill'd Cometa Vega Long + 100 кг камней</li>
+                        <li>Широкие двухъярусные полки без сучков + спинка</li>
+                        <li>Светильник под полками</li>
+                        <li>Банные принадлежности, табличка «БАНЯ», термометр, ступеньки</li>
+                    </ul>
+                    <a href="tel:88003500393" class="pricing-card__cta">Заказать</a>
+                    <p class="pricing-card__warranty">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                        Гарантия 1 год
+                    </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Configurator Section -->
+    <!-- COMPARE — Accordion Categories -->
+    <section class="compare">
+        <div class="compare-inner">
+            <h2 class="compare-title">Полное сравнение комплектаций</h2>
+
+            <!-- Header -->
+            <div class="compare-header">
+                <div class="compare-header__col"></div>
+                <div class="compare-header__col">Базовая</div>
+                <div class="compare-header__col">Комфорт</div>
+                <div class="compare-header__col">Максимум</div>
+            </div>
+
+            <!-- Category: Фундамент -->
+            <div class="compare-category">
+                <button class="compare-category__toggle" data-category="foundation">
+                    Фундамент и основание
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="compare-category__content" data-content="foundation">
+                    <div class="compare-row"><div>Опорно-столбчатый фундамент из бетонных блоков 200×200×400</div><div class="check">✓</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Обвязка из бруса 100×150</div><div class="check">✓</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Лаги</div><div>40×100, шаг 0,7 м</div><div>40×100, шаг 0,5 м</div><div class="best">100×150, шаг 0,5 м</div></div>
+                    <div class="compare-row"><div>Обработка обвязки и лаг</div><div>маслом</div><div>маслом</div><div class="best">огнебиозащитой</div></div>
+                </div>
+            </div>
+
+            <!-- Category: Стены -->
+            <div class="compare-category">
+                <button class="compare-category__toggle" data-category="walls">
+                    Стены и конструкция
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="compare-category__content" data-content="walls">
+                    <div class="compare-row"><div>Стены из бруса или каркасные на выбор</div><div class="check">✓</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Профилированный брус 90×140 камерной сушки</div><div class="cross">—</div><div class="cross">—</div><div class="check">✓</div></div>
+                </div>
+            </div>
+
+            <!-- Category: Полы -->
+            <div class="compare-category">
+                <button class="compare-category__toggle" data-category="floors">
+                    Полы
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="compare-category__content" data-content="floors">
+                    <div class="compare-row"><div>Раздельный пол в каждом помещении</div><div class="check">✓</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Черновой пол из обрезной доски 20 мм</div><div class="check">✓</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Обработка чернового пола</div><div>антисептиком</div><div>антисептиком</div><div class="best">огнебиозащитой</div></div>
+                    <div class="compare-row"><div>Чистовой пол из шпунтованной доски</div><div>27 мм</div><div>27 мм</div><div class="best">36 мм</div></div>
+                </div>
+            </div>
+
+            <!-- Category: Крыша -->
+            <div class="compare-category">
+                <button class="compare-category__toggle" data-category="roof">
+                    Крыша и потолок
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="compare-category__content" data-content="roof">
+                    <div class="compare-row"><div>Двускатная крыша</div><div class="check">✓</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Высота конька</div><div>30 см</div><div class="best">45 см</div><div class="best">45 см</div></div>
+                    <div class="compare-row"><div>Арочный потолок</div><div class="cross">—</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Высота потолка</div><div>2 м</div><div>1,8–2 м (арка)</div><div>1,8–2 м (арка)</div></div>
+                    <div class="compare-row"><div>Кровля</div><div>оцинкованный профнастил</div><div>цветной профнастил</div><div class="best">цветная металлочерепица</div></div>
+                </div>
+            </div>
+
+            <!-- Category: Окна и двери -->
+            <div class="compare-category">
+                <button class="compare-category__toggle" data-category="doors">
+                    Окна и двери
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="compare-category__content" data-content="doors">
+                    <div class="compare-row"><div>Окна деревянные с двойным остеклением</div><div class="check">✓</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Вентиляционный клапан в комнате отдыха</div><div class="check">✓</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Каркасные двери с шариковыми фиксаторами</div><div class="check">✓</div><div class="cross">—</div><div class="cross">—</div></div>
+                    <div class="compare-row"><div>Клиновые двери c шариковыми фиксаторами</div><div class="cross">—</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Заводские резные наличники окон и двери</div><div class="cross">—</div><div class="cross">—</div><div class="check">✓</div></div>
+                </div>
+            </div>
+
+            <!-- Category: Утепление -->
+            <div class="compare-category">
+                <button class="compare-category__toggle" data-category="insulation">
+                    Утепление
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="compare-category__content" data-content="insulation">
+                    <div class="compare-row"><div>Утеплитель Knauf + пароизоляция Наноизол</div><div class="check">✓</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Утепление пола и потолка</div><div>50 мм</div><div>50 мм</div><div class="best">100 мм</div></div>
+                </div>
+            </div>
+
+            <!-- Category: Печь -->
+            <div class="compare-category">
+                <button class="compare-category__toggle" data-category="stove">
+                    Печь и дымоход
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="compare-category__content" data-content="stove">
+                    <div class="compare-row"><div>Печь</div><div>Ермак 12-Т, бак 55 л</div><div>Ермак 12-Т + экраны, бак 55 л</div><div class="best">Grill'd Cometa Vega Long + экраны, бак 55 л</div></div>
+                    <div class="compare-row"><div>Вывод дымохода</div><div>через стену</div><div>через стену</div><div class="best">через крышу</div></div>
+                    <div class="compare-row"><div>Камни для печи</div><div>40 кг</div><div>40 кг</div><div class="best">100 кг</div></div>
+                </div>
+            </div>
+
+            <!-- Category: Интерьер -->
+            <div class="compare-category">
+                <button class="compare-category__toggle" data-category="interior">
+                    Интерьер
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="compare-category__content" data-content="interior">
+                    <div class="compare-row"><div>Наружная и внутренняя отделка</div><div class="check">✓</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Двухъярусные осиновые полки</div><div class="check">✓</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Полки из древесины без сучков + спинка</div><div class="cross">—</div><div class="cross">—</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Столик и лавки на брусовых ножках</div><div class="check">✓</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Вывод воды по технологии «Жёлоб»</div><div class="cross">—</div><div class="check">✓</div><div class="check">✓</div></div>
+                </div>
+            </div>
+
+            <!-- Category: Электрика -->
+            <div class="compare-category">
+                <button class="compare-category__toggle" data-category="electric">
+                    Электрика и освещение
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="compare-category__content" data-content="electric">
+                    <div class="compare-row"><div>Электрика и освещение</div><div class="check">✓</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Дополнительный светильник под полками</div><div class="cross">—</div><div class="cross">—</div><div class="check">✓</div></div>
+                </div>
+            </div>
+
+            <!-- Category: Внешний вид -->
+            <div class="compare-category">
+                <button class="compare-category__toggle" data-category="exterior">
+                    Внешний вид
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="compare-category__content" data-content="exterior">
+                    <div class="compare-row"><div>Обработка бани снаружи</div><div class="check">✓</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Цвет бани</div><div>светло-коричневый</div><div>светло-коричневый</div><div class="best">на выбор</div></div>
+                    <div class="compare-row"><div>Цвет углов и наличников</div><div>коричневый</div><div>коричневый</div><div class="best">на выбор</div></div>
+                </div>
+            </div>
+
+            <!-- Category: Бонусы -->
+            <div class="compare-category">
+                <button class="compare-category__toggle" data-category="bonus">
+                    Бонусы
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="compare-category__content" data-content="bonus">
+                    <div class="compare-row"><div>Ступенька, термометр, табличка «Баня», принадлежности</div><div class="cross">—</div><div class="cross">—</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Упаковка бани и документация</div><div class="check">✓</div><div class="check">✓</div><div class="check">✓</div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONFIGURATOR -->
     <section class="configurator" id="configurator">
-        <div class="container">
-            <div class="configurator__header">
-                <h2 class="configurator__title">Соберите свою баню</h2>
-                <p class="configurator__subtitle">4 простых шага — и вы узнаете точную стоимость</p>
-            </div>
+        <div class="configurator-inner">
+            <h2>Соберите свою баню</h2>
+            <p class="configurator-subtitle">4 простых шага — и вы узнаете точную стоимость</p>
 
-            <!-- Progress Bar -->
+            <!-- Progress -->
             <div class="config-progress">
-                <div class="config-progress__step config-progress__step--active" data-step="1">
-                    <div class="config-progress__circle"><span>1</span></div>
-                    <div class="config-progress__label">Размер</div>
+                <div class="config-step-indicator config-step-indicator--active" data-step="1">
+                    <div class="config-step-num">1</div>
+                    <div class="config-step-label">Размер</div>
                 </div>
-                <div class="config-progress__step" data-step="2">
-                    <div class="config-progress__circle"><span>2</span></div>
-                    <div class="config-progress__label">Комплек­тация</div>
+                <div class="config-step-indicator" data-step="2">
+                    <div class="config-step-num">2</div>
+                    <div class="config-step-label">Комплектация</div>
                 </div>
-                <div class="config-progress__step" data-step="3">
-                    <div class="config-progress__circle"><span>3</span></div>
-                    <div class="config-progress__label">Детали</div>
+                <div class="config-step-indicator" data-step="3">
+                    <div class="config-step-num">3</div>
+                    <div class="config-step-label">Детали</div>
                 </div>
-                <div class="config-progress__step" data-step="4">
-                    <div class="config-progress__circle"><span>4</span></div>
-                    <div class="config-progress__label">Доставка</div>
+                <div class="config-step-indicator" data-step="4">
+                    <div class="config-step-num">4</div>
+                    <div class="config-step-label">Доставка</div>
                 </div>
             </div>
 
-            <!-- Steps Container -->
-            <div class="config-steps">
-                <!-- Step 1: Size Selection -->
-                <div class="config-step config-step--active" data-step="1">
-                    <h3 class="config-step__title">Выберите размер бани</h3>
-                    <p class="config-step__hint">← Листайте →</p>
-                    <div class="config-sizes config-sizes--scroll">
-                        <div class="config-size-card" data-size="2-3x3" data-price="364900">
-                            <span class="config-size-card__tag">Компактная</span>
-                            <span class="config-size-card__check">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                    <polyline points="20 6 9 17 4 12"></polyline>
-                                </svg>
-                            </span>
-                            <img src="/images/proekty/2-3x3/main.webp" alt="Баня 2,3×3" class="config-size-card__image">
-                            <div class="config-size-card__name">2,3 × 3 м</div>
-                            <div class="config-size-card__price">от 364 900 ₽</div>
+            <!-- Panels -->
+            <div class="config-panels">
+                <!-- Step 1: Size -->
+                <div class="config-panel config-panel--active" data-panel="1">
+                    <h3>Выберите размер бани</h3>
+                    <p class="config-panel-hint">← Листайте →</p>
+                    <div class="config-sizes">
+                        <div class="config-size" data-size="2-3x3" data-price="364900">
+                            <span class="config-size__tag">Компактная</span>
+                            <img src="/images/proekty/2-3x3/main.webp" alt="2,3×3">
+                            <div class="config-size__name">2,3 × 3 м</div>
+                            <div class="config-size__price">от 364 900 ₽</div>
                         </div>
-                        <div class="config-size-card config-size-card--selected" data-size="2-3x4" data-price="397900">
-                            <span class="config-size-card__badge">Вы смотрите</span>
-                            <span class="config-size-card__check">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                    <polyline points="20 6 9 17 4 12"></polyline>
-                                </svg>
-                            </span>
-                            <img src="/images/proekty/2-3x4/main.webp" alt="Баня 2,3×4" class="config-size-card__image">
-                            <div class="config-size-card__name">2,3 × 4 м</div>
-                            <div class="config-size-card__price">от 397 900 ₽</div>
+                        <div class="config-size config-size--selected" data-size="2-3x4" data-price="397900">
+                            <span class="config-size__tag">Вы смотрите</span>
+                            <img src="/images/proekty/2-3x4/main.webp" alt="2,3×4">
+                            <div class="config-size__name">2,3 × 4 м</div>
+                            <div class="config-size__price">от 397 900 ₽</div>
                         </div>
-                        <div class="config-size-card" data-size="2-3x5" data-price="436900">
-                            <span class="config-size-card__check">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                    <polyline points="20 6 9 17 4 12"></polyline>
-                                </svg>
-                            </span>
-                            <img src="/images/banya-winter-3.png" alt="Баня 2,3×5" class="config-size-card__image">
-                            <div class="config-size-card__name">2,3 × 5 м</div>
-                            <div class="config-size-card__price">от 436 900 ₽</div>
+                        <div class="config-size" data-size="2-3x5" data-price="436900">
+                            <span class="config-size__tag">&nbsp;</span>
+                            <img src="/images/banya-winter-3.png" alt="2,3×5">
+                            <div class="config-size__name">2,3 × 5 м</div>
+                            <div class="config-size__price">от 436 900 ₽</div>
                         </div>
-                        <div class="config-size-card" data-size="2-3x6-krylco" data-price="455900">
-                            <span class="config-size-card__tag">С крыльцом</span>
-                            <span class="config-size-card__check">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                    <polyline points="20 6 9 17 4 12"></polyline>
-                                </svg>
-                            </span>
-                            <img src="/images/banya-winter-1.png" alt="Баня 2,3×6 с крыльцом" class="config-size-card__image">
-                            <div class="config-size-card__name">2,3 × 6 м</div>
-                            <div class="config-size-card__price">от 455 900 ₽</div>
+                        <div class="config-size" data-size="2-3x6-krylco" data-price="455900">
+                            <span class="config-size__tag">С крыльцом</span>
+                            <img src="/images/banya-winter-1.png" alt="2,3×6 с крыльцом">
+                            <div class="config-size__name">2,3 × 6 м</div>
+                            <div class="config-size__price">от 455 900 ₽</div>
                         </div>
-                        <div class="config-size-card" data-size="2-3x6" data-price="467900">
-                            <span class="config-size-card__check">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                    <polyline points="20 6 9 17 4 12"></polyline>
-                                </svg>
-                            </span>
-                            <img src="/images/proekty/2-3x6/main.webp" alt="Баня 2,3×6" class="config-size-card__image">
-                            <div class="config-size-card__name">2,3 × 6 м</div>
-                            <div class="config-size-card__price">от 467 900 ₽</div>
+                        <div class="config-size" data-size="2-3x6" data-price="467900">
+                            <span class="config-size__tag">&nbsp;</span>
+                            <img src="/images/proekty/2-3x6/main.webp" alt="2,3×6">
+                            <div class="config-size__name">2,3 × 6 м</div>
+                            <div class="config-size__price">от 467 900 ₽</div>
                         </div>
-                        <div class="config-size-card" data-size="2-3x7-krylco" data-price="494900">
-                            <span class="config-size-card__tag">С крыльцом</span>
-                            <span class="config-size-card__check">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                    <polyline points="20 6 9 17 4 12"></polyline>
-                                </svg>
-                            </span>
-                            <img src="/images/proekty/2-3x7-krylco/main.webp" alt="Баня 2,3×7 с крыльцом" class="config-size-card__image">
-                            <div class="config-size-card__name">2,3 × 7 м</div>
-                            <div class="config-size-card__price">от 494 900 ₽</div>
+                        <div class="config-size" data-size="2-3x7-krylco" data-price="494900">
+                            <span class="config-size__tag">С крыльцом</span>
+                            <img src="/images/proekty/2-3x7-krylco/main.webp" alt="2,3×7 с крыльцом">
+                            <div class="config-size__name">2,3 × 7 м</div>
+                            <div class="config-size__price">от 494 900 ₽</div>
                         </div>
-                        <div class="config-size-card" data-size="2-3x7" data-price="494900">
-                            <span class="config-size-card__tag">Популярная</span>
-                            <span class="config-size-card__check">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                    <polyline points="20 6 9 17 4 12"></polyline>
-                                </svg>
-                            </span>
-                            <img src="/images/banya-winter-1.png" alt="Баня 2,3×7" class="config-size-card__image">
-                            <div class="config-size-card__name">2,3 × 7 м</div>
-                            <div class="config-size-card__price">от 494 900 ₽</div>
+                        <div class="config-size" data-size="2-3x7" data-price="494900">
+                            <span class="config-size__tag">Популярная</span>
+                            <img src="/images/banya-winter-1.png" alt="2,3×7">
+                            <div class="config-size__name">2,3 × 7 м</div>
+                            <div class="config-size__price">от 494 900 ₽</div>
                         </div>
-                        <div class="config-size-card" data-size="2-3x8" data-price="567900">
-                            <span class="config-size-card__tag">Просторная</span>
-                            <span class="config-size-card__check">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                    <polyline points="20 6 9 17 4 12"></polyline>
-                                </svg>
-                            </span>
-                            <img src="/images/proekty/2-3x8/main.webp" alt="Баня 2,3×8" class="config-size-card__image">
-                            <div class="config-size-card__name">2,3 × 8 м</div>
-                            <div class="config-size-card__price">от 567 900 ₽</div>
+                        <div class="config-size" data-size="2-3x8" data-price="567900">
+                            <span class="config-size__tag">Просторная</span>
+                            <img src="/images/proekty/2-3x8/main.webp" alt="2,3×8">
+                            <div class="config-size__name">2,3 × 8 м</div>
+                            <div class="config-size__price">от 567 900 ₽</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Step 2: Package Selection -->
-                <div class="config-step" data-step="2">
-                    <h3 class="config-step__title">Выберите комплектацию</h3>
+                <!-- Step 2: Package -->
+                <div class="config-panel" data-panel="2">
+                    <h3>Выберите комплектацию</h3>
                     <div class="config-packages">
                         <div class="config-package" data-package="base" data-price="0">
                             <div class="config-package__header">
                                 <div class="config-package__name">Базовая</div>
-                                <div class="config-package__price">
-                                    <div class="config-package__price-value" data-price-type="base">397 900 ₽</div>
-                                </div>
+                                <div class="config-package__price">397 900 ₽</div>
                             </div>
                             <p class="config-package__desc">Всё необходимое для настоящей русской бани</p>
                         </div>
-                        <div class="config-package config-package--recommended config-package--selected" data-package="comfort" data-price="72000">
+                        <div class="config-package config-package--selected" data-package="comfort" data-price="72000">
                             <span class="config-package__badge">Рекомендуем</span>
-                            <span class="config-package__popular">Выбор 70%</span>
                             <div class="config-package__header">
                                 <div class="config-package__name">Комфорт</div>
-                                <div class="config-package__price">
-                                    <div class="config-package__price-value" data-price-type="comfort">469 900 ₽</div>
-                                </div>
+                                <div class="config-package__price">469 900 ₽</div>
                             </div>
                             <p class="config-package__desc">Оптимальное соотношение цены и удобства</p>
                         </div>
                         <div class="config-package" data-package="max" data-price="214100">
                             <div class="config-package__header">
                                 <div class="config-package__name">Максимум</div>
-                                <div class="config-package__price">
-                                    <div class="config-package__price-value" data-price-type="max">612 000 ₽</div>
-                                </div>
+                                <div class="config-package__price">612 000 ₽</div>
                             </div>
                             <p class="config-package__desc">Премиальные материалы и максимум комфорта</p>
                         </div>
@@ -631,374 +1854,521 @@ const projectSize = '2-3x4';
                 </div>
 
                 <!-- Step 3: Options -->
-                <div class="config-step" data-step="3">
-                    <h3 class="config-step__title">Настройте детали</h3>
-                    <div class="config-options">
-                        <!-- Layout Selection -->
-                        <div class="config-option-group">
-                            <h4 class="config-option-group__title">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                                    <line x1="3" y1="9" x2="21" y2="9"/>
-                                    <line x1="9" y1="21" x2="9" y2="9"/>
-                                </svg>
-                                Планировка
-                            </h4>
-                            <div class="config-layouts">
-                                <div class="config-layout-card config-layout-card--selected" data-layout="1">
-                                    <img src="/images/banya-winter-1.png" alt="Планировка 1" class="config-layout-card__image">
-                                    <div class="config-layout-card__name">№1 Классика</div>
-                                </div>
-                                <div class="config-layout-card" data-layout="2">
-                                    <img src="/images/banya-winter-3.png" alt="Планировка 2" class="config-layout-card__image">
-                                    <div class="config-layout-card__name">№2 Открытая</div>
-                                </div>
-                                <div class="config-layout-card" data-layout="3">
-                                    <img src="/images/banya-winter-1.png" alt="Планировка 3" class="config-layout-card__image">
-                                    <div class="config-layout-card__name">№3 Большая</div>
-                                </div>
+                <div class="config-panel config-panel--details" data-panel="3">
+                    <h3>Настройте детали</h3>
+
+                    <div class="config-options-group">
+                        <h4>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                <line x1="3" y1="9" x2="21" y2="9"/>
+                                <line x1="9" y1="21" x2="9" y2="9"/>
+                            </svg>
+                            Планировка
+                        </h4>
+                        <div class="config-options-grid">
+                            <div class="config-option config-option--selected" data-option="layout" data-value="1">
+                                <img src="/images/banya-winter-1.png" alt="Планировка 1">
+                                <div class="config-option__name">№1 Классика</div>
+                            </div>
+                            <div class="config-option" data-option="layout" data-value="2">
+                                <img src="/images/banya-winter-3.png" alt="Планировка 2">
+                                <div class="config-option__name">№2 Открытая</div>
+                            </div>
+                            <div class="config-option" data-option="layout" data-value="3">
+                                <img src="/images/banya-winter-1.png" alt="Планировка 3">
+                                <div class="config-option__name">№3 Большая</div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Stove Selection -->
-                        <div class="config-option-group">
-                            <h4 class="config-option-group__title">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5"/>
-                                    <path d="M2 12l10 5 10-5"/>
-                                </svg>
-                                Печь
-                            </h4>
-                            <div class="config-option-cards">
-                                <div class="config-option-card config-option-card--selected" data-option="stove" data-value="ermak" data-price="0">
-                                    <img src="/images/proekty/2-3x4/03.webp" alt="Ермак 12-Т" class="config-option-card__image">
-                                    <div class="config-option-card__name">Ермак 12-Т</div>
-                                    <div class="config-option-card__included">Включено</div>
-                                </div>
-                                <div class="config-option-card" data-option="stove" data-value="grilld" data-price="35000">
-                                    <img src="/images/proekty/2-3x4/04.webp" alt="Grill'd Cometa" class="config-option-card__image">
-                                    <div class="config-option-card__name">Grill'd Cometa</div>
-                                    <div class="config-option-card__price">+35 000 ₽</div>
-                                </div>
+                    <div class="config-options-group">
+                        <h4>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5"/>
+                            </svg>
+                            Печь
+                        </h4>
+                        <div class="config-options-grid">
+                            <div class="config-option config-option--selected" data-option="stove" data-value="ermak" data-price="0">
+                                <img src="/images/proekty/2-3x4/03.webp" alt="Ермак">
+                                <div class="config-option__name">Ермак 12-Т</div>
+                                <div class="config-option__included">Включено</div>
+                            </div>
+                            <div class="config-option" data-option="stove" data-value="grilld" data-price="35000">
+                                <img src="/images/proekty/2-3x4/04.webp" alt="Grill'd">
+                                <div class="config-option__name">Grill'd Cometa</div>
+                                <div class="config-option__price">+35 000 ₽</div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Foundation Selection -->
-                        <div class="config-option-group">
-                            <h4 class="config-option-group__title">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect x="2" y="6" width="20" height="12" rx="2"/>
-                                    <path d="M12 6v12"/>
-                                    <path d="M2 12h20"/>
-                                </svg>
-                                Фундамент
-                            </h4>
-                            <div class="config-option-cards">
-                                <div class="config-option-card config-option-card--selected" data-option="foundation" data-value="blocks" data-price="0">
-                                    <img src="/images/proekty/2-3x4/05.webp" alt="Блоки" class="config-option-card__image">
-                                    <div class="config-option-card__name">Блоки 200×200</div>
-                                    <div class="config-option-card__included">Включено</div>
-                                </div>
-                                <div class="config-option-card" data-option="foundation" data-value="svai" data-price="25000">
-                                    <img src="/images/proekty/2-3x4/06.webp" alt="Сваи" class="config-option-card__image">
-                                    <div class="config-option-card__name">Винтовые сваи</div>
-                                    <div class="config-option-card__price">+25 000 ₽</div>
-                                </div>
+                    <div class="config-options-group">
+                        <h4>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="6" width="20" height="12" rx="2"/>
+                            </svg>
+                            Фундамент
+                        </h4>
+                        <div class="config-options-grid">
+                            <div class="config-option config-option--selected" data-option="foundation" data-value="blocks" data-price="0">
+                                <img src="/images/proekty/2-3x4/05.webp" alt="Блоки">
+                                <div class="config-option__name">Блоки 200×200</div>
+                                <div class="config-option__included">Включено</div>
+                            </div>
+                            <div class="config-option" data-option="foundation" data-value="svai" data-price="25000">
+                                <img src="/images/proekty/2-3x4/06.webp" alt="Сваи">
+                                <div class="config-option__name">Винтовые сваи</div>
+                                <div class="config-option__price">+25 000 ₽</div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Additional Options -->
-                        <div class="config-option-group">
-                            <h4 class="config-option-group__title">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="3"/>
-                                    <path d="M12 1v6m0 6v10"/>
-                                    <path d="M21 12h-6m-6 0H1"/>
-                                </svg>
-                                Дополнительно
-                            </h4>
-                            <div class="config-option-cards">
-                                <div class="config-option-card" data-option="extra" data-value="terrace" data-price="45000">
-                                    <img src="/images/proekty/2-3x7-krylco/main.webp" alt="Терраса" class="config-option-card__image">
-                                    <div class="config-option-card__name">Терраса</div>
-                                    <div class="config-option-card__price">+45 000 ₽</div>
-                                </div>
-                                <div class="config-option-card" data-option="extra" data-value="benches" data-price="12000">
-                                    <img src="/images/proekty/2-3x4/07.webp" alt="Мебель" class="config-option-card__image">
-                                    <div class="config-option-card__name">Стол + лавки</div>
-                                    <div class="config-option-card__price">+12 000 ₽</div>
-                                </div>
+                    <div class="config-options-group">
+                        <h4>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                                <polyline points="9 22 9 12 15 12 15 22"/>
+                            </svg>
+                            Терраса
+                        </h4>
+                        <div class="config-options-grid">
+                            <div class="config-option config-option--selected" data-option="terrace" data-value="no" data-price="0">
+                                <img src="/images/banya-winter-1.png" alt="Без террасы">
+                                <div class="config-option__name">Без террасы</div>
+                                <div class="config-option__included">—</div>
+                            </div>
+                            <div class="config-option" data-option="terrace" data-value="1m" data-price="35000">
+                                <img src="/images/banya-winter-2.png" alt="Терраса 1м">
+                                <div class="config-option__name">Терраса 1 м</div>
+                                <div class="config-option__price">+35 000 ₽</div>
+                            </div>
+                            <div class="config-option" data-option="terrace" data-value="2m" data-price="55000">
+                                <img src="/images/banya-winter-3.png" alt="Терраса 2м">
+                                <div class="config-option__name">Терраса 2 м</div>
+                                <div class="config-option__price">+55 000 ₽</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="config-options-group">
+                        <h4>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="7" height="7"/>
+                                <rect x="14" y="3" width="7" height="7"/>
+                                <rect x="14" y="14" width="7" height="7"/>
+                                <rect x="3" y="14" width="7" height="7"/>
+                            </svg>
+                            Мебель
+                        </h4>
+                        <div class="config-options-grid">
+                            <div class="config-option config-option--selected" data-option="furniture" data-value="base" data-price="0">
+                                <img src="/images/proekty/2-3x4/02.webp" alt="Базовая">
+                                <div class="config-option__name">Базовая (стол + лавки)</div>
+                                <div class="config-option__included">Включено</div>
+                            </div>
+                            <div class="config-option" data-option="furniture" data-value="premium" data-price="18000">
+                                <img src="/images/proekty/2-3x4/07.webp" alt="Премиум">
+                                <div class="config-option__name">Премиум комплект</div>
+                                <div class="config-option__price">+18 000 ₽</div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Step 4: Delivery -->
-                <div class="config-step" data-step="4">
-                    <h3 class="config-step__title">Куда доставить?</h3>
+                <div class="config-panel" data-panel="4">
+                    <h3>Куда доставить?</h3>
+                    <p class="config-panel-hint">Введите ваш город для расчёта стоимости доставки</p>
 
-                    <div class="config-delivery">
-                        <h4 class="config-delivery__title">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                                <circle cx="12" cy="10" r="3"/>
-                            </svg>
-                            Адрес доставки
-                        </h4>
-                        <div class="config-delivery__input-wrap">
-                            <svg class="config-delivery__input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="11" cy="11" r="8"/>
-                                <path d="m21 21-4.35-4.35"/>
-                            </svg>
-                            <input type="text" class="config-delivery__input" id="config-city-input" placeholder="Введите город..." autocomplete="off">
-                            <div class="config-delivery__suggestions" id="config-city-suggestions"></div>
-                        </div>
-                        <div class="config-delivery__result" id="config-delivery-result" style="display: none;">
-                            <div class="config-delivery__route">
-                                <span>Пестово</span>
-                                <span class="config-delivery__route-arrow">→</span>
-                                <span class="config-delivery__route-to" id="config-delivery-city">—</span>
-                            </div>
-                            <div class="config-delivery__info">
-                                <div class="config-delivery__info-item">
-                                    <span class="config-delivery__info-label">Расстояние</span>
-                                    <span class="config-delivery__info-value" id="config-delivery-distance">— км</span>
-                                </div>
-                                <div class="config-delivery__info-item">
-                                    <span class="config-delivery__info-label">Доставка</span>
-                                    <span class="config-delivery__info-value config-delivery__info-value--accent" id="config-delivery-price">— ₽</span>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="config-delivery-input">
+                        <input type="text" id="delivery-city" placeholder="Введите город...">
                     </div>
 
-                    <!-- Summary -->
                     <div class="config-summary">
-                        <h4 class="config-summary__title">Ваша баня</h4>
-                        <div class="config-summary__items">
-                            <div class="config-summary__item">
-                                <span class="config-summary__item-name" id="summary-size-name">Баня 2,3 × 4 м</span>
-                                <span class="config-summary__item-value" id="summary-size">397 900 ₽</span>
-                            </div>
-                            <div class="config-summary__item">
-                                <span class="config-summary__item-name" id="summary-package-name">Комплектация «Комфорт»</span>
-                                <span class="config-summary__item-value" id="summary-package">+72 000 ₽</span>
-                            </div>
-                            <!-- Options details -->
-                            <div class="config-summary__options" id="summary-options-list">
-                                <!-- Filled dynamically -->
-                            </div>
-                            <div class="config-summary__item">
-                                <span class="config-summary__item-name">Доставка</span>
-                                <span class="config-summary__item-value" id="summary-delivery">—</span>
-                            </div>
+                        <h4>Ваша баня</h4>
+                        <div class="config-summary-item">
+                            <span id="summary-size-name">Баня 2,3 × 4 м</span>
+                            <span id="summary-size">397 900 ₽</span>
                         </div>
-                        <div class="config-summary__total">
-                            <span class="config-summary__total-label">Итого:</span>
-                            <span class="config-summary__total-value" id="summary-total">469 900 ₽</span>
+                        <div class="config-summary-item">
+                            <span id="summary-package-name">Комплектация «Базовая»</span>
+                            <span id="summary-package">—</span>
+                        </div>
+                        <div class="config-summary-item">
+                            <span>Дополнительно</span>
+                            <span id="summary-extras">—</span>
+                        </div>
+                        <div class="config-summary-item">
+                            <span>Доставка</span>
+                            <span id="summary-delivery">Рассчитаем</span>
+                        </div>
+                        <div class="config-summary-total">
+                            <span>Итого:</span>
+                            <span id="summary-total">397 900 ₽</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Footer with navigation -->
+            <!-- Footer -->
             <div class="config-footer">
-                <div class="config-footer__inner">
-                    <div class="config-footer__price">
-                        <span class="config-footer__price-label">Итого:</span>
-                        <span class="config-footer__price-value" id="config-footer-price">469 900 ₽</span>
-                    </div>
-                    <div class="config-footer__actions">
-                        <button class="config-footer__btn config-footer__btn--back" id="config-btn-back" style="display: none;">
-                            Назад
-                        </button>
-                        <button class="config-footer__btn config-footer__btn--next" id="config-btn-next">
-                            Далее
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="9 18 15 12 9 6"></polyline>
-                            </svg>
-                        </button>
-                        <a href="tel:88003500393" class="config-footer__btn config-footer__btn--order" id="config-btn-order" style="display: none;">
-                            Заказать баню
-                        </a>
-                    </div>
-                </div>
+                <button class="config-btn config-btn--back" id="config-back" style="display: none;">Назад</button>
+                <button class="config-btn config-btn--next" id="config-next">
+                    Далее
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
             </div>
         </div>
     </section>
 
-    <!-- Layouts Section -->
-    <section class="layouts-section">
-        <div class="container">
-            <h2 class="layouts-section__title">Планировки бани 2,3×4 м</h2>
-            <p class="layouts-section__subtitle">Выберите удобное расположение помещений</p>
-
-            <div class="layouts-section__grid">
+    <!-- LAYOUTS -->
+    <section class="layouts">
+        <div class="layouts-inner">
+            <h2>Планировки бани 2,3×4 м</h2>
+            <p class="layouts-subtitle">Выберите удобное расположение помещений</p>
+            <div class="layouts-grid">
                 <div class="layout-card">
-                    <div class="layout-card__image">
-                        <img src="/images/banya-winter-1.png" alt="Планировка 1">
-                    </div>
+                    <img src="/images/banya-winter-1.png" alt="Планировка 1">
                     <div class="layout-card__content">
-                        <h3 class="layout-card__name">Планировка №1</h3>
-                        <p class="layout-card__desc">Парилка + моечная + раздевалка</p>
+                        <h3>Планировка №1</h3>
+                        <p>Парилка + моечная + раздевалка</p>
                     </div>
                 </div>
-
                 <div class="layout-card">
-                    <div class="layout-card__image">
-                        <img src="/images/banya-winter-2.png" alt="Планировка 2">
-                    </div>
+                    <img src="/images/banya-winter-2.png" alt="Планировка 2">
                     <div class="layout-card__content">
-                        <h3 class="layout-card__name">Планировка №2</h3>
-                        <p class="layout-card__desc">Парилка + комната отдыха</p>
+                        <h3>Планировка №2</h3>
+                        <p>Парилка + комната отдыха</p>
                     </div>
                 </div>
-
                 <div class="layout-card">
-                    <div class="layout-card__image">
-                        <img src="/images/banya-winter-3.png" alt="Планировка 3">
-                    </div>
+                    <img src="/images/banya-winter-3.png" alt="Планировка 3">
                     <div class="layout-card__content">
-                        <h3 class="layout-card__name">Планировка №3</h3>
-                        <p class="layout-card__desc">Большая парилка + моечная</p>
+                        <h3>Планировка №3</h3>
+                        <p>Большая парилка + моечная</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section class="product-features">
-        <div class="container">
-            <h2 class="product-features__title">Что входит в комплектацию</h2>
-            <div class="product-features__grid">
-                <div class="feature-item">
-                    <div class="feature-item__icon">
-                        <img src="/images/banya-winter-1.png" alt="Брус">
+    <!-- FEATURES -->
+    <section class="features">
+        <div class="features-inner">
+            <h2>Что входит в комплектацию</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <img src="/images/banya-winter-1.png" alt="Брус">
+                    <div>
+                        <h3>Стены из массива бруса</h3>
+                        <p>Профилированный брус 90×140 мм, естественная влажность</p>
                     </div>
-                    <h3 class="feature-item__title">Стены из массива бруса</h3>
-                    <p class="feature-item__desc">Профилированный брус 90×140 мм, естественная влажность</p>
                 </div>
-                <div class="feature-item">
-                    <div class="feature-item__icon">
-                        <img src="/images/banya-winter-2.png" alt="Печь">
+                <div class="feature-card">
+                    <img src="/images/banya-winter-2.png" alt="Печь">
+                    <div>
+                        <h3>Заводская печь с гарантией</h3>
+                        <p>Ермак или Grill'D — в зависимости от комплектации</p>
                     </div>
-                    <h3 class="feature-item__title">Заводская печь с гарантией</h3>
-                    <p class="feature-item__desc">Ермак или Grill'D — в зависимости от комплектации</p>
                 </div>
-                <div class="feature-item">
-                    <div class="feature-item__icon">
-                        <img src="/images/banya-winter-3.png" alt="Электрика">
+                <div class="feature-card">
+                    <img src="/images/banya-winter-3.png" alt="Электрика">
+                    <div>
+                        <h3>Безопасная электрика</h3>
+                        <p>Термостойкий провод, влагозащищённые светильники</p>
                     </div>
-                    <h3 class="feature-item__title">Безопасная электрика</h3>
-                    <p class="feature-item__desc">Термостойкий провод, влагозащищённые светильники</p>
                 </div>
-                <div class="feature-item">
-                    <div class="feature-item__icon">
-                        <img src="/images/banya-winter-1.png" alt="Утеплитель">
+                <div class="feature-card">
+                    <img src="/images/banya-winter-1.png" alt="Утеплитель">
+                    <div>
+                        <h3>Немецкий утеплитель Knauf</h3>
+                        <p>Потолок и пол утеплены минеральной ватой</p>
                     </div>
-                    <h3 class="feature-item__title">Немецкий утеплитель Knauf</h3>
-                    <p class="feature-item__desc">Потолок и пол утеплены минеральной ватой</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="cta-section">
-        <div class="container">
-            <div class="cta-box">
-                <h2 class="cta-box__title">Остались вопросы?</h2>
-                <p class="cta-box__text">Позвоните — расскажем подробнее и поможем выбрать комплектацию</p>
-                <a href="tel:88003500393" class="btn btn--primary btn--large">
-                    8-800-350-03-93
-                </a>
-                <span class="cta-box__hint">Бесплатно по России, с 8:00 до 24:00</span>
-            </div>
-        </div>
+    <!-- CTA -->
+    <section class="cta" id="cta">
+        <h2>Остались вопросы?</h2>
+        <p>Позвоните — расскажем подробнее и поможем выбрать комплектацию</p>
+        <a href="tel:88003500393" class="cta-phone">8-800-350-03-93</a>
+        <p class="cta-hint">Бесплатно по России, с 8:00 до 24:00</p>
     </section>
 
-    <!-- Lightbox -->
+    <footer class="footer">
+        © 2014–2025 С лёгким паром · Пестово, Новгородская область
+    </footer>
+
+    <!-- LIGHTBOX -->
     <div class="lightbox" id="lightbox">
-        <div class="lightbox__overlay"></div>
-        <div class="lightbox__content">
-            <button class="lightbox__close" aria-label="Закрыть">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-            </button>
-            <button class="lightbox__nav lightbox__nav--prev" aria-label="Предыдущее фото">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="15 18 9 12 15 6"></polyline>
-                </svg>
-            </button>
-            <img src="" alt="" class="lightbox__image" id="lightbox-image">
-            <button class="lightbox__nav lightbox__nav--next" aria-label="Следующее фото">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="9 18 15 12 9 6"></polyline>
-                </svg>
-            </button>
-            <div class="lightbox__counter" id="lightbox-counter">1 / 11</div>
-        </div>
+        <button class="lightbox-close" aria-label="Закрыть">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+        <button class="lightbox-nav lightbox-nav--prev" aria-label="Назад">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </button>
+        <img src="" alt="" id="lightbox-img">
+        <button class="lightbox-nav lightbox-nav--next" aria-label="Вперёд">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </button>
+        <div class="lightbox-counter" id="lightbox-counter">1 / 7</div>
     </div>
 
-    <!-- VK Video Modal -->
+    <!-- VIDEO MODAL -->
     <div class="video-modal" id="video-modal">
-        <div class="video-modal__overlay"></div>
+        <button class="video-modal__close" aria-label="Закрыть">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
         <div class="video-modal__content">
-            <button class="video-modal__close" aria-label="Закрыть">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-            </button>
-            <div class="video-modal__player">
-                <iframe id="vk-video-iframe" src="" width="100%" height="100%" allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;" frameborder="0" allowfullscreen></iframe>
-            </div>
+            <iframe id="video-iframe" src="" allow="autoplay; fullscreen" allowfullscreen></iframe>
         </div>
     </div>
 
-    <script is:inline src="/js/product.js"></script>
-    <script is:inline src="/js/configurator.js"></script>
-    <script is:inline src="/js/project-page.js"></script>
-
-    <script is:inline>
-        // VK Video Modal
-        (function() {
-            const videoModal = document.getElementById('video-modal');
-            const videoIframe = document.getElementById('vk-video-iframe');
-            const openBtn = document.getElementById('open-video-modal');
-            const closeBtn = videoModal?.querySelector('.video-modal__close');
-            const overlay = videoModal?.querySelector('.video-modal__overlay');
-
-            const VK_VIDEO_URL = 'https://vk.com/video_ext.php?oid=-50174471&id=456239252&hd=2&autoplay=1';
-
-            function openModal() {
-                if (videoModal && videoIframe) {
-                    videoIframe.src = VK_VIDEO_URL;
-                    videoModal.classList.add('video-modal--open');
-                    document.body.style.overflow = 'hidden';
-                }
+    <script>
+    (function() {
+        // Header scroll effect
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
             }
+        });
 
-            function closeModal() {
-                if (videoModal && videoIframe) {
-                    videoModal.classList.remove('video-modal--open');
-                    videoIframe.src = '';
-                    document.body.style.overflow = '';
-                }
-            }
-
-            openBtn?.addEventListener('click', openModal);
-            closeBtn?.addEventListener('click', closeModal);
-            overlay?.addEventListener('click', closeModal);
-
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && videoModal?.classList.contains('video-modal--open')) {
-                    closeModal();
-                }
+        // Compare accordion categories
+        document.querySelectorAll('.compare-category__toggle').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const cat = toggle.dataset.category;
+                const content = document.querySelector(`[data-content="${cat}"]`);
+                toggle.classList.toggle('active');
+                content.classList.toggle('active');
             });
-        })();
+        });
+
+        // Configurator with dynamic pricing
+        let currentStep = 1;
+        const totalSteps = 4;
+        const indicators = document.querySelectorAll('.config-step-indicator');
+        const panels = document.querySelectorAll('.config-panel');
+        const btnBack = document.getElementById('config-back');
+        const btnNext = document.getElementById('config-next');
+
+        // Price state
+        const priceState = {
+            size: 397900,
+            sizeName: '2,3 × 4 м',
+            package: 0,
+            packageName: 'Базовая',
+            stove: 0,
+            foundation: 0,
+            terrace: 0,
+            furniture: 0
+        };
+
+        function formatPrice(n) {
+            return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' ₽';
+        }
+
+        function updateSummary() {
+            const base = priceState.size;
+            const pkg = priceState.package;
+            const extras = priceState.stove + priceState.foundation + priceState.terrace + priceState.furniture;
+            const total = base + pkg + extras;
+
+            document.getElementById('summary-size').textContent = formatPrice(base);
+            document.getElementById('summary-package').textContent = pkg > 0 ? '+' + formatPrice(pkg) : '—';
+            document.getElementById('summary-extras').textContent = extras > 0 ? '+' + formatPrice(extras) : '—';
+            document.getElementById('summary-total').textContent = formatPrice(total);
+            document.getElementById('summary-size-name').textContent = `Баня ${priceState.sizeName}`;
+            document.getElementById('summary-package-name').textContent = `Комплектация «${priceState.packageName}»`;
+        }
+
+        function updateStep(step) {
+            currentStep = step;
+
+            // Update indicators
+            indicators.forEach((ind, i) => {
+                ind.classList.remove('config-step-indicator--active', 'config-step-indicator--done');
+                if (i + 1 < step) ind.classList.add('config-step-indicator--done');
+                if (i + 1 === step) ind.classList.add('config-step-indicator--active');
+            });
+
+            // Update panels
+            panels.forEach(p => {
+                p.classList.remove('config-panel--active');
+                if (parseInt(p.dataset.panel) === step) p.classList.add('config-panel--active');
+            });
+
+            // Scroll configurator into view smoothly
+            document.querySelector('.configurator').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // Update buttons
+            btnBack.style.display = step > 1 ? 'inline-block' : 'none';
+            if (step === totalSteps) {
+                btnNext.innerHTML = 'Заказать';
+            } else {
+                btnNext.innerHTML = 'Далее <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>';
+            }
+        }
+
+        btnNext?.addEventListener('click', () => {
+            if (currentStep < totalSteps) {
+                updateStep(currentStep + 1);
+            } else {
+                window.location.href = 'tel:88003500393';
+            }
+        });
+
+        btnBack?.addEventListener('click', () => {
+            if (currentStep > 1) updateStep(currentStep - 1);
+        });
+
+        // Size selection with price update
+        document.querySelectorAll('.config-size').forEach(size => {
+            size.addEventListener('click', () => {
+                document.querySelectorAll('.config-size').forEach(s => s.classList.remove('config-size--selected'));
+                size.classList.add('config-size--selected');
+                priceState.size = parseInt(size.dataset.price) || 397900;
+                priceState.sizeName = size.querySelector('.config-size__name').textContent;
+                updateSummary();
+            });
+        });
+
+        // Package selection with price update
+        const packagePrices = { base: 0, comfort: 72000, max: 214100 };
+        const packageNames = { base: 'Базовая', comfort: 'Комфорт', max: 'Максимум' };
+        document.querySelectorAll('.config-package').forEach(pkg => {
+            pkg.addEventListener('click', () => {
+                document.querySelectorAll('.config-package').forEach(p => p.classList.remove('config-package--selected'));
+                pkg.classList.add('config-package--selected');
+                const pkgType = pkg.dataset.package;
+                priceState.package = packagePrices[pkgType] || 0;
+                priceState.packageName = packageNames[pkgType] || 'Базовая';
+                updateSummary();
+            });
+        });
+
+        // Option selection with price update
+        document.querySelectorAll('.config-option').forEach(opt => {
+            opt.addEventListener('click', () => {
+                const group = opt.dataset.option;
+                document.querySelectorAll(`.config-option[data-option="${group}"]`).forEach(o => o.classList.remove('config-option--selected'));
+                opt.classList.add('config-option--selected');
+                const price = parseInt(opt.dataset.price) || 0;
+                if (group === 'stove') priceState.stove = price;
+                if (group === 'foundation') priceState.foundation = price;
+                if (group === 'terrace') priceState.terrace = price;
+                if (group === 'furniture') priceState.furniture = price;
+                updateSummary();
+            });
+        });
+
+        // Gallery lightbox
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxCounter = document.getElementById('lightbox-counter');
+        const galleryItems = document.querySelectorAll('.gallery-item:not(.gallery-item--video)');
+        let currentIndex = 0;
+
+        const images = Array.from(galleryItems).map(item => item.querySelector('img').src);
+
+        function openLightbox(index) {
+            currentIndex = index;
+            lightboxImg.src = images[currentIndex];
+            lightboxCounter.textContent = `${currentIndex + 1} / ${images.length}`;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        galleryItems.forEach((item, i) => {
+            item.addEventListener('click', () => openLightbox(i));
+        });
+
+        lightbox.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
+        lightbox.querySelector('.lightbox-nav--prev').addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            lightboxImg.src = images[currentIndex];
+            lightboxCounter.textContent = `${currentIndex + 1} / ${images.length}`;
+        });
+        lightbox.querySelector('.lightbox-nav--next').addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % images.length;
+            lightboxImg.src = images[currentIndex];
+            lightboxCounter.textContent = `${currentIndex + 1} / ${images.length}`;
+        });
+
+        // Gallery dots indicator
+        const galleryTrack = document.querySelector('.gallery-track');
+        const galleryDots = document.querySelectorAll('.gallery-dot');
+        const allGalleryItems = document.querySelectorAll('.gallery-item');
+
+        function updateGalleryDots() {
+            if (!galleryTrack || galleryDots.length === 0) return;
+            const scrollLeft = galleryTrack.scrollLeft;
+            const itemWidth = allGalleryItems[0]?.offsetWidth + 16 || 300; // 16px gap
+            const activeIndex = Math.round(scrollLeft / itemWidth);
+            galleryDots.forEach((dot, i) => {
+                dot.classList.toggle('gallery-dot--active', i === activeIndex);
+            });
+        }
+
+        galleryTrack?.addEventListener('scroll', updateGalleryDots);
+
+        galleryDots.forEach((dot, i) => {
+            dot.addEventListener('click', () => {
+                const itemWidth = allGalleryItems[0]?.offsetWidth + 16 || 300;
+                galleryTrack.scrollTo({ left: i * itemWidth, behavior: 'smooth' });
+            });
+        });
+
+        // Video modal
+        const videoModal = document.getElementById('video-modal');
+        const videoIframe = document.getElementById('video-iframe');
+        const openVideo = document.getElementById('open-video');
+        const VK_VIDEO_URL = 'https://vk.com/video_ext.php?oid=-50174471&id=456239252&hd=2&autoplay=1';
+
+        openVideo?.addEventListener('click', () => {
+            videoIframe.src = VK_VIDEO_URL;
+            videoModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        videoModal.querySelector('.video-modal__close').addEventListener('click', () => {
+            videoModal.classList.remove('active');
+            videoIframe.src = '';
+            document.body.style.overflow = '';
+        });
+
+        // Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeLightbox();
+                videoModal.classList.remove('active');
+                videoIframe.src = '';
+                document.body.style.overflow = '';
+            }
+        });
+    })();
     </script>
-</BaseLayout>
+</body>
+</html>
