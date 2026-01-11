@@ -468,97 +468,129 @@
             color: var(--bg-dark);
         }
 
-        /* ========== COMPARE — Accordion Style ========== */
+        .pricing-card__warranty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+        }
+
+        .pricing-card__warranty svg {
+            color: var(--accent);
+        }
+
+        /* ========== COMPARE — Accordion Categories ========== */
         .compare {
             padding: 4rem 2rem;
             background: var(--bg-dark);
         }
 
         .compare-inner {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
         }
 
-        .compare-toggle {
-            width: 100%;
+        .compare-title {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .compare-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
             background: var(--bg-medium);
             border: 1px solid var(--border);
+            padding: 1rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            position: sticky;
+            top: 70px;
+            z-index: 10;
+        }
+
+        .compare-header__col:not(:first-child) {
+            text-align: center;
+        }
+
+        .compare-category {
+            border: 1px solid var(--border);
+            border-top: none;
+        }
+
+        .compare-category__toggle {
+            width: 100%;
+            background: var(--bg-light);
+            border: none;
             color: var(--text);
-            padding: 1.5rem 2rem;
+            padding: 1rem 1.5rem;
             font-family: 'Outfit', sans-serif;
-            font-size: 1rem;
+            font-size: 0.9375rem;
+            font-weight: 500;
             display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
-            transition: border-color 0.3s;
+            transition: background 0.3s;
         }
 
-        .compare-toggle:hover { border-color: var(--accent); }
+        .compare-category__toggle:hover {
+            background: var(--bg-medium);
+        }
 
-        .compare-toggle svg {
+        .compare-category__toggle svg {
             transition: transform 0.3s;
+            color: var(--accent);
         }
 
-        .compare-toggle.active svg {
+        .compare-category__toggle.active svg {
             transform: rotate(180deg);
         }
 
-        .compare-content {
+        .compare-category__content {
             display: none;
             background: var(--bg-medium);
-            border: 1px solid var(--border);
-            border-top: none;
-            overflow-x: auto;
         }
 
-        .compare-content.active { display: block; }
-
-        .compare-table {
-            width: 100%;
-            min-width: 600px;
-            border-collapse: collapse;
+        .compare-category__content.active {
+            display: block;
         }
 
-        .compare-table th,
-        .compare-table td {
-            padding: 1rem;
-            text-align: left;
+        .compare-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
             border-bottom: 1px solid var(--border);
-            font-size: 0.875rem;
+            font-size: 0.8125rem;
         }
 
-        .compare-table th {
-            background: var(--bg-dark);
-            color: var(--text-muted);
-            font-weight: 400;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            font-size: 0.75rem;
+        .compare-row > div {
+            padding: 0.75rem 1rem;
         }
 
-        .compare-table th:first-child { width: 40%; }
-
-        .compare-table td:first-child {
+        .compare-row > div:first-child {
             color: var(--text-secondary);
         }
 
-        .compare-section {
-            background: var(--bg-light);
-            color: var(--accent);
-            font-weight: 500;
-            letter-spacing: 0.05em;
+        .compare-row > div:not(:first-child) {
+            text-align: center;
+            color: var(--text);
         }
 
-        .compare-check {
+        .compare-row .check {
             color: var(--accent);
         }
 
-        .compare-cross {
+        .compare-row .cross {
             color: var(--text-muted);
         }
 
-        .compare-best {
+        .compare-row .best {
             color: var(--accent);
             font-weight: 500;
         }
@@ -1328,6 +1360,15 @@
             <div class="gallery-item" data-index="7">
                 <img src="/images/proekty/2-3x4/07.webp" alt="Фото 7">
             </div>
+            <div class="gallery-item" data-index="8">
+                <img src="/images/proekty/2-3x4/08.webp" alt="Фото 8">
+            </div>
+            <div class="gallery-item" data-index="9">
+                <img src="/images/proekty/2-3x4/09.webp" alt="Фото 9">
+            </div>
+            <div class="gallery-item" data-index="10">
+                <img src="/images/proekty/2-3x4/10.webp" alt="Фото 10">
+            </div>
         </div>
     </section>
 
@@ -1356,6 +1397,12 @@
                         <li>Слив в центре пола или душевой поддон</li>
                     </ul>
                     <a href="tel:88003500393" class="pricing-card__cta">Заказать</a>
+                    <p class="pricing-card__warranty">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                        Гарантия 1 год
+                    </p>
                 </div>
 
                 <!-- Comfort -->
@@ -1379,6 +1426,12 @@
                         <li>Слив по авторской технологии «Жёлоб»</li>
                     </ul>
                     <a href="tel:88003500393" class="pricing-card__cta">Заказать</a>
+                    <p class="pricing-card__warranty">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                        Гарантия 1 год
+                    </p>
                 </div>
 
                 <!-- Max -->
@@ -1405,98 +1458,175 @@
                         <li>Банные принадлежности, табличка «БАНЯ», термометр, ступеньки</li>
                     </ul>
                     <a href="tel:88003500393" class="pricing-card__cta">Заказать</a>
+                    <p class="pricing-card__warranty">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                        Гарантия 1 год
+                    </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- COMPARE -->
+    <!-- COMPARE — Accordion Categories -->
     <section class="compare">
         <div class="compare-inner">
-            <button class="compare-toggle" id="compare-toggle">
-                Показать полное сравнение комплектаций
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-            </button>
-            <div class="compare-content" id="compare-content">
-                <table class="compare-table">
-                    <thead>
-                        <tr>
-                            <th>Характеристика</th>
-                            <th>Базовая</th>
-                            <th>Комфорт</th>
-                            <th>Максимум</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="compare-section"><td colspan="4">Фундамент и основание</td></tr>
-                        <tr>
-                            <td>Опорно-столбчатый фундамент из бетонных блоков</td>
-                            <td class="compare-check">✓</td>
-                            <td class="compare-check">✓</td>
-                            <td class="compare-check">✓</td>
-                        </tr>
-                        <tr>
-                            <td>Лаги</td>
-                            <td>40×100, шаг 0,7 м</td>
-                            <td>40×100, шаг 0,5 м</td>
-                            <td class="compare-best">100×150, шаг 0,5 м</td>
-                        </tr>
-                        <tr>
-                            <td>Обработка обвязки и лаг</td>
-                            <td>маслом</td>
-                            <td>маслом</td>
-                            <td class="compare-best">огнебиозащитой</td>
-                        </tr>
-                        <tr class="compare-section"><td colspan="4">Крыша и потолок</td></tr>
-                        <tr>
-                            <td>Высота конька</td>
-                            <td>30 см</td>
-                            <td class="compare-best">45 см</td>
-                            <td class="compare-best">45 см</td>
-                        </tr>
-                        <tr>
-                            <td>Арочный потолок</td>
-                            <td class="compare-cross">—</td>
-                            <td class="compare-check">✓</td>
-                            <td class="compare-check">✓</td>
-                        </tr>
-                        <tr>
-                            <td>Кровля</td>
-                            <td>оцинкованный профнастил</td>
-                            <td>цветной профнастил</td>
-                            <td class="compare-best">цветная металлочерепица</td>
-                        </tr>
-                        <tr class="compare-section"><td colspan="4">Печь и дымоход</td></tr>
-                        <tr>
-                            <td>Печь</td>
-                            <td>Ермак 12-Т</td>
-                            <td>Ермак 12-Т + экраны</td>
-                            <td class="compare-best">Grill'd Cometa Vega Long</td>
-                        </tr>
-                        <tr>
-                            <td>Камни для печи</td>
-                            <td>40 кг</td>
-                            <td>40 кг</td>
-                            <td class="compare-best">100 кг</td>
-                        </tr>
-                        <tr class="compare-section"><td colspan="4">Утепление</td></tr>
-                        <tr>
-                            <td>Утепление пола и потолка</td>
-                            <td>50 мм</td>
-                            <td>50 мм</td>
-                            <td class="compare-best">100 мм</td>
-                        </tr>
-                        <tr class="compare-section"><td colspan="4">Бонусы</td></tr>
-                        <tr>
-                            <td>Ступенька, термометр, табличка «Баня»</td>
-                            <td class="compare-cross">—</td>
-                            <td class="compare-cross">—</td>
-                            <td class="compare-check">✓</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <h2 class="compare-title">Полное сравнение комплектаций</h2>
+
+            <!-- Header -->
+            <div class="compare-header">
+                <div class="compare-header__col"></div>
+                <div class="compare-header__col">Базовая</div>
+                <div class="compare-header__col">Комфорт</div>
+                <div class="compare-header__col">Максимум</div>
+            </div>
+
+            <!-- Category: Фундамент -->
+            <div class="compare-category">
+                <button class="compare-category__toggle" data-category="foundation">
+                    Фундамент и основание
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="compare-category__content" data-content="foundation">
+                    <div class="compare-row"><div>Опорно-столбчатый фундамент из бетонных блоков 200×200×400</div><div class="check">✓</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Обвязка из бруса 100×150</div><div class="check">✓</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Лаги</div><div>40×100, шаг 0,7 м</div><div>40×100, шаг 0,5 м</div><div class="best">100×150, шаг 0,5 м</div></div>
+                    <div class="compare-row"><div>Обработка обвязки и лаг</div><div>маслом</div><div>маслом</div><div class="best">огнебиозащитой</div></div>
+                </div>
+            </div>
+
+            <!-- Category: Стены -->
+            <div class="compare-category">
+                <button class="compare-category__toggle" data-category="walls">
+                    Стены и конструкция
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="compare-category__content" data-content="walls">
+                    <div class="compare-row"><div>Стены из бруса или каркасные на выбор</div><div class="check">✓</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Профилированный брус 90×140 камерной сушки</div><div class="cross">—</div><div class="cross">—</div><div class="check">✓</div></div>
+                </div>
+            </div>
+
+            <!-- Category: Полы -->
+            <div class="compare-category">
+                <button class="compare-category__toggle" data-category="floors">
+                    Полы
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="compare-category__content" data-content="floors">
+                    <div class="compare-row"><div>Раздельный пол в каждом помещении</div><div class="check">✓</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Черновой пол из обрезной доски 20 мм</div><div class="check">✓</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Обработка чернового пола</div><div>антисептиком</div><div>антисептиком</div><div class="best">огнебиозащитой</div></div>
+                    <div class="compare-row"><div>Чистовой пол из шпунтованной доски</div><div>27 мм</div><div>27 мм</div><div class="best">36 мм</div></div>
+                </div>
+            </div>
+
+            <!-- Category: Крыша -->
+            <div class="compare-category">
+                <button class="compare-category__toggle" data-category="roof">
+                    Крыша и потолок
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="compare-category__content" data-content="roof">
+                    <div class="compare-row"><div>Двускатная крыша</div><div class="check">✓</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Высота конька</div><div>30 см</div><div class="best">45 см</div><div class="best">45 см</div></div>
+                    <div class="compare-row"><div>Арочный потолок</div><div class="cross">—</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Высота потолка</div><div>2 м</div><div>1,8–2 м (арка)</div><div>1,8–2 м (арка)</div></div>
+                    <div class="compare-row"><div>Кровля</div><div>оцинкованный профнастил</div><div>цветной профнастил</div><div class="best">цветная металлочерепица</div></div>
+                </div>
+            </div>
+
+            <!-- Category: Окна и двери -->
+            <div class="compare-category">
+                <button class="compare-category__toggle" data-category="doors">
+                    Окна и двери
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="compare-category__content" data-content="doors">
+                    <div class="compare-row"><div>Окна деревянные с двойным остеклением</div><div class="check">✓</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Вентиляционный клапан в комнате отдыха</div><div class="check">✓</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Каркасные двери с шариковыми фиксаторами</div><div class="check">✓</div><div class="cross">—</div><div class="cross">—</div></div>
+                    <div class="compare-row"><div>Клиновые двери c шариковыми фиксаторами</div><div class="cross">—</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Заводские резные наличники окон и двери</div><div class="cross">—</div><div class="cross">—</div><div class="check">✓</div></div>
+                </div>
+            </div>
+
+            <!-- Category: Утепление -->
+            <div class="compare-category">
+                <button class="compare-category__toggle" data-category="insulation">
+                    Утепление
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="compare-category__content" data-content="insulation">
+                    <div class="compare-row"><div>Утеплитель Knauf + пароизоляция Наноизол</div><div class="check">✓</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Утепление пола и потолка</div><div>50 мм</div><div>50 мм</div><div class="best">100 мм</div></div>
+                </div>
+            </div>
+
+            <!-- Category: Печь -->
+            <div class="compare-category">
+                <button class="compare-category__toggle" data-category="stove">
+                    Печь и дымоход
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="compare-category__content" data-content="stove">
+                    <div class="compare-row"><div>Печь</div><div>Ермак 12-Т, бак 55 л</div><div>Ермак 12-Т + экраны, бак 55 л</div><div class="best">Grill'd Cometa Vega Long + экраны, бак 55 л</div></div>
+                    <div class="compare-row"><div>Вывод дымохода</div><div>через стену</div><div>через стену</div><div class="best">через крышу</div></div>
+                    <div class="compare-row"><div>Камни для печи</div><div>40 кг</div><div>40 кг</div><div class="best">100 кг</div></div>
+                </div>
+            </div>
+
+            <!-- Category: Интерьер -->
+            <div class="compare-category">
+                <button class="compare-category__toggle" data-category="interior">
+                    Интерьер
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="compare-category__content" data-content="interior">
+                    <div class="compare-row"><div>Наружная и внутренняя отделка</div><div class="check">✓</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Двухъярусные осиновые полки</div><div class="check">✓</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Полки из древесины без сучков + спинка</div><div class="cross">—</div><div class="cross">—</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Столик и лавки на брусовых ножках</div><div class="check">✓</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Вывод воды по технологии «Жёлоб»</div><div class="cross">—</div><div class="check">✓</div><div class="check">✓</div></div>
+                </div>
+            </div>
+
+            <!-- Category: Электрика -->
+            <div class="compare-category">
+                <button class="compare-category__toggle" data-category="electric">
+                    Электрика и освещение
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="compare-category__content" data-content="electric">
+                    <div class="compare-row"><div>Электрика и освещение</div><div class="check">✓</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Дополнительный светильник под полками</div><div class="cross">—</div><div class="cross">—</div><div class="check">✓</div></div>
+                </div>
+            </div>
+
+            <!-- Category: Внешний вид -->
+            <div class="compare-category">
+                <button class="compare-category__toggle" data-category="exterior">
+                    Внешний вид
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="compare-category__content" data-content="exterior">
+                    <div class="compare-row"><div>Обработка бани снаружи</div><div class="check">✓</div><div class="check">✓</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Цвет бани</div><div>светло-коричневый</div><div>светло-коричневый</div><div class="best">на выбор</div></div>
+                    <div class="compare-row"><div>Цвет углов и наличников</div><div>коричневый</div><div>коричневый</div><div class="best">на выбор</div></div>
+                </div>
+            </div>
+
+            <!-- Category: Бонусы -->
+            <div class="compare-category">
+                <button class="compare-category__toggle" data-category="bonus">
+                    Бонусы
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="compare-category__content" data-content="bonus">
+                    <div class="compare-row"><div>Ступенька, термометр, табличка «Баня», принадлежности</div><div class="cross">—</div><div class="cross">—</div><div class="check">✓</div></div>
+                    <div class="compare-row"><div>Упаковка бани и документация</div><div class="check">✓</div><div class="check">✓</div><div class="check">✓</div></div>
+                </div>
             </div>
         </div>
     </section>
@@ -1682,6 +1812,57 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="config-options-group">
+                        <h4>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                                <polyline points="9 22 9 12 15 12 15 22"/>
+                            </svg>
+                            Терраса
+                        </h4>
+                        <div class="config-options-grid">
+                            <div class="config-option config-option--selected" data-option="terrace" data-value="no" data-price="0">
+                                <img src="/images/banya-winter-1.png" alt="Без террасы">
+                                <div class="config-option__name">Без террасы</div>
+                                <div class="config-option__included">—</div>
+                            </div>
+                            <div class="config-option" data-option="terrace" data-value="1m" data-price="35000">
+                                <img src="/images/banya-winter-2.png" alt="Терраса 1м">
+                                <div class="config-option__name">Терраса 1 м</div>
+                                <div class="config-option__price">+35 000 ₽</div>
+                            </div>
+                            <div class="config-option" data-option="terrace" data-value="2m" data-price="55000">
+                                <img src="/images/banya-winter-3.png" alt="Терраса 2м">
+                                <div class="config-option__name">Терраса 2 м</div>
+                                <div class="config-option__price">+55 000 ₽</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="config-options-group">
+                        <h4>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="7" height="7"/>
+                                <rect x="14" y="3" width="7" height="7"/>
+                                <rect x="14" y="14" width="7" height="7"/>
+                                <rect x="3" y="14" width="7" height="7"/>
+                            </svg>
+                            Мебель
+                        </h4>
+                        <div class="config-options-grid">
+                            <div class="config-option config-option--selected" data-option="furniture" data-value="base" data-price="0">
+                                <img src="/images/proekty/2-3x4/02.webp" alt="Базовая">
+                                <div class="config-option__name">Базовая (стол + лавки)</div>
+                                <div class="config-option__included">Включено</div>
+                            </div>
+                            <div class="config-option" data-option="furniture" data-value="premium" data-price="18000">
+                                <img src="/images/proekty/2-3x4/07.webp" alt="Премиум">
+                                <div class="config-option__name">Премиум комплект</div>
+                                <div class="config-option__price">+18 000 ₽</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Step 4: Delivery -->
@@ -1696,20 +1877,24 @@
                     <div class="config-summary">
                         <h4>Ваша баня</h4>
                         <div class="config-summary-item">
-                            <span>Баня 2,3 × 4 м</span>
+                            <span id="summary-size-name">Баня 2,3 × 4 м</span>
                             <span id="summary-size">397 900 ₽</span>
                         </div>
                         <div class="config-summary-item">
-                            <span>Комплектация «Комфорт»</span>
-                            <span id="summary-package">+72 000 ₽</span>
+                            <span id="summary-package-name">Комплектация «Базовая»</span>
+                            <span id="summary-package">—</span>
+                        </div>
+                        <div class="config-summary-item">
+                            <span>Дополнительно</span>
+                            <span id="summary-extras">—</span>
                         </div>
                         <div class="config-summary-item">
                             <span>Доставка</span>
-                            <span id="summary-delivery">—</span>
+                            <span id="summary-delivery">Рассчитаем</span>
                         </div>
                         <div class="config-summary-total">
                             <span>Итого:</span>
-                            <span id="summary-total">469 900 ₽</span>
+                            <span id="summary-total">397 900 ₽</span>
                         </div>
                     </div>
                 </div>
@@ -1855,21 +2040,53 @@
             }
         });
 
-        // Compare toggle
-        const compareToggle = document.getElementById('compare-toggle');
-        const compareContent = document.getElementById('compare-content');
-        compareToggle?.addEventListener('click', () => {
-            compareToggle.classList.toggle('active');
-            compareContent.classList.toggle('active');
+        // Compare accordion categories
+        document.querySelectorAll('.compare-category__toggle').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const cat = toggle.dataset.category;
+                const content = document.querySelector(`[data-content="${cat}"]`);
+                toggle.classList.toggle('active');
+                content.classList.toggle('active');
+            });
         });
 
-        // Configurator
+        // Configurator with dynamic pricing
         let currentStep = 1;
         const totalSteps = 4;
         const indicators = document.querySelectorAll('.config-step-indicator');
         const panels = document.querySelectorAll('.config-panel');
         const btnBack = document.getElementById('config-back');
         const btnNext = document.getElementById('config-next');
+
+        // Price state
+        const priceState = {
+            size: 397900,
+            sizeName: '2,3 × 4 м',
+            package: 0,
+            packageName: 'Базовая',
+            stove: 0,
+            foundation: 0,
+            terrace: 0,
+            furniture: 0
+        };
+
+        function formatPrice(n) {
+            return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' ₽';
+        }
+
+        function updateSummary() {
+            const base = priceState.size;
+            const pkg = priceState.package;
+            const extras = priceState.stove + priceState.foundation + priceState.terrace + priceState.furniture;
+            const total = base + pkg + extras;
+
+            document.getElementById('summary-size').textContent = formatPrice(base);
+            document.getElementById('summary-package').textContent = pkg > 0 ? '+' + formatPrice(pkg) : '—';
+            document.getElementById('summary-extras').textContent = extras > 0 ? '+' + formatPrice(extras) : '—';
+            document.getElementById('summary-total').textContent = formatPrice(total);
+            document.getElementById('summary-size-name').textContent = `Баня ${priceState.sizeName}`;
+            document.getElementById('summary-package-name').textContent = `Комплектация «${priceState.packageName}»`;
+        }
 
         function updateStep(step) {
             currentStep = step;
@@ -1908,28 +2125,43 @@
             if (currentStep > 1) updateStep(currentStep - 1);
         });
 
-        // Size selection
+        // Size selection with price update
         document.querySelectorAll('.config-size').forEach(size => {
             size.addEventListener('click', () => {
                 document.querySelectorAll('.config-size').forEach(s => s.classList.remove('config-size--selected'));
                 size.classList.add('config-size--selected');
+                priceState.size = parseInt(size.dataset.price) || 397900;
+                priceState.sizeName = size.querySelector('.config-size__name').textContent;
+                updateSummary();
             });
         });
 
-        // Package selection
+        // Package selection with price update
+        const packagePrices = { base: 0, comfort: 72000, max: 214100 };
+        const packageNames = { base: 'Базовая', comfort: 'Комфорт', max: 'Максимум' };
         document.querySelectorAll('.config-package').forEach(pkg => {
             pkg.addEventListener('click', () => {
                 document.querySelectorAll('.config-package').forEach(p => p.classList.remove('config-package--selected'));
                 pkg.classList.add('config-package--selected');
+                const pkgType = pkg.dataset.package;
+                priceState.package = packagePrices[pkgType] || 0;
+                priceState.packageName = packageNames[pkgType] || 'Базовая';
+                updateSummary();
             });
         });
 
-        // Option selection
+        // Option selection with price update
         document.querySelectorAll('.config-option').forEach(opt => {
             opt.addEventListener('click', () => {
                 const group = opt.dataset.option;
                 document.querySelectorAll(`.config-option[data-option="${group}"]`).forEach(o => o.classList.remove('config-option--selected'));
                 opt.classList.add('config-option--selected');
+                const price = parseInt(opt.dataset.price) || 0;
+                if (group === 'stove') priceState.stove = price;
+                if (group === 'foundation') priceState.foundation = price;
+                if (group === 'terrace') priceState.terrace = price;
+                if (group === 'furniture') priceState.furniture = price;
+                updateSummary();
             });
         });
 
